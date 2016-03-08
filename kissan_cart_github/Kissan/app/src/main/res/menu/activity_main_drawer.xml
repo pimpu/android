@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_createEnquiry"
+            android:title="@string/nav_item_createEnquiry" />
+        <item
+            android:id="@+id/nav_viewEnquiry"
+            android:title="@string/nav_item_viewEnquiry" />
+        <item
+            android:id="@+id/nav_createOrder"
+            android:title="@string/nav_item_createOrder" />
+        <item
+            android:id="@+id/nav_newReply"
+            android:title="@string/nav_item_newReply" />
+        <item
+            android:id="@+id/nav_createSociety"
+            android:title="@string/nav_item_createSociety" />
+        <item
+            android:id="@+id/nav_obp_logout"
+            android:title="@string/nav_item_logout" />
+    </group>
+
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>

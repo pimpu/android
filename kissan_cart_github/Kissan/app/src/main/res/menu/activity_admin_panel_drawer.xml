@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/id_admin_nav_viewEnquiry"
+            android:title="@string/nav_item_viewEnquiry" />
+        <item
+            android:id="@+id/id_admin_nav_newReply"
+            android:title="@string/nav_item_newReply" />
+        <item
+            android:id="@+id/id_admin_nav_viewOrder"
+            android:title="@string/nav_item_viewOrder" />
+        <item
+            android:id="@+id/id_admin_nav_createOBP"
+            android:title="@string/nav_item_createOBP" />
+    </group>
+
+</menu>

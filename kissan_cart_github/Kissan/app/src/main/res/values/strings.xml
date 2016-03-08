@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Kissan Cart</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!--item list for navigation drawer-->
+    <string name="nav_item_createEnquiry">Create Enquiry</string>
+    <string name="nav_item_viewEnquiry">View Enquiry</string>
+    <string name="nav_item_createOrder">Create Order</string>
+    <string name="nav_item_viewOrder">View Orders</string>
+    <string name="nav_item_newReply">New Reply</string>
+    <string name="nav_item_createSociety">Create Society</string>
+    <string name="nav_item_createOBP">Create OBP</string>
+    <string name="nav_item_logout">Logout</string>
+    <!--item list for navigation drawer-->
+
+    <!--all hints-->
+    <string name="hint_ref_no">Reference number</string>
+    <string name="hint_society_contact">Society Contact</string>
+    <string name="hint_society_email">Society Email</string>
+    <string name="hint_society_address">Society Address</string>
+    <string name="hint_enquiry_message">Enquiry Message</string>
+    <string name="hint_order_utr">UTR</string>
+    <string name="hint_order_item_name">Item Name</string>
+    <string name="hint_order_item_qty">Quantity</string>
+    <string name="hint_order_item_price">Price</string>
+    <string name="hint_order_item_total_amt">Total Amount</string>
+    <string name="hint_society_name">Society Name</string>
+    <string name="hint_obp_name">OBP Name</string>
+    <string name="hint_obp_contact">OBP Contact</string>
+    <string name="hint_obp_email">OBP Email</string>
+    <string name="hint_obp_pwd">OBP Password</string>
+    <string name="hint_obp_address">OBP Address</string>
+    <string name="hint_obp_store_name">Store Name</string>
+    <string name="hint_obp_pin">Pincode</string>
+    <string name="hint_obp_city">City</string>
+    <string name="hint_obp_state">State</string>
+    <string name="hint_obp_country">Country</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <!--all hints-->
+
+    <string name="sharedPrefrence">info.alchemistdigital.kissan_cart</string>
+    <string name="login">Login</string>
+    <string name="upload_enquiry">Upload Enquiry</string>
+    <string name="choose_file">Choose File: </string>
+    <string name="submit">submit</string>
+    <string name="network_error_message">Internet Connection Error</string>
+    <string name="no_society_found">Click on me for creating society.</string>
+    <string name="btn_login">Login</string>
+    <string name="userType">user_type</string>
+    <string name="boolean_login_sharedPref">BooloanLoginSharedPref</string>
+    <string name="loginName">login_name</string>
+    <string name="loginEmail">login_email</string>
+    <string name="userId">userId</string>
+    <string name="title_activity_admin_panel">AdminPanel</string>
+    <string name="title_select_society">Select society -</string>
+    <string name="sharedPreference_filepath">preference_filepath</string>
+    <string name="bool_scan_image">is_scan_file</string>
+    <string name="empty_enquiry_message">No enquiry registered.</string>
+</resources>
