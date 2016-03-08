@@ -166,7 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting society count
      */
-    public int numberOfRows(){
+    public int numberOfSocietyRows(){
         SQLiteDatabase db = this.getReadableDatabase();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
@@ -332,7 +332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting enquiry count using user id
      */
-    public int numberOfRowsByUid(){
+    public int numberOfEnquiryRowsByUid(){
         SQLiteDatabase db = this.getReadableDatabase();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);

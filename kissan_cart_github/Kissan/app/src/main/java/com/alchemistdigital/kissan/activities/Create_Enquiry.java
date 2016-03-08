@@ -60,7 +60,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
 
         dbHelper = new DatabaseHelper(Create_Enquiry.this);
-        int rowsCount = dbHelper.numberOfRows();
+        int rowsCount = dbHelper.numberOfSocietyRows();
         dbHelper.closeDB();
 
         if (rowsCount <= 0) {

@@ -28,10 +28,6 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
-
-        for(int i = 0 ; i < data.size() ; i++ ){
-            System.out.println(data.get(0).getEnquiry_reference());
-        }
     }
 
     public void delete(int position) {
@@ -50,9 +46,9 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
     public void onBindViewHolder(EnquiryViewHolder holder, int position) {
 
         Enquiry current = data.get(position);
-        holder.tv_ref.setText(current.getEnquiry_reference());
-        holder.tv_scoiety.setText(current.getEnquiry_society());
-        holder.tv_message.setText(current.getEnquiry_message());
+        holder.tv_ref.setText("Ref no - "+current.getEnquiry_reference());
+        holder.tv_scoiety.setText("Scoiety - "+current.getEnquiry_society());
+        holder.tv_message.setText("Message - "+current.getEnquiry_message());
 
     }
 

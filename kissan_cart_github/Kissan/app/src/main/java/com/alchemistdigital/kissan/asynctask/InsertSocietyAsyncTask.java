@@ -133,7 +133,7 @@ public class InsertSocietyAsyncTask extends AsyncTask<String,String,String>{
                 Society society = new Society(id_society,uId,str_society_name,str_society_contact,str_society_email,str_society_address);
                 long societyId = dbHelper.insertSociety(society);
                 System.out.println("Society id: "+societyId);
-                System.out.println("Society count: "+dbHelper.numberOfRows());
+                System.out.println("Society count: "+dbHelper.numberOfSocietyRows());
                 dbHelper.closeDB();
 
                 ((Activity)context).finish();

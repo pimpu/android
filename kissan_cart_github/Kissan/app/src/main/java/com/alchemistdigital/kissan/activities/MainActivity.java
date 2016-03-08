@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.asynctask.GetEnquiryPerOBP;
 import com.alchemistdigital.kissan.asynctask.GetSocietyPerOBP;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 
@@ -39,14 +40,21 @@ public class MainActivity extends AppCompatActivity
 
         // get society data from server when obp has already created society.
         dbHelper = new DatabaseHelper(MainActivity.this);
-        int rowsCount = dbHelper.numberOfRows();
+        int societyRowsCount = dbHelper.numberOfSocietyRows();
+        int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
         dbHelper.closeDB();
-        if (rowsCount <= 0) {
-            GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
-            int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
-            String strUID = String.valueOf(uId);
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
+        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+        String strUID = String.valueOf(uId);
+
+        if (societyRowsCount <= 0) {
             new GetSocietyPerOBP(MainActivity.this,strUID).execute();
         }
+        if ( enquiryRowsCount <= 0){
+            new GetEnquiryPerOBP(MainActivity.this,strUID).execute();
+        }
+
     }
 
     @Override

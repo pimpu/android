@@ -7,9 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
-import com.alchemistdigital.kissan.R;
-import com.alchemistdigital.kissan.model.Society;
-import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 
@@ -28,15 +26,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 /**
- * Created by user on 3/3/2016.
+ * Created by user on 3/8/2016.
  */
-public class GetSocietyPerOBP extends AsyncTask<String, String, String> {
+public class GetEnquiryPerOBP extends AsyncTask<String, String, String> {
     private Context context;
     // Progress Dialog
     private ProgressDialog pDialog;
     private String str_obpId;
 
-    public GetSocietyPerOBP(Context context, String str_obpId) {
+    public GetEnquiryPerOBP(Context context, String str_obpId) {
         this.context = context;
         this.str_obpId = str_obpId;
     }
@@ -56,7 +54,7 @@ public class GetSocietyPerOBP extends AsyncTask<String, String, String> {
         String responseString = null;
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(CommonVariables.SOCIETY_PER_OBP_INSERT_SERVER_URL);
+        HttpPost httppost = new HttpPost(CommonVariables.ENQUIRY_PER_OBP_INSERT_SERVER_URL);
 
         try {
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -100,7 +98,7 @@ public class GetSocietyPerOBP extends AsyncTask<String, String, String> {
         pDialog.dismiss();
 
         try {
-            Log.d("Society per obp Data", result.toString());
+            Log.d("Enquiry per obp Data: ", result.toString());
 
             if(result.contains("Error occurred!")){
                 Toast.makeText(context, result, Toast.LENGTH_LONG).show();
@@ -110,33 +108,32 @@ public class GetSocietyPerOBP extends AsyncTask<String, String, String> {
             JSONObject json = new JSONObject(result);
             // check for success tag
             int success = json.getInt(CommonVariables.TAG_SUCCESS);
-            if (success == 2) {
-                String message = json.getString(CommonVariables.TAG_MESSAGE);
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
-            else if (success == 1) {
+            if (success == 1) {
                 JSONArray jsonSociety = json.getJSONArray(CommonVariables.TAG_MESSAGE);
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
-
-                // get userId from shared preference.
-                GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
-                int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
                 // looping through All Products
                 for (int i = 0; i < jsonSociety.length(); i++) {
                     JSONObject c = jsonSociety.getJSONObject(i);
 
                     // Storing each json item in variable
-                    int id_society = c.getInt("soc_id");
-                    String str_society_name = c.getString("soc_name");
-                    String str_society_contact = c.getString("soc_contact");
-                    String str_society_email = c.getString("soc_email");
-                    String str_society_address = c.getString("soc_adrs");
+                    int id_enquiry = c.getInt("id");
+                    String creted_at = c.getString("creted_at");
+                    String str_ref_no = c.getString("ref");
+                    int eUid = c.getInt("eUid");
+                    int gId = c.getInt("gId");
+                    int repToVal = c.getInt("repToVal");
+                    int replied = c.getInt("replied");
+                    String str_message = c.getString("message");
+                    String str_name = c.getString("society_name");
+                    String str_address = c.getString("society_address");
+                    String str_contact = c.getString("society_contact");
+                    String str_email = c.getString("society_email");
+                    String fileName = c.getString("document");
 
-                    Society society = new Society(id_society,uId,str_society_name,str_society_contact,str_society_email,str_society_address);
-                    long societyId = dbHelper.insertSociety(society);
-                    System.out.println(context.getClass().getSimpleName()+" : "+societyId);
-//                    System.out.println("Society count: " + dbHelper.numberOfSocietyRows());
+                    Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, 0, str_message, str_name, str_address, str_contact, str_email, fileName);
+                    long enquiryId = dbHelper.insertEnquiry(enquiry);
+                    System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
                 }
 
                 dbHelper.closeDB();
