@@ -1,17 +1,32 @@
 package com.alchemistdigital.kissan.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
+import com.alchemistdigital.kissan.Login;
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.CommonVariables;
+import com.alchemistdigital.kissan.utilities.WakeLocker;
+import com.google.android.gcm.GCMRegistrar;
 
 public class AdminPanel extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,15 +48,102 @@ public class AdminPanel extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.admin_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // get society data from server when obp has already created society.
+        DatabaseHelper dbHelper = new DatabaseHelper(AdminPanel.this);
+        int societyRowsCount = dbHelper.numberOfSocietyRows();
+        int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
+        dbHelper.closeDB();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
+        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+        String strUID = String.valueOf(uId);
+
+        // when app is uninstalled then this function get all data from server
+        if (societyRowsCount <= 0) {
+            new GetAllSocietyAsyncTask(AdminPanel.this).execute();
+        }
+
+        // when app is uninstalled then this function get all data from server
+        if ( enquiryRowsCount <= 0){
+            new GetEnquiryAsyncTask(AdminPanel.this,strUID).execute();
+        }
+
+        // Make sure the device has the proper dependencies.
+        GCMRegistrar.checkDevice(this);
+
+        // Make sure the manifest was properly set - comment out this line
+        // while developing the app, then uncomment it when it's ready.
+        GCMRegistrar.checkManifest(this);
+
+        // Get GCM registration id
+        final String regId = GCMRegistrar.getRegistrationId(this);
+        registerReceiver(mHandleMessageReceiverAtAdmin, new IntentFilter(
+                CommonVariables.DISPLAY_MESSAGE_ACTION));
+
+        if (regId.equals("")) {
+            // Registration is not present, Register now with GCM
+            GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
+        }
+    }
+
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleMessageReceiverAtAdmin = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            System.out.println("on activity via gcm.");
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        try {
+            unregisterReceiver(mHandleMessageReceiverAtAdmin);
+            GCMRegistrar.onDestroy(getApplicationContext());
+        } catch (Exception e) {
+            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
+        }
+        super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.admin_drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+//        System.out.println(getSupportFragmentManager().getBackStackEntryCount() > 0);
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0 )
+        {
             super.onBackPressed();
+        }
+        else
+        {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.ic_launcher_logo)
+                    .setTitle("Closing Kisan Cart")
+                    .setMessage("Are you sure you want to close this app?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
+                            String loginSharedPref = getPreference.getLoginPreference(getResources().getString(R.string.boolean_login_sharedPref));
+                            if(loginSharedPref.equals("true")  )
+                            {
+                                finish();
+                            }
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
     }
 
@@ -79,12 +181,24 @@ public class AdminPanel extends AppCompatActivity
         if (id == R.id.id_admin_nav_viewEnquiry) {
             startActivity(new Intent(AdminPanel.this, View_Enquiry.class));
         } else if (id == R.id.id_admin_nav_newReply) {
-
+            startActivity(new Intent(AdminPanel.this, New_Reply.class));
         } else if (id == R.id.id_admin_nav_viewOrder) {
 
         } else if (id == R.id.id_admin_nav_createOBP) {
             // send program flow to OBP creation class(Activity)
             startActivity(new Intent(AdminPanel.this, Create_OBP.class));
+        }else if (id == R.id.id_admin_nav_logout) {
+            SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(AdminPanel.this);
+
+            // it store false value of user for purpose of user is logging.
+            setPreference.setLoginPreference(getResources().getString(R.string.boolean_login_sharedPref), "false");
+            Intent intent = new Intent(AdminPanel.this, Login.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            finish();
+
         }
 
         return true;

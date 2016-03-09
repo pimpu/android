@@ -54,6 +54,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
     private List<Society> allSocieties;
     private SetSharedPreferenceHelper setPreference;
     private View createEnquiryView;
+    private String eId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,10 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         int rowsCount = dbHelper.numberOfSocietyRows();
         dbHelper.closeDB();
 
-        if (rowsCount <= 0) {
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
+        String userTypePreference = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
+
+        if (rowsCount <= 0 && userTypePreference.equals("obp")) {
             setContentView(R.layout.society_unavailable);
             Toolbar toolbar = (Toolbar) findViewById(R.id.create_enquiry_toolbar);
             setSupportActionBar(toolbar);
@@ -99,7 +103,20 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
         tvFileName = (TextView) findViewById(R.id.tv_id_UploadedImage);
         txt_ref_no = (EditText) findViewById(R.id.edittext_id_ref_no);
-        txt_ref_no.setText("REF"+getRefStringDate());
+
+        Bundle extras = getIntent().getExtras();
+
+        if(extras.getString("callingClass").equals("mainActivity")){
+            // this intent comes from main activity
+            txt_ref_no.setText( getResources().getString(R.string.refString, getRefStringDate()) );
+            eId = "0";
+        }
+        else {
+            // this intent comes from new reply with reference no
+            txt_ref_no.setText( extras.getString("ref") );
+            eId = String.valueOf(extras.getInt("enquiryId"));
+        }
+
 
         txt_contact = (EditText) findViewById(R.id.edittext_id_society_contact);
         txt_email = (EditText) findViewById(R.id.edittext_id_society_email);
@@ -195,7 +212,6 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
                         String strUID = String.valueOf(uId);
                         String userType = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
-                        String eId = "0";
 
                         // Check if Internet present
                         if (!isConnectingToInternet(Create_Enquiry.this)) {

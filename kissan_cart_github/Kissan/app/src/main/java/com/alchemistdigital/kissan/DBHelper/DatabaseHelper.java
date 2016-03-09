@@ -128,7 +128,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
-        long society_id = db.insert(TABLE_SOCIETY, null, contentValues);
+        long society_id = 0;
+        try {
+            society_id = db.insert(TABLE_SOCIETY, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return society_id;
     }
 
@@ -341,6 +346,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ENQUIRY, ENQUIRY_USERID+" = ?",new String[]{ String.valueOf(uId)});
         return numRows;
     }
+
+    /**
+     * getting enquiry count using replyTo with logged in  user id and replied with 0 value.
+     */
+    public int numberOfEnquiryRowsByReplyto(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String whereClause = ENQUIRY_REPLYTO+" = ? AND "+ENQUIRY_REPLIED+" = ?";
+        String[] whereArgs = new String[]{ String.valueOf(uId),"0"} ;
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ENQUIRY, whereClause, whereArgs);
+        return numRows;
+    }
+
+    public List<Enquiry> getEnquiryByReplytoAndReplied() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Enquiry> array_list = new ArrayList<Enquiry>();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
+                + ENQUIRY_REPLYTO + " = " + uId+" AND "+ENQUIRY_REPLIED+" = 0 ORDER BY "+KEY_CREATED_AT;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Enquiry enquiry = new Enquiry();
+                String formatedDate = null;
+
+                String date = res.getString(res.getColumnIndex(KEY_CREATED_AT));
+                int abc = date.lastIndexOf(':');
+                if (abc != -1) {
+                    formatedDate = date.substring(0,abc);
+                }
+
+                enquiry.setEnquiry_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                enquiry.setEnquiry_reference(res.getString(res.getColumnIndex(ENQUIRY_REF)));
+                enquiry.setEnquiry_userId(res.getInt(res.getColumnIndex(ENQUIRY_USERID)));
+                enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
+                enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
+                enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
+                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
+                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
+                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
+                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
+                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
+                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setCreted_at(formatedDate);
+
+                array_list.add(enquiry);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+
+    }
+
     // ------------------------ "Enquiry" table methods ----------------//
 
     // closing database
@@ -359,5 +427,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Date date = new Date();
         return dateFormat.format(date);
     }
-
 }

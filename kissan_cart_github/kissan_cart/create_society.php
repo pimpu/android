@@ -1,6 +1,7 @@
 <?php
 	// include db connect class
 	include 'kissanCart_db_connect.php';
+	include 'GCM.php';
 	error_reporting(0);
 	$response = array();
 	
@@ -43,6 +44,36 @@
 														
 			if(isset($getId)){
 				
+				$gcm = new GCM();
+
+				$society = array();
+				$registration_ids = array();
+
+				$society["soc_id"] = $getId;
+				$society["soc_name"] = $society_name;
+				$society["soc_contact"] = $society_contact;
+				$society["soc_email"] = $society_email;
+				$society["soc_adrs"] = $society_address;
+
+				$gcmMessage = array(
+											'message' => 'downloadSocietyAtAdmin',
+											'societyDetails' => $society
+										);
+
+				// get gcmId from user data  when user is logging.
+				$sql = "SELECT gcmId FROM userdetails WHERE gID=1;";
+				$getGCMResultData = mysql_query($sql);
+				
+				if( mysql_num_rows($getGCMResultData) > 0 ){
+					
+					$idGCM=mysql_fetch_array($getGCMResultData);
+					array_push($registration_ids, $idGCM['gcmId']);
+					
+				}
+
+				$gcm->send_notification($registration_ids, $gcmMessage);
+
+
 				$response["success"] = 2;
 				$response["message"] = $getId;
 	

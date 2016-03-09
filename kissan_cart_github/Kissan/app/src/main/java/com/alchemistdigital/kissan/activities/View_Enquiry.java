@@ -59,7 +59,7 @@ public class View_Enquiry extends AppCompatActivity {
             new RecyclerViewListener.RecyclerItemClickListener(getApplicationContext(), new RecyclerViewListener.RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, final int position) {
-                    int enquiryId = data.get(position).getEnquiry_id();
+//                    int enquiryId = data.get(position).getEnquiry_id();
                     Intent goToDetailEnquiry = new Intent(View_Enquiry.this,Enquiry_Detail.class);
 
                     Bundle extras = new Bundle();

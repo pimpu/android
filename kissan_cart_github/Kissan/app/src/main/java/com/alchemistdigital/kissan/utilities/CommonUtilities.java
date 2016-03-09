@@ -1,6 +1,7 @@
 package com.alchemistdigital.kissan.utilities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -66,6 +67,7 @@ public class CommonUtilities {
         Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
         return bitmap;
     }
+
     public static String getStringImage(String filename) {
         Bitmap bmp = createBitmapFromFilePath(filename);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -73,5 +75,20 @@ public class CommonUtilities {
         byte[] imageBytes = baos.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
+    }
+
+    /**
+     * Notifies UI to display a message.
+     * <p>
+     * This method is defined in the common helper because it's used both by
+     * the UI and the background service.
+     *
+     * @param context application's context.
+     * @param message message to be displayed.
+     */
+    public static void displayMessage(Context context, String message) {
+        Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
+        intent.putExtra(CommonVariables.EXTRA_MESSAGE, message);
+        context.sendBroadcast(intent);
     }
 }

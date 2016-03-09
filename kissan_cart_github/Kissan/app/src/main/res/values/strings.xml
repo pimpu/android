@@ -61,4 +61,13 @@
     <string name="sharedPreference_filepath">preference_filepath</string>
     <string name="bool_scan_image">is_scan_file</string>
     <string name="empty_enquiry_message">No enquiry registered.</string>
+    <string name="empty_enquiry_reply_message">No enquiry reply.</string>
+    <string name="view">View</string>
+    <string name="reply">Reply</string>
+    <string name="refString">REF%1$s</string>
+
+
+    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
 </resources>
