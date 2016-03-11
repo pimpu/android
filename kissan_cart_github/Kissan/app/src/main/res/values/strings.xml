@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Kissan Cart</string>
 
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -48,6 +49,7 @@
     <string name="upload_enquiry">Upload Enquiry</string>
     <string name="choose_file">Choose File: </string>
     <string name="submit">submit</string>
+    <string name="create_item">Create Item</string>
     <string name="network_error_message">Internet Connection Error</string>
     <string name="no_society_found">Click on me for creating society.</string>
     <string name="btn_login">Login</string>
@@ -56,15 +58,23 @@
     <string name="loginName">login_name</string>
     <string name="loginEmail">login_email</string>
     <string name="userId">userId</string>
-    <string name="title_activity_admin_panel">AdminPanel</string>
+    <string name="title_activity_admin_panel">Admin Panel</string>
     <string name="title_select_society">Select society -</string>
     <string name="sharedPreference_filepath">preference_filepath</string>
     <string name="bool_scan_image">is_scan_file</string>
     <string name="empty_enquiry_message">No enquiry registered.</string>
     <string name="empty_enquiry_reply_message">No enquiry reply.</string>
+    <string name="empty_no_enquiry_for_order">Please register enquiry to generate order.</string>
     <string name="view">View</string>
     <string name="reply">Reply</string>
     <string name="refString">REF%1$s</string>
+    <string name="createNewItem">Create New Item</string>
+    <string name="enquiryDetail">Enquiry Detail</string>
+    <string name="newReply">New Reply</string>
+    <string name="createItem">Create Item</string>
+    <string name="Rs">\u20B9</string>
+    <string name="emptyItemErrorMsg">No item created.</string>
+
 
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->

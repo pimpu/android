@@ -172,7 +172,9 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                 long enquiryId = dbHelper.insertEnquiry(enquiry);
                 System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
 
-                if(!eId.equals("0")){
+                System.out.println("Before update stmt: "+eId);
+                if( !eId.equals("0") ){
+                    System.out.println("inside update replied.");
                     int i = dbHelper.updateEnquiryReplied(eId);
                     System.out.println(context.getClass().getSimpleName()+"(update) : "+i);
                 }

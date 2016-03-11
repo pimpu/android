@@ -106,15 +106,17 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
         Bundle extras = getIntent().getExtras();
 
-        if(extras.getString("callingClass").equals("mainActivity")){
-            // this intent comes from main activity
-            txt_ref_no.setText( getResources().getString(R.string.refString, getRefStringDate()) );
-            eId = "0";
-        }
-        else {
-            // this intent comes from new reply with reference no
-            txt_ref_no.setText( extras.getString("ref") );
-            eId = String.valueOf(extras.getInt("enquiryId"));
+        if(extras != null){
+            if(extras.getString("callingClass").equals("mainActivity")){
+                // this intent comes from main activity
+                txt_ref_no.setText( getResources().getString(R.string.refString, getRefStringDate()) );
+                eId = "0";
+            }
+            else {
+                // this intent comes from new reply with reference no
+                txt_ref_no.setText( extras.getString("ref") );
+                eId = String.valueOf(extras.getInt("enquiryId"));
+            }
         }
 
 

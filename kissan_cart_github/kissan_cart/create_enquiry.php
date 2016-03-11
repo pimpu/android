@@ -147,6 +147,7 @@ if (isset($_FILES['image']['name'])) {
 					$enquiry["eSocCont"] = $contact;
 					$enquiry["eSocEmail"] = $email;
 					$enquiry["eDoc"] = $_FILES['image']['name'];
+					$enquiry["oldEnquiryId"] = $eId;
 
 					$gcmMessage = array(
 											'message' => 'downloadEnquiry',

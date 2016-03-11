@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 
@@ -37,10 +39,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_SOCIETY = "Society";
     private static final String TABLE_ENQUIRY = "Enquiry";
+    private static final String TABLE_ORDER = "Orders";
+    private static final String TABLE_ITEM = "Item";
 
     // Common column names
     private static final String KEY_ID = "id";
     private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_STATUS = "status";
 
     // SOCIETY Table - column names
     private static final String SOCIETY_COLUMN_USERID = "uID";
@@ -62,12 +67,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ENQUIRY_SOCIETY_EMAIL = "eSocEmail";
     private static final String ENQUIRY_DOCUMENT = "eDoc";
 
+    // ORDER Table - column names
+    private static final String ORDER_USERID = "orderUserId";
+    private static final String ORDER_REFERENCE = "enqRef";
+    private static final String ORDER_UTR = "UTR";
+    private static final String ORDER_ITEM = "ordItem";
+    private static final String ORDER_QUANTITY = "ordQty";
+    private static final String ORDER_PRICE = "ordPrice";
+    private static final String ORDER_TOTAL_AMOUNT = "totamnt";
+
+    // ITEM Table - column names
+    private static final String ITEM_REFERENCE = "referenceNo";
+    private static final String ITEM_NAME = "name";
+    private static final String ITEM_QUANTITY = "quantity";
+    private static final String ITEM_PRICE = "price";
+    private static final String ITEM_TOTAL_AMOUNT = "total_amount";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
-
-
 
     // Society Table Create Statements
     private static final String CREATE_TABLE_SOCIETY =
@@ -78,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
                     SOCIETY_COLUMN_EMAIL+" VARCHAR(100)," +
                     SOCIETY_COLUMN_ADDRESS+" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Enquiry Table Create Statements
@@ -95,6 +115,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     ENQUIRY_SOCIETY_CONTACT +" VARCHAR(20)," +
                     ENQUIRY_SOCIETY_EMAIL +" VARCHAR(20)," +
                     ENQUIRY_DOCUMENT +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Item Table Create Statement
+    private static final String CREATE_TABLE_ITEM =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_ITEM +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    ITEM_REFERENCE +" VARCHAR(50)," +
+                    ITEM_NAME +" VARCHAR(50)," +
+                    ITEM_QUANTITY +" INTEGER,"+
+                    ITEM_PRICE +" VARCHAR(50)," +
+                    ITEM_TOTAL_AMOUNT +" VARCHAR(50)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Order Table Create Statement
+    private static final String CREATE_TABLE_ORDER =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_ORDER +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY," +
+                    ORDER_USERID + " INTEGER,"+
+                    ORDER_REFERENCE +" VARCHAR(40),"+
+                    ORDER_UTR + " VARCHAR(40),"+
+                    ORDER_ITEM + " VARCHAR(40),"+
+                    ORDER_QUANTITY + " INTEGER,"+
+                    ORDER_PRICE + " VARCHAR(40),"+
+                    ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+
+                    KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     @Override
@@ -102,6 +148,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         db.execSQL(CREATE_TABLE_SOCIETY);
         db.execSQL(CREATE_TABLE_ENQUIRY);
+        db.execSQL(CREATE_TABLE_ITEM);
+        db.execSQL(CREATE_TABLE_ORDER);
     }
 
     @Override
@@ -109,6 +157,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOCIETY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENQUIRY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
 
         // create new tables
         onCreate(db);
@@ -125,6 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SOCIETY_COLUMN_CONTACT, societyColumn.getSoc_contact());
         contentValues.put(SOCIETY_COLUMN_EMAIL, societyColumn.getSoc_email());
         contentValues.put(SOCIETY_COLUMN_ADDRESS, societyColumn.getSoc_adrs());
+        contentValues.put(KEY_STATUS, "1");
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -184,7 +235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a society
      */
-    public boolean updateContact(Society society){
+    public boolean updateSociety(Society society){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -201,7 +252,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deleting a society
      */
-    public Integer deleteContact (int id)
+    public Integer deleteSociety (int id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -253,6 +304,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ID, enquiryColumn.getEnquiry_id());
+        contentValues.put(KEY_STATUS, "1");
         contentValues.put(KEY_CREATED_AT, enquiryColumn.getCreted_at());
         contentValues.put(ENQUIRY_REF, enquiryColumn.getEnquiry_reference());
         contentValues.put(ENQUIRY_USERID, enquiryColumn.getEnquiry_userId());
@@ -274,11 +326,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a society
      */
-    public int updateEnquiryReplied(String eId){
+    public int updateEnquiryReplied(String eId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ENQUIRY_REPLIED, 1);
+        contentValues.put(ENQUIRY_REPLIED, "1");
 
 //      db.update(String table_name,String where_clause,String[] where_args);
         int update = db.update(TABLE_ENQUIRY, contentValues, KEY_ID + " = ? ", new String[]{eId});
@@ -409,7 +461,132 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public List<Enquiry> getReferenceNumberForOrder(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Enquiry> array_list = new ArrayList<Enquiry>();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        // gets reference number from enquiry table
+        // Condition :-
+        // group id from enquiry with value 2 (get only obp data)
+        // AND
+        // replied from enquiry with value 1 (get only admin replied enquiry from enquiry table)
+        // AND
+        // reference no which are not in order table. i.e. oreder not created of that reference number.
+        String selectQuery = "SELECT DISTINCT e."+ENQUIRY_REF+" FROM " + TABLE_ENQUIRY + " e WHERE e."
+                +ENQUIRY_USERID+ " = " +uId+" AND " +
+                "e."+ENQUIRY_GROUPID+" = 2 AND " +
+                "e."+ENQUIRY_REPLIED+" = 1 AND e."
+                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+                +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
+//        String selectQuery = "SELECT * FROM "+TABLE_ENQUIRY;
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do {
+                Enquiry enquiry = new Enquiry();
+                enquiry.setEnquiry_reference(res.getString(res.getColumnIndex(ENQUIRY_REF)));
+//                System.out.println("Ref no-" + res.getString(res.getColumnIndex(ENQUIRY_REF)) + ", USER id-" + res.getString(res.getColumnIndex(ENQUIRY_USERID)) + ", GROUP no-" + res.getString(res.getColumnIndex(ENQUIRY_GROUPID)) + ", Replied no-" + res.getString(res.getColumnIndex(ENQUIRY_REPLIED))+ ", Satus-"+res.getString(res.getColumnIndex(KEY_STATUS)));
+                array_list.add(enquiry);
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    public void deleteEnquiryTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENQUIRY);
+    }
+
     // ------------------------ "Enquiry" table methods ----------------//
+
+
+    // ------------------------ "Orders" table methods ----------------//
+    public long insertOrder(Order orderColumn){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_ID, orderColumn.getOrder_id());
+        contentValues.put(KEY_STATUS, "1");
+        contentValues.put(ORDER_USERID, orderColumn.getUserId());
+        contentValues.put(ORDER_REFERENCE, orderColumn.getOrder_reference());
+        contentValues.put(ORDER_UTR, orderColumn.getOrder_utr());
+        contentValues.put(ORDER_ITEM, orderColumn.getOrder_item());
+        contentValues.put(ORDER_QUANTITY, orderColumn.getOrder_quantity());
+        contentValues.put(ORDER_PRICE, orderColumn.getOrder_price());
+        contentValues.put(ORDER_TOTAL_AMOUNT, orderColumn.getOrder_total_amount());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long order_id = db.insert(TABLE_ORDER, null, contentValues);
+        return order_id;
+    }
+    // ------------------------ "Orders" table methods ----------------//
+
+
+
+    // ------------------------ "Item" table methods ----------------//
+    public long insertItem(Item itemColumn){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+        contentValues.put(ITEM_REFERENCE, itemColumn.getReferenceNo());
+        contentValues.put(ITEM_NAME, itemColumn.getItemName());
+        contentValues.put(ITEM_QUANTITY, itemColumn.getItemQuantity());
+        contentValues.put(ITEM_PRICE, itemColumn.getItemPrice());
+        contentValues.put(ITEM_TOTAL_AMOUNT, itemColumn.getItemTotalAmount());
+
+        // insert row
+        long item_id = db.insert(TABLE_ITEM, null, contentValues);
+        return item_id;
+    }
+
+    public List<Item> getItemByRefno(String refno) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Item> array_list = new ArrayList<Item>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ITEM + " WHERE "
+                + ITEM_REFERENCE + " = '" +refno+"' ORDER BY "+KEY_CREATED_AT;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Item item = new Item();
+
+                item.setItemId(res.getInt(res.getColumnIndex(KEY_ID)));
+                item.setReferenceNo(res.getString(res.getColumnIndex(ITEM_REFERENCE)));
+                item.setItemName(res.getString(res.getColumnIndex(ITEM_NAME)));
+                item.setItemQuantity(res.getInt(res.getColumnIndex(ITEM_QUANTITY)));
+                item.setItemPrice(res.getString(res.getColumnIndex(ITEM_PRICE)));
+                item.setItemTotalAmount(res.getString(res.getColumnIndex(ITEM_TOTAL_AMOUNT)));
+                array_list.add(item);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    /**
+     * getting item count using reference value
+     */
+    public int numberOfItemRowsByRefNo(String refNo){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = ITEM_REFERENCE+" = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(refNo)} ;
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ITEM, whereClause, whereArgs);
+        return numRows;
+    }
+
+    // ------------------------ "Item" table methods ----------------//
 
     // closing database
     public void closeDB() {

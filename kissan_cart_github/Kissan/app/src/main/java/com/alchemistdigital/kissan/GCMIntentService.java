@@ -49,13 +49,23 @@ public class GCMIntentService extends GCMBaseIntentService {
             String str_contact = json.getString("eSocCont");
             String str_email = json.getString("eSocEmail");
             String fileName = json.getString("eDoc");
+            String oldEnquiryId = json.getString("oldEnquiryId");
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
             Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, replied, str_message, str_name, str_address, str_contact, str_email, fileName);
             long enquiryId = dbHelper.insertEnquiry(enquiry);
+
+            System.out.println("Before update stmt(GCM): "+oldEnquiryId);
+            if( !oldEnquiryId.equals("0") ){
+                System.out.println("inside update replied.");
+                int i = dbHelper.updateEnquiryReplied(oldEnquiryId);
+                System.out.println(context.getClass().getSimpleName()+"(update at GCM) : "+i);
+            }
+
             dbHelper.closeDB();
 
             System.out.println("insert enquiry(GCM): " + enquiryId);
+
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -180,21 +180,33 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_createEnquiry) {
             Intent intent = new Intent(MainActivity.this, Create_Enquiry.class);
-
             Bundle bundle = new Bundle();
             bundle.putString("callingClass","mainActivity");
             intent.putExtras(bundle);
             startActivity(intent);
 
         } else if (id == R.id.nav_viewEnquiry) {
+
             startActivity(new Intent(MainActivity.this, View_Enquiry.class));
+
         } else if (id == R.id.nav_createOrder) {
-            startActivity(new Intent(MainActivity.this, Create_Order.class));
+
+            Intent orderIntent = new Intent(MainActivity.this, Create_View_Orders.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("referenceNo","0");
+            orderIntent.putExtras(bundle);
+            startActivity(orderIntent);
+
         } else if (id == R.id.nav_newReply) {
+
             startActivity(new Intent(MainActivity.this, New_Reply.class));
+
         } else if (id == R.id.nav_createSociety) {
+
             startActivity(new Intent(MainActivity.this, Create_Society.class));
+
         } else if (id == R.id.nav_obp_logout) {
+
             SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(MainActivity.this);
 
             // it store false value of user for purpose of user is logging.
