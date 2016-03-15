@@ -12,7 +12,7 @@
     <string name="nav_item_viewEnquiry">View Enquiry</string>
     <string name="nav_item_createOrder">Create Order</string>
     <string name="nav_item_viewOrder">View Orders</string>
-    <string name="nav_item_newReply">New Reply</string>
+    <string name="nav_item_newReply">New Enquiry</string>
     <string name="nav_item_createSociety">Create Society</string>
     <string name="nav_item_createOBP">Create OBP</string>
     <string name="nav_item_logout">Logout</string>
@@ -63,19 +63,23 @@
     <string name="sharedPreference_filepath">preference_filepath</string>
     <string name="bool_scan_image">is_scan_file</string>
     <string name="empty_enquiry_message">No enquiry registered.</string>
-    <string name="empty_enquiry_reply_message">No enquiry reply.</string>
+    <string name="empty_order_message">No order registered.</string>
+    <string name="empty_enquiry_reply_message">No new enquiry reply.</string>
     <string name="empty_no_enquiry_for_order">Please register enquiry to generate order.</string>
     <string name="view">View</string>
     <string name="reply">Reply</string>
     <string name="refString">REF%1$s</string>
     <string name="createNewItem">Create New Item</string>
     <string name="enquiryDetail">Enquiry Detail</string>
-    <string name="newReply">New Reply</string>
+    <string name="newReply">New Enquiry</string>
+    <string name="viewOrders">View Orders</string>
+    <string name="orderDetails">Order Detail</string>
     <string name="createItem">Create Item</string>
     <string name="Rs">\u20B9</string>
     <string name="emptyItemErrorMsg">No item created.</string>
-
-
+    <string name="utrNumber">UTR number</string>
+    <string name="societyDetails">Society Detail</string>
+    <string name="obpDetails">OBP Detail</string>
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>

@@ -179,6 +179,7 @@ public class Create_Item extends AppCompatActivity {
                         Intent intentToCO = new Intent(Create_Item.this,Create_View_Orders.class);
                         Bundle extra = new Bundle();
                         extra.putString("referenceNo",refNo);
+                        extra.putString("UTRNo",getIntent().getExtras().getString("utrNo"));
                         intentToCO.putExtras(extra);
                         startActivity(intentToCO);
                         finish();
@@ -193,6 +194,7 @@ public class Create_Item extends AppCompatActivity {
         Intent intentToCO = new Intent(Create_Item.this,Create_View_Orders.class);
         Bundle extra = new Bundle();
         extra.putString("referenceNo",refNo);
+        extra.putString("UTRNo",getIntent().getExtras().getString("utrNo"));
         intentToCO.putExtras(extra);
         startActivity(intentToCO);
         finish();

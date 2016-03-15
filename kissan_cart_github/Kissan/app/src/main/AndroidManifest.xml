@@ -51,37 +51,41 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name" />
-
-        <activity android:name=".activities.Create_Enquiry"
+        <activity
+            android:name=".activities.Create_Enquiry"
             android:label="@string/nav_item_createEnquiry" />
-
-        <activity android:name=".activities.Create_Item"
+        <activity
+            android:name=".activities.Create_Item"
             android:label="@string/createItem" />
-
-        <activity android:name=".activities.Create_Society"
+        <activity
+            android:name=".activities.Create_Society"
             android:label="@string/nav_item_createSociety" />
-
-        <activity android:name=".activities.Create_OBP"
+        <activity
+            android:name=".activities.Create_OBP"
             android:label="@string/nav_item_createOBP" />
-
         <activity
             android:name=".activities.AdminPanel"
             android:label="@string/title_activity_admin_panel"
             android:theme="@style/MyMaterialTheme" />
-
         <activity android:name=".activities.scannerActivity" />
-
-        <activity android:name=".activities.View_Enquiry"
+        <activity
+            android:name=".activities.View_Enquiry"
             android:label="@string/nav_item_viewEnquiry" />
-
-        <activity android:name=".activities.Enquiry_Detail"
+        <activity
+            android:name=".activities.Enquiry_Detail"
             android:label="@string/enquiryDetail" />
-
-        <activity android:name=".activities.New_Reply"
+        <activity
+            android:name=".activities.New_Reply"
             android:label="@string/newReply" />
-
-        <activity android:name=".activities.Create_View_Orders"
+        <activity
+            android:name=".activities.Create_View_Orders"
             android:label="@string/nav_item_createOrder" />
+        <activity
+            android:name=".activities.View_Orders"
+            android:label="@string/viewOrders"/>
+        <activity
+            android:name=".activities.Order_Detail"
+            android:label="@string/orderDetails"/>
 
         <service android:name=".GCMIntentService" />
 
@@ -98,6 +102,7 @@
                 <category android:name="com.alchemistdigital.kissan" />
             </intent-filter>
         </receiver>
+
 
     </application>
 

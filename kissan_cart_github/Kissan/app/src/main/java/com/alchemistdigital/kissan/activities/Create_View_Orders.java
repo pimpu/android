@@ -100,6 +100,7 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
         String referenceNo = getIntent().getExtras().getString("referenceNo");
         if( !referenceNo.equals("0") ){
             spinnerRefNo.setSelection(adapterRefNo.getPosition(referenceNo));
+            txt_utr.setText(getIntent().getExtras().getString("UTRNo"));
         }
 
         // make item list view
@@ -124,7 +125,12 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
                     if ( !isConnectingToInternet(Create_View_Orders.this) ) {
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
                         return;
-                    } else {
+                    }
+                    else if( itemsCount <= 0){
+                        Toast.makeText(Create_View_Orders.this,getResources().getString(R.string.emptyItemErrorMsg),Toast.LENGTH_LONG).show();
+                    }
+                    else {
+
                         JSONArray jsonArr = new JSONArray();
                         for (Item pn : itemByRefno ) {
                             JSONObject pnObj = new JSONObject();
@@ -145,14 +151,13 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
                         // get userId from shared preference.
                         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_View_Orders.this);
                         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
-                        new InsertOrderAsyncTask(Create_View_Orders.this).execute(str_enquiry_refno,
-                                                                                    str_utr,
-                                                                                    String.valueOf(jsonArr),
-                                                                                    String.valueOf(uId));
+                        new InsertOrderAsyncTask(Create_View_Orders.this,
+                                                    str_enquiry_refno,
+                                                    str_utr,
+                                                    String.valueOf(jsonArr),
+                                                    String.valueOf(uId)
+                                                    ).execute();
                     }
-                }
-                else if( itemsCount <= 0){
-                    Toast.makeText(Create_View_Orders.this,getResources().getString(R.string.emptyItemErrorMsg),Toast.LENGTH_LONG).show();
                 }
                 else {
                     utrInputLayout.setErrorEnabled(true);
@@ -212,9 +217,14 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
     }*/
 
     public void createNewItem(View view) {
+        if( txt_utr.getText().toString().isEmpty() ){
+            Toast.makeText(Create_View_Orders.this,"UTR filed is empty",Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(Create_View_Orders.this,Create_Item.class);
         Bundle extra = new Bundle();
         extra.putString("refNo",str_enquiry_refno);
+        extra.putString("utrNo",txt_utr.getText().toString());
         intent.putExtras(extra);
         startActivity(intent);
         finish();

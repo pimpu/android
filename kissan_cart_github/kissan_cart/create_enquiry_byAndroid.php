@@ -49,7 +49,7 @@ if (isset($_FILES['image']['name'])) {
 				$response['success'] = 1;
 				$response['message'] = 'Could not move the file!';
 			}
-			else{
+			else {
 
 				// query for to setting the replyTo var.
 				// if result get null value with eID that means obp create fisrt time enquiry with reference.

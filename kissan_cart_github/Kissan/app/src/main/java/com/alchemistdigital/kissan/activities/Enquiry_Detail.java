@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.DownloadImageAsyncTask;
+import com.alchemistdigital.kissan.utilities.CommonVariables;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -77,8 +78,7 @@ public class Enquiry_Detail extends AppCompatActivity {
         } else {
 
             new DownloadImageAsyncTask(Enquiry_Detail.this,(ImageView) findViewById(R.id.imageview_id_slip))
-                    .execute("http://bd15a3a2.ngrok.io/kissan_cart/AndroidFileUpload/uploads/" + document);
-
+                    .execute(CommonVariables.FILE_UPLOAD_URL + document);
         }
     }
 }

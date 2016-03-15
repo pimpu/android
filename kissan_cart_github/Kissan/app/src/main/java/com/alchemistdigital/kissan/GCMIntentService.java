@@ -5,11 +5,14 @@ import android.content.Intent;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.google.android.gcm.GCMBaseIntentService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +31,42 @@ public class GCMIntentService extends GCMBaseIntentService {
             storeSocietyDetails(context, intent.getExtras().getString("societyDetails"));
         } else if (message.equals("downloadEnquiry")) {
             storeEnquiryDetails(context, intent.getExtras().getString("enquiryDetails"));
+        } else if (message.equals("downloadOrderAtAdmin")) {
+            String referenceNo = intent.getExtras().getString("referenceNo");
+            String utr = intent.getExtras().getString("utr");
+            String items = intent.getExtras().getString("items");
+            String userId = intent.getExtras().getString("userId");
+
+            storeOrderAtAdminSite(context, referenceNo, utr, items, userId);
+        }
+
+    }
+
+    private void storeOrderAtAdminSite(Context context, String referenceNo, String utr, String items, String userId) {
+        try {
+            JSONArray jsonItem = new JSONArray(items);
+            DatabaseHelper dbhelper = new DatabaseHelper(context);
+
+            for (int i = 0; i < jsonItem.length(); i++) {
+                JSONObject obj = jsonItem.getJSONObject(i);
+
+                Item item = new Item( referenceNo,
+                                        obj.getString("itemName"),
+                                        obj.getInt("itemQuantity"),
+                                        obj.getString("itemPrice"),
+                                        obj.getString("itemTotalAmount") );
+
+                dbhelper.insertItem(item);
+
+            }
+
+            Order order = new Order(Integer.parseInt(userId), referenceNo, utr);
+            dbhelper.insertOrder(order);
+
+            dbhelper.closeDB();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

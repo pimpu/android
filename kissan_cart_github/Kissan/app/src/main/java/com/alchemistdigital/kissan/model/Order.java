@@ -8,21 +8,25 @@ public class Order {
     private int userId;
     private String order_reference;
     private String order_utr;
-    private String order_item;
+   /* private String order_item;
     private int order_quantity;
     private String order_price;
-    private String order_total_amount;
+    private String order_total_amount;*/
     private int order_status;
     private String order_creted_at;
-    public Order(int userId, int order_quantity, int order_id, String order_reference, String order_utr, String order_item, String order_price, String order_total_amount, int order_status, String order_creted_at) {
+
+    public Order() {
+    }
+
+    public Order(int userId, String order_reference, String order_utr) {
         this.userId = userId;
-        this.order_quantity = order_quantity;
         this.order_id = order_id;
         this.order_reference = order_reference;
         this.order_utr = order_utr;
-        this.order_item = order_item;
+       /* this.order_item = order_item;
+        this.order_quantity = order_quantity;
         this.order_price = order_price;
-        this.order_total_amount = order_total_amount;
+        this.order_total_amount = order_total_amount;*/
         this.order_status = order_status;
         this.order_creted_at = order_creted_at;
     }
@@ -43,7 +47,7 @@ public class Order {
         this.order_utr = order_utr;
     }
 
-    public void setOrder_item(String order_item) {
+    /*public void setOrder_item(String order_item) {
         this.order_item = order_item;
     }
 
@@ -57,7 +61,7 @@ public class Order {
 
     public void setOrder_total_amount(String order_total_amount) {
         this.order_total_amount = order_total_amount;
-    }
+    }*/
 
     public void setOrder_status(int order_status) {
         this.order_status = order_status;
@@ -83,7 +87,7 @@ public class Order {
         return order_utr;
     }
 
-    public String getOrder_item() {
+    /*public String getOrder_item() {
         return order_item;
     }
 
@@ -97,7 +101,7 @@ public class Order {
 
     public String getOrder_total_amount() {
         return order_total_amount;
-    }
+    }*/
 
     public int getOrder_status() {
         return order_status;

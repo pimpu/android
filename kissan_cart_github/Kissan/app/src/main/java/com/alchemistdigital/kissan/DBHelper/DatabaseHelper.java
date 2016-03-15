@@ -15,11 +15,9 @@ import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by user on 2/29/2016.
@@ -71,10 +69,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ORDER_USERID = "orderUserId";
     private static final String ORDER_REFERENCE = "enqRef";
     private static final String ORDER_UTR = "UTR";
-    private static final String ORDER_ITEM = "ordItem";
+   /* private static final String ORDER_ITEM = "ordItem";
     private static final String ORDER_QUANTITY = "ordQty";
     private static final String ORDER_PRICE = "ordPrice";
-    private static final String ORDER_TOTAL_AMOUNT = "totamnt";
+    private static final String ORDER_TOTAL_AMOUNT = "totamnt";*/
 
     // ITEM Table - column names
     private static final String ITEM_REFERENCE = "referenceNo";
@@ -132,14 +130,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Order Table Create Statement
     private static final String CREATE_TABLE_ORDER =
             "CREATE TABLE IF NOT EXISTS "+ TABLE_ORDER +
-                    "(" + KEY_ID + " INTEGER PRIMARY KEY," +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     ORDER_USERID + " INTEGER,"+
                     ORDER_REFERENCE +" VARCHAR(40),"+
                     ORDER_UTR + " VARCHAR(40),"+
-                    ORDER_ITEM + " VARCHAR(40),"+
+                   /* ORDER_ITEM + " VARCHAR(40),"+
                     ORDER_QUANTITY + " INTEGER,"+
                     ORDER_PRICE + " VARCHAR(40),"+
-                    ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+
+                    ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+*/
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -400,7 +398,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * getting enquiry count using replyTo with logged in  user id and replied with 0 value.
+     * getting enquiry count using replyTo with logged in user id and replied with 0 value.
      */
     public int numberOfEnquiryRowsByReplyto(){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -408,9 +406,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String whereClause = ENQUIRY_REPLYTO+" = ? AND "+ENQUIRY_REPLIED+" = ?";
-        String[] whereArgs = new String[]{ String.valueOf(uId),"0"} ;
-        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ENQUIRY, whereClause, whereArgs);
+        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_ENQUIRY + " e WHERE e."
+                + ENQUIRY_REPLYTO + " = " + uId+" AND e."+ENQUIRY_REPLIED+" = 0 AND e."
+                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+                +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
+
+        int numRows = (int) DatabaseUtils.longForQuery(db, selectQuery, null);
+
         return numRows;
     }
 
@@ -421,8 +423,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
-                + ENQUIRY_REPLYTO + " = " + uId+" AND "+ENQUIRY_REPLIED+" = 0 ORDER BY "+KEY_CREATED_AT;
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " e WHERE e."
+                + ENQUIRY_REPLYTO + " = " + uId+" AND e."+ENQUIRY_REPLIED+" = 0 AND e."
+                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+                +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
 
         Log.d(LOG, selectQuery);
 
@@ -502,6 +506,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENQUIRY);
     }
 
+    /**
+     * get enquiry by user id and reference
+     */
+    public List<Enquiry> getEnquiryByUid_Reference(int userId,String reference) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Enquiry> array_list = new ArrayList<Enquiry>();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
+                + ENQUIRY_USERID + " = " + userId +" AND " + ENQUIRY_REF + " = '"+reference+"' ORDER BY "+KEY_CREATED_AT;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Enquiry enquiry = new Enquiry();
+                String formatedDate = null;
+
+                String date = res.getString(res.getColumnIndex(KEY_CREATED_AT));
+                int abc = date.lastIndexOf(':');
+                if (abc != -1) {
+                    formatedDate = date.substring(0,abc);
+                }
+
+                enquiry.setEnquiry_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                enquiry.setEnquiry_reference(res.getString(res.getColumnIndex(ENQUIRY_REF)));
+                enquiry.setEnquiry_userId(res.getInt(res.getColumnIndex(ENQUIRY_USERID)));
+                enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
+                enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
+                enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
+                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
+                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
+                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
+                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
+                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
+                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setCreted_at(formatedDate);
+
+                array_list.add(enquiry);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
     // ------------------------ "Enquiry" table methods ----------------//
 
 
@@ -510,21 +563,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_ID, orderColumn.getOrder_id());
         contentValues.put(KEY_STATUS, "1");
         contentValues.put(ORDER_USERID, orderColumn.getUserId());
         contentValues.put(ORDER_REFERENCE, orderColumn.getOrder_reference());
         contentValues.put(ORDER_UTR, orderColumn.getOrder_utr());
-        contentValues.put(ORDER_ITEM, orderColumn.getOrder_item());
+       /* contentValues.put(ORDER_ITEM, orderColumn.getOrder_item());
         contentValues.put(ORDER_QUANTITY, orderColumn.getOrder_quantity());
         contentValues.put(ORDER_PRICE, orderColumn.getOrder_price());
-        contentValues.put(ORDER_TOTAL_AMOUNT, orderColumn.getOrder_total_amount());
+        contentValues.put(ORDER_TOTAL_AMOUNT, orderColumn.getOrder_total_amount());*/
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
         long order_id = db.insert(TABLE_ORDER, null, contentValues);
         return order_id;
     }
+
+    /**
+     * getting order count
+     */
+    public int numberOfOrderRows(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ORDER);
+        return numRows;
+    }
+
+    public List<Order> getAllOrder( ) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Order> array_list = new ArrayList<Order>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ORDER + " ORDER BY "+KEY_CREATED_AT;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Order order = new Order();
+
+                order.setOrder_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                order.setOrder_reference(res.getString(res.getColumnIndex(ORDER_REFERENCE)));
+                order.setOrder_utr(res.getString(res.getColumnIndex(ORDER_UTR)));
+                order.setUserId(res.getInt(res.getColumnIndex(ORDER_USERID)));
+                order.setOrder_creted_at(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+
+                array_list.add(order);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
     // ------------------------ "Orders" table methods ----------------//
 
 
@@ -599,9 +689,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * get datetime
      * */
     private String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
-        return dateFormat.format(date);
+        return ""+date.getTime() ;
     }
 }

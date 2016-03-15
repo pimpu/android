@@ -18,14 +18,21 @@ public class CommonVariables {
     public static final String EXTRA_MESSAGE = "message";
 
     public static final String SCAN_FILE_PATH = Environment.getExternalStorageDirectory() + "/obp";
-    public static final String SOCIETY_INSERT_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/create_society.php";
-    public static final String LOGGING_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/logging.php";
-    public static final String OBP_INSERT_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/cerate_obp.php";
-    public static final String SOCIETY_PER_OBP_QUERY_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/getSociety.php";
-    public static final String ALL_SOCIETY_BY_ADMIN_QUERY_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/getAllSociety.php";
-    public static final String ENQUIRY_INSERT_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/create_enquiry.php";
-    public static final String ENQUIRY_PER_OBP_QUERY_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/getEnquiry.php";
-    public static final String UPDATE_GCMID_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/updateGCMId.php";
-    public static final String ORDER_INSERT_SERVER_URL = "http://bd15a3a2.ngrok.io/kissan_cart/create_order.php";
+
+    static String SERVER_URL = "http://2e045bf7.ngrok.io/kissan_cart/";
+
+    public static String FILE_UPLOAD_URL = SERVER_URL+"AndroidFileUpload/uploads/";
+//    public static String FILE_UPLOAD_URL = "http://kissancart.com/obp/admin/Enquiry/";
+
+    public static final String SOCIETY_INSERT_SERVER_URL = SERVER_URL +"create_society_byAndroid.php";
+    public static final String LOGGING_SERVER_URL = SERVER_URL+"logging_byAndroid.php";
+    public static final String OBP_INSERT_SERVER_URL = SERVER_URL+"cerate_obp_byAndroid.php";
+    public static final String SOCIETY_PER_OBP_QUERY_SERVER_URL = SERVER_URL+"getSociety_byAndroid.php";
+    public static final String ALL_SOCIETY_BY_ADMIN_QUERY_SERVER_URL = SERVER_URL+"getAllSociety_byAndroid.php";
+    public static final String ENQUIRY_INSERT_SERVER_URL = SERVER_URL+"create_enquiry_byAndroid.php";
+    public static final String ENQUIRY_PER_OBP_QUERY_SERVER_URL = SERVER_URL+"getEnquiry_byAndroid.php";
+    public static final String UPDATE_GCMID_SERVER_URL = SERVER_URL+"updateGCMId_byAndroid.php";
+    public static final String ORDER_INSERT_SERVER_URL = SERVER_URL+"create_order_byAndroid.php";
+    public static final String QUERY_OBP_DETAIL_SERVER_URL = SERVER_URL+"getObpDetailsAtAdmin.php";
 
 }

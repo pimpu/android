@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
-import com.alchemistdigital.kissan.model.Order;
+import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 
@@ -20,24 +24,22 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
 /**
- * Created by user on 3/11/2016.
+ * Created by user on 3/15/2016.
  */
-public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
+public class GetOBPDetailsAtAdmin extends AsyncTask<String, String, String> {
     Context context;
+    String userId;
     private ProgressDialog pDialog;
-    private String str_enquiry_refno,str_utr,jsonItemArray,userId;
 
-    public InsertOrderAsyncTask(Context context, String str_enquiry_refno, String str_utr, String jsonItemArray, String userId) {
+    public GetOBPDetailsAtAdmin(Context context, String userId) {
         this.context = context;
-        this.str_enquiry_refno = str_enquiry_refno;
-        this.str_utr = str_utr;
-        this.jsonItemArray = jsonItemArray;
         this.userId = userId;
     }
 
@@ -45,7 +47,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
     protected void onPreExecute() {
         super.onPreExecute();
         pDialog = new ProgressDialog(context);
-        pDialog.setMessage("inserting ...");
+        pDialog.setMessage("Loading ...");
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.show();
@@ -56,7 +58,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
         String responseString = null;
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(CommonVariables.ORDER_INSERT_SERVER_URL);
+        HttpPost httppost = new HttpPost(CommonVariables.QUERY_OBP_DETAIL_SERVER_URL);
 
         try {
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -69,10 +71,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
                     });
 
             // Adding file data to http body
-            entity.addPart("referenceNo", new StringBody(str_enquiry_refno));
-            entity.addPart("UTR", new StringBody(str_utr));
-            entity.addPart("itemsJSONArray", new StringBody(jsonItemArray));
-            entity.addPart("userId", new StringBody(userId));
+            entity.addPart("str_obpId", new StringBody(userId));
 
             httppost.setEntity(entity);
 
@@ -96,6 +95,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
         }
 
         return responseString;
+
     }
 
     @Override
@@ -103,29 +103,67 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
         pDialog.dismiss();
 
         try {
-            Log.d("Order insert Data", result.toString());
+            Log.d("get obp Data at admin: ", result.toString());
+
             if(result.contains("Error occurred!")){
                 Toast.makeText(context, result, Toast.LENGTH_LONG).show();
                 return;
             }
 
             JSONObject json = new JSONObject(result);
+            // check for success tag
             int success = json.getInt(CommonVariables.TAG_SUCCESS);
-            String message = json.getString(CommonVariables.TAG_MESSAGE);
             if (success == 1) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                DatabaseHelper dbhelper = new DatabaseHelper(context);
-                Order order = new Order(Integer.parseInt(userId), str_enquiry_refno, str_utr);
-                dbhelper.insertOrder(order);
-                dbhelper.closeDB();
+                JSONArray jsonSociety = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
-                ((Activity)context).finish();
+                JSONObject obpData = jsonSociety.getJSONObject(0);
+
+                createObpDialog(context,obpData);
+
             }
-            else {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    private void createObpDialog(Context context, JSONObject obpData) {
+        // custom dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_alert_obp_detail, null);
+        dialogBuilder.setView(dialogView);
+
+
+        // set the custom dialog components - text, image and button
+        TextView tv_obp_name = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_name);
+        TextView tv_store_name = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_store_name);
+        TextView tv_obp_contact = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_contact);
+        TextView tv_obp_email = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_email);
+        TextView tv_obp_address = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_address);
+        ImageView closeDialog = (ImageView) dialogView.findViewById(R.id.closeOBPDetailsAlert);
+
+        try {
+            tv_obp_name.setText( obpData.getString("name") );
+            tv_store_name.setText( obpData.getString("storeName") );
+            tv_obp_contact.setText( obpData.getString("contact") );
+            tv_obp_email.setText( obpData.getString("email") );
+            tv_obp_address.setText( obpData.getString("address") );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final AlertDialog b = dialogBuilder.create();
+
+        // if button is clicked, close the custom dialog
+        closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.dismiss();
+            }
+        });
+
+        b.show();
+    }
+
 }

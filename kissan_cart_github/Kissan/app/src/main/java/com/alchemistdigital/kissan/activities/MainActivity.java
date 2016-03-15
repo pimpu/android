@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DatabaseHelper dbHelper;
+    TextView tv_ObpEmail_navHeader,tv_ObpName_navHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.obp_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -49,13 +55,24 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.obp_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // set email-id and name to nav header view
+        View headerLayout = navigationView.getHeaderView(0);
+
+        String emailPreference = getPreference.getEmailPreference(getResources().getString(R.string.loginEmail));
+        String namePreference = getPreference.getNamePreference(getResources().getString(R.string.loginName));
+
+        tv_ObpEmail_navHeader = (TextView) headerLayout.findViewById(R.id.obp_email);
+        tv_ObpName_navHeader  = (TextView) headerLayout.findViewById(R.id.obp_name);
+        tv_ObpEmail_navHeader.setText(emailPreference);
+        tv_ObpName_navHeader.setText(namePreference);
+
+
         // get society data from server when obp has already created society.
         dbHelper = new DatabaseHelper(MainActivity.this);
         int societyRowsCount = dbHelper.numberOfSocietyRows();
         int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
         dbHelper.closeDB();
 
-        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
         String strUID = String.valueOf(uId);
 
@@ -85,6 +102,7 @@ public class MainActivity extends AppCompatActivity
             // Registration is not present, Register now with GCM
             GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
         }
+
 
     }
 

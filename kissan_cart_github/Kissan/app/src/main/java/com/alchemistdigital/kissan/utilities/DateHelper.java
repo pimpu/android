@@ -17,7 +17,6 @@ public class DateHelper {
     private final static SimpleDateFormat MINUTE= new SimpleDateFormat("mm");
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
 
-
     /**
      *
      * @param dateFormili in format "yyyy/mm/dd"
@@ -39,6 +38,7 @@ public class DateHelper {
         Date currentDate = new Date(millis);
         return sdf.format(currentDate);
     }
+
 
     public static String getRefStringDate(){
         Date date = new Date();

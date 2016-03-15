@@ -135,11 +135,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/textItemHint"
+                        android:text="Items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/mdtp_done_text_color_dark_disabled" />
+
                     <ListView
                         android:id="@+id/itemListView"
                         android:layout_width="match_parent"
                         android:fadeScrollbars="false"
                         android:background="@drawable/border_lsitview"
+                        android:layout_below="@+id/textItemHint"
                         android:layout_height="200sp" >
                     </ListView>
 

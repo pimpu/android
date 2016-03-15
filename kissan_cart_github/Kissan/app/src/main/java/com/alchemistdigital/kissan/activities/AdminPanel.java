@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
@@ -31,6 +33,7 @@ import com.google.android.gcm.GCMRegistrar;
 public class AdminPanel extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    TextView tv_AdminEmail_navHeader,tv_AdminName_navHeader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,18 @@ public class AdminPanel extends AppCompatActivity
             // Registration is not present, Register now with GCM
             GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
         }
+
+        // set email-id and name to nav header view
+        View headerLayout = navigationView.getHeaderView(0);
+
+        String emailPreference = getPreference.getEmailPreference(getResources().getString(R.string.loginEmail));
+        String namePreference = getPreference.getNamePreference(getResources().getString(R.string.loginName));
+
+        tv_AdminEmail_navHeader = (TextView) headerLayout.findViewById(R.id.admin_email);
+        tv_AdminName_navHeader  = (TextView) headerLayout.findViewById(R.id.admin_name);
+        tv_AdminEmail_navHeader.setText(emailPreference);
+        tv_AdminName_navHeader.setText(namePreference);
+
     }
 
     /**
@@ -183,7 +198,7 @@ public class AdminPanel extends AppCompatActivity
         } else if (id == R.id.id_admin_nav_newReply) {
             startActivity(new Intent(AdminPanel.this, New_Reply.class));
         } else if (id == R.id.id_admin_nav_viewOrder) {
-
+            startActivity(new Intent(AdminPanel.this, View_Orders.class));
         } else if (id == R.id.id_admin_nav_createOBP) {
             // send program flow to OBP creation class(Activity)
             startActivity(new Intent(AdminPanel.this, Create_OBP.class));
