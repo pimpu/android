@@ -1,5 +1,6 @@
 package com.alchemistdigital.kissan.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,11 +26,13 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.InsertEnquiryAsyncTask;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
-import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.andexert.library.RippleView;
+import com.scanlibrary.ScanActivity;
+import com.scanlibrary.ScanConstants;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +56,9 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
     Spinner spinnerSociety;
     private ArrayAdapter<String> adapterSociety;
     private List<Society> allSocieties;
-    private SetSharedPreferenceHelper setPreference;
     private View createEnquiryView;
     private String eId;
+    private static final int REQUEST_CODE = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +84,6 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_enquiry_toolbar);
         setSupportActionBar(toolbar);
-
-        setPreference   = new SetSharedPreferenceHelper(Create_Enquiry.this);
-        setPreference.setBoolScanPicture(getResources().getString(R.string.bool_scan_image),false);
 
         // creating spinner from society table
         spinnerSociety = (Spinner) findViewById(R.id.spinner_id_societies);
@@ -208,7 +209,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                         System.out.println(str_email);
                         System.out.println(str_address);
                         System.out.println(str_message);*/
-                        String filepath = CommonVariables.SCAN_FILE_PATH+"/"+selectedFileName;
+                        String filepath = CommonVariables.SCAN_FILE_PATH+"/"+tvFileName.getText().toString().trim();
 
                         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
                         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
@@ -265,17 +266,13 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         // if not exist then go to a scanner activity.
         File dir = new File(CommonVariables.SCAN_FILE_PATH);
         if(dir.exists() && dir.isDirectory()) {
-            // do something here
+
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("Select from gallery?");
 
             alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
-
-                    // set preference is false because when we do not get file path from
-                    // shared preference in onResume() of this activity.
-                    setPreference.setBoolScanPicture(getResources().getString(R.string.bool_scan_image),false);
 
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     Uri uri = Uri.parse(CommonVariables.SCAN_FILE_PATH);
@@ -287,23 +284,53 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
             alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
-
-                    // set preference is true so that when we get file path from
-                    // shared preference in onResume() of this activity.
-                    // because bitmap is create on scannerActivity class
-                    setPreference.setBoolScanPicture(getResources().getString(R.string.bool_scan_image), true);
-                    startActivity(new Intent(Create_Enquiry.this, scannerActivity.class));
+                gotoScannerActivity();
                 }
             });
+
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }
         else {
-            setPreference.setBoolScanPicture(getResources().getString(R.string.bool_scan_image), true);
-            startActivity(new Intent(Create_Enquiry.this, scannerActivity.class));
+
+            gotoScannerActivity();
         }
 
+    }
+
+    private void gotoScannerActivity() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Create_Enquiry.this);
+        alertDialog.setTitle("File name");
+        alertDialog.setMessage("Enter file name");
+
+        final EditText input = new EditText(Create_Enquiry.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+
+        alertDialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            String name = input.getText().toString();
+            if (name.compareTo("") == 0) {
+                Toast.makeText(getApplicationContext(),
+                        "field is empty.", Toast.LENGTH_LONG).show();
+            }
+            else {
+                selectedFileName = name ;
+                startScan(0);
+            }
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    protected void startScan(int preference) {
+        Intent intent = new Intent(this, ScanActivity.class);
+        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, preference);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -317,6 +344,21 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 selectedFileName = getFileName(Create_Enquiry.this, filePath);
                 tvFileName.setText(selectedFileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getExtras().getParcelable(ScanConstants.SCANNED_RESULT);
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                getContentResolver().delete(uri, null, null);
+
+                store_Png_InSdcard(bitmap);
+
+                tvFileName.setText("PNG_" + selectedFileName +".png");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -341,22 +383,24 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
-        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
-        boolean boolScanPicture = getPreference.getBoolScanPicture(getResources().getString(R.string.bool_scan_image));
-        if(boolScanPicture){
-            Toast.makeText(this,"resume",Toast.LENGTH_SHORT).show();
-            String filePathPreference = getPreference.getFilePathPreference(getResources().getString(R.string.sharedPreference_filepath));
-            if(filePathPreference != null){
-//                filePathPreference = .../filename.png
-                int cut = filePathPreference.lastIndexOf('/');
-                if (cut != -1) {
-                    selectedFileName = filePathPreference.substring(cut + 1);
-//                    result = filename.png
-                    tvFileName.setText(selectedFileName);
-                }
+    private void store_Png_InSdcard(Bitmap bitmap) {
+        File fn;
+        String IMAGE_PATH = CommonVariables.SCAN_FILE_PATH;
+        try {  // Try to Save #1
 
-            }
+            fn = new File(IMAGE_PATH, "PNG_" + selectedFileName +".png");
+
+            FileOutputStream out = new FileOutputStream(fn);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 70, out);
+            out.flush();
+            out.close();
+
+            Toast.makeText(getApplicationContext(),
+                    "File is Saved in  " + fn, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

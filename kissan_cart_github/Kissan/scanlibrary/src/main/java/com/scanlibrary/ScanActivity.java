@@ -16,6 +16,7 @@ public class ScanActivity extends Activity implements IScanner {
     }
 
     private void init() {
+
         PickImageFragment fragment = new PickImageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ScanConstants.OPEN_INTENT_PREFERENCE, getPreferenceContent());

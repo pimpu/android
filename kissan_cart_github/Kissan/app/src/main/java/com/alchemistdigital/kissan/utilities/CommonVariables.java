@@ -19,7 +19,7 @@ public class CommonVariables {
 
     public static final String SCAN_FILE_PATH = Environment.getExternalStorageDirectory() + "/obp";
 
-    static String SERVER_URL = "http://9a901e70.ngrok.io/kissan_cart/";
+    static String SERVER_URL = "http://32db8882.ngrok.io/kissan_cart/";
 
     public static String FILE_UPLOAD_URL = "AndroidFileUpload/uploads/";
     public static String File_DOWNLOAD_URL = SERVER_URL+"AndroidFileUpload/uploads/";

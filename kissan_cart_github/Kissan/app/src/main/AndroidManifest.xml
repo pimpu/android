@@ -67,7 +67,6 @@
             android:name=".activities.AdminPanel"
             android:label="@string/title_activity_admin_panel"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".activities.scannerActivity" />
         <activity
             android:name=".activities.View_Enquiry"
             android:label="@string/nav_item_viewEnquiry" />
@@ -112,7 +111,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.Scanner"></activity>
     </application>
 
 </manifest>
