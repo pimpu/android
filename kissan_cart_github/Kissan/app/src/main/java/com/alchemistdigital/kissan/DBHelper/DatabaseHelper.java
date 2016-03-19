@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.MatrixCursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -173,7 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SOCIETY_COLUMN_CONTACT, societyColumn.getSoc_contact());
         contentValues.put(SOCIETY_COLUMN_EMAIL, societyColumn.getSoc_email());
         contentValues.put(SOCIETY_COLUMN_ADDRESS, societyColumn.getSoc_adrs());
-        contentValues.put(KEY_STATUS, "1");
+        contentValues.put(KEY_STATUS, societyColumn.getSoc_status());
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -196,7 +198,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
         String selectQuery = "SELECT * FROM " + TABLE_SOCIETY + " WHERE "
-                + KEY_ID + " = " + society_id + " AND " + SOCIETY_COLUMN_USERID + " = " + uId;
+                + KEY_ID + " = " + society_id + " AND " + SOCIETY_COLUMN_USERID + " = " + uId
+                +" AND "+ KEY_STATUS + " = 1;" ;
 
         Log.d(LOG, selectQuery);
 
@@ -220,20 +223,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting society count
      */
-    public int numberOfSocietyRows(){
+    public int numberOfSocietyRows() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_SOCIETY,SOCIETY_COLUMN_USERID+" = ?",new String[]{ String.valueOf(uId)});
+        String whereClause = SOCIETY_COLUMN_USERID+" = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(uId) } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_SOCIETY,whereClause,whereArgs);
+        return numRows;
+    }
+
+    public int numberOfSocietyRowsByStatus() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String whereClause = SOCIETY_COLUMN_USERID+" = ? AND "+KEY_STATUS+" = ?";
+        String[] whereArgs = new String[]{ String.valueOf(uId), String.valueOf("1") } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_SOCIETY,whereClause,whereArgs);
         return numRows;
     }
 
     /**
      * Updating a society
      */
-    public boolean updateSociety(Society society){
+    public boolean updateSociety(Society society) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -243,21 +262,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SOCIETY_COLUMN_ADDRESS, society.getSoc_adrs());
 
 //      db.update(String table_name,String where_clause,String[] where_args);
-        db.update(TABLE_SOCIETY, contentValues, KEY_ID+" = ? ", new String[] { String.valueOf(society.getId()) } );
+        db.update(TABLE_SOCIETY, contentValues, KEY_ID + " = ? ", new String[]{String.valueOf(society.getId())});
         return true;
     }
 
     /**
      * Deleting a society
      */
-    public Integer deleteSociety (int id)
-    {
+    public Integer deleteSociety (int id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-//      db.delete(String table_name,String where_clause,String[] where_args);
-        return db.delete(TABLE_SOCIETY,
-                KEY_ID+" = ? ",
-                new String[] { String.valueOf(id) });
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_STATUS, "0");
+
+        return db.update(TABLE_SOCIETY, contentValues, KEY_ID + " = ? ", new String[]{ String.valueOf(id) });
     }
 
     /**
@@ -269,7 +287,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
         List<Society> array_list = new ArrayList<Society>();
-        String selectQuery = "SELECT * FROM "+TABLE_SOCIETY+" WHERE "+SOCIETY_COLUMN_USERID+" = "+uId+" ORDER BY "+KEY_CREATED_AT;
+        String selectQuery = "SELECT * FROM "+TABLE_SOCIETY+" WHERE "+SOCIETY_COLUMN_USERID+" = "+uId
+                            +" AND "+KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT;
         Log.d(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -293,6 +312,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return array_list;
     }
+
     // ------------------------ "Society" table methods ----------------//
 
 
@@ -302,7 +322,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_ID, enquiryColumn.getEnquiry_id());
-        contentValues.put(KEY_STATUS, "1");
+        contentValues.put(KEY_STATUS, enquiryColumn.getEnquiry_status());
         contentValues.put(KEY_CREATED_AT, enquiryColumn.getCreted_at());
         contentValues.put(ENQUIRY_REF, enquiryColumn.getEnquiry_reference());
         contentValues.put(ENQUIRY_USERID, enquiryColumn.getEnquiry_userId());
@@ -346,7 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
         String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
-                + ENQUIRY_USERID + " = " + uId+" ORDER BY "+KEY_CREATED_AT;
+                + ENQUIRY_USERID + " = " + uId +" AND "+KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT;
 
         Log.d(LOG, selectQuery);
 
@@ -393,10 +413,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ENQUIRY, ENQUIRY_USERID+" = ?",new String[]{ String.valueOf(uId)});
+        String whereClause = ENQUIRY_USERID + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(uId)};
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
         return numRows;
     }
 
+    public int numberOfEnquiryRowsByUidAndStatus(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String whereClause = ENQUIRY_USERID + " = ? AND "+KEY_STATUS + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(uId), String.valueOf("1")};
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
+        return numRows;
+    }
     /**
      * getting enquiry count using replyTo with logged in user id and replied with 0 value.
      */
@@ -406,9 +441,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_ENQUIRY + " e WHERE e."
-                + ENQUIRY_REPLYTO + " = " + uId+" AND e."+ENQUIRY_REPLIED+" = 0 AND e."
-                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_ENQUIRY + " e WHERE " +
+                "e."+ ENQUIRY_REPLYTO + " = " + uId+" AND " +
+                "e."+ ENQUIRY_REPLIED+" = 0 " +"AND " +
+                "e."+ KEY_STATUS+" = 1 AND " +
+                "e."+ ENQUIRY_REF +" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
                 +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
 
         int numRows = (int) DatabaseUtils.longForQuery(db, selectQuery, null);
@@ -423,9 +460,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " e WHERE e."
-                + ENQUIRY_REPLYTO + " = " + uId+" AND e."+ENQUIRY_REPLIED+" = 0 AND e."
-                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " e WHERE " +
+                "e."+ ENQUIRY_REPLYTO + " = " + uId+" AND " +
+                "e."+ENQUIRY_REPLIED+" = 0 " +"AND " +
+                "e."+KEY_STATUS +" = 1 AND " +
+                "e."+ENQUIRY_REF +" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
                 +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
 
         Log.d(LOG, selectQuery);
@@ -479,11 +518,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // replied from enquiry with value 1 (get only admin replied enquiry from enquiry table)
         // AND
         // reference no which are not in order table. i.e. oreder not created of that reference number.
-        String selectQuery = "SELECT DISTINCT e."+ENQUIRY_REF+" FROM " + TABLE_ENQUIRY + " e WHERE e."
-                +ENQUIRY_USERID+ " = " +uId+" AND " +
+        String selectQuery = "SELECT DISTINCT e."+ENQUIRY_REF+" FROM " + TABLE_ENQUIRY + " e WHERE " +
+                "e."+ENQUIRY_USERID+ " = " +uId+" AND " +
                 "e."+ENQUIRY_GROUPID+" = 2 AND " +
-                "e."+ENQUIRY_REPLIED+" = 1 AND e."
-                +ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
+                "e."+ENQUIRY_REPLIED+" = 1 AND " +
+                "e."+KEY_STATUS+" = 1 AND " +
+                " e."+ENQUIRY_REF+" NOT IN (SELECT o."+ORDER_REFERENCE+" FROM "+TABLE_ORDER+" o GROUP BY o."
                 +ORDER_REFERENCE+") ORDER BY e."+KEY_CREATED_AT;
 //        String selectQuery = "SELECT * FROM "+TABLE_ENQUIRY;
         Log.d(LOG, selectQuery);
@@ -507,9 +547,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * get enquiry by user id and reference
+     * get enquiry by reference
+     * purposely for showing society details in order details
      */
-    public List<Enquiry> getEnquiryByUid_Reference(int userId,String reference) {
+    public List<Enquiry> getEnquiryByReference(String reference) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Enquiry> array_list = new ArrayList<Enquiry>();
 
@@ -517,7 +558,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
         String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
-                + ENQUIRY_USERID + " = " + userId +" AND " + ENQUIRY_REF + " = '"+reference+"' ORDER BY "+KEY_CREATED_AT;
+                + ENQUIRY_REF + " = '"+reference+"' ORDER BY "+KEY_CREATED_AT + " LIMIT 1;";
 
         Log.d(LOG, selectQuery);
 
@@ -555,6 +596,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    /**
+     * update society details in enquiry table when society details update
+     * @param enquiry
+     * @param oldSocietyName
+     * @return
+     */
+
+    public boolean updateSocietyColumnInEnquiryTable(Enquiry enquiry, String oldSocietyName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ENQUIRY_SOCIETY, enquiry.getEnquiry_society());
+        contentValues.put(ENQUIRY_SOCIETY_CONTACT, enquiry.getEnquiry_society_contact());
+        contentValues.put(ENQUIRY_SOCIETY_EMAIL, enquiry.getEnquiry_society_email());
+        contentValues.put(ENQUIRY_SOCIETY_ADDRESS, enquiry.getEnquiry_society_address());
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_ENQUIRY, contentValues, ENQUIRY_SOCIETY + " = ? ", new String[]{oldSocietyName});
+        return true;
+    }
+
     // ------------------------ "Enquiry" table methods ----------------//
 
 
@@ -563,7 +625,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_STATUS, "1");
+        contentValues.put(KEY_STATUS, orderColumn.getOrder_status());
         contentValues.put(ORDER_USERID, orderColumn.getUserId());
         contentValues.put(ORDER_REFERENCE, orderColumn.getOrder_reference());
         contentValues.put(ORDER_UTR, orderColumn.getOrder_utr());
@@ -571,7 +633,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(ORDER_QUANTITY, orderColumn.getOrder_quantity());
         contentValues.put(ORDER_PRICE, orderColumn.getOrder_price());
         contentValues.put(ORDER_TOTAL_AMOUNT, orderColumn.getOrder_total_amount());*/
-        contentValues.put(KEY_CREATED_AT, getDateTime());
+        contentValues.put(KEY_CREATED_AT, orderColumn.getOrder_creted_at());
 
         // insert row
         long order_id = db.insert(TABLE_ORDER, null, contentValues);
@@ -584,7 +646,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int numberOfOrderRows(){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ORDER);
+        String whereClause = KEY_STATUS+" = ? ";
+        String[] whereArgs = new String[]{ String.valueOf("1") } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ORDER, whereClause, whereArgs);
+        return numRows;
+
+    }
+
+    /**
+     *
+     * @param referenceno
+     * @return numRows
+     */
+    public int numberOfOrderByRefNo(String referenceno){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = ORDER_REFERENCE+" = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(referenceno) } ;
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ORDER, whereClause, whereArgs);
+
+        return  numRows;
+    }
+
+    /**
+     * get count of order depending upon user type
+     * if user is admin then take all order details irrespective of userid.
+     * if uer is obp then take users data only using userId.
+     *
+     * @return numRows
+     * @param userType
+     */
+    public int numberOfOrderRowsByUserType(String userType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows;
+
+        if(userType.equals("obp")){
+
+            GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+            int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+            String whereClause = ORDER_USERID+" = ? ";
+            String[] whereArgs = new String[]{ String.valueOf(uId) } ;
+            numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ORDER, whereClause, whereArgs);
+        } else {
+            numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ORDER);
+        }
+
         return numRows;
     }
 
@@ -592,7 +700,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Order> array_list = new ArrayList<Order>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_ORDER + " ORDER BY "+KEY_CREATED_AT;
+        String selectQuery = "SELECT * FROM " + TABLE_ORDER + " WHERE "+KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT;
 
         Log.d(LOG, selectQuery);
 
@@ -614,6 +722,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return array_list;
     }
+
 
     // ------------------------ "Orders" table methods ----------------//
 
@@ -691,5 +800,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String getDateTime() {
         Date date = new Date();
         return ""+date.getTime() ;
+    }
+
+    public ArrayList<Cursor> getData(String Query){
+        //get writable database
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        String[] columns = new String[] { "mesage" };
+        //an array list of cursor to save two cursors one has results from the query
+        //other cursor stores error message if any errors are triggered
+        ArrayList<Cursor> alc = new ArrayList<Cursor>(2);
+        MatrixCursor Cursor2= new MatrixCursor(columns);
+        alc.add(null);
+        alc.add(null);
+
+
+        try{
+            String maxQuery = Query ;
+            //execute the query results will be save in Cursor c
+            Cursor c = sqlDB.rawQuery(maxQuery, null);
+
+
+            //add value to cursor2
+            Cursor2.addRow(new Object[] { "Success" });
+
+            alc.set(1,Cursor2);
+            if (null != c && c.getCount() > 0) {
+
+
+                alc.set(0,c);
+                c.moveToFirst();
+
+                return alc ;
+            }
+            return alc;
+        } catch(SQLException sqlEx){
+            Log.d("printing exception", sqlEx.getMessage());
+            //if any exceptions are triggered save the error message to cursor an return the arraylist
+            Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
+            alc.set(1,Cursor2);
+            return alc;
+        } catch(Exception ex){
+
+            Log.d("printing exception", ex.getMessage());
+
+            //if any exceptions are triggered save the error message to cursor an return the arraylist
+            Cursor2.addRow(new Object[] { ""+ex.getMessage() });
+            alc.set(1,Cursor2);
+            return alc;
+        }
+
+
     }
 }

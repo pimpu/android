@@ -12,11 +12,17 @@
             android:id="@+id/nav_createOrder"
             android:title="@string/nav_item_createOrder" />
         <item
+            android:id="@+id/nav_viewOrder"
+            android:title="@string/viewOrders" />
+        <item
             android:id="@+id/nav_newReply"
             android:title="@string/nav_item_newReply" />
         <item
             android:id="@+id/nav_createSociety"
             android:title="@string/nav_item_createSociety" />
+        <item
+            android:id="@+id/nav_viewSociety"
+            android:title="@string/viewSociety" />
         <item
             android:id="@+id/nav_obp_logout"
             android:title="@string/nav_item_logout" />

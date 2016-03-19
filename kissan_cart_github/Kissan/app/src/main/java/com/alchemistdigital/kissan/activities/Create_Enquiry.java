@@ -61,7 +61,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
 
         dbHelper = new DatabaseHelper(Create_Enquiry.this);
-        int rowsCount = dbHelper.numberOfSocietyRows();
+        int rowsCount = dbHelper.numberOfSocietyRowsByStatus();
         dbHelper.closeDB();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
@@ -358,5 +358,10 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

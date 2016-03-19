@@ -10,6 +10,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.util.Base64;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -90,5 +94,30 @@ public class CommonUtilities {
         Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
         intent.putExtra(CommonVariables.EXTRA_MESSAGE, message);
         context.sendBroadcast(intent);
+    }
+
+    /**
+     *
+     * @param expandableListView
+     */
+    public static void setListViewHeightBasedOnChildren(ExpandableListView expandableListView) {
+        ListAdapter listAdapter = expandableListView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(expandableListView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, expandableListView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = expandableListView.getLayoutParams();
+        params.height = totalHeight + (expandableListView.getDividerHeight() * (listAdapter.getCount() - 1));
+        expandableListView.setLayoutParams(params);
+        expandableListView.requestLayout();
     }
 }

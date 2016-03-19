@@ -15,10 +15,8 @@ if ( isset($_POST['referenceNo']) ) {
 
 	$decodedItemArray = json_decode($itemsJSONArray, true);
 	$response["success"] = array();
+
 	for ($i=0; $i < count($decodedItemArray); $i++) {
-		/*$item = array();
-		$item["itemname"] = $decodedItemArray[$i]["itemName"];
-		array_push($response["success"], $item);*/
 
 		$result = mysql_query("INSERT INTO orderdetail(	uID,
 														enqRef,
@@ -36,6 +34,10 @@ if ( isset($_POST['referenceNo']) ) {
 														'".$decodedItemArray[$i]["itemTotalAmount"]."');");
 	}
 
+	$id = mysql_insert_id();
+	$getOrderData = mysql_query("SELECT ordDate FROM orderdetail WHERE ordID = ".$id);
+	$getArrayOrderData = mysql_fetch_array($getOrderData);
+
 	// send gcm notification to reply user
 	$gcm = new GCM();
 
@@ -45,7 +47,8 @@ if ( isset($_POST['referenceNo']) ) {
 							'referenceNo' => $referenceNo, 	
 							'utr' => $UTR,
 							'items' => $itemsJSONArray,
-							'userId' => $userId
+							'userId' => $userId,
+							'creationtime' => $getArrayOrderData["ordDate"]
 						);
 
 	$sql = "SELECT gcmId FROM userdetails WHERE gID=1;";
@@ -58,6 +61,7 @@ if ( isset($_POST['referenceNo']) ) {
 
 	$response["success"] = 1;
 	$response["message"] = "Order inserted successfully.";
+	$response["creationtime"] = $getArrayOrderData["ordDate"];
 
 }
 else {

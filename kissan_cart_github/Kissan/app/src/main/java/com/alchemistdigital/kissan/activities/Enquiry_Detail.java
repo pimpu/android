@@ -3,6 +3,7 @@ package com.alchemistdigital.kissan.activities;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ public class Enquiry_Detail extends AppCompatActivity {
         setContentView(R.layout.activity_enquiry__detail);
 
         enquiryDetailView = findViewById(R.id.id_enquiry_details_view);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.enquiry_details_toolbar);
+        setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
         reference = extras.getString("reference");
@@ -78,7 +82,7 @@ public class Enquiry_Detail extends AppCompatActivity {
         } else {
 
             new DownloadImageAsyncTask(Enquiry_Detail.this,(ImageView) findViewById(R.id.imageview_id_slip))
-                    .execute(CommonVariables.FILE_UPLOAD_URL + document);
+                    .execute(CommonVariables.File_DOWNLOAD_URL + document);
         }
     }
 }

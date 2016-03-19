@@ -25,6 +25,7 @@
 				$society["soc_contact"] = $row["soc_contact"];
 				$society["soc_email"] = $row["soc_email"];
 				$society["soc_adrs"] = $row["soc_adrs"];
+				$society["soc_status"] = $row["status"];
 		 
 				// push single society into final response array
 				array_push($response["message"], $society);

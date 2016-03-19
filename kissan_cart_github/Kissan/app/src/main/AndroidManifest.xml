@@ -82,10 +82,19 @@
             android:label="@string/nav_item_createOrder" />
         <activity
             android:name=".activities.View_Orders"
-            android:label="@string/viewOrders"/>
+            android:label="@string/viewOrders" />
         <activity
             android:name=".activities.Order_Detail"
-            android:label="@string/orderDetails"/>
+            android:label="@string/orderDetails" />
+        <activity
+            android:name=".activities.View_Society"
+            android:label="@string/viewSocietyDetails" />
+        <activity
+            android:name=".activities.Edit_Society_Details"
+            android:label="@string/editSocietyDetails" />
+        <activity
+            android:name=".activities.AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <service android:name=".GCMIntentService" />
 
@@ -103,7 +112,7 @@
             </intent-filter>
         </receiver>
 
-
+        <activity android:name=".activities.Scanner"></activity>
     </application>
 
 </manifest>

@@ -7,6 +7,9 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
     <!--item list for navigation drawer-->
     <string name="nav_item_createEnquiry">Create Enquiry</string>
     <string name="nav_item_viewEnquiry">View Enquiry</string>
@@ -42,6 +45,7 @@
     <string name="hint_obp_country">Country</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_image_name">Image Name</string>
     <!--all hints-->
 
     <string name="sharedPrefrence">info.alchemistdigital.kissan_cart</string>
@@ -73,15 +77,18 @@
     <string name="enquiryDetail">Enquiry Detail</string>
     <string name="newReply">New Enquiry</string>
     <string name="viewOrders">View Orders</string>
+    <string name="viewSocietyDetails">View Societies</string>
     <string name="orderDetails">Order Detail</string>
     <string name="createItem">Create Item</string>
     <string name="Rs">\u20B9</string>
     <string name="emptyItemErrorMsg">No item created.</string>
+    <string name="empty_society_message">No society found.</string>
     <string name="utrNumber">UTR number</string>
     <string name="societyDetails">Society Detail</string>
     <string name="obpDetails">OBP Detail</string>
-
-    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="viewSociety">View Society</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="editSocietyDetails">Edit Society</string>
 
 </resources>

@@ -34,7 +34,7 @@ public class View_Enquiry extends AppCompatActivity {
         enquiry_RecyclerView = (RecyclerView)findViewById(R.id.enquiry_details_recycler);
 
         DatabaseHelper dbhelper = new DatabaseHelper(View_Enquiry.this);
-        int len = dbhelper.numberOfEnquiryRowsByUid();
+        int len = dbhelper.numberOfEnquiryRowsByUidAndStatus();
         if(len <= 0){
             emptyView.setVisibility(View.VISIBLE);
             enquiry_RecyclerView.setVisibility(View.GONE);

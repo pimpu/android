@@ -55,28 +55,30 @@ public class SplashScreen extends Activity {
                     // if already logged in or not
                     String loginSharedPref =getPrefrence.getLoginPreference(getResources().getString(R.string.boolean_login_sharedPref));
 
-                    if( loginSharedPref.equals("true")){
-                        String who = getPrefrence.getUserTypePreference(getResources().getString(R.string.userType));
+                    Intent intent;
 
+                    if( loginSharedPref.equals("true")) {
+                        String who = getPrefrence.getUserTypePreference(getResources().getString(R.string.userType));
                         System.out.println("Who: "+who);
 
                         // check user is admin or obp
                         // on the bases of preference value.
                         if( who.equals("obp") ){
-                            startActivity(new Intent(SplashScreen.this, MainActivity.class));
+                            intent = new Intent(SplashScreen.this, MainActivity.class);
                         }
                         else {
-                            startActivity(new Intent(SplashScreen.this, AdminPanel.class));
+                            intent = new Intent(SplashScreen.this, AdminPanel.class);
                         }
-
-                        finish();
                     }
                     else {
-
-                        Intent intent = new Intent(SplashScreen.this, Login.class);
-                        startActivity(intent);
-                        finish();
+                        intent = new Intent(SplashScreen.this, Login.class);
                     }
+
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                    startActivity(intent);
+
+                    finish();
                 }
                 }
             };

@@ -19,9 +19,11 @@ public class CommonVariables {
 
     public static final String SCAN_FILE_PATH = Environment.getExternalStorageDirectory() + "/obp";
 
-    static String SERVER_URL = "http://2e045bf7.ngrok.io/kissan_cart/";
+    static String SERVER_URL = "http://9a901e70.ngrok.io/kissan_cart/";
 
-    public static String FILE_UPLOAD_URL = SERVER_URL+"AndroidFileUpload/uploads/";
+    public static String FILE_UPLOAD_URL = "AndroidFileUpload/uploads/";
+    public static String File_DOWNLOAD_URL = SERVER_URL+"AndroidFileUpload/uploads/";
+
 //    public static String FILE_UPLOAD_URL = "http://kissancart.com/obp/admin/Enquiry/";
 
     public static final String SOCIETY_INSERT_SERVER_URL = SERVER_URL +"create_society_byAndroid.php";
@@ -31,8 +33,11 @@ public class CommonVariables {
     public static final String ALL_SOCIETY_BY_ADMIN_QUERY_SERVER_URL = SERVER_URL+"getAllSociety_byAndroid.php";
     public static final String ENQUIRY_INSERT_SERVER_URL = SERVER_URL+"create_enquiry_byAndroid.php";
     public static final String ENQUIRY_PER_OBP_QUERY_SERVER_URL = SERVER_URL+"getEnquiry_byAndroid.php";
+    public static final String ALL_ORDER_QUERY_SERVER_URL = SERVER_URL+"getAllOrder_byAndroid.php";
     public static final String UPDATE_GCMID_SERVER_URL = SERVER_URL+"updateGCMId_byAndroid.php";
     public static final String ORDER_INSERT_SERVER_URL = SERVER_URL+"create_order_byAndroid.php";
     public static final String QUERY_OBP_DETAIL_SERVER_URL = SERVER_URL+"getObpDetailsAtAdmin.php";
+    public static final String UPDATE_SOCIETY_DETAIL_SERVER_URL = SERVER_URL+"updateSocietyDetail.php";
+    public static final String DELETE_SOCIETY_DETAIL_SERVER_URL = SERVER_URL+"deleteSocietyDetail.php";
 
 }

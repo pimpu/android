@@ -35,6 +35,7 @@
 				$enquiry["society_contact"] = $row["eSocCont"];
 				$enquiry["society_email"] = $row["eSocEmail"];
 				$enquiry["document"] = $row["eDoc"];
+				$enquiry["status"] = $row["status"];
 		 
 				// push single enquiry into final response array
 				array_push($response["message"], $enquiry);

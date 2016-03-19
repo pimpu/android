@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.model.Order;
-import com.alchemistdigital.kissan.utilities.DateHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,10 +44,9 @@ public class Order_Adapter extends RecyclerView.Adapter<Order_Adapter.OrderViewH
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
         Order current = data.get(position);
-        long date= Long.parseLong(current.getOrder_creted_at());
         holder.tv_ref.setText(current.getOrder_reference());
         holder.tv_utr.setText(current.getOrder_utr());
-        holder.tv_date.setText(DateHelper.convertToString(date));
+        holder.tv_date.setText(current.getOrder_creted_at());
     }
 
     @Override

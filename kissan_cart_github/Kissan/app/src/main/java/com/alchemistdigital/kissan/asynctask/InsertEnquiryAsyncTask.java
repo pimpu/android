@@ -104,6 +104,7 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
             entity.addPart("uId", new StringBody(strUID));
             entity.addPart("userType", new StringBody(userType));
             entity.addPart("eId", new StringBody(eId));
+            entity.addPart("filepath",new StringBody(CommonVariables.FILE_UPLOAD_URL));
 
 //            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
@@ -168,7 +169,7 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                     fileName = absolutePath.substring(cut + 1);
                 }
 
-                Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, 0, str_message, str_name, str_address, str_contact, str_email, fileName);
+                Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, 0, str_message, str_name, str_address, str_contact, str_email, fileName, 1);
                 long enquiryId = dbHelper.insertEnquiry(enquiry);
                 System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
 

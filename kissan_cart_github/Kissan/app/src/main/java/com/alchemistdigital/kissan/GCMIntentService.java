@@ -28,21 +28,68 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onMessage(Context context, Intent intent) {
         String message = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
         if (message.equals("downloadSocietyAtAdmin")) {
+
+            // comes from create_society_byAndroid.php page.
             storeSocietyDetails(context, intent.getExtras().getString("societyDetails"));
+
         } else if (message.equals("downloadEnquiry")) {
+
             storeEnquiryDetails(context, intent.getExtras().getString("enquiryDetails"));
+
         } else if (message.equals("downloadOrderAtAdmin")) {
+
             String referenceNo = intent.getExtras().getString("referenceNo");
             String utr = intent.getExtras().getString("utr");
             String items = intent.getExtras().getString("items");
             String userId = intent.getExtras().getString("userId");
+            String creationTime = intent.getExtras().getString("creationtime");
 
-            storeOrderAtAdminSite(context, referenceNo, utr, items, userId);
+            storeOrderAtAdminSite(context, referenceNo, utr, items, userId,creationTime);
+
+        } else if (message.equals("updateSocietyAtAdmin")){
+           updateSocietyDetails(context, intent.getExtras().getString("changedSocietyDetails"));
         }
 
     }
 
-    private void storeOrderAtAdminSite(Context context, String referenceNo, String utr, String items, String userId) {
+    private void updateSocietyDetails(Context context, String changedSocietyDetails) {
+        JSONObject json = null;
+        try {
+            json = new JSONObject(changedSocietyDetails);
+
+            int soc_id = json.getInt("soc_id");
+            String old_name = json.getString("old_name");
+            String soc_name = json.getString("soc_name");
+            String soc_contact = json.getString("soc_contact");
+            String soc_email = json.getString("soc_email");
+            String soc_adrs = json.getString("soc_adrs");
+
+            Society society = new Society();
+
+            society.setSoc_name(soc_name);
+            society.setSoc_contact(soc_contact);
+            society.setSoc_email(soc_email);
+            society.setSoc_adrs(soc_adrs);
+            society.setId(soc_id);
+
+            Enquiry enquiry = new Enquiry();
+            enquiry.setEnquiry_society(soc_name);
+            enquiry.setEnquiry_society_contact(soc_contact);
+            enquiry.setEnquiry_society_email(soc_email);
+            enquiry.setEnquiry_society_address(soc_adrs);
+
+            DatabaseHelper dbhelper = new DatabaseHelper(context);
+            dbhelper.updateSociety(society);
+            dbhelper.updateSocietyColumnInEnquiryTable(enquiry, old_name);
+            dbhelper.closeDB();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void storeOrderAtAdminSite(Context context, String referenceNo, String utr, String items, String userId, String creationTime) {
         try {
             JSONArray jsonItem = new JSONArray(items);
             DatabaseHelper dbhelper = new DatabaseHelper(context);
@@ -60,7 +107,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             }
 
-            Order order = new Order(Integer.parseInt(userId), referenceNo, utr);
+            Order order = new Order(Integer.parseInt(userId), referenceNo, utr, creationTime,1);
             dbhelper.insertOrder(order);
 
             dbhelper.closeDB();
@@ -91,7 +138,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             String oldEnquiryId = json.getString("oldEnquiryId");
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
-            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, replied, str_message, str_name, str_address, str_contact, str_email, fileName);
+            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, replied, str_message, str_name, str_address, str_contact, str_email, fileName,1);
             long enquiryId = dbHelper.insertEnquiry(enquiry);
 
             System.out.println("Before update stmt(GCM): "+oldEnquiryId);
@@ -126,7 +173,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             int userId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
-            Society society = new Society(soc_id, userId, soc_name, soc_contact, soc_email, soc_adrs);
+            Society society = new Society(soc_id, userId, soc_name, soc_contact, soc_email, soc_adrs,1);
             long societyId = dbHelper.insertSociety(society);
             dbHelper.closeDB();
 

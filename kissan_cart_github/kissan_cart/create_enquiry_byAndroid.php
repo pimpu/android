@@ -7,7 +7,6 @@ error_reporting(0);
 $response = array();
  
 // final file url that is being uploaded
-$file_upload_url = 'AndroidFileUpload/uploads/';
 
 
 	/*$file_upload_url = "filename";
@@ -22,6 +21,8 @@ $file_upload_url = 'AndroidFileUpload/uploads/';
 	$eId = 0;*/
 
 if (isset($_FILES['image']['name'])) {
+
+	$file_upload_url = isset($_POST['filepath']) ? $_POST['filepath'] : '';
 
     $file_upload_url = $file_upload_url . basename($_FILES['image']['name']);
 	$refNo = isset($_POST['refNo']) ? $_POST['refNo'] : '';
@@ -94,7 +95,7 @@ if (isset($_FILES['image']['name'])) {
 															'".$address."',
 															'".$contact."',
 															'".$email."',
-															'".$file_upload_url."',
+															'".$_FILES['image']['name']."',
 															'',
 															1);");
 				

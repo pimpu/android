@@ -17,11 +17,12 @@ public class Enquiry {
     private String enquiry_society_contact;
     private String enquiry_society_email;
     private String enquiry_document;
+    private int  enquiry_status;
 
     public Enquiry() {
     }
 
-    public Enquiry(int enquiry_id, String creted_at, String enquiry_reference, int enquiry_userId, int enquiry_groupId, int enquiry_replyTo, int enquiry_replied, String enquiry_message, String enquiry_society, String enquiry_society_address, String enquiry_society_contact, String enquiry_society_email, String enquiry_document) {
+    public Enquiry(int enquiry_id, String creted_at, String enquiry_reference, int enquiry_userId, int enquiry_groupId, int enquiry_replyTo, int enquiry_replied, String enquiry_message, String enquiry_society, String enquiry_society_address, String enquiry_society_contact, String enquiry_society_email, String enquiry_document,int enquiry_status) {
         this.enquiry_id = enquiry_id;
         this.creted_at = creted_at;
         this.enquiry_reference = enquiry_reference;
@@ -35,6 +36,7 @@ public class Enquiry {
         this.enquiry_society_contact = enquiry_society_contact;
         this.enquiry_society_email = enquiry_society_email;
         this.enquiry_document = enquiry_document;
+        this.enquiry_status  = enquiry_status;
     }
 
     // Getters
@@ -90,6 +92,10 @@ public class Enquiry {
         return enquiry_document;
     }
 
+    public int getEnquiry_status() {
+        return enquiry_status;
+    }
+
     // Setters
     public void setEnquiry_id(int enquiry_id) {
         this.enquiry_id = enquiry_id;
@@ -141,6 +147,10 @@ public class Enquiry {
 
     public void setEnquiry_document(String enquiry_document) {
         this.enquiry_document = enquiry_document;
+    }
+
+    public void setEnquiry_status(int enquiry_status) {
+        this.enquiry_status = enquiry_status;
     }
 
 }

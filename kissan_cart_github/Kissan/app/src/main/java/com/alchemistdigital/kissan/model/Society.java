@@ -10,19 +10,24 @@ public class Society {
     private String soc_name;
     private String soc_contact;
     private String soc_email;
-
+    private int soc_status;
     private String soc_adrs;
 
     public Society() {
     }
 
-    public Society(int id, int userId, String soc_name, String soc_contact, String soc_email, String soc_adrs) {
+    public Society(int id, int userId, String soc_name, String soc_contact, String soc_email, String soc_adrs,int soc_status) {
         this.id = id;
         this.userId = userId;
         this.soc_name = soc_name;
         this.soc_contact = soc_contact;
         this.soc_email = soc_email;
         this.soc_adrs = soc_adrs;
+        this.soc_status = soc_status;
+    }
+
+    public void setSoc_status(int soc_status) {
+        this.soc_status = soc_status;
     }
 
     // setters
@@ -57,6 +62,10 @@ public class Society {
     // getters
     public int getId() {
         return id;
+    }
+
+    public int getSoc_status() {
+        return soc_status;
     }
 
     public String getSoc_name() {

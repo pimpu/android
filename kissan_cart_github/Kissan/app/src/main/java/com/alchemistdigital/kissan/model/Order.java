@@ -18,7 +18,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int userId, String order_reference, String order_utr) {
+    public Order(int userId, String order_reference, String order_utr, String order_creted_at,int order_status) {
         this.userId = userId;
         this.order_id = order_id;
         this.order_reference = order_reference;

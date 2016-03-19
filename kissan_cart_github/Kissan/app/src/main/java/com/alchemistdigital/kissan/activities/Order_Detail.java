@@ -13,7 +13,6 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
@@ -21,7 +20,7 @@ import com.alchemistdigital.kissan.adapter.ExpandableListItemAdapter;
 import com.alchemistdigital.kissan.asynctask.GetOBPDetailsAtAdmin;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
-import com.alchemistdigital.kissan.utilities.DateHelper;
+import com.alchemistdigital.kissan.utilities.CommonUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,8 +48,7 @@ public class Order_Detail extends AppCompatActivity {
         referenceNo = extras.getString("reference");
         utr = extras.getString("utr");
         userId = extras.getInt("userId");
-        long date = Long.parseLong(extras.getString("creationTime"));
-        time = DateHelper.convertToString(date);
+        time = extras.getString("creationTime");
 
         expListView = (ExpandableListView) findViewById(R.id.expandable_id_item);
         tv_ref = (TextView) findViewById(R.id.tv_id_order_details_reference);
@@ -66,6 +64,7 @@ public class Order_Detail extends AppCompatActivity {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
+        CommonUtilities.setListViewHeightBasedOnChildren(expListView);
 
         // Listview Group click listener
         expListView.setOnGroupClickListener(new OnGroupClickListener() {
@@ -85,9 +84,9 @@ public class Order_Detail extends AppCompatActivity {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -96,9 +95,9 @@ public class Order_Detail extends AppCompatActivity {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();*/
 
             }
         });
@@ -110,14 +109,14 @@ public class Order_Detail extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 // TODO Auto-generated method stub
-                Toast.makeText(
+                /*Toast.makeText(
                         getApplicationContext(),
                         listDataHeader.get(groupPosition)
                                 + " : "
                                 + listDataChild.get(
                                 listDataHeader.get(groupPosition)).get(
                                 childPosition), Toast.LENGTH_SHORT)
-                        .show();
+                        .show();*/
                 return false;
             }
         });
@@ -138,18 +137,18 @@ public class Order_Detail extends AppCompatActivity {
 
             listDataHeader.add(itemsByRefno.get(i).getItemName());
             List<String> lists = new ArrayList<String>();
-            lists.add(""+itemsByRefno.get(i).getItemQuantity());
-            lists.add(itemsByRefno.get(i).getItemPrice());
-            lists.add(itemsByRefno.get(i).getItemTotalAmount());
+            lists.add("Quantity: "+itemsByRefno.get(i).getItemQuantity());
+            lists.add("Price: "+itemsByRefno.get(i).getItemPrice());
+            lists.add("Total Amount: "+itemsByRefno.get(i).getItemTotalAmount());
 
-            listDataChild.put(itemsByRefno.get(i).getItemName() , lists); // Header, Child data
+            listDataChild.put(itemsByRefno.get(i).getItemName(), lists); // Header, Child data
 
         }
     }
 
     public void showSocietyDetails(View view) {
         DatabaseHelper dbhelper = new DatabaseHelper(Order_Detail.this);
-        List<Enquiry> enquiryByUid_reference = dbhelper.getEnquiryByUid_Reference(userId, referenceNo);
+        List<Enquiry> enquiryByUid_reference = dbhelper.getEnquiryByReference(referenceNo);
         dbhelper.closeDB();
 
         // custom dialog
@@ -169,7 +168,6 @@ public class Order_Detail extends AppCompatActivity {
         tv_societyContact.setText( enquiryByUid_reference.get(0).getEnquiry_society_contact());
         tv_societyEmail.setText( enquiryByUid_reference.get(0).getEnquiry_society_email());
         tv_societyAddress.setText( enquiryByUid_reference.get(0).getEnquiry_society_address());
-
 
         final AlertDialog b = dialogBuilder.create();
 

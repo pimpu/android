@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.alchemistdigital.kissan.activities.Scanner">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/id_input_layout_scan_image_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textNoSuggestions"
+            android:id="@+id/edittext_id_scan_image_name"
+            android:hint="@string/hint_image_name" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/test"
+        android:layout_alignParentBottom="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Scan" />
+</RelativeLayout>

@@ -115,7 +115,9 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
             if (success == 1) {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 DatabaseHelper dbhelper = new DatabaseHelper(context);
-                Order order = new Order(Integer.parseInt(userId), str_enquiry_refno, str_utr);
+
+                String creationtime = json.getString("creationtime");
+                Order order = new Order(Integer.parseInt(userId), str_enquiry_refno, str_utr, creationtime,1);
                 dbhelper.insertOrder(order);
                 dbhelper.closeDB();
 

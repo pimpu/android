@@ -42,12 +42,11 @@ public class scannerActivity extends AppCompatActivity {
 
     private void init() {
         scanButton = (Button) findViewById(R.id.scanButton);
-        scanButton.performClick();
         scanButton.setOnClickListener(new ScanButtonClickListener());
-        /*cameraButton = (Button) findViewById(R.id.cameraButton);
+        cameraButton = (Button) findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_CAMERA));
         mediaButton = (Button) findViewById(R.id.mediaButton);
-        mediaButton.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_MEDIA));*/
+        mediaButton.setOnClickListener(new ScanButtonClickListener(ScanConstants.OPEN_MEDIA));
         scannedImageView = (ImageView) findViewById(R.id.scannedImage);
     }
 

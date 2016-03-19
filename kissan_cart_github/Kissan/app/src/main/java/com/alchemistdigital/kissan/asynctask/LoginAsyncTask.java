@@ -137,11 +137,12 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
                 } else {
                     intent = new Intent(context, AdminPanel.class);
                 }
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK  | Intent.FLAG_ACTIVITY_NO_HISTORY);
+
                 ((Activity) context).finish();
                 context.startActivity(intent);
+
             } // if (success == 1)
             else if (success == 0 || success == 2 || success == 3) {
                 String message = json.getString(CommonVariables.TAG_MESSAGE);

@@ -23,6 +23,7 @@ import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetSocietyAsyncTask;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         dbHelper = new DatabaseHelper(MainActivity.this);
         int societyRowsCount = dbHelper.numberOfSocietyRows();
         int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
+        int orderRowsCount = dbHelper.numberOfOrderRowsByUserType("obp");
         dbHelper.closeDB();
 
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
@@ -84,6 +86,10 @@ public class MainActivity extends AppCompatActivity
         // when app is uninstalled then this function get all data from server
         if ( enquiryRowsCount <= 0){
             new GetEnquiryAsyncTask(MainActivity.this,strUID).execute();
+        }
+
+        if ( orderRowsCount <= 0 ) {
+            new GetOrderAsyncTask(MainActivity.this,strUID,"obp").execute();
         }
 
         // Make sure the device has the proper dependencies.
@@ -137,32 +143,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-//        System.out.println(getSupportFragmentManager().getBackStackEntryCount() > 0);
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0 )
-        {
-            super.onBackPressed();
-        }
-        else
-        {
-            new AlertDialog.Builder(this)
-                .setIcon(R.mipmap.ic_launcher_logo)
-                .setTitle("Closing Kisan Cart")
-                .setMessage("Are you sure you want to close this app?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
-                        String loginSharedPref = getPreference.getLoginPreference(getResources().getString(R.string.boolean_login_sharedPref));
-                        if (loginSharedPref.equals("true")) {
-                            finish();
-                        }
-                        finish();
-                    }
 
-                })
-                .setNegativeButton("No", null)
-                .show();
-        }
+        new AlertDialog.Builder(this)
+            .setIcon(R.mipmap.ic_launcher_logo)
+            .setTitle("Closing Kisan Cart")
+            .setMessage("Are you sure you want to close this app?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    MainActivity.this.finish();
+                }
+            })
+            .setNegativeButton("No", null)
+            .show();
     }
 
     @Override
@@ -199,7 +193,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_createEnquiry) {
             Intent intent = new Intent(MainActivity.this, Create_Enquiry.class);
             Bundle bundle = new Bundle();
-            bundle.putString("callingClass","mainActivity");
+            bundle.putString("callingClass", "mainActivity");
             intent.putExtras(bundle);
             startActivity(intent);
 
@@ -223,6 +217,14 @@ public class MainActivity extends AppCompatActivity
 
             startActivity(new Intent(MainActivity.this, Create_Society.class));
 
+        } else if(id == R.id.nav_viewOrder) {
+
+            startActivity(new Intent(MainActivity.this, View_Orders.class));
+
+        } else if(id == R.id.nav_viewSociety) {
+
+            startActivity(new Intent(MainActivity.this, View_Society.class));
+
         } else if (id == R.id.nav_obp_logout) {
 
             SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(MainActivity.this);
@@ -230,14 +232,17 @@ public class MainActivity extends AppCompatActivity
             // it store false value of user for purpose of user is logging.
             setPreference.setLoginPreference(getResources().getString(R.string.boolean_login_sharedPref), "false");
             Intent intent = new Intent(MainActivity.this, Login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK  | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             finish();
 
         }
 
         return true;
+    }
+
+    public void viewSQLiteDbAtObp(MenuItem item) {
+        Intent dbmanager = new Intent(MainActivity.this,AndroidDatabaseManager.class);
+        startActivity(dbmanager);
     }
 }

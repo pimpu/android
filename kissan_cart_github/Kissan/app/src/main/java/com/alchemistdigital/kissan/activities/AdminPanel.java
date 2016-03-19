@@ -24,6 +24,7 @@ import com.alchemistdigital.kissan.Login;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -52,15 +53,17 @@ public class AdminPanel extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.admin_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
+        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+        String strUID = String.valueOf(uId);
+
         // get society data from server when obp has already created society.
         DatabaseHelper dbHelper = new DatabaseHelper(AdminPanel.this);
         int societyRowsCount = dbHelper.numberOfSocietyRows();
         int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
+        int orderRowsCount = dbHelper.numberOfOrderRowsByUserType("admin");
         dbHelper.closeDB();
 
-        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
-        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
-        String strUID = String.valueOf(uId);
 
         // when app is uninstalled then this function get all data from server
         if (societyRowsCount <= 0) {
@@ -68,9 +71,14 @@ public class AdminPanel extends AppCompatActivity
         }
 
         // when app is uninstalled then this function get all data from server
-        if ( enquiryRowsCount <= 0){
+        if ( enquiryRowsCount <= 0 ){
             new GetEnquiryAsyncTask(AdminPanel.this,strUID).execute();
         }
+
+        if ( orderRowsCount <= 0 ) {
+            new GetOrderAsyncTask(AdminPanel.this,strUID,"admin").execute();
+        }
+
 
         // Make sure the device has the proper dependencies.
         GCMRegistrar.checkDevice(this);
@@ -133,33 +141,20 @@ public class AdminPanel extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-//        System.out.println(getSupportFragmentManager().getBackStackEntryCount() > 0);
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0 )
-        {
-            super.onBackPressed();
-        }
-        else
-        {
-            new AlertDialog.Builder(this)
-                    .setIcon(R.mipmap.ic_launcher_logo)
-                    .setTitle("Closing Kisan Cart")
-                    .setMessage("Are you sure you want to close this app?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
-                            String loginSharedPref = getPreference.getLoginPreference(getResources().getString(R.string.boolean_login_sharedPref));
-                            if(loginSharedPref.equals("true")  )
-                            {
-                                finish();
-                            }
-                            finish();
-                        }
+        new AlertDialog.Builder(this)
+                .setIcon(R.mipmap.ic_launcher_logo)
+                .setTitle("Closing Kisan Cart")
+                .setMessage("Are you sure you want to close this app?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        AdminPanel.this.finish();
+                    }
 
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @Override
@@ -208,14 +203,17 @@ public class AdminPanel extends AppCompatActivity
             // it store false value of user for purpose of user is logging.
             setPreference.setLoginPreference(getResources().getString(R.string.boolean_login_sharedPref), "false");
             Intent intent = new Intent(AdminPanel.this, Login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK  | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             finish();
 
         }
 
         return true;
+    }
+
+    public void viewSQLiteDb(MenuItem item) {
+        Intent dbmanager = new Intent(AdminPanel.this,AndroidDatabaseManager.class);
+        startActivity(dbmanager);
     }
 }
