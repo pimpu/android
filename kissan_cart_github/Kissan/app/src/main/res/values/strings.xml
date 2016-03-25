@@ -61,6 +61,7 @@
     <string name="boolean_login_sharedPref">BooloanLoginSharedPref</string>
     <string name="loginName">login_name</string>
     <string name="loginEmail">login_email</string>
+    <string name="adminUserId">admin_userId</string>
     <string name="userId">userId</string>
     <string name="title_activity_admin_panel">Admin Panel</string>
     <string name="title_select_society">Select society -</string>

@@ -39,4 +39,8 @@ public class GetSharedPreferenceHelper extends CommonGetPreference {
     public boolean getBoolScanPicture(String text){
         return getBoolean(text);
     }
+
+    public int getAdminUserId(String text){
+        return getInt(text);
+    }
 }

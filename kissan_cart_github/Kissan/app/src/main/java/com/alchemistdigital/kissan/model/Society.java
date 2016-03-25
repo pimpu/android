@@ -26,13 +26,13 @@ public class Society {
         this.soc_status = soc_status;
     }
 
-    public void setSoc_status(int soc_status) {
-        this.soc_status = soc_status;
-    }
-
     // setters
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setSoc_status(int soc_status) {
+        this.soc_status = soc_status;
     }
 
     public void setSoc_name(String soc_name) {

@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class DateHelper {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+    private final static SimpleDateFormat sdfForStoreInDb = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     private final static SimpleDateFormat noFormatDateSdf = new SimpleDateFormat("ddMMyyhhmmss");
     private final static SimpleDateFormat MONTH = new SimpleDateFormat("MM");
     private final static SimpleDateFormat DAY = new SimpleDateFormat("dd");
@@ -39,6 +40,10 @@ public class DateHelper {
         return sdf.format(currentDate);
     }
 
+    public static String getDateToStoreInDb(){
+        Date date = new Date();
+        return sdfForStoreInDb.format(date);
+    }
 
     public static String getRefStringDate(){
         Date date = new Date();

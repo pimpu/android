@@ -1,5 +1,7 @@
 package com.alchemistdigital.kissan.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.DownloadImageAsyncTask;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -20,6 +23,7 @@ public class Enquiry_Detail extends AppCompatActivity {
             document;
     ImageView imageviewSlip;
     View enquiryDetailView;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class Enquiry_Detail extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Bundle extras = getIntent().getExtras();
+        id = extras.getInt("enq_id");
         reference = extras.getString("reference");
         creationTime = extras.getString("creationTime");
         message = extras.getString("message");
@@ -67,22 +72,35 @@ public class Enquiry_Detail extends AppCompatActivity {
         tv_contact.setText(society_contact);
         tv_address.setText(society_address);
 
-        // Check if Internet present
-        if (!isConnectingToInternet(Enquiry_Detail.this)) {
-            // Internet Connection is not present
-            Snackbar.make(enquiryDetailView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Retry", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            onCreate(null);
-                        }
-                    }).show();
-            // stop executing code by return
-            return;
-        } else {
+        DatabaseHelper dbHelper = new DatabaseHelper(Enquiry_Detail.this);
 
-            new DownloadImageAsyncTask(Enquiry_Detail.this,(ImageView) findViewById(R.id.imageview_id_slip))
-                    .execute(CommonVariables.File_DOWNLOAD_URL + document);
+        if( dbHelper.numberOfOfflineRowsByid(id) > 0 ){
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = BitmapFactory.decodeFile(CommonVariables.SCAN_FILE_PATH +"/"+document, options);
+            imageviewSlip.setImageBitmap(bitmap);
+
+        } else {
+            // Check if Internet present
+            if (!isConnectingToInternet(Enquiry_Detail.this)) {
+                // Internet Connection is not present
+                Snackbar.make(enquiryDetailView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Retry", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onCreate(null);
+                            }
+                        }).show();
+                // stop executing code by return
+                return;
+            } else {
+
+                new DownloadImageAsyncTask(Enquiry_Detail.this,imageviewSlip)
+                        .execute(CommonVariables.File_DOWNLOAD_URL + document);
+            }
         }
+
+        dbHelper.closeDB();
     }
 }

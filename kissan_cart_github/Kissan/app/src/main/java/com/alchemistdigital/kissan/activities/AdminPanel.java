@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
@@ -31,6 +33,12 @@ import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.alchemistdigital.kissan.utilities.WakeLocker;
 import com.google.android.gcm.GCMRegistrar;
 
+import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
+
+/**
+ * don't finish this activity. because network connection receiver is register with this activity.
+ * if finish then it will not check the whether internet connection is working or not.
+ */
 public class AdminPanel extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -65,18 +73,21 @@ public class AdminPanel extends AppCompatActivity
         dbHelper.closeDB();
 
 
-        // when app is uninstalled then this function get all data from server
-        if (societyRowsCount <= 0) {
-            new GetAllSocietyAsyncTask(AdminPanel.this).execute();
-        }
+        if ( isConnectingToInternet(AdminPanel.this) ) {
 
-        // when app is uninstalled then this function get all data from server
-        if ( enquiryRowsCount <= 0 ){
-            new GetEnquiryAsyncTask(AdminPanel.this,strUID).execute();
-        }
+            // when app is uninstalled then this function get all data from server
+            if (societyRowsCount <= 0) {
+                new GetAllSocietyAsyncTask(AdminPanel.this).execute();
+            }
 
-        if ( orderRowsCount <= 0 ) {
-            new GetOrderAsyncTask(AdminPanel.this,strUID,"admin").execute();
+            // when app is uninstalled then this function get all data from server
+            if ( enquiryRowsCount <= 0 ){
+                new GetEnquiryAsyncTask(AdminPanel.this,strUID).execute();
+            }
+
+            if ( orderRowsCount <= 0 ) {
+                new GetOrderAsyncTask(AdminPanel.this,strUID,"admin").execute();
+            }
         }
 
 
@@ -108,8 +119,30 @@ public class AdminPanel extends AppCompatActivity
         tv_AdminEmail_navHeader.setText(emailPreference);
         tv_AdminName_navHeader.setText(namePreference);
 
+        this.registerReceiver(this.mConnReceiverAtAdmin,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
+    /**
+     * it check whether internet connection is working or not.
+     */
+    private BroadcastReceiver mConnReceiverAtAdmin = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if( isConnectingToInternet(context) ){
+                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+
+//                DatabaseHelper dbHelper = new DatabaseHelper(context);
+//                List<Offline> offlineData = dbHelper.getOfflineData();
+//
+//                for (int o = 0 ; o < offlineData.size() ; o++ ){
+//                    System.out.println( offlineData.get(o) );
+//                }
+
+            } else {
+                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
     /**
      * Receiving push messages
      * */
@@ -132,6 +165,7 @@ public class AdminPanel extends AppCompatActivity
     protected void onDestroy() {
         try {
             unregisterReceiver(mHandleMessageReceiverAtAdmin);
+            unregisterReceiver(mConnReceiverAtAdmin);
             GCMRegistrar.onDestroy(getApplicationContext());
         } catch (Exception e) {
             Log.e("UnRegisterReceiverError", "> " + e.getMessage());

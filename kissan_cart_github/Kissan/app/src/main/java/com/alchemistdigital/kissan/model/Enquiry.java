@@ -5,6 +5,7 @@ package com.alchemistdigital.kissan.model;
  */
 public class Enquiry {
     private int enquiry_id;
+    private int enquiry_server_id;
     private String creted_at;
     private String enquiry_reference;
     private int enquiry_userId;
@@ -18,12 +19,27 @@ public class Enquiry {
     private String enquiry_society_email;
     private String enquiry_document;
     private int  enquiry_status;
+    private String enquiry_offline_action;
 
     public Enquiry() {
     }
 
-    public Enquiry(int enquiry_id, String creted_at, String enquiry_reference, int enquiry_userId, int enquiry_groupId, int enquiry_replyTo, int enquiry_replied, String enquiry_message, String enquiry_society, String enquiry_society_address, String enquiry_society_contact, String enquiry_society_email, String enquiry_document,int enquiry_status) {
-        this.enquiry_id = enquiry_id;
+    public Enquiry(int enquiry_server_id,
+                   String creted_at,
+                   String enquiry_reference,
+                   int enquiry_userId,
+                   int enquiry_groupId,
+                   int enquiry_replyTo,
+                   int enquiry_replied,
+                   String enquiry_message,
+                   String enquiry_society,
+                   String enquiry_society_address,
+                   String enquiry_society_contact,
+                   String enquiry_society_email,
+                   String enquiry_document,
+                   int enquiry_status) {
+
+        this.enquiry_server_id = enquiry_server_id;
         this.creted_at = creted_at;
         this.enquiry_reference = enquiry_reference;
         this.enquiry_userId = enquiry_userId;
@@ -37,6 +53,27 @@ public class Enquiry {
         this.enquiry_society_email = enquiry_society_email;
         this.enquiry_document = enquiry_document;
         this.enquiry_status  = enquiry_status;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " \"enquiry_id\":\"" + enquiry_id + '\"' +
+                ", \"enquiry_server_id\":\"" + enquiry_server_id + '\"' +
+                ", \"enquiry_reference\":\"" + enquiry_reference + '\"' +
+                ", \"enquiry_userId\":\"" + enquiry_userId + '\"' +
+                ", \"enquiry_groupId\":\"" + enquiry_groupId + '\"' +
+                ", \"enquiry_replyTo\":\"" + enquiry_replyTo + '\"' +
+                ", \"enquiry_replied\":\"" + enquiry_replied + '\"' +
+                ", \"enquiry_message\":\"" + enquiry_message + '\"' +
+                ", \"enquiry_society\":\"" + enquiry_society + '\"' +
+                ", \"enquiry_society_address\":\"" + enquiry_society_address + '\"' +
+                ", \"enquiry_society_contact\":\"" + enquiry_society_contact + '\"' +
+                ", \"enquiry_society_email\":\"" + enquiry_society_email + '\"' +
+                ", \"enquiry_document\":\"" + enquiry_document + '\"' +
+                ", \"enquiry_creted_at\":\"" + creted_at + '\"' +
+                ", \"enquiry_offline_action\":\"" + enquiry_offline_action + '\"' +
+                '}';
     }
 
     // Getters
@@ -96,6 +133,14 @@ public class Enquiry {
         return enquiry_status;
     }
 
+    public int getEnquiry_server_id() {
+        return enquiry_server_id;
+    }
+
+    public String getEnquiry_offline_action() {
+        return enquiry_offline_action;
+    }
+
     // Setters
     public void setEnquiry_id(int enquiry_id) {
         this.enquiry_id = enquiry_id;
@@ -153,4 +198,11 @@ public class Enquiry {
         this.enquiry_status = enquiry_status;
     }
 
+    public void setEnquiry_server_id(int enquiry_server_id) {
+        this.enquiry_server_id = enquiry_server_id;
+    }
+
+    public void setEnquiry_offline_action(String enquiry_offline_action) {
+        this.enquiry_offline_action = enquiry_offline_action;
+    }
 }

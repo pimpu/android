@@ -7,14 +7,11 @@ package com.alchemistdigital.kissan;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.alchemistdigital.kissan.activities.AdminPanel;
 import com.alchemistdigital.kissan.activities.MainActivity;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
-
-import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
 public class SplashScreen extends Activity {
 
@@ -27,7 +24,7 @@ public class SplashScreen extends Activity {
         View idSplashScreen = findViewById(R.id.id_xmlSplashScreen);
 
         // Check if Internet present
-        if (!isConnectingToInternet(SplashScreen.this)) {
+       /* if (!isConnectingToInternet(SplashScreen.this)) {
             // Internet Connection is not present
             Snackbar.make(idSplashScreen, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Retry", new View.OnClickListener() {
@@ -39,7 +36,7 @@ public class SplashScreen extends Activity {
             // stop executing code by return
             return;
         }
-        else{
+        else{*/
             Thread timerThread = new Thread(){
                 public void run(){
                 try{
@@ -83,7 +80,7 @@ public class SplashScreen extends Activity {
                 }
             };
             timerThread.start();
-        }
+//        }
     }
 
     @Override

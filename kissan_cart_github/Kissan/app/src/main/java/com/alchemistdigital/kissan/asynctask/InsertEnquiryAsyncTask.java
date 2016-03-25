@@ -3,6 +3,7 @@ package com.alchemistdigital.kissan.asynctask;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,8 +46,10 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
     private String strUID;
     private String userType;
     private String eId;
+    private String replyTo;
+    private String groupId;
 
-    public InsertEnquiryAsyncTask(Context context, String str_ref_no, String str_name, String str_contact, String str_email, String str_address, String str_message, String absolutePath, String strUID, String userType, String eId) {
+    public InsertEnquiryAsyncTask(Context context, String str_ref_no, String str_name, String str_contact, String str_email, String str_address, String str_message, String absolutePath, String strUID, String userType, String eId, int repToVal, int gId) {
         this.context = context;
         this.str_ref_no = str_ref_no;
         this.str_name = str_name;
@@ -58,11 +61,17 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
         this.strUID = strUID;
         this.userType = userType;
         this.eId = eId;
+        replyTo = String.valueOf(repToVal);
+        groupId = String.valueOf(gId);
+
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("inserting ...");
         pDialog.setIndeterminate(false);
@@ -104,6 +113,8 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
             entity.addPart("uId", new StringBody(strUID));
             entity.addPart("userType", new StringBody(userType));
             entity.addPart("eId", new StringBody(eId));
+            entity.addPart("replyTo", new StringBody(replyTo));
+            entity.addPart("groupId", new StringBody(groupId));
             entity.addPart("filepath",new StringBody(CommonVariables.FILE_UPLOAD_URL));
 
 //            totalSize = entity.getContentLength();
@@ -136,6 +147,8 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         pDialog.dismiss();
 
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
         Log.d("enquiry insert Data", result.toString());
 
         if (result.contains("Error occurred!")) {
@@ -157,7 +170,8 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
 
                 JSONObject c = jsonSociety.getJSONObject(0);
                 int id_enquiry = c.getInt("id");
-                String creted_at = c.getString("timestamp"),fileName=null;
+                String creted_at = c.getString("timestamp");
+                String fileName=null;
                 int gId = c.getInt("groupId");
                 int repToVal = c.getInt("repToVal");
                 int eUid = Integer.valueOf(strUID);
@@ -169,15 +183,15 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                     fileName = absolutePath.substring(cut + 1);
                 }
 
-                Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, 0, str_message, str_name, str_address, str_contact, str_email, fileName, 1);
+                Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId,
+                                                repToVal, 0, str_message, str_name, str_address,
+                                                str_contact, str_email, fileName, 1);
+
                 long enquiryId = dbHelper.insertEnquiry(enquiry);
                 System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
 
-                System.out.println("Before update stmt: "+eId);
-                if( !eId.equals("0") ){
-                    System.out.println("inside update replied.");
-                    int i = dbHelper.updateEnquiryReplied(eId);
-                    System.out.println(context.getClass().getSimpleName()+"(update) : "+i);
+                if( !eId.equals("0") ) {
+                    int i = dbHelper.updateEnquiryReplied(eId, "1");
                 }
 
                 dbHelper.closeDB();

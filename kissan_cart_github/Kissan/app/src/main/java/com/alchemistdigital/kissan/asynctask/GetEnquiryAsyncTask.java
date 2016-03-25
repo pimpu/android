@@ -132,9 +132,12 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
                     String fileName = c.getString("document");
                     int status = c.getInt("status");
 
-                    Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, replied, str_message, str_name, str_address, str_contact, str_email, fileName, status);
+                    Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId,
+                                                    repToVal, replied, str_message, str_name,
+                                                    str_address,str_contact, str_email,
+                                                    fileName, status );
                     long enquiryId = dbHelper.insertEnquiry(enquiry);
-                    System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
+//                    System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
                 }
 
                 dbHelper.closeDB();

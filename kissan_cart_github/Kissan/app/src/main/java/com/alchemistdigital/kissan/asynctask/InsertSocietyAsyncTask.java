@@ -130,7 +130,8 @@ public class InsertSocietyAsyncTask extends AsyncTask<String,String,String>{
                 GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
                 int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-                Society society = new Society(id_society,uId,str_society_name,str_society_contact,str_society_email,str_society_address,1);
+                Society society = new Society(id_society, uId, str_society_name, str_society_contact,
+                                                str_society_email, str_society_address, 1);
                 long societyId = dbHelper.insertSociety(society);
                 dbHelper.closeDB();
 

@@ -71,6 +71,7 @@ public class New_Reply extends AppCompatActivity {
                             Intent goToDetailEnquiry = new Intent(New_Reply.this,Enquiry_Detail.class);
 
                             Bundle extras = new Bundle();
+                            extras.putInt("enq_id",data.get(position).getEnquiry_id());
                             extras.putString("reference", data.get(position).getEnquiry_reference());
                             extras.putString("creationTime",data.get(position).getCreted_at());
                             extras.putString("society",data.get(position).getEnquiry_society());
@@ -94,7 +95,7 @@ public class New_Reply extends AppCompatActivity {
                             Bundle bundle = new Bundle();
                             bundle.putString("callingClass","newRelpy");
                             bundle.putString("ref",data.get(position).getEnquiry_reference());
-                            bundle.putInt("enquiryId", data.get(position).getEnquiry_id());
+                            bundle.putInt("enquiryId", data.get(position).getEnquiry_server_id());
                             intent.putExtras(bundle);
                             startActivity(intent);
 

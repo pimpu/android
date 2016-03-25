@@ -10,6 +10,7 @@ public class Item {
     private int itemQuantity;
     private String itemPrice;
     private String itemTotalAmount;
+    private String itemCreationTime;
 
     public Item() {
     }
@@ -77,6 +78,4 @@ public class Item {
     public void setItemCreationTime(String itemCreationTime) {
         this.itemCreationTime = itemCreationTime;
     }
-
-    private String itemCreationTime;
 }

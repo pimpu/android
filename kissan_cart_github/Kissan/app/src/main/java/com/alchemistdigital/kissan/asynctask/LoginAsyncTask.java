@@ -131,6 +131,9 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
                 // user register name
                 setPreference.setNamePreference(context.getResources().getString(R.string.loginName), userDataObject.getString("name"));
 
+                // set admin user id
+                setPreference.setAdminUserId( context.getResources().getString(R.string.adminUserId), userDataObject.getInt("adminUID") );
+
                 Intent intent;
                 if (userDataObject.getString("who").equals("obp")) {
                     intent = new Intent(context, MainActivity.class);

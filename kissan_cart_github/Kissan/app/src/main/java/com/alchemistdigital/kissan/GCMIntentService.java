@@ -48,8 +48,66 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         } else if (message.equals("updateSocietyAtAdmin")){
            updateSocietyDetails(context, intent.getExtras().getString("changedSocietyDetails"));
+        } else if (message.equals("downloadOfflineInsertEnquiry")){
+
+            storeOfflineEnquiryDetails(context, intent.getExtras().getString("enquiryDetails"));
+
+        } else if(message.equals("downloadOfflineUpdateEnquiry")){
+            updateOfflineEnquiry(context,intent.getExtras().getString("enquiryDetails"));
         }
 
+    }
+
+    private void updateOfflineEnquiry(Context context, String enquiryDetails) {
+        try {
+            JSONObject json = new JSONObject(enquiryDetails);
+
+            String enquiryId = json.getString("enquiry_id");
+            String replied = json.getString("replied");
+
+            DatabaseHelper dbhelper = new DatabaseHelper(context);
+            int i = dbhelper.updateEnquiryReplied(enquiryId, replied);
+            dbhelper.closeDB();
+            System.out.println("(update at GCM offline) : " + i);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void storeOfflineEnquiryDetails(Context context, String enquiryDetails) {
+        try {
+            JSONObject json = new JSONObject(enquiryDetails);
+
+            // Storing each json item in variable
+            int id_enquiry = json.getInt("id");
+            String creted_at = json.getString("eTime");
+            String str_ref_no = json.getString("eRef");
+            int eUid = json.getInt("uID");
+            int gId = json.getInt("gID");
+            int repToVal = json.getInt("repTo");
+            int replied = json.getInt("replied");
+            String str_message = json.getString("eMsg");
+            String str_name = json.getString("eSociety");
+            String str_address = json.getString("eSocAdrs");
+            String str_contact = json.getString("eSocCont");
+            String str_email = json.getString("eSocEmail");
+            String fileName = json.getString("eDoc");
+
+            DatabaseHelper dbHelper = new DatabaseHelper(context);
+            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal,
+                    replied, str_message, str_name, str_address,
+                    str_contact, str_email, fileName, 1);
+            long enquiryId = dbHelper.insertEnquiry(enquiry);
+
+            dbHelper.closeDB();
+
+            System.out.println("insert offline enquiry(GCM): " + enquiryId);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateSocietyDetails(Context context, String changedSocietyDetails) {
@@ -107,7 +165,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             }
 
-            Order order = new Order(Integer.parseInt(userId), referenceNo, utr, creationTime,1);
+            Order order = new Order(Integer.parseInt(userId), referenceNo, utr, creationTime, 1);
             dbhelper.insertOrder(order);
 
             dbhelper.closeDB();
@@ -138,13 +196,13 @@ public class GCMIntentService extends GCMBaseIntentService {
             String oldEnquiryId = json.getString("oldEnquiryId");
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
-            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal, replied, str_message, str_name, str_address, str_contact, str_email, fileName,1);
+            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal,
+                                            replied, str_message, str_name, str_address,
+                                            str_contact, str_email, fileName, 1);
             long enquiryId = dbHelper.insertEnquiry(enquiry);
 
-            System.out.println("Before update stmt(GCM): "+oldEnquiryId);
             if( !oldEnquiryId.equals("0") ){
-                System.out.println("inside update replied.");
-                int i = dbHelper.updateEnquiryReplied(oldEnquiryId);
+                int i = dbHelper.updateEnquiryReplied(oldEnquiryId, "1");
                 System.out.println(context.getClass().getSimpleName()+"(update at GCM) : "+i);
             }
 

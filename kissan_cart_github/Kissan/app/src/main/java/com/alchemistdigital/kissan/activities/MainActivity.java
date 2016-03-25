@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
@@ -25,12 +27,23 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetSocietyAsyncTask;
+import com.alchemistdigital.kissan.asynctask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.alchemistdigital.kissan.utilities.WakeLocker;
 import com.google.android.gcm.GCMRegistrar;
 
+import java.util.List;
+
+import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
+
+/**
+ * don't finish this activity. because network connection receiver is register with this activity.
+ * if finish then it will not check the whether internet connection is working or not.
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.obp_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -78,18 +90,21 @@ public class MainActivity extends AppCompatActivity
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
         String strUID = String.valueOf(uId);
 
-        // when app is uninstalled then this function get all data from server
-        if (societyRowsCount <= 0) {
-            new GetSocietyAsyncTask(MainActivity.this,strUID).execute();
-        }
+        if ( isConnectingToInternet(MainActivity.this) ) {
 
-        // when app is uninstalled then this function get all data from server
-        if ( enquiryRowsCount <= 0){
-            new GetEnquiryAsyncTask(MainActivity.this,strUID).execute();
-        }
+            // when app is uninstalled then this function get all data from server
+            if (societyRowsCount <= 0) {
+                new GetSocietyAsyncTask(MainActivity.this,strUID).execute();
+            }
 
-        if ( orderRowsCount <= 0 ) {
-            new GetOrderAsyncTask(MainActivity.this,strUID,"obp").execute();
+            // when app is uninstalled then this function get all data from server
+            if ( enquiryRowsCount <= 0){
+                new GetEnquiryAsyncTask(MainActivity.this,strUID).execute();
+            }
+
+            if ( orderRowsCount <= 0 ) {
+                new GetOrderAsyncTask(MainActivity.this,strUID,"obp").execute();
+            }
         }
 
         // Make sure the device has the proper dependencies.
@@ -109,8 +124,57 @@ public class MainActivity extends AppCompatActivity
             GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
         }
 
+        this.registerReceiver(this.mConnReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
+
+    /**
+     * it check whether internet connection is working or not.
+     */
+    private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if( isConnectingToInternet(context) ){
+                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+
+                DatabaseHelper dbHelper = new DatabaseHelper(context);
+                List<Offline> offlineEnquiryData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ENQUIRY);
+                List<Offline> offlineSocietyData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_SOCIETY);
+                List<Offline> offlineOrderData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ORDER);
+
+                String jsonEnquiryArr = null;
+                String jsonSocietyArr = null;
+                String jsonOrderArr = null;
+
+                for (int o = 0 ; o < offlineEnquiryData.size() ; o++ ) {
+
+                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID( offlineEnquiryData.get(o).getOffline_row_id(),
+                                                                         offlineEnquiryData.get(0).getOffline_row_action() );
+
+                    jsonEnquiryArr = jsonEnquiryArr + enquiryByID.toString() ;
+                }
+
+
+                for (int a = 0 ; a < offlineSocietyData.size() ; a++ ) {
+                    System.out.println(offlineEnquiryData.get(a).getOffline_table_name());
+                }
+
+                for (int b = 0 ; b < offlineOrderData.size() ; b++ ) {
+                    System.out.println(offlineEnquiryData.get(b).getOffline_table_name());
+                }
+
+                if(jsonEnquiryArr != null) {
+                    String jsonArrayEnquiryArr = jsonEnquiryArr.replace("null", "").replaceAll("\\]\\[", ",");
+                    new InsertOfflineEnquiryDataAsyncTask(MainActivity.this,jsonArrayEnquiryArr).execute();
+                }
+
+                dbHelper.closeDB();
+
+            } else {
+                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 
     /**
      * Receiving push messages
@@ -134,6 +198,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         try {
             unregisterReceiver(mHandleMessageReceiver);
+            unregisterReceiver(mConnReceiver);
             GCMRegistrar.onDestroy(getApplicationContext());
         } catch (Exception e) {
             Log.e("UnRegisterReceiverError", "> " + e.getMessage());

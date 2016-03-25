@@ -116,7 +116,9 @@ public class GetAllSocietyAsyncTask extends AsyncTask<String, String, String> {
                     String str_society_address = c.getString("soc_adrs");
                     int str_society_status = c.getInt("soc_status");
 
-                    Society society = new Society(id_society,uId,str_society_name,str_society_contact,str_society_email,str_society_address,str_society_status);
+                    Society society = new Society(id_society,uId,str_society_name,
+                                                    str_society_contact,str_society_email,
+                                                    str_society_address,str_society_status );
                     long societyId = dbHelper.insertSociety(society);
                     System.out.println(context.getClass().getSimpleName()+" : "+societyId);
 //                    System.out.println("Society count: " + dbHelper.numberOfSocietyRows());

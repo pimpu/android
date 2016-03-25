@@ -63,6 +63,7 @@ public class View_Enquiry extends AppCompatActivity {
                     Intent goToDetailEnquiry = new Intent(View_Enquiry.this,Enquiry_Detail.class);
 
                     Bundle extras = new Bundle();
+                    extras.putInt("enq_id",data.get(position).getEnquiry_id());
                     extras.putString("reference", data.get(position).getEnquiry_reference());
                     extras.putString("creationTime",data.get(position).getCreted_at());
                     extras.putString("society",data.get(position).getEnquiry_society());

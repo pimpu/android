@@ -12,8 +12,8 @@
 		$result = mysql_query("SELECT * FROM enquiry WHERE 	uID = ".$str_obpId);
 		$getReplyEnquiry = mysql_query("SELECT * FROM enquiry WHERE repTo = ".$str_obpId." AND replied = 0;");
 		 
-		// check for empty result
-		if (mysql_num_rows($result) > 0 ) {
+		/*// check for empty result
+		if (mysql_num_rows($result) > 0 ) {*/
 			// looping through all results
 			// societies node
 			$response["message"] = array();
@@ -42,12 +42,12 @@
 			}
 			$response["success"] = 1;
 		 
-		} else {
+		/*} else {
 			// no societies found
 			$response["success"] = 0;
 			$response["message"] = "No enquiry found";
 		 
-		}
+		}*/
 
 		if (mysql_num_rows($getReplyEnquiry) > 0 ) {
 			while ($row = mysql_fetch_array($getReplyEnquiry)) {
@@ -67,6 +67,7 @@
 				$enquiry["society_contact"] = $row["eSocCont"];
 				$enquiry["society_email"] = $row["eSocEmail"];
 				$enquiry["document"] = $row["eDoc"];
+				$enquiry["status"] = $row["status"];
 		 
 				// push single enquiry into final response array
 				array_push($response["message"], $enquiry);

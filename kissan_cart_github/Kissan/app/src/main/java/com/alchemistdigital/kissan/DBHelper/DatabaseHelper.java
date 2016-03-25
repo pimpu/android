@@ -13,6 +13,7 @@ import android.util.Log;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
@@ -37,15 +38,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "KissanCart.db";
 
     // Table Names
-    private static final String TABLE_SOCIETY = "Society";
-    private static final String TABLE_ENQUIRY = "Enquiry";
-    private static final String TABLE_ORDER = "Orders";
+    public static final String TABLE_SOCIETY = "Society";
+    public static final String TABLE_ENQUIRY = "Enquiry";
+    public static final String TABLE_ORDER = "Orders";
     private static final String TABLE_ITEM = "Item";
+    private static final String TABLE_OFFLINE = "Offline";
 
     // Common column names
     private static final String KEY_ID = "id";
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_STATUS = "status";
+//    private static final String KEY_OFFLINE_STATUS = "offline"; /*( 0 - online, 1 - offline )*/
 
     // SOCIETY Table - column names
     private static final String SOCIETY_COLUMN_USERID = "uID";
@@ -55,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SOCIETY_COLUMN_ADDRESS = "soc_adrs";
 
     // ENQUIRY Table - column names
+    private static final String ENQUIRY_SERVER_ID = "eServerId";
     private static final String ENQUIRY_REF = "eRef";
     private static final String ENQUIRY_USERID = "uID";
     private static final String ENQUIRY_GROUPID = "gID";
@@ -83,6 +87,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ITEM_PRICE = "price";
     private static final String ITEM_TOTAL_AMOUNT = "total_amount";
 
+    // OFFLINE Table - column names
+    private static final String OFFLINE_TABLE_NAME = "table_name";
+    private static final String OFFLINE_ROW_ID = "column_id";
+    private static final String OFFLINE_ROW_ACTION = "column_action";
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -90,58 +100,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Society Table Create Statements
     private static final String CREATE_TABLE_SOCIETY =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_SOCIETY +
-                    "(" + KEY_ID + " INTEGER PRIMARY KEY," +
-                    SOCIETY_COLUMN_USERID+" INTEGER," +
-                    SOCIETY_COLUMN_NAME+" VARCHAR(100)," +
-                    SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
-                    SOCIETY_COLUMN_EMAIL+" VARCHAR(100)," +
-                    SOCIETY_COLUMN_ADDRESS+" VARCHAR(200)," +
-                    KEY_STATUS +" TINYINT(4)," +
-                    KEY_CREATED_AT + " DATETIME" + ")";
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_SOCIETY +
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            SOCIETY_COLUMN_USERID+" INTEGER," +
+            SOCIETY_COLUMN_NAME+" VARCHAR(100)," +
+            SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
+            SOCIETY_COLUMN_EMAIL+" VARCHAR(100)," +
+            SOCIETY_COLUMN_ADDRESS+" VARCHAR(200)," +
+            KEY_STATUS +" TINYINT(4)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
 
     // Enquiry Table Create Statements
     private static final String CREATE_TABLE_ENQUIRY =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_ENQUIRY +
-                    "(" + KEY_ID + " INTEGER PRIMARY KEY," +
-                    ENQUIRY_REF +" VARCHAR(20)," +
-                    ENQUIRY_USERID +" INTEGER," +
-                    ENQUIRY_GROUPID +" INTEGER," +
-                    ENQUIRY_REPLYTO +" INTEGER," +
-                    ENQUIRY_REPLIED +" TINYINT(4)," +
-                    ENQUIRY_MESSAGE +" TEXT,"+
-                    ENQUIRY_SOCIETY +" VARCHAR(50)," +
-                    ENQUIRY_SOCIETY_ADDRESS +" VARCHAR(50)," +
-                    ENQUIRY_SOCIETY_CONTACT +" VARCHAR(20)," +
-                    ENQUIRY_SOCIETY_EMAIL +" VARCHAR(20)," +
-                    ENQUIRY_DOCUMENT +" VARCHAR(50)," +
-                    KEY_STATUS +" TINYINT(4)," +
-                    KEY_CREATED_AT + " DATETIME" + ")";
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_ENQUIRY +
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            ENQUIRY_SERVER_ID +" INTEGER," +
+            ENQUIRY_REF +" VARCHAR(20)," +
+            ENQUIRY_USERID +" INTEGER," +
+            ENQUIRY_GROUPID +" INTEGER," +
+            ENQUIRY_REPLYTO +" INTEGER," +
+            ENQUIRY_REPLIED +" TINYINT(4)," +
+            ENQUIRY_MESSAGE +" TEXT,"+
+            ENQUIRY_SOCIETY +" VARCHAR(50)," +
+            ENQUIRY_SOCIETY_ADDRESS +" VARCHAR(50)," +
+            ENQUIRY_SOCIETY_CONTACT +" VARCHAR(20)," +
+            ENQUIRY_SOCIETY_EMAIL +" VARCHAR(20)," +
+            ENQUIRY_DOCUMENT +" VARCHAR(50)," +
+            KEY_STATUS +" TINYINT(4)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
 
     // Item Table Create Statement
     private static final String CREATE_TABLE_ITEM =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_ITEM +
-                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    ITEM_REFERENCE +" VARCHAR(50)," +
-                    ITEM_NAME +" VARCHAR(50)," +
-                    ITEM_QUANTITY +" INTEGER,"+
-                    ITEM_PRICE +" VARCHAR(50)," +
-                    ITEM_TOTAL_AMOUNT +" VARCHAR(50)," +
-                    KEY_CREATED_AT + " DATETIME" + ")";
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_ITEM +
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            ITEM_REFERENCE +" VARCHAR(50)," +
+            ITEM_NAME +" VARCHAR(50)," +
+            ITEM_QUANTITY +" INTEGER,"+
+            ITEM_PRICE +" VARCHAR(50)," +
+            ITEM_TOTAL_AMOUNT +" VARCHAR(50)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
 
     // Order Table Create Statement
     private static final String CREATE_TABLE_ORDER =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_ORDER +
-                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    ORDER_USERID + " INTEGER,"+
-                    ORDER_REFERENCE +" VARCHAR(40),"+
-                    ORDER_UTR + " VARCHAR(40),"+
-                   /* ORDER_ITEM + " VARCHAR(40),"+
-                    ORDER_QUANTITY + " INTEGER,"+
-                    ORDER_PRICE + " VARCHAR(40),"+
-                    ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+*/
-                    KEY_STATUS +" TINYINT(4)," +
-                    KEY_CREATED_AT + " DATETIME" + ")";
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_ORDER +
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            ORDER_USERID + " INTEGER,"+
+            ORDER_REFERENCE +" VARCHAR(40),"+
+            ORDER_UTR + " VARCHAR(40),"+
+           /* ORDER_ITEM + " VARCHAR(40),"+
+            ORDER_QUANTITY + " INTEGER,"+
+            ORDER_PRICE + " VARCHAR(40),"+
+            ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+*/
+            KEY_STATUS +" TINYINT(4)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Offline Table Cretate statement
+    private static final String CREATE_TABLE_OFFLINE =
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_OFFLINE +
+            "("+ KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            OFFLINE_TABLE_NAME +" VARCHAR(40)," +
+            OFFLINE_ROW_ID +" INTEGER," +
+            OFFLINE_ROW_ACTION +" VARCHAR(40)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -150,6 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ENQUIRY);
         db.execSQL(CREATE_TABLE_ITEM);
         db.execSQL(CREATE_TABLE_ORDER);
+        db.execSQL(CREATE_TABLE_OFFLINE);
     }
 
     @Override
@@ -159,6 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENQUIRY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE);
 
         // create new tables
         onCreate(db);
@@ -229,7 +252,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String whereClause = SOCIETY_COLUMN_USERID+" = ? ";
+        String whereClause = SOCIETY_COLUMN_USERID +" = ? ";
         String[] whereArgs = new String[]{ String.valueOf(uId) } ;
 
         int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_SOCIETY,whereClause,whereArgs);
@@ -292,7 +315,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery(selectQuery, null);
+        Cursor res = db.rawQuery(selectQuery, null);
 
         if(res.moveToFirst()){
             do{
@@ -317,11 +340,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // ------------------------ "Enquiry" table methods ----------------//
-    public long insertEnquiry(Enquiry enquiryColumn){
+    public long insertEnquiry(Enquiry enquiryColumn) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_ID, enquiryColumn.getEnquiry_id());
+        contentValues.put(ENQUIRY_SERVER_ID, enquiryColumn.getEnquiry_server_id());
         contentValues.put(KEY_STATUS, enquiryColumn.getEnquiry_status());
         contentValues.put(KEY_CREATED_AT, enquiryColumn.getCreted_at());
         contentValues.put(ENQUIRY_REF, enquiryColumn.getEnquiry_reference());
@@ -344,14 +367,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a society
      */
-    public int updateEnquiryReplied(String eId) {
+    public int updateEnquiryReplied(String eId,String repliedVal) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ENQUIRY_REPLIED, "1");
 
 //      db.update(String table_name,String where_clause,String[] where_args);
-        int update = db.update(TABLE_ENQUIRY, contentValues, KEY_ID + " = ? ", new String[]{eId});
+        int update = db.update(TABLE_ENQUIRY, contentValues, ENQUIRY_SERVER_ID + " = ? ", new String[]{eId});
         return update;
     }
 
@@ -395,6 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
                 enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
                 enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
                 array_list.add(enquiry);
@@ -413,11 +437,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        String whereClause = ENQUIRY_USERID + " = ? ";
-        String[] whereArgs = new String[]{String.valueOf(uId)};
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY);
+        return numRows;
+    }
+
+    /**
+     * if result get null value with id that means obp create fisrt time enquiry with reference.
+     * then it goes to by default to admin
+     * if result gets value with eID then it goes in reply scenario.
+     * get user-id from currently clicked enqiry and store it into replyTo variable.
+     * @param id
+     * @return
+     */
+    public int numberOfEnquiryRowsByServerID(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = ENQUIRY_SERVER_ID + " = ? ";
+        String[] whereArgs = new String[]{ id };
 
         int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
         return numRows;
+    }
+
+    public int getUserIdByServerIdInEnquired(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int userId = 0;
+
+        String selectQuery = "SELECT "+ENQUIRY_USERID+" FROM " + TABLE_ENQUIRY + " WHERE "
+                + ENQUIRY_SERVER_ID + " = " + id ;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                userId = res.getInt(res.getColumnIndex(ENQUIRY_USERID));
+            }while (res.moveToNext());
+        }
+        return userId;
     }
 
     public int numberOfEnquiryRowsByUidAndStatus(){
@@ -432,6 +490,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
         return numRows;
     }
+
     /**
      * getting enquiry count using replyTo with logged in user id and replied with 0 value.
      */
@@ -494,6 +553,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
                 enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
                 enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
                 array_list.add(enquiry);
@@ -587,6 +647,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
                 enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
                 enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
                 array_list.add(enquiry);
@@ -602,7 +663,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param oldSocietyName
      * @return
      */
-
     public boolean updateSocietyColumnInEnquiryTable(Enquiry enquiry, String oldSocietyName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -617,6 +677,86 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     *
+     * @param userId
+     * @param msg
+     * @param filename
+     * @return
+     */
+    public int checkEnquiryEntryPresent(int userId, String msg, String filename){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = ENQUIRY_USERID + " = ? AND " + ENQUIRY_MESSAGE + " = ? AND " + ENQUIRY_DOCUMENT + " = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(userId), msg, filename };
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
+        return numRows;
+    }
+
+    /**
+     * get all enquiry data which are store in offline mode.
+     * @param id
+     * @param action
+     * @return
+     */
+    public List<Enquiry> getEnquiryByID(int id, String action){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Enquiry> array_list = new ArrayList<Enquiry>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
+                + KEY_ID + " = " + id;
+
+//        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Enquiry enquiry = new Enquiry();
+
+                enquiry.setEnquiry_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                enquiry.setEnquiry_reference(res.getString(res.getColumnIndex(ENQUIRY_REF)));
+                enquiry.setEnquiry_userId(res.getInt(res.getColumnIndex(ENQUIRY_USERID)));
+                enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
+                enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
+                enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
+                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
+                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
+                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
+                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
+                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
+                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setCreted_at( res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+                enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
+                enquiry.setEnquiry_offline_action( action );
+
+                array_list.add(enquiry);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+
+    }
+
+    /**
+     * update server id when offline data inserted on server while internet is on.
+     * function - InsertOfflineEnquiryDataAsyncTask
+     * @param enquiryId
+     * @param serverId
+     * @return
+     */
+    public boolean updateServerIdOfEnquiry(String enquiryId, int serverId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ENQUIRY_SERVER_ID, serverId );
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_ENQUIRY, contentValues, KEY_ID + " = ? ", new String[]{ enquiryId });
+        return true;
+    }
     // ------------------------ "Enquiry" table methods ----------------//
 
 
@@ -787,12 +927,98 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ------------------------ "Item" table methods ----------------//
 
+
+    // ------------------------ "Offline" table methods ----------------//
+    /**
+     * inserting key of data whose row of table is inserted in offline mode.
+     * @param offline
+     * @return id of inserted row
+     */
+    public long insertOffline(Offline offline){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OFFLINE_TABLE_NAME, offline.getOffline_table_name());
+        contentValues.put(OFFLINE_ROW_ID, offline.getOffline_row_id());
+        contentValues.put(OFFLINE_ROW_ACTION, offline.getOffline_row_action());
+        contentValues.put(KEY_CREATED_AT, offline.getOffline_row_creationTime());
+
+        // insert row
+        long offline_id = 0;
+        try {
+            offline_id = db.insert(TABLE_OFFLINE, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return offline_id;
+    }
+
+    /**
+     * delete data by row id which are inserted into online server
+     * @param id
+     * @return
+     */
+    public int deleteOfflineTableData(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String whereClause = OFFLINE_ROW_ID +" = ? ";
+        String[] whereArgs = new String[]{ id } ;
+
+        return db.delete(TABLE_OFFLINE, whereClause, whereArgs);
+    }
+
+    /**
+     * get data with respect to table name
+     * @param tableName
+     * @return
+     */
+    public List<Offline> getOfflineDataByTableName(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Offline> array_list = new ArrayList<Offline>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_OFFLINE + " WHERE "+
+                                OFFLINE_TABLE_NAME+" = '"+tableName+"' ORDER BY "+KEY_CREATED_AT;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Offline offline = new Offline();
+
+                offline.setOffline_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                offline.setOffline_table_name(res.getString(res.getColumnIndex(OFFLINE_TABLE_NAME)));
+                offline.setOffline_row_id(res.getInt(res.getColumnIndex(OFFLINE_ROW_ID)));
+                offline.setOffline_row_action(res.getString(res.getColumnIndex(OFFLINE_ROW_ACTION)));
+
+                array_list.add(offline);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+
+    public int numberOfOfflineRowsByid( int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = OFFLINE_ROW_ID +" = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(id)} ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_OFFLINE, whereClause, whereArgs);
+        return numRows;
+    }
+
+    // ------------------------ "Offline" table methods ----------------//
+
     // closing database
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null && db.isOpen())
             db.close();
     }
+
 
     /**
      * get datetime

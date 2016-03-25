@@ -38,6 +38,10 @@ public class SetSharedPreferenceHelper extends CommonSetPreference{
     }
 
     public void setBoolScanPicture(String text,boolean value){
-        setBoolean(text,value);
+        setBoolean(text, value);
+    }
+
+    public void setAdminUserId(String text,int value){
+        setInt(text,value);
     }
 }

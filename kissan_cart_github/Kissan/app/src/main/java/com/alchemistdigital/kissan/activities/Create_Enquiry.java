@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,9 +23,13 @@ import android.widget.Toast;
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.InsertEnquiryAsyncTask;
+import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
+import com.alchemistdigital.kissan.utilities.DateHelper;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
 import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
@@ -35,6 +38,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.getFileName;
@@ -66,7 +70,6 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
         dbHelper = new DatabaseHelper(Create_Enquiry.this);
         int rowsCount = dbHelper.numberOfSocietyRowsByStatus();
-        dbHelper.closeDB();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
         String userTypePreference = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
@@ -119,7 +122,6 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                 eId = String.valueOf(extras.getInt("enquiryId"));
             }
         }
-
 
         txt_contact = (EditText) findViewById(R.id.edittext_id_society_contact);
         txt_email = (EditText) findViewById(R.id.edittext_id_society_email);
@@ -198,49 +200,73 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
                 if (boolRef && boolContact && boolEmail && boolAddress && boolMessage && boolFileName) {
 
+                    GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
+                    int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+                    String strUID = String.valueOf(uId);
+                    String userType = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
+
+                    // check if same enquiry present with this userid.
+                    if (dbHelper.checkEnquiryEntryPresent(uId, str_message, tvFileName.getText().toString().trim()) > 0) {
+                        Toast.makeText(Create_Enquiry.this, "This enquiry is already exist.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    String filepath = CommonVariables.SCAN_FILE_PATH + "/" + tvFileName.getText().toString().trim();
+
+                    int gId;
+                    int repToVal;
+                    if (userType.equals("obp")) {
+                        gId = 2;
+                    } else {
+                        gId = 1;
+                    }
+
+                    if ( eId.equals("0") ) {
+                        repToVal = getPreference.getAdminUserId(getResources().getString(R.string.adminUserId));
+                    } else {
+                        repToVal = dbHelper.getUserIdByServerIdInEnquired(eId);
+                    }
+
                     // Check if Internet present
                     if (!isConnectingToInternet(Create_Enquiry.this)) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
-                        return;
-                    } else {
-                        /*System.out.println(str_ref_no);
-                        System.out.println(str_name);
-                        System.out.println(str_contact);
-                        System.out.println(str_email);
-                        System.out.println(str_address);
-                        System.out.println(str_message);*/
-                        String filepath = CommonVariables.SCAN_FILE_PATH+"/"+tvFileName.getText().toString().trim();
 
-                        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
-                        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
-                        String strUID = String.valueOf(uId);
-                        String userType = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
+                        Enquiry enquiry = new Enquiry(0, DateHelper.getDateToStoreInDb(), str_ref_no, uId, gId,
+                                repToVal, 0, str_message, str_name, str_address,
+                                str_contact, str_email, tvFileName.getText().toString().trim(), 1);
+                        long enquiryId = dbHelper.insertEnquiry(enquiry);
 
-                        // Check if Internet present
-                        if (!isConnectingToInternet(Create_Enquiry.this)) {
-                            // Internet Connection is not present
-                            Snackbar.make(createEnquiryView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                    .setAction("Retry", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            onCreate(null);
-                                        }
-                                    }).show();
-                            // stop executing code by return
-                            return;
-                        } else {
-                            new InsertEnquiryAsyncTask(Create_Enquiry.this,
-                                    str_ref_no,
-                                    str_name,
-                                    str_contact,
-                                    str_email,
-                                    str_address,
-                                    str_message,
-                                    filepath,
-                                    strUID,
-                                    userType,
-                                    eId).execute();
+                        Offline offline = new Offline( dbHelper.TABLE_ENQUIRY,
+                                (int) enquiryId,
+                                offlineActionModeEnum.INSERT.toString(),
+                                ""+new Date().getTime() );
+
+                        dbHelper.insertOffline(offline);
+
+                        if (!eId.equals("0")) {
+                            int i = dbHelper.updateEnquiryReplied(eId,"1");
+
+                            Offline offline1 = new Offline(dbHelper.TABLE_ENQUIRY,
+                                    Integer.parseInt(eId),
+                                    offlineActionModeEnum.UPDATE.toString(),
+                                    ""+new Date().getTime());
+                            dbHelper.insertOffline(offline1);
                         }
+
+                        finish();
+                    } else {
+                        new InsertEnquiryAsyncTask(Create_Enquiry.this,
+                                str_ref_no,
+                                str_name,
+                                str_contact,
+                                str_email,
+                                str_address,
+                                str_message,
+                                filepath,
+                                strUID,
+                                userType,
+                                eId,
+                                repToVal,
+                                gId).execute();
                     }
                 }
             }
@@ -318,7 +344,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                         "field is empty.", Toast.LENGTH_LONG).show();
             }
             else {
-                selectedFileName = name ;
+                selectedFileName = name.replaceAll("\\s","_");
                 startScan(0);
             }
             }
@@ -355,9 +381,9 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 getContentResolver().delete(uri, null, null);
 
-                store_Png_InSdcard(bitmap);
+                tvFileName.setText("PNG_" + selectedFileName + ".png");
+                store_Png_InSdcard(bitmap, "PNG_" + selectedFileName +".png");
 
-                tvFileName.setText("PNG_" + selectedFileName +".png");
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -385,12 +411,12 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         super.onResume();
     }
 
-    private void store_Png_InSdcard(Bitmap bitmap) {
+    private void store_Png_InSdcard(Bitmap bitmap, String filename) {
         File fn;
         String IMAGE_PATH = CommonVariables.SCAN_FILE_PATH;
         try {  // Try to Save #1
 
-            fn = new File(IMAGE_PATH, "PNG_" + selectedFileName +".png");
+            fn = new File(IMAGE_PATH, filename);
 
             FileOutputStream out = new FileOutputStream(fn);
             bitmap.compress(Bitmap.CompressFormat.PNG, 70, out);
@@ -406,6 +432,18 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Bundle extras = getIntent().getExtras();
+        if(extras.getString("callingClass").equals("newRelpy")){
+            startActivity(new Intent(Create_Enquiry.this,New_Reply.class));
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dbHelper.closeDB();
     }
 }

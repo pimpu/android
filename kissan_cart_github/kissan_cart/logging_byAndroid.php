@@ -20,6 +20,10 @@
 		}
 		else if(mysql_num_rows($checkIsRegister) > 0 )
 		{
+			// admin id requires for replyTo in offline mode in enquiry table when enquire first time created.
+			$queryUIDForAdmin = mysql_query("SELECT uID FROM userdetails WHERE 	gID = 1;");
+			$arrayUIDForAdmin = mysql_fetch_array($queryUIDForAdmin);
+
 			$userEach = array();
 			$arrayRow = mysql_fetch_array($checkIsRegister);
 			$userEach["loggedId"] = $arrayRow["uID"];
@@ -29,6 +33,8 @@
 			$arrayUG = mysql_fetch_array($getUserGroup);
 			
 			$userEach["who"] = $arrayUG["gName"];
+			$userEach["adminUID"] = $arrayUIDForAdmin['uID'];
+
 			
 			$response["success"] = 1;
 			$response["message"] = array();

@@ -18,7 +18,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(int userId, String order_reference, String order_utr, String order_creted_at,int order_status) {
+    public Order(int userId, String order_reference, String order_utr, String order_creted_at,
+                 int order_status) {
         this.userId = userId;
         this.order_id = order_id;
         this.order_reference = order_reference;
@@ -30,6 +31,8 @@ public class Order {
         this.order_status = order_status;
         this.order_creted_at = order_creted_at;
     }
+
+    // Setters
 
     public void setUserId(int userId) {
         this.userId = userId;
@@ -70,6 +73,8 @@ public class Order {
     public void setOrder_creted_at(String order_creted_at) {
         this.order_creted_at = order_creted_at;
     }
+
+    // Getters
 
     public int getUserId() {
         return userId;

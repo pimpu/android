@@ -117,7 +117,8 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
                 DatabaseHelper dbhelper = new DatabaseHelper(context);
 
                 String creationtime = json.getString("creationtime");
-                Order order = new Order(Integer.parseInt(userId), str_enquiry_refno, str_utr, creationtime,1);
+                Order order = new Order(Integer.parseInt(userId), str_enquiry_refno,
+                                        str_utr, creationtime, 1);
                 dbhelper.insertOrder(order);
                 dbhelper.closeDB();
 
