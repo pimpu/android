@@ -59,8 +59,12 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
 
             for (int i = 0 ; i < getFilePathArray.length() ; i++ ) {
                 JSONObject c = getFilePathArray.getJSONObject(i);
-                File attachfilename = new File( CommonVariables.SCAN_FILE_PATH + "/" + c.getString("enquiry_document"));
-                entity.addPart("image"+i, new FileBody(attachfilename));
+
+                if ( !(c.getString("enquiry_offline_action")).equals(offlineActionModeEnum.UPDATE.toString()) ){
+                    File attachfilename = new File( CommonVariables.SCAN_FILE_PATH + "/" + c.getString("enquiry_document"));
+                    entity.addPart("image"+i, new FileBody(attachfilename));
+                }
+
             }
 
             // Adding file data to http body

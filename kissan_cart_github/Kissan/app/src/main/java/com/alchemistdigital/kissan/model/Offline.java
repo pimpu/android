@@ -8,7 +8,7 @@ public class Offline {
     private String offline_table_name;
     private int offline_row_id;
     private String offline_row_action;
-
+    private String offline_row_creationTime;
 
     public Offline() {
     }
@@ -18,6 +18,17 @@ public class Offline {
         this.offline_row_id = offline_row_id;
         this.offline_row_action = offline_row_action;
         this.offline_row_creationTime = offline_row_creationTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Offline{" +
+                "offline_id=" + offline_id +
+                ", offline_table_name='" + offline_table_name + '\'' +
+                ", offline_row_id=" + offline_row_id +
+                ", offline_row_action='" + offline_row_action + '\'' +
+                ", offline_row_creationTime='" + offline_row_creationTime + '\'' +
+                '}';
     }
 
     public String getOffline_row_creationTime() {
@@ -59,6 +70,4 @@ public class Offline {
     public void setOffline_row_action(String offline_row_action) {
         this.offline_row_action = offline_row_action;
     }
-
-    private String offline_row_creationTime;
 }

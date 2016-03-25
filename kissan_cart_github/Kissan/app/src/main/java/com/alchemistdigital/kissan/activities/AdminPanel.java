@@ -27,11 +27,16 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
+import com.alchemistdigital.kissan.asynctask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.alchemistdigital.kissan.utilities.WakeLocker;
 import com.google.android.gcm.GCMRegistrar;
+
+import java.util.List;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -131,12 +136,38 @@ public class AdminPanel extends AppCompatActivity
             if( isConnectingToInternet(context) ){
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
 
-//                DatabaseHelper dbHelper = new DatabaseHelper(context);
-//                List<Offline> offlineData = dbHelper.getOfflineData();
-//
-//                for (int o = 0 ; o < offlineData.size() ; o++ ){
-//                    System.out.println( offlineData.get(o) );
-//                }
+                DatabaseHelper dbHelper = new DatabaseHelper(context);
+                List<Offline> offlineEnquiryData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ENQUIRY);
+                List<Offline> offlineSocietyData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_SOCIETY);
+                List<Offline> offlineOrderData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ORDER);
+
+                String jsonEnquiryArr = null;
+                String jsonSocietyArr = null;
+                String jsonOrderArr = null;
+
+                for (int p = 0 ; p < offlineEnquiryData.size() ; p++ ) {
+
+                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID( offlineEnquiryData.get(p).getOffline_row_id(),
+                            offlineEnquiryData.get(p).getOffline_row_action() );
+
+                    jsonEnquiryArr = jsonEnquiryArr + enquiryByID.toString() ;
+                }
+
+
+                for (int a = 0 ; a < offlineSocietyData.size() ; a++ ) {
+                    System.out.println(offlineEnquiryData.get(a).getOffline_table_name());
+                }
+
+                for (int b = 0 ; b < offlineOrderData.size() ; b++ ) {
+                    System.out.println(offlineEnquiryData.get(b).getOffline_table_name());
+                }
+
+                if(jsonEnquiryArr != null) {
+                    String jsonArrayEnquiryArr = jsonEnquiryArr.replace("null", "").replaceAll("\\]\\[", ",");
+                    new InsertOfflineEnquiryDataAsyncTask(AdminPanel.this,jsonArrayEnquiryArr).execute();
+                }
+
+                dbHelper.closeDB();
 
             } else {
                 Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();

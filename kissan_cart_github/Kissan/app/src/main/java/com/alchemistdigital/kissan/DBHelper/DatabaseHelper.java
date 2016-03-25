@@ -379,6 +379,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * get enquiry id for storing in column_id in offline table
+     * @param serverId
+     * @return
+     */
+    public int getEnquiryIdByEnquiryServerId(String serverId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int id = 0;
+        String selectQuery = "SELECT * FROM " + TABLE_ENQUIRY + " WHERE "
+                + ENQUIRY_SERVER_ID + " = " + serverId;
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+
+                id = res.getInt(res.getColumnIndex(KEY_ID));
+
+            }while (res.moveToNext());
+        }
+        return id;
+
+    }
+
+    /**
      * get all enquiry by user id
      */
     public List<Enquiry> getEnquiryByUid() {
@@ -986,6 +1011,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(res.moveToFirst()){
             do{
                 Offline offline = new Offline();
+
 
                 offline.setOffline_id(res.getInt(res.getColumnIndex(KEY_ID)));
                 offline.setOffline_table_name(res.getString(res.getColumnIndex(OFFLINE_TABLE_NAME)));

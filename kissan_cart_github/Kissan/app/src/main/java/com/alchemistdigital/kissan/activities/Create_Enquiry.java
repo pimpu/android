@@ -246,7 +246,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                             int i = dbHelper.updateEnquiryReplied(eId,"1");
 
                             Offline offline1 = new Offline(dbHelper.TABLE_ENQUIRY,
-                                    Integer.parseInt(eId),
+                                    dbHelper.getEnquiryIdByEnquiryServerId(eId),
                                     offlineActionModeEnum.UPDATE.toString(),
                                     ""+new Date().getTime());
                             dbHelper.insertOffline(offline1);
@@ -435,6 +435,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         Bundle extras = getIntent().getExtras();
         if(extras.getString("callingClass").equals("newRelpy")){
             startActivity(new Intent(Create_Enquiry.this,New_Reply.class));
+            finish();
         }
         else {
             super.onBackPressed();

@@ -91,5 +91,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="editSocietyDetails">Edit Society</string>
+    <string name="viewEnquiry">View</string>
+    <string name="replyEnquiry">Reply</string>
 
 </resources>

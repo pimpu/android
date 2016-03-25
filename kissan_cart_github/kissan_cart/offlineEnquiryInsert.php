@@ -18,11 +18,18 @@ if ( isset($_POST['jsonArrayEnquiryArr']) ) {
 
 	for ($i=0; $i < count($decodedItemArray); $i++) {
 
-		$file_upload_url = $file_upload_url . basename($_FILES['image'.$i]['name']);
+		if ( strcmp($decodedItemArray[$i]["enquiry_offline_action"], "Update") !== 0 ) {
 
-		if (!move_uploaded_file($_FILES['image'.$i]['tmp_name'], $file_upload_url)) {
-			// make error flag true
-			array_push($response["file_upload_message"], 'Could not move the '.$_FILES['image'.$i]['name'].' file!');
+			$file_upload_url = $file_upload_url . basename($_FILES['image'.$i]['name']);
+
+			if (! file_exists($file_upload_url)) {
+				
+				if (!move_uploaded_file($_FILES['image'.$i]['tmp_name'], $file_upload_url)) {
+					// make error flag true
+					array_push($response["file_upload_message"], 'Could not move the '.$_FILES['image'.$i]['name'].' file!');
+				}
+			}
+
 		}
 
 		switch ( $decodedItemArray[$i]["enquiry_offline_action"] ) {
@@ -121,8 +128,10 @@ if ( isset($_POST['jsonArrayEnquiryArr']) ) {
 		    	}
 
 		        break;
+
 		    case "Update":
-		        $query1 = mysql_query("UPDATE enquiry SET replied = ".$decodedItemArray[$i]["enquiry_replied"]." WHERE eID = ".$decodedItemArray[$i]["enquiry_server_id"].";");
+
+		        $query1 = mysql_query("UPDATE enquiry SET replied = '".$decodedItemArray[$i]["enquiry_replied"]."' where eID = ".$decodedItemArray[$i]["enquiry_server_id"].";");
 
 		        if($query1) {
 

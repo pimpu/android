@@ -2,10 +2,12 @@ package com.alchemistdigital.kissan.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -61,13 +63,27 @@ public class New_Reply extends AppCompatActivity {
             new RecyclerViewListener.RecyclerItemClickListener(getApplicationContext(), new RecyclerViewListener.RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, final int position) {
-                    btn_view = (TextView) findViewById(R.id.tv_id_view_enquiry);
-                    btn_reply = (TextView) findViewById(R.id.tv_id_new_reply);
 
-                    btn_view.setOnClickListener(new View.OnClickListener(){
+                    // custom dialog
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(New_Reply.this);
+                    LayoutInflater inflater = New_Reply.this.getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.custom_alert_newreply_row_click, null);
+                    dialogBuilder.setView(dialogView);
+
+                    final AlertDialog b = dialogBuilder.create();
+                    b.show();
+
+
+                    TextView viewDetails = (TextView) dialogView.findViewById(R.id.tv_id_viewEnquiryDetails);
+                    TextView reply = (TextView) dialogView.findViewById(R.id.tv_id_replyEnquiryDetails);
+
+                    viewDetails.setOnClickListener(new View.OnClickListener(){
 
                         @Override
                         public void onClick(View v) {
+
+                            b.dismiss();
+
                             Intent goToDetailEnquiry = new Intent(New_Reply.this,Enquiry_Detail.class);
 
                             Bundle extras = new Bundle();
@@ -86,10 +102,12 @@ public class New_Reply extends AppCompatActivity {
                         }
                     });
 
-                    btn_reply.setOnClickListener(new View.OnClickListener(){
+                    reply.setOnClickListener(new View.OnClickListener(){
 
                         @Override
                         public void onClick(View v) {
+
+                            b.dismiss();
                             Intent intent = new Intent(New_Reply.this, Create_Enquiry.class);
 
                             Bundle bundle = new Bundle();
@@ -105,5 +123,10 @@ public class New_Reply extends AppCompatActivity {
                 }
             })
         );
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
