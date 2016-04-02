@@ -14,11 +14,13 @@
     <string name="nav_item_createEnquiry">Create Enquiry</string>
     <string name="nav_item_viewEnquiry">View Enquiry</string>
     <string name="nav_item_createOrder">Create Order</string>
-    <string name="nav_item_viewOrder">View Orders</string>
+    <string name="nav_item_viewOrder">Order</string>
     <string name="nav_item_newReply">New Enquiry</string>
     <string name="nav_item_createSociety">Create Society</string>
     <string name="nav_item_createOBP">Create OBP</string>
     <string name="nav_item_logout">Logout</string>
+    <string name="nav_enquiry">Enquiry</string>
+    <string name="nav_society">Society</string>
     <!--item list for navigation drawer-->
 
     <!--all hints-->

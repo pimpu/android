@@ -5,6 +5,7 @@ package com.alchemistdigital.kissan.model;
  */
 public class Society {
     private int id;
+    private int serverId;
     private String creted_at;
     private int userId;
     private String soc_name;
@@ -13,11 +14,13 @@ public class Society {
     private int soc_status;
     private String soc_adrs;
 
+    private String soc_offline_action;
+
     public Society() {
     }
 
-    public Society(int id, int userId, String soc_name, String soc_contact, String soc_email, String soc_adrs,int soc_status) {
-        this.id = id;
+    public Society(int serverId, int userId, String soc_name, String soc_contact, String soc_email, String soc_adrs,int soc_status) {
+        this.serverId = serverId;
         this.userId = userId;
         this.soc_name = soc_name;
         this.soc_contact = soc_contact;
@@ -25,6 +28,21 @@ public class Society {
         this.soc_adrs = soc_adrs;
         this.soc_status = soc_status;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " \"id\":\"" + id + '\"' +
+                ", \"userId\":\"" + userId + '\"' +
+                ", \"soc_name\":\"" + soc_name + '\"' +
+                ", \"soc_contact\":\"" + soc_contact + '\"' +
+                ", \"soc_email\":\"" + soc_email + '\"' +
+                ", \"soc_adrs\":\"" + soc_adrs + '\"' +
+                ", \"soc_offline_action\":\"" + soc_offline_action + '\"' +
+                '}';
+    }
+
+
 
     // setters
     public void setId(int id) {
@@ -59,6 +77,14 @@ public class Society {
         this.creted_at = creted_at;
     }
 
+    public void setServerId(int serverId) {
+        this.serverId = serverId;
+    }
+
+    public void setSoc_offline_action(String soc_offline_action) {
+        this.soc_offline_action = soc_offline_action;
+    }
+
     // getters
     public int getId() {
         return id;
@@ -90,5 +116,13 @@ public class Society {
 
     public String getCreted_at() {
         return creted_at;
+    }
+
+    public int getServerId() {
+        return serverId;
+    }
+
+    public String getSoc_offline_action() {
+        return soc_offline_action;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
+import com.alchemistdigital.kissan.asynctask.StoreServerImageAtMemory;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
 import com.alchemistdigital.kissan.model.Order;
@@ -47,15 +48,49 @@ public class GCMIntentService extends GCMBaseIntentService {
             storeOrderAtAdminSite(context, referenceNo, utr, items, userId,creationTime);
 
         } else if (message.equals("updateSocietyAtAdmin")){
+
            updateSocietyDetails(context, intent.getExtras().getString("changedSocietyDetails"));
+
         } else if (message.equals("downloadOfflineInsertEnquiry")){
 
             storeOfflineEnquiryDetails(context, intent.getExtras().getString("enquiryDetails"));
 
-        } else if(message.equals("downloadOfflineUpdateEnquiry")){
+        } else if(message.equals("downloadOfflineUpdateEnquiry")) {
+
             updateOfflineEnquiry(context,intent.getExtras().getString("enquiryDetails"));
+
+        } else if(message.equals("downloadOfflineSocietyAtAdmin")) {
+
+            storeOfflineSociety(context,intent.getExtras().getString("societyDetails"));
+
         }
 
+    }
+
+    private void storeOfflineSociety(Context context, String societyDetails) {
+        try {
+            JSONObject json = new JSONObject(societyDetails);
+
+            int soc_id = json.getInt("soc_id");
+            String soc_name = json.getString("soc_name");
+            String soc_contact = json.getString("soc_contact");
+            String soc_email = json.getString("soc_email");
+            String soc_adrs = json.getString("soc_adrs");
+
+            GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+            int userId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+            DatabaseHelper dbHelper = new DatabaseHelper(context);
+            Society society = new Society(soc_id, userId, soc_name, soc_contact, soc_email, soc_adrs,1);
+            long societyId = dbHelper.insertSociety(society);
+            dbHelper.closeDB();
+
+            System.out.println("insert offline society(GCM) : " + societyId);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateOfflineEnquiry(Context context, String enquiryDetails) {
@@ -104,6 +139,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             System.out.println("insert offline enquiry(GCM): " + enquiryId);
 
+            // save uploaded image on server into memory
+            new StoreServerImageAtMemory(context,fileName).execute();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -210,6 +247,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             System.out.println("insert enquiry(GCM): " + enquiryId);
 
+            // save uploaded image on server into memory
+            new StoreServerImageAtMemory(context,fileName).execute();
 
         } catch (JSONException e) {
             e.printStackTrace();

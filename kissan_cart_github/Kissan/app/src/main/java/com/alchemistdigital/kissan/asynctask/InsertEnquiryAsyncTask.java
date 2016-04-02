@@ -195,7 +195,7 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                 }
 
                 dbHelper.closeDB();
-                ((Activity)context).finish();
+                ((Activity)context).onBackPressed();
             }
 
         } catch (JSONException e) {

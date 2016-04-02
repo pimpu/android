@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+/**
+ * Created by jhansi on 28/03/15.
+ */
 public class ScanActivity extends Activity implements IScanner {
 
     @Override
@@ -16,7 +19,6 @@ public class ScanActivity extends Activity implements IScanner {
     }
 
     private void init() {
-
         PickImageFragment fragment = new PickImageFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ScanConstants.OPEN_INTENT_PREFERENCE, getPreferenceContent());

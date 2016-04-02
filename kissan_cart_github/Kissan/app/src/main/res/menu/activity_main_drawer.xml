@@ -2,27 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_createEnquiry"
-            android:title="@string/nav_item_createEnquiry" />
+        <!--<item-->
+            <!--android:id="@+id/nav_createEnquiry"-->
+            <!--android:title="@string/nav_item_createEnquiry" />-->
         <item
             android:id="@+id/nav_viewEnquiry"
-            android:title="@string/nav_item_viewEnquiry" />
+            android:title="@string/nav_enquiry" />
         <item
-            android:id="@+id/nav_createOrder"
-            android:title="@string/nav_item_createOrder" />
+        android:id="@+id/nav_newReply"
+        android:title="@string/nav_item_newReply" />
+        <!--<item-->
+        <!--android:id="@+id/nav_createOrder"-->
+        <!--android:title="@string/nav_item_createOrder" />-->
         <item
             android:id="@+id/nav_viewOrder"
-            android:title="@string/viewOrders" />
-        <item
-            android:id="@+id/nav_newReply"
-            android:title="@string/nav_item_newReply" />
-        <item
+            android:title="@string/nav_item_viewOrder" />
+        <!--<item
             android:id="@+id/nav_createSociety"
-            android:title="@string/nav_item_createSociety" />
+            android:title="@string/nav_item_createSociety" />-->
         <item
             android:id="@+id/nav_viewSociety"
-            android:title="@string/viewSociety" />
+            android:title="@string/nav_society" />
         <item
             android:id="@+id/nav_obp_logout"
             android:title="@string/nav_item_logout" />

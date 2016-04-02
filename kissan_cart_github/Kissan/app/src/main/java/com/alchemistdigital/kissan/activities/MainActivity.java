@@ -27,9 +27,11 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetSocietyAsyncTask;
-import com.alchemistdigital.kissan.asynctask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineSocietyDataAsyncTask;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity
      */
     private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            if( isConnectingToInternet(context) ){
+            if( isConnectingToInternet(context) ) {
                 Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
 
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
@@ -148,15 +150,20 @@ public class MainActivity extends AppCompatActivity
 
                 for (int o = 0 ; o < offlineEnquiryData.size() ; o++ ) {
 
-                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID( offlineEnquiryData.get(o).getOffline_row_id(),
-                                                                         offlineEnquiryData.get(0).getOffline_row_action() );
+                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID(
+                                                    offlineEnquiryData.get(o).getOffline_row_id(),
+                                                    offlineEnquiryData.get(o).getOffline_row_action() );
 
                     jsonEnquiryArr = jsonEnquiryArr + enquiryByID.toString() ;
                 }
 
 
-                for (int a = 0 ; a < offlineSocietyData.size() ; a++ ) {
-                    System.out.println(offlineEnquiryData.get(a).getOffline_table_name());
+                for (int p = 0 ; p < offlineSocietyData.size() ; p++ ) {
+                    List<Society> offlineSocietyById = dbHelper.getOfflineSocietyById(
+                            offlineSocietyData.get(p).getOffline_row_id(),
+                            offlineSocietyData.get(p).getOffline_row_action());
+
+                    jsonSocietyArr = jsonSocietyArr + offlineSocietyById.toString() ;
                 }
 
                 for (int b = 0 ; b < offlineOrderData.size() ; b++ ) {
@@ -166,6 +173,11 @@ public class MainActivity extends AppCompatActivity
                 if(jsonEnquiryArr != null) {
                     String jsonArrayEnquiryArr = jsonEnquiryArr.replace("null", "").replaceAll("\\]\\[", ",");
                     new InsertOfflineEnquiryDataAsyncTask(MainActivity.this,jsonArrayEnquiryArr).execute();
+                }
+
+                if(jsonSocietyArr != null) {
+                    String jsonArraySocietyArr = jsonSocietyArr.replace("null", "").replaceAll("\\]\\[", ",");
+                    new InsertOfflineSocietyDataAsyncTask(MainActivity.this,jsonArraySocietyArr).execute();
                 }
 
                 dbHelper.closeDB();
@@ -255,18 +267,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_createEnquiry) {
+        /*if (id == R.id.nav_createEnquiry) {
             Intent intent = new Intent(MainActivity.this, Create_Enquiry.class);
             Bundle bundle = new Bundle();
             bundle.putString("callingClass", "mainActivity");
             intent.putExtras(bundle);
             startActivity(intent);
 
-        } else if (id == R.id.nav_viewEnquiry) {
+        } else*/ if (id == R.id.nav_viewEnquiry) {
 
             startActivity(new Intent(MainActivity.this, View_Enquiry.class));
 
-        } else if (id == R.id.nav_createOrder) {
+        } /*else if (id == R.id.nav_createOrder) {
 
             Intent orderIntent = new Intent(MainActivity.this, Create_View_Orders.class);
             Bundle bundle = new Bundle();
@@ -274,15 +286,15 @@ public class MainActivity extends AppCompatActivity
             orderIntent.putExtras(bundle);
             startActivity(orderIntent);
 
-        } else if (id == R.id.nav_newReply) {
+        }*/ else if (id == R.id.nav_newReply) {
 
             startActivity(new Intent(MainActivity.this, New_Reply.class));
 
-        } else if (id == R.id.nav_createSociety) {
+        } /*else if (id == R.id.nav_createSociety) {
 
             startActivity(new Intent(MainActivity.this, Create_Society.class));
 
-        } else if(id == R.id.nav_viewOrder) {
+        }*/ else if(id == R.id.nav_viewOrder) {
 
             startActivity(new Intent(MainActivity.this, View_Orders.class));
 

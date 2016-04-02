@@ -27,6 +27,7 @@ import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.CommonUtilities;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.alchemistdigital.kissan.utilities.DateHelper;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
@@ -35,7 +36,6 @@ import com.scanlibrary.ScanActivity;
 import com.scanlibrary.ScanConstants;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,12 +111,13 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         Bundle extras = getIntent().getExtras();
 
         if(extras != null){
-            if(extras.getString("callingClass").equals("mainActivity")){
+            if(extras.getString("callingClass").equals("mainActivity")
+                    || extras.getString("callingClass").equals("createSociety") ) {
                 // this intent comes from main activity
                 txt_ref_no.setText( getResources().getString(R.string.refString, getRefStringDate()) );
                 eId = "0";
             }
-            else {
+            else if(extras.getString("callingClass").equals("newRelpy")){
                 // this intent comes from new reply with reference no
                 txt_ref_no.setText( extras.getString("ref") );
                 eId = String.valueOf(extras.getInt("enquiryId"));
@@ -252,7 +253,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                             dbHelper.insertOffline(offline1);
                         }
 
-                        finish();
+                        onBackPressed();
                     } else {
                         new InsertEnquiryAsyncTask(Create_Enquiry.this,
                                 str_ref_no,
@@ -282,7 +283,11 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
     }
 
     public void goToCreateSociety(View v) {
-        startActivity(new Intent(Create_Enquiry.this, Create_Society.class));
+        Intent intent = new Intent(Create_Enquiry.this, Create_Society.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("comesFrom","CreateEnquiry");
+        intent.putExtras(bundle);
+        startActivity(intent);
         finish();
     }
 
@@ -382,7 +387,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                 getContentResolver().delete(uri, null, null);
 
                 tvFileName.setText("PNG_" + selectedFileName + ".png");
-                store_Png_InSdcard(bitmap, "PNG_" + selectedFileName +".png");
+                CommonUtilities.store_Png_InSdcard(this,bitmap, "PNG_" + selectedFileName +".png");
 
 
             } catch (IOException e) {
@@ -411,30 +416,15 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         super.onResume();
     }
 
-    private void store_Png_InSdcard(Bitmap bitmap, String filename) {
-        File fn;
-        String IMAGE_PATH = CommonVariables.SCAN_FILE_PATH;
-        try {  // Try to Save #1
-
-            fn = new File(IMAGE_PATH, filename);
-
-            FileOutputStream out = new FileOutputStream(fn);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 70, out);
-            out.flush();
-            out.close();
-
-            Toast.makeText(getApplicationContext(),
-                    "File is Saved in  " + fn, Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         Bundle extras = getIntent().getExtras();
         if(extras.getString("callingClass").equals("newRelpy")){
             startActivity(new Intent(Create_Enquiry.this,New_Reply.class));
+            finish();
+        }
+        else if(extras.getString("callingClass").equals("mainActivity")){
+            startActivity(new Intent(Create_Enquiry.this,View_Enquiry.class));
             finish();
         }
         else {

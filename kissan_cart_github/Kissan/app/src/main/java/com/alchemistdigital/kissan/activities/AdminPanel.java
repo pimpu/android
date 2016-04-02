@@ -27,7 +27,7 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
-import com.alchemistdigital.kissan.asynctask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineEnquiryDataAsyncTask;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
@@ -77,7 +77,6 @@ public class AdminPanel extends AppCompatActivity
         int orderRowsCount = dbHelper.numberOfOrderRowsByUserType("admin");
         dbHelper.closeDB();
 
-
         if ( isConnectingToInternet(AdminPanel.this) ) {
 
             // when app is uninstalled then this function get all data from server
@@ -86,7 +85,7 @@ public class AdminPanel extends AppCompatActivity
             }
 
             // when app is uninstalled then this function get all data from server
-            if ( enquiryRowsCount <= 0 ){
+            if ( enquiryRowsCount <= 0 ) {
                 new GetEnquiryAsyncTask(AdminPanel.this,strUID).execute();
             }
 

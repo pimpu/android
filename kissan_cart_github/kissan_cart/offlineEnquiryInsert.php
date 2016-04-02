@@ -8,7 +8,7 @@ $response = array();
 
 if ( isset($_POST['jsonArrayEnquiryArr']) ) {
 
-	$file_upload_url = isset($_POST['filepath']) ? $_POST['filepath'] : '';
+	$file_upload_path = isset($_POST['filepath']) ? $_POST['filepath'] : '';
 	$jsonArrayEnquiryArr = isset($_POST['jsonArrayEnquiryArr']) ? $_POST['jsonArrayEnquiryArr'] : '';
 
 	$decodedItemArray = json_decode($jsonArrayEnquiryArr, true);
@@ -18,9 +18,10 @@ if ( isset($_POST['jsonArrayEnquiryArr']) ) {
 
 	for ($i=0; $i < count($decodedItemArray); $i++) {
 
+		$file_upload_url = null ;
 		if ( strcmp($decodedItemArray[$i]["enquiry_offline_action"], "Update") !== 0 ) {
 
-			$file_upload_url = $file_upload_url . basename($_FILES['image'.$i]['name']);
+			$file_upload_url = $file_upload_path . basename($_FILES['image'.$i]['name']);
 
 			if (! file_exists($file_upload_url)) {
 				

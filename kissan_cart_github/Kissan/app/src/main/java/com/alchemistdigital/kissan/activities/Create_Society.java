@@ -1,17 +1,23 @@
 package com.alchemistdigital.kissan.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
+import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.InsertSocietyAsyncTask;
+import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
+
+import java.util.Date;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.kissan.utilities.Validations.emailValidate;
@@ -24,6 +30,7 @@ public class Create_Society extends AppCompatActivity{
     private String  str_society_name,str_society_contact,str_society_email,str_society_address;
     TextInputLayout society_nameInputLayout,society_contactInputLayout,society_emailInputLayout,society_addressInputLayuot;
     private View createSocietyView;
+    String comesFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,8 @@ public class Create_Society extends AppCompatActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_society_toolbar);
         setSupportActionBar(toolbar);
+
+        comesFrom = getIntent().getExtras().getString("comesFrom");
 
         txt_society_name        = (EditText) findViewById(R.id.edittext_id_create_society_name);
         txt_society_contact     = (EditText) findViewById(R.id.edittext_id_create_society_contact);
@@ -92,30 +101,55 @@ public class Create_Society extends AppCompatActivity{
 
                 if ( boolName && boolContact && boolEmail && boolAddress ) {
 
+                    GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Society.this);
+                    int userId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+
                     // Check if Internet present
                     if (!isConnectingToInternet(Create_Society.this)) {
-                        // Internet Connection is not present
-                        Snackbar.make(createSocietyView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Retry", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        onCreate(null);
-                                    }
-                                }).show();
-                        // stop executing code by return
-                        return;
+
+                        DatabaseHelper dbHelper = new DatabaseHelper(Create_Society.this);
+
+                        Society society = new Society(0, userId, str_society_name, str_society_contact,
+                                str_society_email, str_society_address, 1);
+                        long societyId = dbHelper.insertSociety(society);
+
+                        Offline offline = new Offline( dbHelper.TABLE_SOCIETY,
+                                (int) societyId,
+                                offlineActionModeEnum.INSERT.toString(),
+                                ""+new Date().getTime() );
+                        dbHelper.insertOffline(offline);
+
+                        dbHelper.closeDB();
+
+                        onBackPressed();
                     } else {
                         /*System.out.println(str_society_name);
                         System.out.println(str_society_contact);
                         System.out.println(str_society_email);
                         System.out.println(str_society_address);*/
-                        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Society.this);
-                        int userId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
 
-                        new InsertSocietyAsyncTask(Create_Society.this,str_society_name,str_society_contact,str_society_email,str_society_address,userId).execute();
+
+                        new InsertSocietyAsyncTask(Create_Society.this,str_society_name,str_society_contact,str_society_email,str_society_address,userId,comesFrom).execute();
                     }
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = null;
+        if (comesFrom.equals("CreateEnquiry")){
+            intent = new Intent( Create_Society.this , Create_Enquiry.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("callingClass","createSociety");
+            intent.putExtras(bundle);
+        }
+        else if (comesFrom.equals("ViewSociety")) {
+            intent = new Intent( Create_Society.this , View_Society.class);
+        }
+        startActivity(intent);
+        finish();
     }
 }

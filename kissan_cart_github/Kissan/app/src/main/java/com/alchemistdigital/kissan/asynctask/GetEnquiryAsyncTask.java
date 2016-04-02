@@ -137,6 +137,8 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
                                                     str_address,str_contact, str_email,
                                                     fileName, status );
                     long enquiryId = dbHelper.insertEnquiry(enquiry);
+
+                    new StoreServerImageAtMemory(context,fileName).execute();
 //                    System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
                 }
 

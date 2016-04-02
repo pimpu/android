@@ -1,0 +1,61 @@
+CREATE TABLE enquiry(
+eID int(11)  primary key auto_increment,
+eRef varchar(20)  not null,
+uID int(11) not null,
+gID int(11) not null,
+repTo int(11) not null,
+replied tinyint(4) not null default 0,
+eMsg longtext not null,
+eSociety varchar(50)  not null,
+eSocAdrs varchar(50)  not null,
+eSocCont  varchar(20)  not null,
+eSocEmail varchar(50)  not null,
+eDoc varchar(50)  not null,
+eCost varchar(50)  not null,
+eTime timestamp default now() not null,
+status tinyint(4) not null default 1
+); 
+
+CREATE TABLE orderdetail(
+ordID int(11)  primary key auto_increment,
+enqRef varchar(50)  not null,
+UTR varchar(50)  not null,
+ordItem varchar(50)  not null,
+ordQty int(11) not null,
+ordPrice varchar(50)  not null,
+totamnt varchar(50)  not null,
+ordDate  timestamp default now() not null,
+ordStatus tinyint(4) not null default 1
+);
+
+CREATE TABLE society(
+id int(11)  primary key auto_increment,
+uID int(11) not null,
+soc_name varchar(100)  not null,
+soc_contact  varchar(100)  not null,
+soc_email  varchar(100)  not null,
+soc_adrs  varchar(200)  not null,
+status tinyint(4) not null default 1
+);
+
+CREATE TABLE userdetails(
+uID int(11)  primary key auto_increment,
+gID int(11) not null,
+uName varchar(50)  not null,
+uStoreName varchar(50)  not null,
+uEmailID varchar(50)  not null,
+uPassword varchar(50)  not null,
+uCont varchar(20)  not null,
+uAddrs varchar(300)  not null,
+uPin int(10) not null,
+uCity varchar(50)  not null,
+uState varchar(50)  not null,
+uCountry varchar(50)  not null,
+status tinyint(4) not null default 1
+);
+
+CREATE TABLE usergroup(
+gId int(11)  primary key auto_increment,
+gName varchar(50)  not null,
+status tinyint(4) not null default 1
+);

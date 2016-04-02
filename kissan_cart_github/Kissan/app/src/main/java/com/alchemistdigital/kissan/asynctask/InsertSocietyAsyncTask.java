@@ -3,12 +3,15 @@ package com.alchemistdigital.kissan.asynctask;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.activities.Create_Enquiry;
+import com.alchemistdigital.kissan.activities.View_Society;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
@@ -34,14 +37,22 @@ public class InsertSocietyAsyncTask extends AsyncTask<String,String,String>{
     private Context context;
     // Progress Dialog
     private ProgressDialog pDialog;
-    private String str_society_name,str_society_contact,str_society_email,str_society_address,str_userId;
+    private String str_society_name,str_society_contact,
+                        str_society_email,str_society_address,str_userId,comesFrom;
 
-    public InsertSocietyAsyncTask(Context context, String str_society_name, String str_society_contact, String str_society_email, String str_society_address, int userId) {
+    public InsertSocietyAsyncTask(Context context,
+                                  String str_society_name,
+                                  String str_society_contact,
+                                  String str_society_email,
+                                  String str_society_address,
+                                  int userId,
+                                  String comesFrom) {
         this.context = context;
         this.str_society_name       = str_society_name;
         this.str_society_contact    = str_society_contact;
         this.str_society_email      = str_society_email;
         this.str_society_address    = str_society_address;
+        this.comesFrom              = comesFrom;
         str_userId                  = String.valueOf(userId);
     }
 
@@ -135,7 +146,16 @@ public class InsertSocietyAsyncTask extends AsyncTask<String,String,String>{
                 long societyId = dbHelper.insertSociety(society);
                 dbHelper.closeDB();
 
-                ((Activity)context).finish();
+                Intent intent = null;
+                if (comesFrom.equals("CreateEnquiry")){
+                    intent = new Intent( ((Activity) context) , Create_Enquiry.class);
+                }
+                else if (comesFrom.equals("ViewSociety")) {
+                    intent = new Intent( ((Activity) context) , View_Society.class);
+                }
+
+                context.startActivity(intent);
+                ((Activity) context).finish();
             }
 
         } catch (JSONException e) {

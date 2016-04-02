@@ -2,6 +2,7 @@ package com.alchemistdigital.kissan.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.adapter.Enquiry_Adapter;
 import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.RecyclerViewListener;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class View_Enquiry extends AppCompatActivity {
     private RecyclerView enquiry_RecyclerView;
     public RecyclerView.Adapter enquiry_Adapter;
     public static List<Enquiry> data;
+    private FloatingActionButton fabCreateEnquiry;
+    View emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,39 @@ public class View_Enquiry extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_enquiry_toolbar);
         setSupportActionBar(toolbar);
 
-        View emptyView = findViewById(R.id.empty_enquiry_data);
+
+        fabCreateEnquiry = (FloatingActionButton) findViewById(R.id.fab_create_enquiry);
+        fabCreateEnquiry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(View_Enquiry.this, Create_Enquiry.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("callingClass", "mainActivity");
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+                finish();
+            }
+        });
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(View_Enquiry.this);
+        String who = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
+        // check user is admin or obp
+        // on the bases of preference value.
+        if( who.equals("obp") ){
+            fabCreateEnquiry.setVisibility(View.VISIBLE);
+        }
+        else {
+            fabCreateEnquiry.setVisibility(View.GONE);
+        }
+
+        emptyView = findViewById(R.id.empty_enquiry_data);
         enquiry_RecyclerView = (RecyclerView)findViewById(R.id.enquiry_details_recycler);
+        initEnquiryRecycler();
+
+    }
+
+    private void initEnquiryRecycler() {
 
         DatabaseHelper dbhelper = new DatabaseHelper(View_Enquiry.this);
         int len = dbhelper.numberOfEnquiryRowsByUidAndStatus();
@@ -46,7 +81,6 @@ public class View_Enquiry extends AppCompatActivity {
             enquiryRecycler(data);
         }
         dbhelper.closeDB();
-
     }
 
     private void enquiryRecycler(List<Enquiry> enquiryByuid) {
@@ -81,4 +115,9 @@ public class View_Enquiry extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        enquiry_Adapter.notifyDataSetChanged();
+        super.onResume();
+    }
 }

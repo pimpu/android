@@ -8,15 +8,18 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by user on 2/25/2016.
@@ -119,5 +122,32 @@ public class CommonUtilities {
         params.height = totalHeight + (expandableListView.getDividerHeight() * (listAdapter.getCount() - 1));
         expandableListView.setLayoutParams(params);
         expandableListView.requestLayout();
+    }
+
+    public static void store_Png_InSdcard(Context context, Bitmap bitmap, String filename) {
+        File fn;
+
+        try {  // Try to Save #1
+
+            File myDirectory = new File(Environment.getExternalStorageDirectory(), "obp");
+
+            if(!myDirectory.exists()) {
+                myDirectory.mkdirs();
+            }
+
+            String IMAGE_PATH = CommonVariables.SCAN_FILE_PATH;
+
+            fn = new File(IMAGE_PATH, filename);
+
+            FileOutputStream out = new FileOutputStream(fn);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 70, out);
+            out.flush();
+            out.close();
+
+            Toast.makeText(context,
+                    "File is Saved in  " + fn, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

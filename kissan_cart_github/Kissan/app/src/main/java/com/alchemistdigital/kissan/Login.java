@@ -74,17 +74,11 @@ public class Login extends AppCompatActivity {
 
                 if (EmailValid && PWDValid) {
 
-
                     // Check if Internet present
                     if (!isConnectingToInternet(Login.this)) {
                         // Internet Connection is not present
                         Snackbar.make(idLogin, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Retry", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        onCreate(null);
-                                    }
-                                }).show();
+                                .show();
                         // stop executing code by return
                         return;
                     } else {

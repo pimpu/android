@@ -3,7 +3,6 @@ package com.alchemistdigital.kissan.activities;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,8 +11,10 @@ import android.widget.TextView;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
-import com.alchemistdigital.kissan.asynctask.DownloadImageAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetOnlineServerImageAsyncTask;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
+
+import java.io.File;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -74,31 +75,21 @@ public class Enquiry_Detail extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(Enquiry_Detail.this);
 
-        if( dbHelper.numberOfOfflineRowsByid(id) > 0 ){
+        File dir = new File(CommonVariables.SCAN_FILE_PATH +"/"+document );
+        if( dbHelper.numberOfOfflineRowsByid(id) > 0
+                || !isConnectingToInternet(Enquiry_Detail.this)
+                || dir.exists() ) {
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(CommonVariables.SCAN_FILE_PATH +"/"+document, options);
+            Bitmap bitmap = BitmapFactory.decodeFile(
+                                    CommonVariables.SCAN_FILE_PATH +"/"+document,
+                                    options);
             imageviewSlip.setImageBitmap(bitmap);
 
         } else {
-            // Check if Internet present
-            if (!isConnectingToInternet(Enquiry_Detail.this)) {
-                // Internet Connection is not present
-                Snackbar.make(enquiryDetailView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Retry", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                onCreate(null);
-                            }
-                        }).show();
-                // stop executing code by return
-                return;
-            } else {
-
-                new DownloadImageAsyncTask(Enquiry_Detail.this,imageviewSlip)
+            new GetOnlineServerImageAsyncTask(Enquiry_Detail.this,imageviewSlip)
                         .execute(CommonVariables.File_DOWNLOAD_URL + document);
-            }
         }
 
         dbHelper.closeDB();

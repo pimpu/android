@@ -51,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    private static final String KEY_OFFLINE_STATUS = "offline"; /*( 0 - online, 1 - offline )*/
 
     // SOCIETY Table - column names
+    private static final String SOCIETY_SERVER_ID = "soc_serverId";
     private static final String SOCIETY_COLUMN_USERID = "uID";
     private static final String SOCIETY_COLUMN_NAME = "soc_name";
     private static final String SOCIETY_COLUMN_CONTACT = "soc_contact";
@@ -89,8 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // OFFLINE Table - column names
     private static final String OFFLINE_TABLE_NAME = "table_name";
-    private static final String OFFLINE_ROW_ID = "column_id";
-    private static final String OFFLINE_ROW_ACTION = "column_action";
+    private static final String OFFLINE_ROW_ID = "row_id";
+    private static final String OFFLINE_ROW_ACTION = "row_action";
 
 
     public DatabaseHelper(Context context) {
@@ -102,6 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SOCIETY =
         "CREATE TABLE IF NOT EXISTS "+ TABLE_SOCIETY +
             "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            SOCIETY_SERVER_ID+" INTEGER," +
             SOCIETY_COLUMN_USERID+" INTEGER," +
             SOCIETY_COLUMN_NAME+" VARCHAR(100)," +
             SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
@@ -188,11 +190,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ------------------------ "Society" table methods ----------------//
-    public long insertSociety(Society societyColumn){
+    public long insertSociety(Society societyColumn) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_ID, societyColumn.getId());
+        contentValues.put(SOCIETY_SERVER_ID, societyColumn.getServerId());
         contentValues.put(SOCIETY_COLUMN_USERID, societyColumn.getUserId());
         contentValues.put(SOCIETY_COLUMN_NAME, societyColumn.getSoc_name());
         contentValues.put(SOCIETY_COLUMN_CONTACT, societyColumn.getSoc_contact());
@@ -241,6 +243,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         society.setCreted_at(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
         return society;
+    }
+
+    public List<Society> getOfflineSocietyById(int offline_row_id, String offline_row_action) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Society> array_list = new ArrayList<Society>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_SOCIETY + " WHERE "
+                + KEY_ID + " = " + offline_row_id ;
+
+        Log.d(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Society society = new Society();
+        society.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        society.setUserId(c.getInt(c.getColumnIndex(SOCIETY_COLUMN_USERID)));
+        society.setSoc_name(c.getString(c.getColumnIndex(SOCIETY_COLUMN_NAME)));
+        society.setSoc_contact(c.getString(c.getColumnIndex(SOCIETY_COLUMN_CONTACT)));
+        society.setSoc_email(c.getString(c.getColumnIndex(SOCIETY_COLUMN_EMAIL)));
+        society.setSoc_adrs(c.getString(c.getColumnIndex(SOCIETY_COLUMN_ADDRESS)));
+        society.setCreted_at(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+        society.setSoc_offline_action(offline_row_action);
+        array_list.add(society);
+
+        return array_list;
+
     }
 
     /**
@@ -304,7 +335,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all societies
     **/
-    public List<Society> getAllSocieties(){
+    public List<Society> getAllSocieties() {
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
@@ -334,6 +365,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }while (res.moveToNext());
         }
         return array_list;
+    }
+
+    /**
+     * update server id when offline data inserted on server while internet is on.
+     * function - InsertOfflineSocietyDataAsyncTask
+     * @param societyId
+     * @param serverId
+     * @return
+     */
+    public boolean updateServerIdOfSociety(String societyId, int serverId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SOCIETY_SERVER_ID, serverId);
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_SOCIETY, contentValues, KEY_ID + " = ? ", new String[]{ societyId });
+        return true;
     }
 
     // ------------------------ "Society" table methods ----------------//

@@ -3,6 +3,7 @@ package com.alchemistdigital.kissan.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.adapter.Society_Adapter;
 import com.alchemistdigital.kissan.asynctask.DeleteSocietyAsyncTask;
 import com.alchemistdigital.kissan.model.Society;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.RecyclerViewListener;
 
 import java.util.List;
@@ -31,6 +33,7 @@ public class View_Society extends AppCompatActivity{
     public RecyclerView.Adapter society_adapter;
     public static List<Society> data;
     View emptyView;
+    private FloatingActionButton fabCreateSociety;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,31 @@ public class View_Society extends AppCompatActivity{
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_society_toolbar);
         setSupportActionBar(toolbar);
+
+        fabCreateSociety = (FloatingActionButton) findViewById(R.id.fab_create_society);
+        fabCreateSociety.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(View_Society.this, Create_Society.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("comesFrom","ViewSociety");
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(View_Society.this);
+        String who = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
+        // check user is admin or obp
+        // on the bases of preference value.
+        if( who.equals("obp") ){
+            fabCreateSociety.setVisibility(View.VISIBLE);
+        }
+        else {
+            fabCreateSociety.setVisibility(View.GONE);
+        }
+
 
         displaySocietyView = findViewById(R.id.id_displayScoietyView);
 
@@ -108,72 +136,67 @@ public class View_Society extends AppCompatActivity{
                         alertDialogBuilder.setMessage("Are you sure to delete this society?");
 
                         alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int arg1) {
-                                        dialog.dismiss();
+                            @Override
+                            public void onClick(DialogInterface dialog, int arg1) {
+                                dialog.dismiss();
 
 
-                                        // Check if Internet present
-                                        if (!isConnectingToInternet(View_Society.this)) {
-                                            // Internet Connection is not present
-                                            Snackbar.make(displaySocietyView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                                    .setAction("Retry", new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            onCreate(null);
-                                                        }
-                                                    }).show();
-                                            // stop executing code by return
-                                            return;
+                                // Check if Internet present
+                                if (!isConnectingToInternet(View_Society.this)) {
+                                    // Internet Connection is not present
+                                    Snackbar.make(displaySocietyView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
+                                            .setAction("Retry", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    onCreate(null);
+                                                }
+                                            }).show();
+                                    // stop executing code by return
+                                    return;
 
-                                        } else {
+                                } else {
 
-                                            new DeleteSocietyAsyncTask(View_Society.this, data.get(position).getId() ).execute();
+                                    new DeleteSocietyAsyncTask(View_Society.this, data.get(position).getId() ).execute();
 
-                                            DatabaseHelper dbhelper = new DatabaseHelper(View_Society.this);
-                                            dbhelper.deleteSociety(data.get(position).getId());
-                                            dbhelper.closeDB();
+                                    DatabaseHelper dbhelper = new DatabaseHelper(View_Society.this);
+                                    dbhelper.deleteSociety(data.get(position).getId());
+                                    dbhelper.closeDB();
 
-                                            societyData.remove(position);
-                                            society_adapter.notifyItemRemoved(position);
+                                    societyData.remove(position);
+                                    society_adapter.notifyItemRemoved(position);
 
-                                            DatabaseHelper dbHelper = new DatabaseHelper(View_Society.this);
-                                            int len = dbHelper.numberOfSocietyRowsByStatus();
-                                            dbHelper.closeDB();
+                                    DatabaseHelper dbHelper = new DatabaseHelper(View_Society.this);
+                                    int len = dbHelper.numberOfSocietyRowsByStatus();
+                                    dbHelper.closeDB();
 
-                                            if(len <= 0) {
-                                                emptyView.setVisibility(View.VISIBLE);
-                                                society_recyclerView.setVisibility(View.GONE);
-                                            }
-
-                                        }
-
-
+                                    if(len <= 0) {
+                                        emptyView.setVisibility(View.VISIBLE);
+                                        society_recyclerView.setVisibility(View.GONE);
                                     }
                                 }
+                            }
+                        });
 
-                        );
+                        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
 
-                            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener()
+                        AlertDialog alertDialog = alertDialogBuilder.create();
 
-                                    {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    }
+                        alertDialog.show();
 
-                            );
-
-                            AlertDialog alertDialog = alertDialogBuilder.create();
-
-                            alertDialog.show();
-
-                        }
-                    });
+                    }
+                });
                 }
             })
         );
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }
