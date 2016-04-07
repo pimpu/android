@@ -75,10 +75,10 @@ public class Enquiry_Detail extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(Enquiry_Detail.this);
 
-        File dir = new File(CommonVariables.SCAN_FILE_PATH +"/"+document );
+        File fileExist = new File(CommonVariables.SCAN_FILE_PATH +"/"+document );
         if( dbHelper.numberOfOfflineRowsByid(id) > 0
                 || !isConnectingToInternet(Enquiry_Detail.this)
-                || dir.exists() ) {
+                || fileExist.exists() ) {
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;

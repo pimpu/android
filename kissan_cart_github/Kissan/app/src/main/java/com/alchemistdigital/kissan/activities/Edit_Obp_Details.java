@@ -1,19 +1,18 @@
 package com.alchemistdigital.kissan.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
-import com.alchemistdigital.kissan.asynctask.InsertOBPAsyncTask;
+import com.alchemistdigital.kissan.asynctask.UpdateObpAsyncTask;
 import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
 
@@ -24,49 +23,72 @@ import static com.alchemistdigital.kissan.utilities.Validations.emailValidate;
 import static com.alchemistdigital.kissan.utilities.Validations.isEmptyString;
 import static com.alchemistdigital.kissan.utilities.Validations.phoneValiate;
 
-public class Create_OBP extends AppCompatActivity {
+public class Edit_Obp_Details extends AppCompatActivity {
 
     private EditText txt_obp_name,txt_obp_contact,txt_obp_email,txt_obp_pwd,txt_obp_address;
     private EditText txt_obp_store_name,txt_obp_pin,txt_obp_city,txt_obp_state,txt_obp_country;
     private String  str_obp_name,str_obp_contact,str_obp_email,str_obp_pwd,str_obp_address;
     private String  str_obp_store_name,str_obp_pin,str_obp_city,str_obp_state,str_obp_country;
+    private int status, localId;
     TextInputLayout obp_nameInputLayout,obp_contactInputLayout,obp_emailInputLayout,obp_pwdInputLayuot,obp_addressInputLayuot;
     TextInputLayout obp_store_nameInputLayout,obp_pinInputLayout,obp_cityInputLayout,obp_stateInputLayuot,obp_countryInputLayuot;
-    private View createObpView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create__obp);
+        setContentView(R.layout.activity_edit__obp__details);
 
-        createObpView = findViewById(R.id.id_CreateOBPView);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.create_obp_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_obp_toolbar);
         setSupportActionBar(toolbar);
 
-        txt_obp_name        = (EditText) findViewById(R.id.edittext_id_obp_name);
-        txt_obp_contact     = (EditText) findViewById(R.id.edittext_id_obp_contact);
-        txt_obp_email       = (EditText) findViewById(R.id.edittext_id_obp_email);
-        txt_obp_pwd         = (EditText) findViewById(R.id.edittext_id_obp_pwd);
-        txt_obp_address     = (EditText) findViewById(R.id.edittext_id_obp_address);
-        txt_obp_store_name  = (EditText) findViewById(R.id.edittext_id_obp_store_name);
-        txt_obp_pin         = (EditText) findViewById(R.id.edittext_id_obp_store_pin);
-        txt_obp_city        = (EditText) findViewById(R.id.edittext_id_obp_store_city);
-        txt_obp_state       = (EditText) findViewById(R.id.edittext_id_obp_store_state);
-        txt_obp_country     = (EditText) findViewById(R.id.edittext_id_obp_store_country);
+        Bundle extras = getIntent().getExtras();
+        str_obp_name = extras.getString("name");
+        str_obp_pwd = extras.getString("password");
+        str_obp_store_name = extras.getString("store_name");
+        str_obp_email = extras.getString("email_id");
+        str_obp_contact = extras.getString("contact");
+        str_obp_address = extras.getString("address");
+        str_obp_pin = String.valueOf(extras.getInt("pincode"));
+        str_obp_city = extras.getString("city");
+        str_obp_state = extras.getString("state");
+        str_obp_country = extras.getString("country");
+        status = extras.getInt("status");
+        localId = extras.getInt("localid");
 
-        obp_nameInputLayout         = (TextInputLayout) findViewById(R.id.id_input_layout_obp_name);
-        obp_contactInputLayout      = (TextInputLayout) findViewById(R.id.id_input_layout_obp_contact);
-        obp_emailInputLayout        = (TextInputLayout) findViewById(R.id.id_input_layout_obp_email);
-        obp_pwdInputLayuot          = (TextInputLayout) findViewById(R.id.id_input_layout_obp_pwd);
-        obp_addressInputLayuot      = (TextInputLayout) findViewById(R.id.id_input_layout_obp_address);
-        obp_store_nameInputLayout   = (TextInputLayout) findViewById(R.id.id_input_layout_obp_store_name);
-        obp_pinInputLayout          = (TextInputLayout) findViewById(R.id.id_input_layout_obp_store_pin);
-        obp_cityInputLayout         = (TextInputLayout) findViewById(R.id.id_input_layout_obp_store_city);
-        obp_stateInputLayuot        = (TextInputLayout) findViewById(R.id.id_input_layout_obp_store_state);
-        obp_countryInputLayuot      = (TextInputLayout) findViewById(R.id.id_input_layout_obp_store_country);
+        txt_obp_name        = (EditText) findViewById(R.id.edittext_id_edit_obp_name);
+        txt_obp_contact     = (EditText) findViewById(R.id.edittext_id_edit_obp_contact);
+        txt_obp_email       = (EditText) findViewById(R.id.edittext_id_edit_obp_email);
+        txt_obp_pwd         = (EditText) findViewById(R.id.edittext_id_edit_obp_pwd);
+        txt_obp_address     = (EditText) findViewById(R.id.edittext_id_edit_obp_address);
+        txt_obp_store_name  = (EditText) findViewById(R.id.edittext_id_edit_obp_store_name);
+        txt_obp_pin         = (EditText) findViewById(R.id.edittext_id_edit_obp_pin);
+        txt_obp_city        = (EditText) findViewById(R.id.edittext_id_edit_obp_city);
+        txt_obp_state       = (EditText) findViewById(R.id.edittext_id_edit_obp_state);
+        txt_obp_country     = (EditText) findViewById(R.id.edittext_id_edit_obp_country);
 
-        final RippleView rippleView = (RippleView)findViewById(R.id.btn_id_submit_obp);
+        txt_obp_name.setText(str_obp_name);
+        txt_obp_contact.setText(str_obp_contact);
+        txt_obp_email.setText(str_obp_email);
+        txt_obp_pwd.setText(str_obp_pwd);
+        txt_obp_address.setText(str_obp_address);
+        txt_obp_store_name.setText(str_obp_store_name);
+        txt_obp_pin.setText(str_obp_pin);
+        txt_obp_city.setText(str_obp_city);
+        txt_obp_state.setText(str_obp_state);
+        txt_obp_country.setText(str_obp_country);
+
+        obp_nameInputLayout         = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_name);
+        obp_contactInputLayout      = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_contact);
+        obp_emailInputLayout        = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_email);
+        obp_pwdInputLayuot          = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_pwd);
+        obp_addressInputLayuot      = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_address);
+        obp_store_nameInputLayout   = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_store_name);
+        obp_pinInputLayout          = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_pin);
+        obp_cityInputLayout         = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_city);
+        obp_stateInputLayuot        = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_state);
+        obp_countryInputLayuot      = (TextInputLayout) findViewById(R.id.id_input_layout_edit_obp_country);
+
+        final RippleView rippleView = (RippleView)findViewById(R.id.btn_id_edit_obp);
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override
@@ -115,18 +137,18 @@ public class Create_OBP extends AppCompatActivity {
                     obp_emailInputLayout.setError("You need to enter correct email-id");
                 }
 
-                if (boolPwd) {
-                    obp_pwdInputLayuot.setErrorEnabled(false);
-                } else {
-                    obp_pwdInputLayuot.setErrorEnabled(true);
-                    obp_pwdInputLayuot.setError("OBP password field is empty.");
-                }
-
                 if (boolAddress) {
                     obp_addressInputLayuot.setErrorEnabled(false);
                 } else {
                     obp_addressInputLayuot.setErrorEnabled(true);
                     obp_addressInputLayuot.setError("OBP address field is empty.");
+                }
+
+                if (boolPwd) {
+                    obp_pwdInputLayuot.setErrorEnabled(false);
+                } else {
+                    obp_pwdInputLayuot.setErrorEnabled(true);
+                    obp_pwdInputLayuot.setError("OBP password field is empty.");
                 }
 
                 if (boolStore) {
@@ -143,7 +165,7 @@ public class Create_OBP extends AppCompatActivity {
                     obp_pinInputLayout.setError("Store pincode field is empty.");
                 }
 
-                if (boolCity) {
+                if (boolCity){
                     obp_cityInputLayout.setErrorEnabled(false);
                 } else {
                     obp_cityInputLayout.setErrorEnabled(true);
@@ -167,10 +189,13 @@ public class Create_OBP extends AppCompatActivity {
                 if ( boolName && boolContact && boolEmail && boolPwd && boolAddress && boolStore
                         && boolPin && boolCity && boolState && boolCountry) {
 
-                    // Check if Internet present
-                    if (!isConnectingToInternet(Create_OBP.this)) {
+                    GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Edit_Obp_Details.this);
+                    int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
 
-                        OBP obpObj = new OBP(0,
+                    // Check if Internet present
+                    if (!isConnectingToInternet(Edit_Obp_Details.this)) {
+
+                        OBP obpObj = new OBP(uId,
                                 str_obp_name,
                                 str_obp_store_name,
                                 str_obp_email,
@@ -181,48 +206,54 @@ public class Create_OBP extends AppCompatActivity {
                                 str_obp_city,
                                 str_obp_state,
                                 str_obp_country,
-                                1);
+                                status);
 
-                        DatabaseHelper dbHelper = new DatabaseHelper(Create_OBP.this);
-                        if( dbHelper.isOBPPresent(str_obp_email) > 0 ) {
-                            Toast.makeText( getApplicationContext(),"This email-id is already exist.",Toast.LENGTH_LONG).show();
+                        DatabaseHelper dbHelper = new DatabaseHelper(Edit_Obp_Details.this);
+                        dbHelper.updateObpData(obpObj);
+
+                        Offline offline = new Offline( dbHelper.TABLE_OBP,
+                                localId,
+                                offlineActionModeEnum.UPDATE.toString(),
+                                ""+new Date().getTime() );
+
+                        // it check whether data with same row id with update action in offline table.
+                        // if yes delete old one and create new entry in offline table.
+                        if (dbHelper.numberOfOfflineRowsByRowIdAndUpdate(localId) > 0) {
+                            dbHelper.deleteOfflineTableDataByRowIdAndUpdate(String.valueOf(localId));
                         }
-                        else {
-                            long obpId = dbHelper.insertOBPData(obpObj);
+                        dbHelper.insertOffline(offline);
 
-                            Offline offline = new Offline( dbHelper.TABLE_OBP,
-                                    (int) obpId,
-                                    offlineActionModeEnum.INSERT.toString(),
-                                    ""+new Date().getTime() );
+                        dbHelper.closeDB();
 
-                            dbHelper.insertOffline(offline);
+                        SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(Edit_Obp_Details.this);
+                        // user register email
+                        setPreference.setEmailPreference(getResources().getString(R.string.loginEmail), str_obp_email);
+                        // user register name
+                        setPreference.setNamePreference(getResources().getString(R.string.loginName), str_obp_name);
 
-                            dbHelper.closeDB();
-
-                            startActivity(new Intent(Create_OBP.this, View_Obp.class));
-                            finish();
-                        }
+                        finish();
 
                     } else {
-                        DatabaseHelper dbHelper = new DatabaseHelper(Create_OBP.this);
-                        if( dbHelper.isOBPPresent(str_obp_email) > 0 ) {
-                            Toast.makeText( getApplicationContext(),"This email-id is already exist.",Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            new InsertOBPAsyncTask(Create_OBP.this,str_obp_name,str_obp_contact,str_obp_email,
-                                    str_obp_pwd,str_obp_address,str_obp_store_name,str_obp_pin,str_obp_city,
-                                    str_obp_state,str_obp_country).execute();
-                        }
+
+                        new UpdateObpAsyncTask(
+                                Edit_Obp_Details.this,
+                                uId,
+                                str_obp_name,
+                                str_obp_store_name,
+                                str_obp_email,
+                                str_obp_pwd,
+                                str_obp_contact,
+                                str_obp_address,
+                                str_obp_pin,
+                                str_obp_city,
+                                str_obp_state,
+                                str_obp_country,
+                                status).execute();
 
                     }
                 }
             }
         });
-    }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(Create_OBP.this, View_Obp.class));
-        finish();
     }
 }

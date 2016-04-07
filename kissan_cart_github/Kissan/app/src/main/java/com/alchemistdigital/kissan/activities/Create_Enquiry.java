@@ -29,7 +29,6 @@ import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonUtilities;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
-import com.alchemistdigital.kissan.utilities.DateHelper;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
 import com.scanlibrary.ScanActivity;
@@ -43,6 +42,7 @@ import java.util.List;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.getFileName;
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
+import static com.alchemistdigital.kissan.utilities.DateHelper.getDateToStoreInDb;
 import static com.alchemistdigital.kissan.utilities.DateHelper.getRefStringDate;
 import static com.alchemistdigital.kissan.utilities.Validations.emailValidate;
 import static com.alchemistdigital.kissan.utilities.Validations.isEmptyString;
@@ -231,7 +231,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                     // Check if Internet present
                     if (!isConnectingToInternet(Create_Enquiry.this)) {
 
-                        Enquiry enquiry = new Enquiry(0, DateHelper.getDateToStoreInDb(), str_ref_no, uId, gId,
+                        Enquiry enquiry = new Enquiry(0, getDateToStoreInDb(), str_ref_no, uId, gId,
                                 repToVal, 0, str_message, str_name, str_address,
                                 str_contact, str_email, tvFileName.getText().toString().trim(), 1);
                         long enquiryId = dbHelper.insertEnquiry(enquiry);

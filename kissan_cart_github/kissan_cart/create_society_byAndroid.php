@@ -5,14 +5,14 @@
 	error_reporting(0);
 	$response = array();
 	
-	if( isset($_POST['society_name']) && isset($_POST['society_contact']) && isset($_POST['society_email']) && isset($_POST['society_address']) && isset($_POST['userId']) ){
+	if( isset($_POST['society_name']) && isset($_POST['society_contact']) && isset($_POST['society_email']) && isset($_POST['society_address']) && isset($_POST['userId']) ) {
 		$society_name    	= $_POST['society_name'];
 		$society_contact	= $_POST['society_contact'];
 		$society_email 		= $_POST['society_email'];
 		$society_address	= $_POST['society_address'];
 		$userId				= $_POST['userId'];
 		
-		$checkMatchOBPNameQuery = mysql_query("SELECT * FROM society WHERE soc_name='".$society_name."';");
+		/*$checkMatchOBPNameQuery = mysql_query("SELECT * FROM society WHERE soc_name='".$society_name."';");
 		$checkMatchOBPEmailQuery = mysql_query("SELECT * FROM society WHERE soc_email='".$society_email."';");
 		
 		if(mysql_num_rows($checkMatchOBPNameQuery) > 0 ){
@@ -27,7 +27,7 @@
 			
 			echo json_encode($response);
 		}
-		else{
+		else{*/
 			$result = mysql_query("INSERT INTO society(	uID,
 														soc_name,
 														soc_contact,
@@ -79,7 +79,7 @@
 	
 				echo json_encode($response);
 			}
-		}
+		// }
 		
 	}
 	else{

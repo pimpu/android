@@ -42,6 +42,7 @@ public class View_Orders extends AppCompatActivity {
                 bundle.putString("referenceNo","0");
                 orderIntent.putExtras(bundle);
                 startActivity(orderIntent);
+                finish();
             }
         });
 

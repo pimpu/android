@@ -40,7 +40,7 @@ public class DateHelper {
         return sdf.format(currentDate);
     }
 
-    public static String getDateToStoreInDb(){
+    public static String getDateToStoreInDb() {
         Date date = new Date();
         return sdfForStoreInDb.format(date);
     }

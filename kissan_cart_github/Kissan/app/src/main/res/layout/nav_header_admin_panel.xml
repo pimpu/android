@@ -5,10 +5,10 @@
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="12dp"
+    android:paddingBottom="10dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="12dp"
+    android:paddingTop="10dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
@@ -17,13 +17,31 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher_logo" />
 
-    <TextView
-        android:id="@+id/admin_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="sfdfdfd"
+            android:id="@+id/admin_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <ImageView
+            android:id="@+id/edit_admin_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:onClick="openAdminProfileMenu"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
+            android:src="@drawable/ic_down_arrow" />
+
+    </RelativeLayout>
 
     <TextView
+        android:text="fdfdfdfd"
         android:id="@+id/admin_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

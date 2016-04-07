@@ -117,7 +117,9 @@ public class View_Enquiry extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        enquiry_Adapter.notifyDataSetChanged();
+        if(enquiry_Adapter != null){
+            enquiry_Adapter.notifyDataSetChanged();
+        }
         super.onResume();
     }
 }

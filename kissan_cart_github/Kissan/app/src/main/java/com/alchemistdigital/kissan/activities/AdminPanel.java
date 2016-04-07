@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,8 +29,12 @@ import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineEnquiryDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineOBPDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineSocietyDataAsyncTask;
 import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -38,6 +43,7 @@ import com.google.android.gcm.GCMRegistrar;
 
 import java.util.List;
 
+import static com.alchemistdigital.kissan.utilities.CommonUtilities.generateNotification;
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
 /**
@@ -45,7 +51,7 @@ import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnecting
  * if finish then it will not check the whether internet connection is working or not.
  */
 public class AdminPanel extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
     TextView tv_AdminEmail_navHeader,tv_AdminName_navHeader;
     @Override
@@ -139,31 +145,75 @@ public class AdminPanel extends AppCompatActivity
                 List<Offline> offlineEnquiryData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ENQUIRY);
                 List<Offline> offlineSocietyData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_SOCIETY);
                 List<Offline> offlineOrderData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ORDER);
+                List<Offline> offlineOBPData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_OBP);
 
                 String jsonEnquiryArr = null;
                 String jsonSocietyArr = null;
                 String jsonOrderArr = null;
+                String jsonOBPArr = null;
 
-                for (int p = 0 ; p < offlineEnquiryData.size() ; p++ ) {
+                for (int o = 0 ; o < offlineEnquiryData.size() ; o++ ) {
 
-                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID( offlineEnquiryData.get(p).getOffline_row_id(),
-                            offlineEnquiryData.get(p).getOffline_row_action() );
+                    List<Enquiry> enquiryByID = dbHelper.getEnquiryByID(
+                            offlineEnquiryData.get(o).getOffline_row_id(),
+                            offlineEnquiryData.get(o).getOffline_row_action() );
 
                     jsonEnquiryArr = jsonEnquiryArr + enquiryByID.toString() ;
                 }
 
 
-                for (int a = 0 ; a < offlineSocietyData.size() ; a++ ) {
-                    System.out.println(offlineEnquiryData.get(a).getOffline_table_name());
+                for (int p = 0 ; p < offlineSocietyData.size() ; p++ ) {
+                    List<Society> offlineSocietyById = dbHelper.getOfflineSocietyById(
+                            offlineSocietyData.get(p).getOffline_row_id(),
+                            offlineSocietyData.get(p).getOffline_row_action());
+
+                    jsonSocietyArr = jsonSocietyArr + offlineSocietyById.toString() ;
                 }
 
                 for (int b = 0 ; b < offlineOrderData.size() ; b++ ) {
                     System.out.println(offlineEnquiryData.get(b).getOffline_table_name());
                 }
 
+                for (int q = 0 ; q < offlineOBPData.size() ; q++ ) {
+                    List<OBP> offlineOBPById = dbHelper.getOfflineOBPById(
+                            offlineOBPData.get(q).getOffline_row_id(),
+                            offlineOBPData.get(q).getOffline_row_action());
+
+                    jsonOBPArr = jsonOBPArr + offlineOBPById.toString() ;
+                }
+
                 if(jsonEnquiryArr != null) {
-                    String jsonArrayEnquiryArr = jsonEnquiryArr.replace("null", "").replaceAll("\\]\\[", ",");
+                    String jsonArrayEnquiryArr = jsonEnquiryArr.replace("null", "")
+                                                                .replaceAll("\\]\\[", ",")
+                                                                .replace(System.getProperty("line.separator"), " <br /> ");
                     new InsertOfflineEnquiryDataAsyncTask(AdminPanel.this,jsonArrayEnquiryArr).execute();
+                }
+
+                if(jsonSocietyArr != null) {
+                    String jsonArraySocietyArr = jsonSocietyArr.replace("null", "")
+                                                                .replaceAll("\\]\\[", ",")
+                                                                .replace(System.getProperty("line.separator"), " <br /> ");
+                    new InsertOfflineSocietyDataAsyncTask(AdminPanel.this,jsonArraySocietyArr).execute();
+                }
+
+                if( jsonOBPArr != null ){
+                    String jsonArrayObpArr = jsonOBPArr.replace("null", "")
+                                                        .replaceAll("\\]\\[", ",")
+                                                        .replace(System.getProperty("line.separator"), " <br /> ");
+
+                    GetSharedPreferenceHelper getPrefrence = new GetSharedPreferenceHelper(AdminPanel.this);
+                    String who = getPrefrence.getUserTypePreference(getResources().getString(R.string.userType));
+                    String gId = null;
+                    // check user is admin or obp
+                    // on the bases of preference value.
+                    if( who.equals("obp") ){
+                        gId = "2";
+                    }
+                    else {
+                        gId = "1";
+                    }
+//                    System.out.println(jsonArrayObpArr);
+                    new InsertOfflineOBPDataAsyncTask(AdminPanel.this,jsonArrayObpArr,gId).execute();
                 }
 
                 dbHelper.closeDB();
@@ -184,7 +234,9 @@ public class AdminPanel extends AppCompatActivity
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            System.out.println("on activity via gcm.");
+            if(newMessage.equals("success")){
+                generateNotification(context, "success");
+            }
 
             // Releasing wake lock
             WakeLocker.release();
@@ -260,8 +312,8 @@ public class AdminPanel extends AppCompatActivity
             startActivity(new Intent(AdminPanel.this, View_Orders.class));
         } else if (id == R.id.id_admin_nav_createOBP) {
             // send program flow to OBP creation class(Activity)
-            startActivity(new Intent(AdminPanel.this, Create_OBP.class));
-        }else if (id == R.id.id_admin_nav_logout) {
+            startActivity(new Intent(AdminPanel.this, View_Obp.class));
+        }  else if (id == R.id.id_admin_nav_logout) {
             SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(AdminPanel.this);
 
             // it store false value of user for purpose of user is logging.
@@ -279,5 +331,74 @@ public class AdminPanel extends AppCompatActivity
     public void viewSQLiteDb(MenuItem item) {
         Intent dbmanager = new Intent(AdminPanel.this,AndroidDatabaseManager.class);
         startActivity(dbmanager);
+    }
+
+    public void openAdminProfileMenu(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+
+        // This activity implements OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(AdminPanel.this);
+        popup.inflate(R.menu.profile_menu);
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.admin_drawer_layout);
+        Intent intent;
+        Bundle extras;
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
+        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+        DatabaseHelper dbHelper = new DatabaseHelper(AdminPanel.this);
+        List<OBP> obpByUserId = dbHelper.getOBPByUserId(uId);
+        dbHelper.closeDB();
+
+        switch (item.getItemId()) {
+            case R.id.action_admin_profile_details:
+
+                drawer.closeDrawer(GravityCompat.START);
+
+                // send program flow to OBP creation class(Activity)
+                intent = new Intent(AdminPanel.this, View_Obp_Details.class);
+                extras = new Bundle();
+                extras.putString("name", obpByUserId.get(0).getObp_name());
+                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
+                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
+                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
+                extras.putString("address", obpByUserId.get(0).getObp_address());
+                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
+                extras.putString("city", obpByUserId.get(0).getObp_city());
+                extras.putString("state", obpByUserId.get(0).getObp_state());
+                extras.putString("country", obpByUserId.get(0).getObp_country());
+                intent.putExtras(extras);
+                startActivity(intent);
+
+                return true;
+            case R.id.action_admin_profile_edit:
+
+                drawer.closeDrawer(GravityCompat.START);
+                // send program flow to OBP creation class(Activity)
+                intent = new Intent(AdminPanel.this, Edit_Obp_Details.class);
+                extras = new Bundle();
+                extras.putString("name", obpByUserId.get(0).getObp_name());
+                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
+                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
+                extras.putString("password", obpByUserId.get(0).getObp_email_passowrd());
+                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
+                extras.putString("address", obpByUserId.get(0).getObp_address());
+                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
+                extras.putString("city", obpByUserId.get(0).getObp_city());
+                extras.putString("state", obpByUserId.get(0).getObp_state());
+                extras.putString("country", obpByUserId.get(0).getObp_country());
+                extras.putInt("status", obpByUserId.get(0).getObp_status());
+                extras.putInt("localid", obpByUserId.get(0).getObp_id());
+                intent.putExtras(extras);
+                startActivity(intent);
+
+                return true;
+            default:
+                return false;
+        }
     }
 }

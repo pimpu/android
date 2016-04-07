@@ -2,7 +2,6 @@ package com.alchemistdigital.kissan.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +11,13 @@ import android.widget.EditText;
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.UpdateSocietyAsyncTask;
+import com.alchemistdigital.kissan.model.Enquiry;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
+
+import java.util.Date;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.kissan.utilities.Validations.emailValidate;
@@ -26,7 +30,7 @@ public class Edit_Society_Details extends AppCompatActivity {
     private EditText txt_society_name,txt_society_contact,txt_society_email,txt_society_address;
     private String  str_society_name,str_society_contact,str_society_email,str_society_address;
     TextInputLayout society_nameInputLayout,society_contactInputLayout,society_emailInputLayout,society_addressInputLayuot;
-    private int societyId;
+    private int societyId,societyServerId,status;
     private String oldSocietyName;
 
     @Override
@@ -51,6 +55,8 @@ public class Edit_Society_Details extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         societyId = extras.getInt("societyId");
+        societyServerId = extras.getInt("societyServerId");
+        status = extras.getInt("societyStatus");
 
         DatabaseHelper dbhelper = new DatabaseHelper(Edit_Society_Details.this);
         Society societyById = dbhelper.getSocietyById(societyId);
@@ -113,19 +119,54 @@ public class Edit_Society_Details extends AppCompatActivity {
 
                     // Check if Internet present
                     if (!isConnectingToInternet(Edit_Society_Details.this)) {
-                        // Internet Connection is not present
-                        Snackbar.make(editSocietyView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Retry", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        onCreate(null);
-                                    }
-                                }).show();
-                        // stop executing code by return
-                        return;
+
+                        Society society = new Society();
+                        society.setSoc_name(str_society_name);
+                        society.setSoc_contact(str_society_contact);
+                        society.setSoc_email(str_society_email);
+                        society.setSoc_adrs(str_society_address);
+                        society.setServerId(societyServerId);
+                        society.setId(societyId);
+                        society.setSoc_status(status);
+
+                        Enquiry enquiry = new Enquiry();
+                        enquiry.setEnquiry_society(str_society_name);
+                        enquiry.setEnquiry_society_contact(str_society_contact);
+                        enquiry.setEnquiry_society_email(str_society_email);
+                        enquiry.setEnquiry_society_address(str_society_address);
+
+                        DatabaseHelper dbhelper = new DatabaseHelper(Edit_Society_Details.this);
+
+                        Offline offline = new Offline( dbhelper.TABLE_SOCIETY,
+                                (int) societyId,
+                                offlineActionModeEnum.UPDATE.toString(),
+                                ""+new Date().getTime() );
+
+                        // it check whether data with same row id with update action in offline table.
+                        // if yes delete old one and create new entry in offline table.
+                        if( dbhelper.numberOfOfflineRowsByRowIdAndUpdate(societyId) > 0 ) {
+                            dbhelper.deleteOfflineTableDataByRowIdAndUpdate(String.valueOf(societyId) );
+                        }
+                        dbhelper.insertOffline(offline);
+
+                        dbhelper.updateSociety(society);
+                        dbhelper.updateSocietyColumnInEnquiryTable(enquiry, oldSocietyName);
+                        dbhelper.closeDB();
+
+                        Intent intent = new Intent(Edit_Society_Details.this,View_Society.class);
+                        startActivity(intent);
+                        finish();
+
                     } else {
 
-                        new UpdateSocietyAsyncTask(Edit_Society_Details.this,str_society_name,str_society_contact,str_society_email,str_society_address,societyId,oldSocietyName).execute();
+                        new UpdateSocietyAsyncTask(Edit_Society_Details.this,
+                                str_society_name,
+                                str_society_contact,
+                                str_society_email,
+                                str_society_address,
+                                oldSocietyName,
+                                societyServerId,
+                                status).execute();
 
                     }
                 }

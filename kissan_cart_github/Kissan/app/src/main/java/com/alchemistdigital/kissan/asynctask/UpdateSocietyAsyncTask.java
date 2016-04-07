@@ -36,17 +36,26 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
     private String str_society_contact;
     private String str_society_email;
     private String str_society_address;
-    private int societyId;
     private String oldSocietyName;
+    private int societyServerId;
+    private int status;
 
-    public UpdateSocietyAsyncTask(Context context, String str_society_name, String str_society_contact, String str_society_email, String str_society_address, int societyId, String oldSocietyName) {
+    public UpdateSocietyAsyncTask(Context context,
+                                  String str_society_name,
+                                  String str_society_contact,
+                                  String str_society_email,
+                                  String str_society_address,
+                                  String oldSocietyName,
+                                  int societyServerId,
+                                  int status) {
         this.context = context;
         this.str_society_name = str_society_name;
         this.str_society_contact = str_society_contact;
         this.str_society_email = str_society_email;
         this.str_society_address = str_society_address;
-        this.societyId = societyId;
         this.oldSocietyName = oldSocietyName;
+        this.societyServerId = societyServerId;
+        this.status = status;
     }
 
     @Override
@@ -81,7 +90,8 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
             entity.addPart("contact", new StringBody(str_society_contact));
             entity.addPart("email", new StringBody(str_society_email));
             entity.addPart("address", new StringBody(str_society_address));
-            entity.addPart("id", new StringBody( String.valueOf(societyId) ));
+            entity.addPart("id", new StringBody( String.valueOf(societyServerId) ));
+            entity.addPart("status", new StringBody( String.valueOf(status) ));
             entity.addPart("old_name", new StringBody(oldSocietyName));
 
             httppost.setEntity(entity);
@@ -114,19 +124,18 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
 
         Log.d("update society Data", result.toString());
 
-        if(result.contains("Error occurred!")){
+        if(result.contains("Error occurred!")) {
             Toast.makeText(context, result, Toast.LENGTH_LONG).show();
             return;
         }
 
-
         Society society = new Society();
-
         society.setSoc_name(str_society_name);
         society.setSoc_contact(str_society_contact);
         society.setSoc_email(str_society_email);
         society.setSoc_adrs(str_society_address);
-        society.setId(societyId);
+        society.setServerId(societyServerId);
+        society.setSoc_status(status);
 
         Enquiry enquiry = new Enquiry();
         enquiry.setEnquiry_society(str_society_name);
@@ -142,6 +151,7 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
         Intent intent = new Intent(context,View_Society.class);
         context.startActivity(intent);
         ((Activity)context).finish();
+
     }
 
 }

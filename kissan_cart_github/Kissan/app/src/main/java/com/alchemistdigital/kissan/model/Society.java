@@ -33,12 +33,14 @@ public class Society {
     public String toString() {
         return "{" +
                 " \"id\":\"" + id + '\"' +
+                ", \"serverId\":\"" + serverId + '\"' +
                 ", \"userId\":\"" + userId + '\"' +
                 ", \"soc_name\":\"" + soc_name + '\"' +
                 ", \"soc_contact\":\"" + soc_contact + '\"' +
                 ", \"soc_email\":\"" + soc_email + '\"' +
                 ", \"soc_adrs\":\"" + soc_adrs + '\"' +
                 ", \"soc_offline_action\":\"" + soc_offline_action + '\"' +
+                ", \"soc_status\":\"" + soc_status + '\"' +
                 '}';
     }
 

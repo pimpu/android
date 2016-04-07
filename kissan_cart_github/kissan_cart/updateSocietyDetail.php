@@ -13,9 +13,10 @@
 		$contact = $_POST['contact'];
 		$email = $_POST['email'];
 		$address = $_POST['address'];
+		$status = $_POST['status'];
 
 		// mysql update row with matched userId
-		$updateSociety = mysql_query("UPDATE society SET soc_name = '".$name."',soc_contact = '".$contact."',soc_email = '".$email."',soc_adrs='".$address."' WHERE id = ".$id);
+		$updateSociety = mysql_query("UPDATE society SET soc_name = '".$name."',soc_contact = '".$contact."',soc_email = '".$email."',soc_adrs='".$address."', status=".$status." WHERE id = ".$id);
 
 		$updateEnquiry = mysql_query("UPDATE enquiry SET eSociety = '".$name."',eSocCont = '".$contact."',eSocEmail = '".$email."',eSocAdrs='".$address."' WHERE eSociety = '".$old_name."';");
 
@@ -29,6 +30,7 @@
 		$society["soc_contact"] = $contact;
 		$society["soc_email"] = $email;
 		$society["soc_adrs"] = $address;
+		$society["status"] = $status;
 
 		$gcmMessage = array(
 								'message' => 'updateSocietyAtAdmin',
@@ -50,7 +52,8 @@
 
 		// required field is missing
 		$response["success"] = 1;
-		$response["message"] = "Records update successfully.";
+		// $response["message"] = "Records update successfully.";
+		$response["message"] = $old_name;
 
 	} else {
 		// required field is missing

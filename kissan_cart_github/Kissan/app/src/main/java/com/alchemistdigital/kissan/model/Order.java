@@ -14,6 +14,8 @@ public class Order {
     private String order_total_amount;*/
     private int order_status;
     private String order_creted_at;
+    private String order_items;
+    private String order_offline_action;
 
     public Order() {
     }
@@ -30,6 +32,20 @@ public class Order {
         this.order_total_amount = order_total_amount;*/
         this.order_status = order_status;
         this.order_creted_at = order_creted_at;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                " \"order_id\":\"" + order_id + '\"' +
+                ", \"userId\":\"" + userId + '\"' +
+                ", \"order_reference\":\"" + order_reference + '\"' +
+                ", \"order_utr\":\"" + order_utr + '\"' +
+                ", \"order_status\":\"" + order_status + '\"' +
+                ", \"order_creted_at\":\"" + order_creted_at + '\"' +
+                ", \"order_items\":\"" + order_items + '\"' +
+                ", \"order_offline_action\":\"" + order_offline_action + '\"' +
+                '}';
     }
 
     // Setters
@@ -74,6 +90,14 @@ public class Order {
         this.order_creted_at = order_creted_at;
     }
 
+    public void setOrder_items(String order_items) {
+        this.order_items = order_items;
+    }
+
+    public void setOrder_offline_action(String order_offline_action) {
+        this.order_offline_action = order_offline_action;
+    }
+
     // Getters
 
     public int getUserId() {
@@ -115,4 +139,13 @@ public class Order {
     public String getOrder_creted_at() {
         return order_creted_at;
     }
+
+    public String getOrder_items() {
+        return order_items;
+    }
+
+    public String getOrder_offline_action() {
+        return order_offline_action;
+    }
+
 }

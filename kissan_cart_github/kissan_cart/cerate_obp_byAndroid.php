@@ -26,50 +26,38 @@
 		$state    	= $_POST['state'];
 		$country	= $_POST['country'];
 		
-		$checkMatchEmailQuery = mysql_query("SELECT * FROM userdetails WHERE uEmailID='".$email."';");
-		
-		// check email id is already exist.
-		if(mysql_num_rows($checkMatchEmailQuery) > 0 ){
-			$response["success"] = 1;
-			$response["message"] = "This email-id is already exist.";
-			
+		$result = mysql_query("INSERT INTO userdetails(
+											gID,
+											uName,
+											uStoreName,
+											uEmailID,
+											uPassword,
+											uCont,
+											uAddrs,
+											uPin,
+											uCity,
+											uState,
+											uCountry,
+											status) VALUES(
+											2,
+											'".$name."',
+											'".$store_name."',
+											'".$email."', 
+											'".$pwd."', 
+											'".$contact."', 
+											'".$address."',
+											".$pin.",
+											'".$city."',
+											'".$state."',
+											'".$country."',
+											1);");
+	
+		if($result) {
+			$response["success"] = 2;
+			$response["message"] = mysql_insert_id();
+
 			echo json_encode($response);
 		}
-		else{
-			$result = mysql_query("INSERT INTO userdetails(
-														gID,
-														uName,
-														uStoreName,
-														uEmailID,
-														uPassword,
-														uCont,
-														uAddrs,
-														uPin,
-														uCity,
-														uState,
-														uCountry,
-														status) VALUES(
-														2,
-														'".$name."',
-														'".$store_name."',
-														'".$email."', 
-														'".$pwd."', 
-														'".$contact."', 
-														'".$address."',
-														".$pin.",
-														'".$city."',
-														'".$state."',
-														'".$country."',
-														1);");
-			
-				if($result){
-					$response["success"] = 2;
-					$response["message"] = "OBP inserted successfully.";
-		
-					echo json_encode($response);
-				}
-		}
-
 	}
 	else{
 		$response["success"] = 0;

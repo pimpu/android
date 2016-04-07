@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -148,14 +149,16 @@ public class InsertSocietyAsyncTask extends AsyncTask<String,String,String>{
 
                 Intent intent = null;
                 if (comesFrom.equals("CreateEnquiry")){
-                    intent = new Intent( ((Activity) context) , Create_Enquiry.class);
+                    intent = new Intent( context , Create_Enquiry.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("callingClass","createSociety");
+                    intent.putExtras(bundle);
                 }
                 else if (comesFrom.equals("ViewSociety")) {
-                    intent = new Intent( ((Activity) context) , View_Society.class);
+                    intent = new Intent( context , View_Society.class);
                 }
-
                 context.startActivity(intent);
-                ((Activity) context).finish();
+                ((Activity)context).finish();
             }
 
         } catch (JSONException e) {

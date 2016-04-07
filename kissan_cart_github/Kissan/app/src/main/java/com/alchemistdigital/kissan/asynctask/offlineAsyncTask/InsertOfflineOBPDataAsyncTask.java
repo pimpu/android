@@ -25,16 +25,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 /**
- * Created by user on 4/1/2016.
+ * Created by user on 4/5/2016.
  */
-public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String, String>  {
+public class InsertOfflineOBPDataAsyncTask extends AsyncTask<String, String, String> {
 
     private Context context;
-    private String jsonArraySocietyArr;
+    private String jsonArrayObpArr, gId;
 
-    public InsertOfflineSocietyDataAsyncTask(Context context, String jsonArraySocietyArr) {
+    public InsertOfflineOBPDataAsyncTask(Context context, String jsonArrayObpArr, String gId) {
         this.context = context ;
-        this.jsonArraySocietyArr = jsonArraySocietyArr ;
+        this.jsonArrayObpArr = jsonArrayObpArr ;
+        this.gId = gId ;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
         String responseString = null;
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(CommonVariables.OFFLINE_SOCIETY_INSERT_SERVER_URL);
+        HttpPost httppost = new HttpPost(CommonVariables.OFFLINE_OBP_INSERT_SERVER_URL);
 
         try {
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -56,7 +57,8 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
 
 
             // Adding file data to http body
-            entity.addPart("jsonArraySocietyArr", new StringBody(jsonArraySocietyArr));
+            entity.addPart("jsonArrayObpArr", new StringBody(jsonArrayObpArr));
+            entity.addPart("gId", new StringBody(gId));
 
 //            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
@@ -85,7 +87,7 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d("offline society insert", result.toString());
+        Log.d("offline obp insert", result.toString());
 
         if (result.contains("Error occurred!")) {
             Toast.makeText(context, result, Toast.LENGTH_LONG).show();
@@ -104,17 +106,16 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
                     JSONObject c = jsonSociety.getJSONObject(i);
                     if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ) {
 
-                        String societyId = c.getString("societyId");
+                        String localOBPId = c.getString("localOBPId");
                         int serverId = c.getInt("serverId");
 
-                        System.out.println(societyId+" : "+serverId);
-                        dbHelper.updateServerIdOfSociety(societyId, serverId);
+                        dbHelper.updateServerIdOfOBP(localOBPId, serverId);
 
-                        dbHelper.deleteOfflineTableData(societyId);
+                        dbHelper.deleteOfflineTableData(localOBPId);
                     }
                     else if( (c.getString("action")).equals( offlineActionModeEnum.UPDATE.toString() ) ){
-                        String societyId = c.getString("societyId");
-                        dbHelper.deleteOfflineTableData( societyId );
+                        String localId = c.getString("localId");
+                        dbHelper.deleteOfflineTableData( localId );
                     }
                 }
                 dbHelper.closeDB();
@@ -123,6 +124,5 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 }

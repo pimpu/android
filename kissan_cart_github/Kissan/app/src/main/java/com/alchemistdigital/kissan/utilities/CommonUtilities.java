@@ -1,5 +1,8 @@
 package com.alchemistdigital.kissan.utilities;
 
+import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,9 +20,13 @@ import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.Toast;
 
+import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.SplashScreen;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * Created by user on 2/25/2016.
@@ -148,6 +155,41 @@ public class CommonUtilities {
                     "File is Saved in  " + fn, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static boolean isActivityRunning(Context ctx) {
+        ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningTaskInfo task : tasks) {
+            if (ctx.getPackageName().equalsIgnoreCase(task.baseActivity.getPackageName()))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static void generateNotification(Context context, String message) {
+        if( !isActivityRunning(context) ){
+            String title = context.getString(R.string.app_name).toString();
+
+            Intent mainIntent=new Intent(context, SplashScreen.class);
+
+            mainIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            mainIntent.setAction(Intent.ACTION_MAIN);
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            Notification notification = new Notification.Builder(context)
+                    .setAutoCancel(true)
+                    .setContentIntent(PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                    .setContentTitle(title)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setSmallIcon(R.mipmap.ic_launcher_logo)
+                    .setContentText(message)
+                    .setWhen(System.currentTimeMillis())
+                    .getNotification();
+            android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, notification);
         }
     }
 }

@@ -3,11 +3,13 @@ package com.alchemistdigital.kissan.asynctask;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
+import com.alchemistdigital.kissan.activities.View_Orders;
 import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -104,7 +106,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
 
         try {
             Log.d("Order insert Data", result.toString());
-            if(result.contains("Error occurred!")){
+            if(result.contains("Error occurred!")) {
                 Toast.makeText(context, result, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -122,6 +124,7 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
                 dbhelper.insertOrder(order);
                 dbhelper.closeDB();
 
+                context.startActivity(new Intent(context, View_Orders.class));
                 ((Activity)context).finish();
             }
             else {

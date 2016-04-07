@@ -67,7 +67,7 @@
             android:label="@string/nav_item_createSociety" />
         <activity
             android:name=".activities.Create_OBP"
-            android:label="@string/nav_item_createOBP" />
+            android:label="@string/createOBP" />
         <activity
             android:name=".activities.AdminPanel"
             android:label="@string/title_activity_admin_panel"
@@ -96,6 +96,14 @@
         <activity
             android:name=".activities.Edit_Society_Details"
             android:label="@string/editSocietyDetails" />
+        <activity
+            android:name=".activities.View_Obp"
+            android:label="@string/viewObpList" />
+        <activity
+            android:name=".activities.View_Obp_Details"
+            android:label="@string/viewObpDetails" />
+        <activity android:name=".activities.Edit_Obp_Details"
+            android:label="@string/editObpDetails" />
         <activity
             android:name=".activities.AndroidDatabaseManager"
             android:theme="@style/Theme.AppCompat.Light" />

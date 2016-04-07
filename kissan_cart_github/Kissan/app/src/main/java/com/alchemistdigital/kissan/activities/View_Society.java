@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +17,13 @@ import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.adapter.Society_Adapter;
 import com.alchemistdigital.kissan.asynctask.DeleteSocietyAsyncTask;
+import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.RecyclerViewListener;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
@@ -96,7 +98,9 @@ public class View_Society extends AppCompatActivity{
         society_recyclerView.setLayoutManager(new LinearLayoutManager(View_Society.this));
 
         society_recyclerView.addOnItemTouchListener(
-            new RecyclerViewListener.RecyclerItemClickListener(getApplicationContext(), new RecyclerViewListener.RecyclerItemClickListener.OnItemClickListener() {
+            new RecyclerViewListener.RecyclerItemClickListener(
+                    getApplicationContext(),
+                    new RecyclerViewListener.RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, final int position) {
 
@@ -120,6 +124,8 @@ public class View_Society extends AppCompatActivity{
                         Intent intent = new Intent(View_Society.this, Edit_Society_Details.class);
                         Bundle extras = new Bundle();
                         extras.putInt("societyId", data.get(position).getId());
+                        extras.putInt("societyServerId", data.get(position).getServerId());
+                        extras.putInt("societyStatus", data.get(position).getSoc_status());
                         intent.putExtras(extras);
                         startActivity(intent);
                         View_Society.this.finish();
@@ -140,30 +146,55 @@ public class View_Society extends AppCompatActivity{
                             public void onClick(DialogInterface dialog, int arg1) {
                                 dialog.dismiss();
 
-
+                                Society societyObj = new Society();
                                 // Check if Internet present
                                 if (!isConnectingToInternet(View_Society.this)) {
-                                    // Internet Connection is not present
-                                    Snackbar.make(displaySocietyView, "No internet connection !", Snackbar.LENGTH_INDEFINITE)
-                                            .setAction("Retry", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    onCreate(null);
-                                                }
-                                            }).show();
-                                    // stop executing code by return
-                                    return;
+
+                                    societyObj.setServerId(data.get(position).getServerId());
+                                    societyObj.setId(data.get(position).getId());
+
+                                    DatabaseHelper dbhelper = new DatabaseHelper(View_Society.this);
+
+                                    // delete society
+                                    dbhelper.deleteSociety(societyObj);
+
+                                    // get number of available society to show
+                                    // if any society not found to show
+                                    // then view thw not found xml view.
+                                    int len = dbhelper.numberOfSocietyRowsByStatus();
+                                    if(len <= 0) {
+                                        emptyView.setVisibility(View.VISIBLE);
+                                        society_recyclerView.setVisibility(View.GONE);
+                                    }
+
+                                    // offline data insert
+                                    Offline offline = new Offline( dbhelper.TABLE_SOCIETY,
+                                            (int) data.get(position).getId(),
+                                            offlineActionModeEnum.UPDATE.toString(),
+                                            ""+new Date().getTime() );
+
+                                    // it check whether data with same row id with update action in offline table.
+                                    // if yes delete old one and create new entry in offline table.
+                                    if( dbhelper.numberOfOfflineRowsByRowIdAndUpdate(
+                                            data.get(position).getId() ) > 0 ) {
+                                        dbhelper.deleteOfflineTableDataByRowIdAndUpdate(
+                                                String.valueOf( data.get(position).getId() ));
+                                    }
+                                    dbhelper.insertOffline(offline);
+
+                                    dbhelper.closeDB();
 
                                 } else {
 
-                                    new DeleteSocietyAsyncTask(View_Society.this, data.get(position).getId() ).execute();
+                                    new DeleteSocietyAsyncTask(View_Society.this, data.get(position).getServerId() ).execute();
+
+                                    societyObj.setServerId( data.get(position).getServerId() );
+                                    societyObj.setId( data.get(position).getId() );
 
                                     DatabaseHelper dbhelper = new DatabaseHelper(View_Society.this);
-                                    dbhelper.deleteSociety(data.get(position).getId());
+                                    dbhelper.deleteSociety(societyObj);
                                     dbhelper.closeDB();
 
-                                    societyData.remove(position);
-                                    society_adapter.notifyItemRemoved(position);
 
                                     DatabaseHelper dbHelper = new DatabaseHelper(View_Society.this);
                                     int len = dbHelper.numberOfSocietyRowsByStatus();
@@ -174,6 +205,9 @@ public class View_Society extends AppCompatActivity{
                                         society_recyclerView.setVisibility(View.GONE);
                                     }
                                 }
+                                // reomove deleted society from adapter
+                                societyData.remove(position);
+                                society_adapter.notifyItemRemoved(position);
                             }
                         });
 

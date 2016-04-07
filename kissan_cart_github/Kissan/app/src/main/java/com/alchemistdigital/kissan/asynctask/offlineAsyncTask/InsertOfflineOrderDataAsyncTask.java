@@ -5,10 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
-import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,23 +16,21 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 
 /**
- * Created by user on 4/1/2016.
+ * Created by user on 4/7/2016.
  */
-public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String, String>  {
-
+public class InsertOfflineOrderDataAsyncTask extends AsyncTask<String, String, String>  {
     private Context context;
-    private String jsonArraySocietyArr;
+    private String jsonArrayOrderArr;
 
-    public InsertOfflineSocietyDataAsyncTask(Context context, String jsonArraySocietyArr) {
+    public InsertOfflineOrderDataAsyncTask(Context context, String jsonArrayOrderArr) {
         this.context = context ;
-        this.jsonArraySocietyArr = jsonArraySocietyArr ;
+        this.jsonArrayOrderArr = jsonArrayOrderArr ;
     }
 
     @Override
@@ -42,7 +38,7 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
         String responseString = null;
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(CommonVariables.OFFLINE_SOCIETY_INSERT_SERVER_URL);
+        HttpPost httppost = new HttpPost(CommonVariables.OFFLINE_ORDER_INSERT_SERVER_URL);
 
         try {
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -56,7 +52,7 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
 
 
             // Adding file data to http body
-            entity.addPart("jsonArraySocietyArr", new StringBody(jsonArraySocietyArr));
+            entity.addPart("jsonArrayOrderArr", new StringBody(jsonArrayOrderArr));
 
 //            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
@@ -85,7 +81,7 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d("offline society insert", result.toString());
+        Log.d("offline order insert", result.toString());
 
         if (result.contains("Error occurred!")) {
             Toast.makeText(context, result, Toast.LENGTH_LONG).show();
@@ -95,31 +91,6 @@ public class InsertOfflineSocietyDataAsyncTask extends AsyncTask<String, String,
         JSONObject json = null;
         try {
             json = new JSONObject(result);
-            int success = json.getInt(CommonVariables.TAG_SUCCESS);
-            if(success == 1) {
-                JSONArray jsonSociety = json.getJSONArray(CommonVariables.TAG_MESSAGE);
-                DatabaseHelper dbHelper = new DatabaseHelper(context);
-
-                for( int i = 0 ; i < jsonSociety.length() ; i++ ) {
-                    JSONObject c = jsonSociety.getJSONObject(i);
-                    if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ) {
-
-                        String societyId = c.getString("societyId");
-                        int serverId = c.getInt("serverId");
-
-                        System.out.println(societyId+" : "+serverId);
-                        dbHelper.updateServerIdOfSociety(societyId, serverId);
-
-                        dbHelper.deleteOfflineTableData(societyId);
-                    }
-                    else if( (c.getString("action")).equals( offlineActionModeEnum.UPDATE.toString() ) ){
-                        String societyId = c.getString("societyId");
-                        dbHelper.deleteOfflineTableData( societyId );
-                    }
-                }
-                dbHelper.closeDB();
-            }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -25,14 +25,23 @@
 			$arrayUIDForAdmin = mysql_fetch_array($queryUIDForAdmin);
 
 			$userEach = array();
+
 			$arrayRow = mysql_fetch_array($checkIsRegister);
 			$userEach["loggedId"] = $arrayRow["uID"];
             $userEach["name"] = $arrayRow["uName"];
+            $userEach["store_name"] = $arrayRow["uStoreName"];
+            $userEach["contact"] = $arrayRow["uCont"];
+            $userEach["address"] = $arrayRow["uAddrs"];
+            $userEach["pincode"] = $arrayRow["uPin"];
+            $userEach["city"] = $arrayRow["uCity"];
+            $userEach["state"] = $arrayRow["uState"];
+            $userEach["country"] = $arrayRow["uCountry"];
+            $userEach["status"] = $arrayRow["status"];
 			
 			$getUserGroup = mysql_query("SELECT gName FROM usergroup WHERE gId=".$arrayRow["gID"]);
 			$arrayUG = mysql_fetch_array($getUserGroup);
-			
 			$userEach["who"] = $arrayUG["gName"];
+
 			$userEach["adminUID"] = $arrayUIDForAdmin['uID'];
 
 			

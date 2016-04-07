@@ -13,14 +13,21 @@ import android.util.Log;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 
 /**
  * Created by user on 2/29/2016.
@@ -43,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_ORDER = "Orders";
     private static final String TABLE_ITEM = "Item";
     private static final String TABLE_OFFLINE = "Offline";
+    public static final String TABLE_OBP = "OBP";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -92,6 +100,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String OFFLINE_TABLE_NAME = "table_name";
     private static final String OFFLINE_ROW_ID = "row_id";
     private static final String OFFLINE_ROW_ACTION = "row_action";
+
+    // OBP Table - column names
+    private static final String OBP_SERVER_ID = "userID_serverId"; // server id
+    private static final String OBP_NAME = "obp_name";
+    private static final String OBP_STORE_NAME = "obp_store_name";
+    private static final String OBP_EMAIL_ID = "obp_email_id";
+    private static final String OBP_PASSWORD = "obp_email_passowrd";
+    private static final String OBP_CONTACT_NO = "obp_contact_number";
+    private static final String OBP_ADDRESS = "obp_address";
+    private static final String OBP_PINCODE = "obp_pincode";
+    private static final String OBP_CITY = "obp_city";
+    private static final String OBP_STATE = "obp_state";
+    private static final String OBP_COUNTRY = "obp_country";
+
+
 
 
     public DatabaseHelper(Context context) {
@@ -165,6 +188,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             OFFLINE_ROW_ACTION +" VARCHAR(40)," +
             KEY_CREATED_AT + " DATETIME" + ")";
 
+    // OBP Table create statement
+    private static final String CREATE_TABLE_OBP =
+        "CREATE TABLE IF NOT EXISTS "+ TABLE_OBP +
+            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            OBP_SERVER_ID +" INTEGER," +
+            OBP_NAME +" VARCHAR(50)," +
+            OBP_STORE_NAME +" VARCHAR(50)," +
+            OBP_EMAIL_ID +" VARCHAR(50)," +
+            OBP_PASSWORD +" VARCHAR(50)," +
+            OBP_CONTACT_NO +" VARCHAR(20)," +
+            OBP_ADDRESS +" VARCHAR(300)," +
+            OBP_PINCODE +" INTEGER," +
+            OBP_CITY +" VARCHAR(50)," +
+            OBP_STATE +" VARCHAR(50)," +
+            OBP_COUNTRY +" VARCHAR(50)," +
+            KEY_STATUS +" TINYINT(4)," +
+            KEY_CREATED_AT + " DATETIME" + ")";
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -174,6 +216,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ITEM);
         db.execSQL(CREATE_TABLE_ORDER);
         db.execSQL(CREATE_TABLE_OFFLINE);
+        db.execSQL(CREATE_TABLE_OBP);
     }
 
     @Override
@@ -184,6 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ORDER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBP);
 
         // create new tables
         onCreate(db);
@@ -267,6 +311,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         society.setSoc_email(c.getString(c.getColumnIndex(SOCIETY_COLUMN_EMAIL)));
         society.setSoc_adrs(c.getString(c.getColumnIndex(SOCIETY_COLUMN_ADDRESS)));
         society.setCreted_at(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+        society.setServerId(c.getInt(c.getColumnIndex(SOCIETY_SERVER_ID)));
+        society.setSoc_status(c.getInt(c.getColumnIndex(KEY_STATUS)));
         society.setSoc_offline_action(offline_row_action);
         array_list.add(society);
 
@@ -314,22 +360,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SOCIETY_COLUMN_CONTACT, society.getSoc_contact());
         contentValues.put(SOCIETY_COLUMN_EMAIL, society.getSoc_email());
         contentValues.put(SOCIETY_COLUMN_ADDRESS, society.getSoc_adrs());
+        contentValues.put(KEY_STATUS, society.getSoc_status());
+
+        String whereClause = null ;
+        String[] whereArgs;
+
+        // when offline society row updated
+        // then server id will be o
+        if ( society.getServerId() == 0 ) {
+            whereClause = KEY_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(society.getId())} ;
+        }
+        else {
+            whereClause = SOCIETY_SERVER_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(society.getServerId())} ;
+        }
 
 //      db.update(String table_name,String where_clause,String[] where_args);
-        db.update(TABLE_SOCIETY, contentValues, KEY_ID + " = ? ", new String[]{String.valueOf(society.getId())});
+        db.update(TABLE_SOCIETY, contentValues, whereClause, whereArgs);
         return true;
     }
 
     /**
      * Deleting a society
      */
-    public Integer deleteSociety (int id) {
+    public Integer deleteSociety (Society societyObj) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_STATUS, "0");
 
-        return db.update(TABLE_SOCIETY, contentValues, KEY_ID + " = ? ", new String[]{ String.valueOf(id) });
+        String whereClause = null ;
+        String[] whereArgs;
+
+        // when offline society row updated
+        // then server id will be o
+        if ( societyObj.getServerId() == 0 ) {
+            whereClause = KEY_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(societyObj.getId())} ;
+        }
+        else {
+            whereClause = SOCIETY_SERVER_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(societyObj.getServerId())} ;
+        }
+
+        return db.update(TABLE_SOCIETY, contentValues, whereClause, whereArgs);
     }
 
     /**
@@ -359,6 +434,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 society.setSoc_email(res.getString(res.getColumnIndex(SOCIETY_COLUMN_EMAIL)));
                 society.setSoc_adrs(res.getString(res.getColumnIndex(SOCIETY_COLUMN_ADDRESS)));
                 society.setCreted_at(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+                society.setServerId(res.getInt(res.getColumnIndex(SOCIETY_SERVER_ID)));
+                society.setSoc_status(res.getInt(res.getColumnIndex(KEY_STATUS)));
 
 //                adding to society list
                 array_list.add(society);
@@ -836,7 +913,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // ------------------------ "Orders" table methods ----------------//
-    public long insertOrder(Order orderColumn){
+    public long insertOrder(Order orderColumn) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -938,6 +1015,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public List<Order> getOfflineOrderById(int offline_row_id, String offline_row_action) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Order> array_list = new ArrayList<Order>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ORDER + " WHERE "
+                + KEY_ID + " = " + offline_row_id ;
+
+        Cursor res = db.rawQuery(selectQuery, null);
+
+        if (res != null) {
+            res.moveToFirst();
+        }
+
+        Order orderRow = new Order();
+
+        orderRow.setOrder_id(res.getInt(res.getColumnIndex(KEY_ID)));
+        orderRow.setUserId(res.getInt(res.getColumnIndex(ORDER_USERID)));
+        orderRow.setOrder_reference(res.getString(res.getColumnIndex(ORDER_REFERENCE)));
+        orderRow.setOrder_utr(res.getString(res.getColumnIndex(ORDER_UTR)));
+        orderRow.setOrder_status(res.getInt(res.getColumnIndex(KEY_STATUS)));
+        orderRow.setOrder_creted_at(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+        orderRow.setOrder_offline_action(offline_row_action);
+
+        // get items from item table using reference no.
+        List<Item> itemByRefno = getItemByRefno(res.getString(res.getColumnIndex(ORDER_REFERENCE)));
+        JSONArray jsonArr = new JSONArray();
+        for (Item pn : itemByRefno ) {
+            JSONObject pnObj = new JSONObject();
+            try {
+                pnObj.put("itemName", pn.getItemName());
+                pnObj.put("itemQuantity", pn.getItemQuantity());
+                pnObj.put("itemPrice", pn.getItemPrice());
+                pnObj.put("itemTotalAmount", pn.getItemTotalAmount());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArr.put(pnObj);
+        }
+
+        orderRow.setOrder_items( String.valueOf(jsonArr).replaceAll("\"", Matcher.quoteReplacement("\\\"")));
+        array_list.add(orderRow);
+
+        return array_list;
+    }
 
     // ------------------------ "Orders" table methods ----------------//
 
@@ -1009,7 +1130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param offline
      * @return id of inserted row
      */
-    public long insertOffline(Offline offline){
+    public long insertOffline(Offline offline) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -1075,8 +1196,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-
-    public int numberOfOfflineRowsByid( int id){
+    /**
+     * this function is used for showing uploaded image in enquiry details till the image
+     * didn't uploaded on server.
+     * @param id
+     * @return
+     */
+    public int numberOfOfflineRowsByid( int id ) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String whereClause = OFFLINE_ROW_ID +" = ? ";
@@ -1086,7 +1212,278 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
+    /**
+     * it check whether data with same row id with update action in offline table.
+     * if yes then it count rows
+     * function - Edit_Society_Details
+     * @param id
+     * @return
+     */
+    public int numberOfOfflineRowsByRowIdAndUpdate( int id ) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = OFFLINE_ROW_ID + " = ? AND " + OFFLINE_ROW_ACTION + " = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(id), offlineActionModeEnum.UPDATE.toString() } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_OFFLINE, whereClause, whereArgs);
+        return numRows;
+    }
+
+    /**
+     * it check whether data with same row id with update action in offline table.
+     * if yes delete old one and create new entry in offline table.
+     * @param id
+     * @return
+     */
+    public int deleteOfflineTableDataByRowIdAndUpdate(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String whereClause = OFFLINE_ROW_ID + " = ? AND " + OFFLINE_ROW_ACTION + " = ? ";
+        String[] whereArgs = new String[]{ id, offlineActionModeEnum.UPDATE.toString() } ;
+
+        return db.delete(TABLE_OFFLINE, whereClause, whereArgs);
+    }
+
     // ------------------------ "Offline" table methods ----------------//
+
+
+    // ------------------------ "OBP" table methods ----------------//
+
+    public long insertOBPData(OBP obpObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OBP_SERVER_ID, obpObj.getUserID_serverId());
+        contentValues.put(OBP_NAME, obpObj.getObp_name());
+        contentValues.put(OBP_STORE_NAME, obpObj.getObp_store_name());
+        contentValues.put(OBP_EMAIL_ID, obpObj.getObp_email_id());
+        contentValues.put(OBP_PASSWORD, obpObj.getObp_email_passowrd());
+        contentValues.put(OBP_CONTACT_NO, obpObj.getObp_contact_number());
+        contentValues.put(OBP_ADDRESS, obpObj.getObp_address());
+        contentValues.put(OBP_PINCODE, obpObj.getObp_pincode());
+        contentValues.put(OBP_CITY, obpObj.getObp_city());
+        contentValues.put(OBP_STATE, obpObj.getObp_state());
+        contentValues.put(OBP_COUNTRY, obpObj.getObp_country());
+        contentValues.put(KEY_STATUS, obpObj.getObp_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long obp_id = 0;
+        try {
+            obp_id = db.insert(TABLE_OBP, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return obp_id;
+    }
+
+    public List<OBP> getOfflineOBPById(int offline_row_id, String offline_row_action) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<OBP> array_list = new ArrayList<OBP>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_OBP + " WHERE "
+                + KEY_ID + " = " + offline_row_id ;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        OBP obp = new OBP();
+        obp.setObp_id(c.getInt(c.getColumnIndex(KEY_ID)));
+        obp.setUserID_serverId(c.getInt(c.getColumnIndex(OBP_SERVER_ID)));
+        obp.setObp_name(c.getString(c.getColumnIndex(OBP_NAME)));
+        obp.setObp_store_name(c.getString(c.getColumnIndex(OBP_STORE_NAME)));
+        obp.setObp_email_id(c.getString(c.getColumnIndex(OBP_EMAIL_ID)));
+        obp.setObp_email_passowrd(c.getString(c.getColumnIndex(OBP_PASSWORD)));
+        obp.setObp_contact_number(c.getString(c.getColumnIndex(OBP_CONTACT_NO)));
+        obp.setObp_address(c.getString(c.getColumnIndex(OBP_ADDRESS)));
+        obp.setObp_pincode(c.getInt(c.getColumnIndex(OBP_PINCODE)));
+        obp.setObp_city(c.getString(c.getColumnIndex(OBP_CITY)));
+        obp.setObp_state(c.getString(c.getColumnIndex(OBP_STATE)));
+        obp.setObp_country(c.getString(c.getColumnIndex(OBP_COUNTRY)));
+        obp.setObp_status(c.getInt(c.getColumnIndex(KEY_STATUS)));
+        obp.setObp_offline_action(offline_row_action);
+
+        array_list.add(obp);
+
+        return array_list;
+    }
+
+    /**
+     * update server id when offline data inserted on server while internet is on.
+     * function - InsertOfflineOBPDataAsyncTask
+     * @param localOBPId
+     * @param serverId
+     * @return
+     */
+    public boolean updateServerIdOfOBP(String localOBPId, int serverId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OBP_SERVER_ID, serverId);
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_OBP, contentValues, KEY_ID + " = ? ", new String[]{ localOBPId });
+        return true;
+    }
+
+    /**
+     * check if obp email id exist
+     */
+    public int isOBPPresent(String obp_email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = OBP_EMAIL_ID +" = ? ";
+        String[] whereArgs = new String[]{ obp_email } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_OBP,whereClause,whereArgs);
+        return numRows;
+    }
+
+    /**
+     * check if any obp entry exist
+     */
+    public int isAnyOBPPresent() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_OBP + " WHERE "+KEY_STATUS+" = 1 AND " +
+                OBP_SERVER_ID+" <> "+uId+";";
+
+        int numRows = (int) DatabaseUtils.longForQuery(db, selectQuery, null);
+
+        return numRows;
+    }
+
+    public List<OBP> getAllOBPExcludeAdmin() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<OBP> array_list = new ArrayList<OBP>();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+//        '<>' = not equal to
+        String selectQuery = "SELECT * FROM " + TABLE_OBP + " WHERE "+KEY_STATUS+" = 1 AND " +
+                OBP_SERVER_ID +" <> "+uId+";";
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                OBP obpOjject = new OBP();
+
+                obpOjject.setObp_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                obpOjject.setUserID_serverId(res.getInt(res.getColumnIndex(OBP_SERVER_ID)));
+                obpOjject.setObp_name(res.getString(res.getColumnIndex(OBP_NAME)));
+                obpOjject.setObp_store_name(res.getString(res.getColumnIndex(OBP_STORE_NAME)));
+                obpOjject.setObp_email_id(res.getString(res.getColumnIndex(OBP_EMAIL_ID)));
+                obpOjject.setObp_email_passowrd(res.getString(res.getColumnIndex(OBP_PASSWORD)));
+                obpOjject.setObp_contact_number(res.getString(res.getColumnIndex(OBP_CONTACT_NO)));
+                obpOjject.setObp_address(res.getString(res.getColumnIndex(OBP_ADDRESS)));
+                obpOjject.setObp_pincode(res.getInt(res.getColumnIndex(OBP_PINCODE)));
+                obpOjject.setObp_city(res.getString(res.getColumnIndex(OBP_CITY)));
+                obpOjject.setObp_state(res.getString(res.getColumnIndex(OBP_STATE)));
+                obpOjject.setObp_country(res.getString(res.getColumnIndex(OBP_COUNTRY)));
+
+                array_list.add(obpOjject);
+
+            } while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    /**
+     * Deleting a obp
+     */
+    public Integer deleteObp (OBP obpObj) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_STATUS, "0");
+
+        String whereClause = null ;
+        String[] whereArgs;
+
+        // when offline society row updated
+        // then server id will be o
+        if ( obpObj.getUserID_serverId() == 0 ) {
+            whereClause = KEY_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(obpObj.getObp_id())} ;
+        }
+        else {
+            whereClause = OBP_SERVER_ID + " = ? ";
+            whereArgs = new String[]{String.valueOf(obpObj.getUserID_serverId())} ;
+        }
+
+        return db.update(TABLE_OBP, contentValues, whereClause, whereArgs);
+    }
+
+    public long updateObpData(OBP obpObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OBP_NAME, obpObj.getObp_name());
+        contentValues.put(OBP_STORE_NAME, obpObj.getObp_store_name());
+        contentValues.put(OBP_EMAIL_ID, obpObj.getObp_email_id());
+        contentValues.put(OBP_PASSWORD, obpObj.getObp_email_passowrd());
+        contentValues.put(OBP_CONTACT_NO, obpObj.getObp_contact_number());
+        contentValues.put(OBP_ADDRESS, obpObj.getObp_address());
+        contentValues.put(OBP_PINCODE, obpObj.getObp_pincode());
+        contentValues.put(OBP_CITY, obpObj.getObp_city());
+        contentValues.put(OBP_STATE, obpObj.getObp_state());
+        contentValues.put(OBP_COUNTRY, obpObj.getObp_country());
+        contentValues.put(KEY_STATUS, obpObj.getObp_status());
+
+        String whereClause = OBP_SERVER_ID + " = ? ";
+        String[] whereArgs = new String[]{ String.valueOf(obpObj.getUserID_serverId()) } ;
+
+        return db.update(TABLE_OBP, contentValues, whereClause, whereArgs);
+    }
+
+    public List<OBP> getOBPByUserId(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<OBP> array_list = new ArrayList<OBP>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_OBP + " WHERE "+KEY_STATUS+" = 1 AND " +
+                OBP_SERVER_ID +" = "+userId+";";
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                OBP obpOjject = new OBP();
+
+                obpOjject.setObp_id(res.getInt(res.getColumnIndex(KEY_ID)));
+                obpOjject.setUserID_serverId(res.getInt(res.getColumnIndex(OBP_SERVER_ID)));
+                obpOjject.setObp_name(res.getString(res.getColumnIndex(OBP_NAME)));
+                obpOjject.setObp_store_name(res.getString(res.getColumnIndex(OBP_STORE_NAME)));
+                obpOjject.setObp_email_id(res.getString(res.getColumnIndex(OBP_EMAIL_ID)));
+                obpOjject.setObp_email_passowrd(res.getString(res.getColumnIndex(OBP_PASSWORD)));
+                obpOjject.setObp_contact_number(res.getString(res.getColumnIndex(OBP_CONTACT_NO)));
+                obpOjject.setObp_address(res.getString(res.getColumnIndex(OBP_ADDRESS)));
+                obpOjject.setObp_pincode(res.getInt(res.getColumnIndex(OBP_PINCODE)));
+                obpOjject.setObp_city(res.getString(res.getColumnIndex(OBP_CITY)));
+                obpOjject.setObp_state(res.getString(res.getColumnIndex(OBP_STATE)));
+                obpOjject.setObp_country(res.getString(res.getColumnIndex(OBP_COUNTRY)));
+                obpOjject.setObp_status(res.getInt(res.getColumnIndex(KEY_STATUS)));
+
+                array_list.add(obpOjject);
+
+            } while (res.moveToNext());
+        }
+        return array_list;
+    }
+    // ------------------------ "OBP" table methods ----------------//
 
     // closing database
     public void closeDB() {

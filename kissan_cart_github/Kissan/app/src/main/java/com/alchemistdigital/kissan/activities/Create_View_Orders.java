@@ -19,7 +19,10 @@ import com.alchemistdigital.kissan.adapter.ItemsListAdapter;
 import com.alchemistdigital.kissan.asynctask.InsertOrderAsyncTask;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
 
 import org.json.JSONArray;
@@ -27,9 +30,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
+import static com.alchemistdigital.kissan.utilities.DateHelper.getDateToStoreInDb;
 import static com.alchemistdigital.kissan.utilities.Validations.isEmptyString;
 
 public class Create_View_Orders extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -81,7 +86,6 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
             str_enquiry_refno = getReferences.get(0).getEnquiry_reference();
         }
 
-
         // only get society names
         ArrayList<String> enquiryRefeNo = new ArrayList<String>();
         for (int i = 0 ; i < getReferences.size() ; i++ ){
@@ -98,7 +102,7 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
         // And also come from Create_Item activity with Database reference number.
         // set reference number to spinner which intent is come from Create_Item activity.
         String referenceNo = getIntent().getExtras().getString("referenceNo");
-        if( !referenceNo.equals("0") ){
+        if( !referenceNo.equals("0") ) {
             spinnerRefNo.setSelection(adapterRefNo.getPosition(referenceNo));
             txt_utr.setText(getIntent().getExtras().getString("UTRNo"));
         }
@@ -122,12 +126,31 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
 
                     utrInputLayout.setErrorEnabled(false);
                     // Check if Internet present
-                    if ( !isConnectingToInternet(Create_View_Orders.this) ) {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    else if( itemsCount <= 0){
+
+                    if( itemsCount <= 0) {
                         Toast.makeText(Create_View_Orders.this,getResources().getString(R.string.emptyItemErrorMsg),Toast.LENGTH_LONG).show();
+                    } else if ( !isConnectingToInternet(Create_View_Orders.this) ) {
+
+                        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_View_Orders.this);
+                        int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
+
+                        Order order = new Order(uId, str_enquiry_refno,
+                                str_utr, getDateToStoreInDb(), 1);
+
+                        DatabaseHelper dbhelper = new DatabaseHelper(Create_View_Orders.this);
+                        long orderId = dbhelper.insertOrder(order);
+
+                        Offline offline = new Offline( dbHelper.TABLE_ORDER,
+                                (int) orderId,
+                                offlineActionModeEnum.INSERT.toString(),
+                                ""+new Date().getTime() );
+                        dbHelper.insertOffline(offline);
+
+                        dbhelper.closeDB();
+
+                        startActivity(new Intent(Create_View_Orders.this, View_Orders.class));
+                        finish();
+
                     }
                     else {
 
@@ -144,9 +167,9 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
                             }
                             jsonArr.put(pnObj);
                         }
-//                        System.out.println(str_utr);
-//                        System.out.println(str_enquiry_refno);
-//                        System.out.println(jsonArr);
+                        System.out.println(str_utr);
+                        System.out.println(str_enquiry_refno);
+                        System.out.println(jsonArr);
 
                         // get userId from shared preference.
                         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_View_Orders.this);
@@ -157,6 +180,7 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
                                                     String.valueOf(jsonArr),
                                                     String.valueOf(uId)
                                                     ).execute();
+
                     }
                 }
                 else {
@@ -170,7 +194,7 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
         dbHelper.closeDB();
     }
 
-    public void makeItemListView(String refNo){
+    public void makeItemListView(String refNo) {
         View viewById = findViewById(R.id.relativelayout_id_itemView);
         DatabaseHelper dbHelper = new DatabaseHelper(Create_View_Orders.this);
 
@@ -227,6 +251,12 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
         extra.putString("utrNo",txt_utr.getText().toString());
         intent.putExtras(extra);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Create_View_Orders.this, View_Orders.class));
         finish();
     }
 }

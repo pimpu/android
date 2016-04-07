@@ -8,9 +8,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.activities.AdminPanel;
 import com.alchemistdigital.kissan.activities.MainActivity;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -120,8 +122,6 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 
                 SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(context);
 
-                // it store true value of user for purpose of user is logging.
-                setPreference.setLoginPreference(context.getResources().getString(R.string.boolean_login_sharedPref), "true");
                 // user register email
                 setPreference.setEmailPreference(context.getResources().getString(R.string.loginEmail), email);
                 // user type (admin / obp)
@@ -134,17 +134,44 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
                 // set admin user id
                 setPreference.setAdminUserId( context.getResources().getString(R.string.adminUserId), userDataObject.getInt("adminUID") );
 
-                Intent intent;
-                if (userDataObject.getString("who").equals("obp")) {
-                    intent = new Intent(context, MainActivity.class);
-                } else {
-                    intent = new Intent(context, AdminPanel.class);
+                if ( userDataObject.getInt("status") == 1 ) {
+                    // it store true value of user for purpose of user is logging.
+                    setPreference.setLoginPreference(context.getResources().getString(R.string.boolean_login_sharedPref), "true");
+                    Intent intent;
+                    if (userDataObject.getString("who").equals("obp")) {
+                        intent = new Intent(context, MainActivity.class);
+                    } else {
+                        intent = new Intent(context, AdminPanel.class);
+                    }
+
+                    OBP obpObj = new OBP(
+                            userDataObject.getInt("loggedId"),
+                            userDataObject.getString("name"),
+                            userDataObject.getString("store_name"),
+                            email,
+                            pwd,
+                            userDataObject.getString("contact"),
+                            userDataObject.getString("address"),
+                            userDataObject.getInt("pincode"),
+                            userDataObject.getString("city"),
+                            userDataObject.getString("state"),
+                            userDataObject.getString("country"),
+                            userDataObject.getInt("status"));
+
+                    DatabaseHelper dbhelper = new DatabaseHelper(context);
+                    if( dbhelper.isOBPPresent(email) <= 0 ) {
+                        long obpId = dbhelper.insertOBPData(obpObj);
+                    }
+                    dbhelper.closeDB();
+
+                    ((Activity) context).finish();
+                    context.startActivity(intent);
+                }
+                else {
+                    setPreference.setLoginPreference(context.getResources().getString(R.string.boolean_login_sharedPref), "false");
+                    Toast.makeText(context,"Logout by Server",Toast.LENGTH_LONG).show();
                 }
 
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK  | Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-                ((Activity) context).finish();
-                context.startActivity(intent);
 
             } // if (success == 1)
             else if (success == 0 || success == 2 || success == 3) {

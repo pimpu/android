@@ -7,9 +7,12 @@ import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.asynctask.StoreServerImageAtMemory;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Order;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
+import com.alchemistdigital.kissan.utilities.CommonUtilities;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -63,6 +66,96 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             storeOfflineSociety(context,intent.getExtras().getString("societyDetails"));
 
+        } else if (message.equals("updateOfflineSocietyAtAdmin")) {
+
+            updateOfflineSociety(context, intent.getExtras().getString("changedSocietyDetails"));
+
+        } else if (message.equals("deletedOBPByAdmin")) {
+
+            SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(context);
+            // it store false value of user for purpose of user is logging.
+            setPreference.setLoginPreference(getResources().getString(R.string.boolean_login_sharedPref), "false");
+
+        } else if (message.equals("updateOfflineOBP") || message.equals("updateOBPAtAdmin") ) {
+            updateObpDetails(context, intent.getExtras().getString("changedOBPDetails"));
+        }
+
+        CommonUtilities.displayMessage(context, "success");
+    }
+
+    private void updateObpDetails(Context context, String changedOBPDetails) {
+        JSONObject json = null;
+        try {
+            json = new JSONObject(changedOBPDetails);
+            String gId = json.getString("fromGid");
+
+            if(gId.equals("1")) {
+                SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(context);
+                // it store false value of user for purpose of user is logging.
+                setPreference.setLoginPreference(getResources().getString(R.string.boolean_login_sharedPref), "false");
+            }
+
+            int userID_serverId = json.getInt("userID_serverId");
+            String obp_name = json.getString("obp_name");
+            String obp_store_name = json.getString("obp_store_name");
+            String obp_email_id = json.getString("obp_email_id");
+            String obp_email_passowrd = json.getString("obp_email_passowrd");
+            String obp_contact_number = json.getString("obp_contact_number");
+            String obp_address = json.getString("obp_address");
+            int obp_pincode = json.getInt("obp_pincode");
+            String obp_city = json.getString("obp_city");
+            String obp_state = json.getString("obp_state");
+            String obp_country = json.getString("obp_country");
+            int obp_status = json.getInt("obp_status");
+
+            OBP obp = new OBP( userID_serverId, obp_name, obp_store_name, obp_email_id, obp_email_passowrd,
+                    obp_contact_number, obp_address, obp_pincode, obp_city, obp_state, obp_country, obp_status );
+
+            DatabaseHelper dbHelper = new DatabaseHelper(context);
+            long l = dbHelper.updateObpData(obp);
+            dbHelper.closeDB();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void updateOfflineSociety(Context context, String changedSocietyDetails) {
+        JSONObject json = null;
+        try {
+            json = new JSONObject(changedSocietyDetails);
+
+            int soc_id = json.getInt("soc_id");
+            String old_name = json.getString("old_name");
+            String soc_name = json.getString("soc_name");
+            String soc_contact = json.getString("soc_contact");
+            String soc_email = json.getString("soc_email");
+            String soc_adrs = json.getString("soc_adrs");
+            int soc_status = json.getInt("soc_status");
+
+            Society society = new Society();
+
+            society.setSoc_name(soc_name);
+            society.setSoc_contact(soc_contact);
+            society.setSoc_email(soc_email);
+            society.setSoc_adrs(soc_adrs);
+            society.setServerId(soc_id);
+            society.setSoc_status(soc_status);
+
+            Enquiry enquiry = new Enquiry();
+            enquiry.setEnquiry_society(soc_name);
+            enquiry.setEnquiry_society_contact(soc_contact);
+            enquiry.setEnquiry_society_email(soc_email);
+            enquiry.setEnquiry_society_address(soc_adrs);
+
+            DatabaseHelper dbhelper = new DatabaseHelper(context);
+            dbhelper.updateSociety(society);
+            dbhelper.updateSocietyColumnInEnquiryTable(enquiry, old_name);
+            dbhelper.closeDB();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
     }
@@ -158,6 +251,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             String soc_contact = json.getString("soc_contact");
             String soc_email = json.getString("soc_email");
             String soc_adrs = json.getString("soc_adrs");
+            int status = json.getInt("status");
 
             Society society = new Society();
 
@@ -165,7 +259,8 @@ public class GCMIntentService extends GCMBaseIntentService {
             society.setSoc_contact(soc_contact);
             society.setSoc_email(soc_email);
             society.setSoc_adrs(soc_adrs);
-            society.setId(soc_id);
+            society.setServerId(soc_id);
+            society.setSoc_status(status);
 
             Enquiry enquiry = new Enquiry();
             enquiry.setEnquiry_society(soc_name);
@@ -275,6 +370,8 @@ public class GCMIntentService extends GCMBaseIntentService {
             dbHelper.closeDB();
 
             System.out.println("insert society(GCM) : " + societyId);
+
+            CommonUtilities.displayMessage(context, "success");
 
         } catch (JSONException e) {
             e.printStackTrace();
