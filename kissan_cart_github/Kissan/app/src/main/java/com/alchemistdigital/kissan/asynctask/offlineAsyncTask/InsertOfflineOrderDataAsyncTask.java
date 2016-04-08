@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
+import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,6 +18,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,7 +93,31 @@ public class InsertOfflineOrderDataAsyncTask extends AsyncTask<String, String, S
 
         JSONObject json = null;
         try {
+
             json = new JSONObject(result);
+            int success = json.getInt(CommonVariables.TAG_SUCCESS);
+            if(success == 1) {
+                JSONArray jsonSociety = json.getJSONArray(CommonVariables.TAG_MESSAGE);
+                DatabaseHelper dbHelper = new DatabaseHelper(context);
+
+                for( int i = 0 ; i < jsonSociety.length() ; i++ ) {
+                    JSONObject c = jsonSociety.getJSONObject(i);
+                    if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ) {
+
+                        String localOrderId = c.getString("localOrderId");
+//                        int serverId = c.getInt("serverId");
+//                        dbHelper.updateServerIdOfOBP(localOBPId, serverId);
+
+                        dbHelper.deleteOfflineTableData(localOrderId);
+                    }
+//                    else if( (c.getString("action")).equals( offlineActionModeEnum.UPDATE.toString() ) ){
+//                        String localId = c.getString("localId");
+//                        dbHelper.deleteOfflineTableData( localId );
+//                    }
+                }
+                dbHelper.closeDB();
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

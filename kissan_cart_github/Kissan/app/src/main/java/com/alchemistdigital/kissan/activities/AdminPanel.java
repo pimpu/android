@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.asynctask.GetAllObpsAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetAllSocietyAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
@@ -81,6 +82,7 @@ public class AdminPanel extends AppCompatActivity
         int societyRowsCount = dbHelper.numberOfSocietyRows();
         int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
         int orderRowsCount = dbHelper.numberOfOrderRowsByUserType("admin");
+        int obpRows = dbHelper.numberOfObpRows();
         dbHelper.closeDB();
 
         if ( isConnectingToInternet(AdminPanel.this) ) {
@@ -98,6 +100,10 @@ public class AdminPanel extends AppCompatActivity
             if ( orderRowsCount <= 0 ) {
                 new GetOrderAsyncTask(AdminPanel.this,strUID,"admin").execute();
             }
+
+            if ( obpRows <= 0 ) {
+                new GetAllObpsAsyncTask(AdminPanel.this, uId).execute();
+            }
         }
 
 
@@ -110,7 +116,7 @@ public class AdminPanel extends AppCompatActivity
 
         // Get GCM registration id
         final String regId = GCMRegistrar.getRegistrationId(this);
-        registerReceiver(mHandleMessageReceiverAtAdmin, new IntentFilter(
+        registerReceiver(mHandleAdminMessageReceiver, new IntentFilter(
                 CommonVariables.DISPLAY_MESSAGE_ACTION));
 
         if (regId.equals("")) {
@@ -226,7 +232,7 @@ public class AdminPanel extends AppCompatActivity
     /**
      * Receiving push messages
      * */
-    private final BroadcastReceiver mHandleMessageReceiverAtAdmin = new BroadcastReceiver() {
+    private final BroadcastReceiver mHandleAdminMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
@@ -234,7 +240,8 @@ public class AdminPanel extends AppCompatActivity
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            if(newMessage.equals("success")){
+            if(newMessage.equals("success")) {
+                Toast.makeText(context,"Admin notification received.",Toast.LENGTH_LONG).show();
                 generateNotification(context, "success");
             }
 
@@ -246,7 +253,7 @@ public class AdminPanel extends AppCompatActivity
     @Override
     protected void onDestroy() {
         try {
-            unregisterReceiver(mHandleMessageReceiverAtAdmin);
+            unregisterReceiver(mHandleAdminMessageReceiver);
             unregisterReceiver(mConnReceiverAtAdmin);
             GCMRegistrar.onDestroy(getApplicationContext());
         } catch (Exception e) {

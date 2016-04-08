@@ -19,7 +19,7 @@ public class CommonVariables {
 
     public static final String SCAN_FILE_PATH = Environment.getExternalStorageDirectory() + "/obp";
 
-    static String SERVER_URL = "http://3ee7ef83.ngrok.io/kissan_cart/";
+    static String SERVER_URL = "http://a7619ba1.ngrok.io/kissan_cart/";
 
     public static String FILE_UPLOAD_URL = "AndroidFileUpload/uploads/";
     public static String File_DOWNLOAD_URL = SERVER_URL + "AndroidFileUpload/uploads/";
@@ -45,5 +45,6 @@ public class CommonVariables {
     public static final String DELETE_OBP_SERVER_URL = SERVER_URL+"deleteOBP.php";
     public static final String UPDATE_OBP_SERVER_URL = SERVER_URL+"updateOBP.php";
     public static final String OFFLINE_ORDER_INSERT_SERVER_URL = SERVER_URL+"offlineOrderInsert.php";
+    public static final String ALL_OBP_QUERY_SERVER_URL = SERVER_URL+"getAllOBP_byAndroid.php";
 
 }

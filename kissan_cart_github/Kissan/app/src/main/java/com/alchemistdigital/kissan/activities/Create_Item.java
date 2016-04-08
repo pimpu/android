@@ -9,14 +9,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.model.Item;
 import com.andexert.library.RippleView;
 
-import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.kissan.utilities.Validations.isEmptyString;
 
 public class Create_Item extends AppCompatActivity {
@@ -162,10 +160,10 @@ public class Create_Item extends AppCompatActivity {
                 if ( boolItemName && boolItemQty && boolItemPrice && !str_item_total_amt.equals("0") ) {
 
                     // Check if Internet present
-                    if ( !isConnectingToInternet(Create_Item.this) ) {
+                    /*if ( !isConnectingToInternet(Create_Item.this) ) {
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.network_error_message),Toast.LENGTH_LONG).show();
                         return;
-                    } else {
+                    } else {*/
                         /*System.out.println(str_item_name);
                         System.out.println(str_item_qty);
                         System.out.println(str_item_price);
@@ -183,7 +181,7 @@ public class Create_Item extends AppCompatActivity {
                         intentToCO.putExtras(extra);
                         startActivity(intentToCO);
                         finish();
-                    }
+//                    }
                 }
             }
         });

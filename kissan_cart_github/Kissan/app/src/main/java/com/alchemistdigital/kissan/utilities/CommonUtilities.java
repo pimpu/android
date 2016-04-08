@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -171,8 +172,9 @@ public class CommonUtilities {
     }
 
     public static void generateNotification(Context context, String message) {
-        if( !isActivityRunning(context) ){
-            String title = context.getString(R.string.app_name).toString();
+        Log.d("Notification",""+isActivityRunning(context));
+//        if( !isActivityRunning(context) ) {
+            String title = context.getString(R.string.app_name);
 
             Intent mainIntent=new Intent(context, SplashScreen.class);
 
@@ -190,6 +192,6 @@ public class CommonUtilities {
                     .getNotification();
             android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(1, notification);
-        }
+//        }
     }
 }

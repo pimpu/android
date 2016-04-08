@@ -973,7 +973,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows;
 
-        if(userType.equals("obp")){
+        if( userType.equals("obp") ) {
 
             GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
             int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
@@ -1076,8 +1076,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(ITEM_PRICE, itemColumn.getItemPrice());
         contentValues.put(ITEM_TOTAL_AMOUNT, itemColumn.getItemTotalAmount());
 
+        String whereClause = ITEM_REFERENCE+" = ? AND "+ITEM_NAME+" = ? AND "+ITEM_QUANTITY+" = ? AND "
+                +ITEM_PRICE+" = ?";
+        String[] whereArgs = new String[]{ itemColumn.getReferenceNo(), itemColumn.getItemName(),
+                String.valueOf(itemColumn.getItemQuantity()), itemColumn.getItemPrice()} ;
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_ITEM, whereClause, whereArgs);
+
+        long item_id = 0;
         // insert row
-        long item_id = db.insert(TABLE_ITEM, null, contentValues);
+        if( numRows <= 0 ) {
+            item_id = db.insert(TABLE_ITEM, null, contentValues);
+        }
         return item_id;
     }
 
@@ -1483,6 +1492,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return array_list;
     }
+
+    /**
+     * except admin user data
+     * @return numRows
+     */
+    public int numberOfObpRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_OBP + " WHERE " +OBP_SERVER_ID+" <> "+uId+";";
+
+        int numRows = (int) DatabaseUtils.longForQuery(db, selectQuery, null);
+
+        return numRows;
+    }
+
     // ------------------------ "OBP" table methods ----------------//
 
     // closing database

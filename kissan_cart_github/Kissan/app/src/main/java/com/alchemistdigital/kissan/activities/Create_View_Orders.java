@@ -167,9 +167,9 @@ public class Create_View_Orders extends AppCompatActivity implements AdapterView
                             }
                             jsonArr.put(pnObj);
                         }
-                        System.out.println(str_utr);
-                        System.out.println(str_enquiry_refno);
-                        System.out.println(jsonArr);
+//                        System.out.println(str_utr);
+//                        System.out.println(str_enquiry_refno);
+//                        System.out.println(jsonArr);
 
                         // get userId from shared preference.
                         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_View_Orders.this);

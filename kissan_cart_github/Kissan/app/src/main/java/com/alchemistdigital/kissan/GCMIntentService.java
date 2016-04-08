@@ -40,7 +40,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
             storeEnquiryDetails(context, intent.getExtras().getString("enquiryDetails"));
 
-        } else if (message.equals("downloadOrderAtAdmin")) {
+        } else if ( message.equals("downloadOrderAtAdmin") || message.equals("downloadOfflineOrderAtAdmin") ) {
 
             String referenceNo = intent.getExtras().getString("referenceNo");
             String utr = intent.getExtras().getString("utr");
@@ -370,8 +370,6 @@ public class GCMIntentService extends GCMBaseIntentService {
             dbHelper.closeDB();
 
             System.out.println("insert society(GCM) : " + societyId);
-
-            CommonUtilities.displayMessage(context, "success");
 
         } catch (JSONException e) {
             e.printStackTrace();

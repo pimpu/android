@@ -55,7 +55,7 @@ if ( isset($_POST['jsonArrayOrderArr']) ) {
 
 				$registration_ids = array();
 				$gcmMessage = array(
-										'message' => 'downloadOrderAtAdmin',
+										'message' => 'downloadOfflineOrderAtAdmin',
 										'referenceNo' => $decodedItemArray[$i]["order_reference"], 	
 										'utr' => $decodedItemArray[$i]["order_utr"],
 										'items' => json_encode($decodeItems),
@@ -72,12 +72,10 @@ if ( isset($_POST['jsonArrayOrderArr']) ) {
 				$gcm->send_notification($registration_ids, $gcmMessage);
 
 
-					/*if($result) {
-						$societyArray = array();
-						$societyArray["id"] = mysql_insert_id();
-						$societyArray["action"] = $decodeItems[$j]["itemName"];
-						array_push( $response["message"] , $societyArray);
-					}*/
+				$orderArray = array();
+				$orderArray["localOrderId"] = $decodedItemArray[$i]["order_id"];
+				$orderArray["action"] = $decodedItemArray[$i]["order_offline_action"];
+				array_push( $response["message"] , $orderArray);
 
 				break;
 

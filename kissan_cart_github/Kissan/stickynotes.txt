@@ -4,28 +4,10 @@ Enquiry table -
       - while online app will update server id, when offline data update to server .
 	- creation time of offline row added to server, but in online ,server creation time added to local.
 
-completed offline async task  - 
-InsertEnquiry
-GetSociety
-GetEnquiry
-GetOrder
-GetAllScoiety
-DownloadImage
-Login
-UpdateGCM
-InsertSociety
-DeleteSociety
-UpdateSociety
-InsertOBP
-
-remianing offline async task  - 
-GetObpDetails
-InsertOrder
-
 remaining task -
-show all enquiry  at admin side
-getAllObpdata
-items listview in order details = lock scroll bar when main activity scroll bar enable.
+show all enquiry to admin in view enquiry
+gcm not received when app is closed
+expandable listview dynamic height issue
 
 hold - 
 society validation = online / offline

@@ -1,21 +1,21 @@
 package com.alchemistdigital.kissan.asynctask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
-import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -23,19 +23,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by user on 3/23/2016.
+ * Created by user on 4/8/2016.
  */
-public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String, String> {
+public class GetAllObpsAsyncTask extends AsyncTask<String, String, String> {
     private Context context;
-    private String jsonArrayEnquiryArr;
+    // Progress Dialog
+    private ProgressDialog pDialog;
+    String userId;
 
-    public InsertOfflineEnquiryDataAsyncTask(Context context, String jsonArrayEnquiryArr) {
-        this.context = context ;
-        this.jsonArrayEnquiryArr = jsonArrayEnquiryArr ;
+    public GetAllObpsAsyncTask(Context context, int uId) {
+        this.context = context;
+        userId = String.valueOf(uId);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
         String responseString = null;
 
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(CommonVariables.OFFLINE_ENQUIRY_INSERT_SERVER_URL);
+        HttpPost httppost = new HttpPost(CommonVariables.ALL_OBP_QUERY_SERVER_URL);
 
         try {
             AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
@@ -55,23 +56,9 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
                         }
                     });
 
-            JSONArray getFilePathArray = new JSONArray(jsonArrayEnquiryArr);
-
-            for (int i = 0 ; i < getFilePathArray.length() ; i++ ) {
-                JSONObject c = getFilePathArray.getJSONObject(i);
-
-                if ( !(c.getString("enquiry_offline_action")).equals(offlineActionModeEnum.UPDATE.toString()) ){
-                    File attachfilename = new File( CommonVariables.SCAN_FILE_PATH + "/" + c.getString("enquiry_document"));
-                    entity.addPart("image"+i, new FileBody(attachfilename));
-                }
-
-            }
-
             // Adding file data to http body
-            entity.addPart("jsonArrayEnquiryArr", new StringBody(jsonArrayEnquiryArr));
-            entity.addPart("filepath",new StringBody(CommonVariables.FILE_UPLOAD_URL));
+            entity.addPart("userId", new StringBody(userId));
 
-//            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
 
             // Making server call
@@ -91,47 +78,51 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
             responseString = e.toString();
         } catch (IOException e) {
             responseString = e.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         return responseString;
-
     }
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d("offline enquiry insert", result.toString());
 
-        if (result.contains("Error occurred!")) {
+        Log.d("get all OBP Data:: ", result.toString());
+        if(result.contains("Error occurred!")){
             Toast.makeText(context, result, Toast.LENGTH_LONG).show();
             return;
         }
 
         JSONObject json = null;
         try {
+
             json = new JSONObject(result);
             int success = json.getInt(CommonVariables.TAG_SUCCESS);
-            if(success == 1){
-                JSONArray jsonEnquiry = json.getJSONArray(CommonVariables.TAG_MESSAGE);
+
+            if (success == 1) {
+                JSONArray jsonObp = json.getJSONArray(CommonVariables.TAG_MESSAGE);
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
 
-                for( int i = 0 ; i < jsonEnquiry.length() ; i++ ){
-                    JSONObject c = jsonEnquiry.getJSONObject(i);
-                    if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ){
+                for (int i = 0; i < jsonObp.length(); i++) {
 
-                        String enquiryId = c.getString("enquiryId");
-                        int serverId = c.getInt("serverId");
+                    JSONObject jsonObj = jsonObp.getJSONObject(i);
 
-                        System.out.println(enquiryId+" : "+serverId);
-                        dbHelper.updateServerIdOfEnquiry(enquiryId, serverId);
+                    int userID_serverId = jsonObj.getInt("userID_serverId");
+                    String obp_name = jsonObj.getString("obp_name");
+                    String obp_store_name = jsonObj.getString("obp_store_name");
+                    String obp_email_id = jsonObj.getString("obp_email_id");
+                    String obp_email_passowrd = jsonObj.getString("obp_email_passowrd");
+                    String obp_contact_number = jsonObj.getString("obp_contact_number");
+                    String obp_address = jsonObj.getString("obp_address");
+                    int obp_pincode = jsonObj.getInt("obp_pincode");
+                    String obp_city = jsonObj.getString("obp_city");
+                    String obp_state = jsonObj.getString("obp_state");
+                    String obp_country = jsonObj.getString("obp_country");
+                    int obp_status = jsonObj.getInt("obp_status");
 
-                        dbHelper.deleteOfflineTableData(enquiryId);
-                    }
-                    else if( (c.getString("action")).equals( offlineActionModeEnum.UPDATE.toString() ) ){
-                        String enquiryId = c.getString("enquiryId");
-                        dbHelper.deleteOfflineTableData( enquiryId );
-                    }
+                    OBP obp = new OBP( userID_serverId, obp_name, obp_store_name, obp_email_id, obp_email_passowrd,
+                            obp_contact_number, obp_address, obp_pincode, obp_city, obp_state, obp_country, obp_status );
+
+                    dbHelper.insertOBPData(obp);
 
                 }
                 dbHelper.closeDB();

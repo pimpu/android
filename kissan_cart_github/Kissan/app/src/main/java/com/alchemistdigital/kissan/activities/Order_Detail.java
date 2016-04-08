@@ -12,14 +12,15 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.adapter.ExpandableListItemAdapter;
-import com.alchemistdigital.kissan.asynctask.GetOBPDetailsAtAdmin;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
+import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.utilities.CommonUtilities;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class Order_Detail extends AppCompatActivity {
     TextView tv_ref, tv_utr;
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,9 @@ public class Order_Detail extends AppCompatActivity {
         userId = extras.getInt("userId");
         time = extras.getString("creationTime");
 
+        scrollView = (ScrollView) findViewById(R.id.id_orderDetails_scroll);
         expListView = (ExpandableListView) findViewById(R.id.expandable_id_item);
+
         tv_ref = (TextView) findViewById(R.id.tv_id_order_details_reference);
         tv_utr = (TextView) findViewById(R.id.tv_id_order_details_utr);
 
@@ -183,6 +187,42 @@ public class Order_Detail extends AppCompatActivity {
     }
 
     public void showObpDetails(View view) {
-        new GetOBPDetailsAtAdmin( Order_Detail.this,String.valueOf(userId) ).execute();
+//        new GetOBPDetailsAtAdmin( Order_Detail.this,String.valueOf(userId) ).execute();
+        DatabaseHelper dbhelper = new DatabaseHelper(Order_Detail.this);
+        List<OBP> obpByUserId = dbhelper.getOBPByUserId(userId);
+
+        // custom dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Order_Detail.this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_alert_obp_detail, null);
+        dialogBuilder.setView(dialogView);
+
+
+        // set the custom dialog components - text, image and button
+        TextView tv_obp_name = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_name);
+        TextView tv_store_name = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_store_name);
+        TextView tv_obp_contact = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_contact);
+        TextView tv_obp_email = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_email);
+        TextView tv_obp_address = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_address);
+        ImageView closeDialog = (ImageView) dialogView.findViewById(R.id.closeOBPDetailsAlert);
+
+        tv_obp_name.setText( obpByUserId.get(0).getObp_name() );
+        tv_store_name.setText( obpByUserId.get(0).getObp_store_name());
+        tv_obp_contact.setText( obpByUserId.get(0).getObp_contact_number() );
+        tv_obp_email.setText( obpByUserId.get(0).getObp_email_id() );
+        tv_obp_address.setText( obpByUserId.get(0).getObp_address() );
+
+        final AlertDialog b = dialogBuilder.create();
+
+        // if button is clicked, close the custom dialog
+        closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.dismiss();
+            }
+        });
+
+        b.show();
     }
+
 }
