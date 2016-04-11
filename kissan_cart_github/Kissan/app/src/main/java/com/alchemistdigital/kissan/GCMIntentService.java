@@ -80,7 +80,9 @@ public class GCMIntentService extends GCMBaseIntentService {
             updateObpDetails(context, intent.getExtras().getString("changedOBPDetails"));
         }
 
+
         CommonUtilities.displayMessage(context, "success");
+//        generateNotification(context, "success");
     }
 
     private void updateObpDetails(Context context, String changedOBPDetails) {

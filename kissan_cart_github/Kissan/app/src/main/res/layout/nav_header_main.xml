@@ -2,48 +2,104 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
-    android:paddingBottom="10dp"
+    android:background="@drawable/crops_slider_header"
+    android:alpha=".7"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="10dp"
+    android:paddingBottom="8dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
     android:id="@+id/obp_nav_header"
     android:gravity="bottom">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_logo"
-        android:id="@+id/obp_imageView" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/obp_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/mdtp_done_text_color_dark"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/edit_obp_profile"
+            android:id="@+id/obp_imageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_launcher_logo" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:onClick="openObpProfileMenu"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:src="@drawable/ic_down_arrow" />
-    </RelativeLayout>
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/obp_email"
-        android:layout_width="wrap_content"
-        android:textColor="@color/mdtp_done_text_color_dark"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/obp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/mdtp_done_text_color_dark"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/obp_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:textColor="@color/mdtp_done_text_color_dark"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <ImageView
+                android:id="@+id/edit_obp_profile"
+                android:onClick="openObpProfileMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_drop_down_white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:maxWidth="500dp"-->
+        <!--android:maxHeight="500dp"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:src="@drawable/ic_launcher_logo"-->
+        <!--android:id="@+id/obp_imageView" />-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/obp_name"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/mdtp_done_text_color_dark"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1" />-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/edit_obp_profile"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:onClick="openObpProfileMenu"-->
+            <!--android:src="@drawable/ic_arrow_drop_down_white" />-->
+    <!--</RelativeLayout>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/obp_email"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:textColor="@color/mdtp_done_text_color_dark"-->
+        <!--android:layout_height="wrap_content" />-->
 
 </LinearLayout>

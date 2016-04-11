@@ -2,22 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:background="@drawable/crops_slider_header"
+    android:alpha="0.7"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
+    android:paddingBottom="8dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="10dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:id="@+id/admin_imageView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_logo" />
+        android:layout_gravity="start"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
 
-    <RelativeLayout
+        <ImageView
+            android:id="@+id/admin_imageView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_launcher_logo" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/admin_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/mdtp_done_text_color_dark"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/admin_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:textColor="@color/mdtp_done_text_color_dark"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right" >
+
+            <ImageView
+                android:id="@+id/edit_admin_profile"
+                android:onClick="openAdminProfileMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_drop_down_white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -30,10 +78,10 @@
 
         <ImageView
             android:id="@+id/edit_admin_profile"
+            android:onClick="openAdminProfileMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:onClick="openAdminProfileMenu"
             android:paddingRight="8dp"
             android:paddingLeft="8dp"
             android:src="@drawable/ic_down_arrow" />
@@ -44,6 +92,6 @@
         android:text="fdfdfdfd"
         android:id="@+id/admin_email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
 </LinearLayout>

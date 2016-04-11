@@ -45,7 +45,6 @@ import com.google.android.gcm.GCMRegistrar;
 
 import java.util.List;
 
-import static com.alchemistdigital.kissan.utilities.CommonUtilities.generateNotification;
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
 /**
@@ -113,7 +112,6 @@ public class MainActivity extends AppCompatActivity
             if ( orderRowsCount <= 0 ) {
                 new GetOrderAsyncTask(MainActivity.this,strUID,"obp").execute();
             }
-
         }
 
         // Make sure the device has the proper dependencies.
@@ -125,18 +123,38 @@ public class MainActivity extends AppCompatActivity
 
         // Get GCM registration id
         final String regId = GCMRegistrar.getRegistrationId(this);
-        registerReceiver(mHandleObpMessageReceiver, new IntentFilter(
-                CommonVariables.DISPLAY_MESSAGE_ACTION));
+        registerReceiver(mHandleObpMessageReceiver,
+                new IntentFilter(CommonVariables.DISPLAY_MESSAGE_ACTION));
 
         if (regId.equals("")) {
             // Registration is not present, Register now with GCM
             GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
         }
 
-        this.registerReceiver(this.mConnReceiver,
+        registerReceiver(mConnReceiver,
                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
+
+    /**
+     * Receiving push messages
+     * */
+    private BroadcastReceiver mHandleObpMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            if(newMessage.equals("success")) {
+
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 
     /**
      * it check whether internet connection is working or not.
@@ -241,25 +259,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-    /**
-     * Receiving push messages
-     * */
-    private final BroadcastReceiver mHandleObpMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
 
-            // Waking up mobile if it is sleeping
-            WakeLocker.acquire(getApplicationContext());
-
-//            if(newMessage.equals("success")) {
-                generateNotification(context, "success");
-//            }
-
-            // Releasing wake lock
-            WakeLocker.release();
-        }
-    };
 
     @Override
     protected void onDestroy() {

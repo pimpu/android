@@ -6,7 +6,6 @@ Enquiry table -
 
 remaining task -
 show all enquiry to admin in view enquiry
-gcm not received when app is closed
 expandable listview dynamic height issue
 
 hold - 

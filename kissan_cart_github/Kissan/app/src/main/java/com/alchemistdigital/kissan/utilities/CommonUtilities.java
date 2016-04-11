@@ -17,6 +17,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
 import android.widget.Toast;
@@ -108,28 +109,74 @@ public class CommonUtilities {
     }
 
     /**
-     *
-     * @param expandableListView
+     * calculate the height of expandable listView without expanded
+     * @param expListView
      */
-    public static void setListViewHeightBasedOnChildren(ExpandableListView expandableListView) {
-        ListAdapter listAdapter = expandableListView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-
+    public static void setListViewHeight(ExpandableListView expListView) {
+        ListAdapter listAdapter = expListView.getAdapter();
         int totalHeight = 0;
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(expandableListView.getWidth(), View.MeasureSpec.AT_MOST);
+
         for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, expandableListView);
-            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            View listItem = listAdapter.getView(i, null, expListView);
+            listItem.measure(0, 0);
             totalHeight += listItem.getMeasuredHeight();
         }
 
-        ViewGroup.LayoutParams params = expandableListView.getLayoutParams();
-        params.height = totalHeight + (expandableListView.getDividerHeight() * (listAdapter.getCount() - 1));
-        expandableListView.setLayoutParams(params);
-        expandableListView.requestLayout();
+        ViewGroup.LayoutParams params = expListView.getLayoutParams();
+        params.height = totalHeight
+                + (expListView.getDividerHeight() * (listAdapter.getCount() - 1));
+
+        expListView.setLayoutParams(params);
+        expListView.requestLayout();
+    }
+
+    // calculate the height of expandable listview dynamically
+    public static void setListViewHeightAtExpand(ExpandableListView expListView, int group) {
+
+        ExpandableListAdapter listAdapter = expListView
+                .getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(expListView.getWidth(),
+                View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null,
+                    expListView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((expListView.isGroupExpanded(i)) && (i == group))
+                    || ((!expListView.isGroupExpanded(i)) && (i == group))) {
+
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            expListView);
+
+                    listItem.setLayoutParams(new ViewGroup.LayoutParams(
+                            desiredWidth, View.MeasureSpec.UNSPECIFIED));
+                    // listItem.measure(desiredWidth, MeasureSpec.UNSPECIFIED);
+                    listItem.measure(View.MeasureSpec.makeMeasureSpec(0,
+                            View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
+                            .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+            }
+        }
+
+        ViewGroup.LayoutParams params = expListView.getLayoutParams();
+        int height = totalHeight
+                + (expListView.getDividerHeight() * (listAdapter
+                .getGroupCount() - 1));
+
+        if (height < 10) {
+            height = 100;
+        }
+        params.height = height;
+        expListView.setLayoutParams(params);
+        expListView.requestLayout();
+
     }
 
     public static void store_Png_InSdcard(Context context, Bitmap bitmap, String filename) {

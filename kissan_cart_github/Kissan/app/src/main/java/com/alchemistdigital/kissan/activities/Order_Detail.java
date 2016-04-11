@@ -68,7 +68,7 @@ public class Order_Detail extends AppCompatActivity {
 
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        CommonUtilities.setListViewHeightBasedOnChildren(expListView);
+        CommonUtilities.setListViewHeight(expListView);
 
         // Listview Group click listener
         expListView.setOnGroupClickListener(new OnGroupClickListener() {
@@ -91,6 +91,7 @@ public class Order_Detail extends AppCompatActivity {
                 /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Expanded",
                         Toast.LENGTH_SHORT).show();*/
+                CommonUtilities.setListViewHeightAtExpand(expListView,groupPosition);
             }
         });
 
@@ -102,6 +103,7 @@ public class Order_Detail extends AppCompatActivity {
                 /*Toast.makeText(getApplicationContext(),
                         listDataHeader.get(groupPosition) + " Collapsed",
                         Toast.LENGTH_SHORT).show();*/
+                CommonUtilities.setListViewHeight(expListView);
 
             }
         });
@@ -125,6 +127,13 @@ public class Order_Detail extends AppCompatActivity {
             }
         });
 
+    }
+
+    private int GetDipsFromPixel(int pixels) {
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        return (int) (pixels * scale + 0.5f);
     }
 
     /**
