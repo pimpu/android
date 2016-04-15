@@ -1,0 +1,86 @@
+ALTER TABLE bookedserviceinfo
+ADD FOREIGN KEY (fk_enquiryId)
+REFERENCES bookingenquiry(enquiryId)
+
+
+ALTER TABLE bookedserviceinfo
+DROP FOREIGN KEY fk_driverId
+
+
+CREATE TABLE bookingenquiry(
+enquiryId int(11) primary key auto_increment,
+fk_userId int(11) not null,
+creationTime timestamp default now(),
+beginningArea varchar(100) not null,
+destinationArea varchar(100) not null,
+deliveryDateTime varchar(50) not null,
+weight decimal(10,2)	 not null,
+unit varchar(10) not null,
+vehicleType varchar(10) not null,
+vehicle varchar(10) not null,
+valueAddedServices	 varchar(50) not null,
+pickupAddress varchar(100) not null, 
+deliveryAddress varchar(100) not null
+);
+
+
+
+CREATE TABLE bookedserviceinfo(
+bookedId  int(11)  primary key auto_increment,
+creationTime timestamp default now(),
+fk_enquiryId int(11) not null,
+fk_driverId int(11) not null,
+status varchar(5) not null
+); 
+
+CREATE TABLE userLogin(
+userId  int(11)  primary key auto_increment,
+creationTime timestamp default now(),
+gcmId longtext,
+emailId varchar(30) not null,
+password	varchar(20) not null,
+phoneNo	int(15) not null,
+fullName	varchar(30) not null,
+userType	char(8) not null,,
+isLogin varchar(5) not null,
+);
+
+CREATE TABLE driverVehicletype(
+driver_vehicle_type_id int(11) primary key auto_increment,
+creationTime timestamp default now(),
+vehicle_type varchar(10) not null,
+fk_driver_uesr_id int(11) not null,
+vehicle varchar(100) not null
+);
+
+CREATE TABLE requestingalldriver(
+requesting_all_driver_id int(11) primary key auto_increment,
+fk_booked_id int(11) not null,
+requesting_driver int(11) not null
+);
+
+
+// add column in table
+
+ALTER TABLE bookingenquiry
+ADD deliveryDateTime  varchar(50) not null
+
+
+// change name of column of table
+ALTER TABLE bookingenquiry CHANGE deliveryDate deliveryDateTime timestamp;          
+
+CREATE TABLE valueaddedservices(
+vas_id int(11) primary key auto_increment,
+manpower int(11) not null,
+insurance decimal(1,1)  not null,
+risk int(11) not null,
+packing int(11) not null,
+handling int(11) not null,
+holiday_delivery int(11) not null,
+shipment int(11) not null,
+labour_charges int(11) not null,
+vehicle int(11) not null
+);
+
+INSERT INTO valueaddedservices(manpower,insurance,risk,packing,handling,holiday_delivery,shipment,labour_charges, vehicle,rsPerKm) VALUES (50,.2,2,0,0,400,0,100,"MARUTI VAN (Cargo)",25)
+

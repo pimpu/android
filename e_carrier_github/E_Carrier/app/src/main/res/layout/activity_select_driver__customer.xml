@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg2"
+    tools:context=".SelectDriver_Customer">
+
+    <LinearLayout
+        android:id="@+id/container_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbarOnDriverView"
+            layout="@layout/toolbar_on_driver_view" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Who you are?"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textSize="30dp"
+        />
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/userType"
+            >
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rdCustomer"
+                android:text="@string/customer"
+                android:layout_marginRight="50dp"
+                />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rdDriver"
+                android:text="@string/driver"
+                />
+
+        </RadioGroup>
+
+        <Button android:id="@+id/btn_userTypeContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:background="@drawable/btn_rounded"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="30dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

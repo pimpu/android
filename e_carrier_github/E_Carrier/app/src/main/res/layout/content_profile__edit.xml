@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="info.alchemistdigital.e_carrier.activity.Profile_Edit"
+    tools:showIn="@layout/activity_profile__edit">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:inputType="text"
+            android:id="@+id/idEditName">
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/idSaveProfile"
+            android:layout_below="@+id/idEditName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="50dp"
+            android:background="#e7065481"
+            android:textColor="@android:color/white"/>
+
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

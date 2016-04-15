@@ -1,0 +1,161 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="info.alchemistdigital.e_carrier.activity.SecondBookServiceFragment">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:padding="5dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Book Service"
+                        android:layout_marginBottom="10dp"
+                        android:textStyle="bold"
+                        android:textSize="30dp"/>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:paddingTop="20dp"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:paddingRight="10dp"
+                            android:orientation="vertical"
+                            xmlns:android="http://schemas.android.com/apk/res/android">
+
+                            <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Value added Service"
+                                android:layout_marginBottom="5dp"
+                                android:textSize="16dp"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:paddingLeft="10dp"
+                            android:orientation="vertical"
+                            xmlns:android="http://schemas.android.com/apk/res/android">
+
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/idAddVAS"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:src="@drawable/ic_action_add"
+                                app:layout_anchorGravity="bottom|right|end"/>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_pickupAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:id="@+id/pickAddress"
+                                android:hint="@string/hint_pickup_address"
+                                android:ems="10"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_deliveryAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:id="@+id/deliveryAddress"
+                                android:hint="@string/hint_delivery_address"
+                                android:ems="10"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:paddingTop="20dp"
+                        android:gravity="center|left"
+                        android:layout_height="wrap_content"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <CheckBox
+                            android:text="@string/term_condition"
+                            android:id="@+id/chkBoxTermCondition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                        </CheckBox>
+
+                    </LinearLayout>
+
+                    <Button android:id="@+id/btn_value_added_continue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Continue"
+                        android:background="@drawable/btn_rounded"
+                        android:layout_marginTop="40dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:textColor="@android:color/white"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </ScrollView>
+    </android.support.design.widget.CoordinatorLayout>

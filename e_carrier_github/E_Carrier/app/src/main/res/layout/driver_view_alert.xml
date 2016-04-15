@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Delivery Information"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:id="@+id/separator"
+                android:visibility="visible"
+                android:background="@android:color/darker_gray"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:id="@+id/textview_pickup_address_Text"
+                    android:layout_height="wrap_content"
+                    android:text="Pickup address"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:id="@+id/textview_pickup_address"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:id="@+id/textview_delivery_address_Text"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery address"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:id="@+id/textview_delivery_address"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:id="@+id/textview_delivery_Date_Text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:id="@+id/textview_delivery_Date"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:id="@+id/textview_weightUnit_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Weight"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <TextView
+                        android:id="@+id/textview_weightUnit"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/conformOrder"
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="Ok"
+                    android:background="@drawable/btn_rounded"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    />
+
+                <Button
+                    android:id="@+id/cancelOrder"
+                    android:layout_width="0.0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1.0"
+                    android:text="Cancel"
+                    android:background="@drawable/btn_rounded"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

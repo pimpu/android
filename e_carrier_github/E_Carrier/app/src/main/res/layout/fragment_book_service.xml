@@ -1,0 +1,470 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:id="@+id/friends_fragment"
+    tools:context="info.alchemistdigital.e_carrier.activity.BookServiceFragment">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Book Service"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="30dp"
+                    />
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="From:"
+                            android:layout_marginBottom="5dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/fromInsertType"
+                            >
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/idGPS"
+                                android:text="@string/gpsName"
+                                android:layout_marginRight="50dp"
+                                />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/idManual"
+                                android:text="@string/manualName"
+                                android:checked="true"
+                                />
+
+                        </RadioGroup>
+
+                        <AutoCompleteTextView
+                            android:id="@+id/fromArea"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_origin">
+                            <requestFocus />
+                        </AutoCompleteTextView>
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/gpsAddressText"
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="To:"
+                            android:layout_marginBottom="5dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/toArea"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_destination">
+
+                        </AutoCompleteTextView>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Date:"
+                            android:layout_marginBottom="5dp"
+                            />
+                        <com.andexert.library.RippleView
+                            android:id="@+id/ripplebtn_date"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            ripple:rv_zoom="true"
+                            android:background="@color/colorPrimary"
+                            android:layout_centerHorizontal="true"
+                            ripple:rv_rippleDuration="200"
+                            ripple:rv_zoomScale="1.1"
+                            >
+                        <Button android:id="@+id/btn_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:layout_gravity="center"
+                            android:layout_margin="0dp"
+                            android:background="@color/colorPrimary"
+                            />
+                        </com.andexert.library.RippleView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingLeft="10dp"
+                        android:orientation="vertical"
+                        xmlns:ripple="http://schemas.android.com/apk/res-auto"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Time:"
+                            android:layout_marginBottom="5dp"
+                            />
+                        <com.andexert.library.RippleView
+                            android:id="@+id/ripplebtn_time"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            ripple:rv_zoom="true"
+                            android:background="@color/colorPrimary"
+                            android:layout_centerHorizontal="true"
+                            ripple:rv_rippleDuration="200"
+                            ripple:rv_zoomScale="1.1"
+                            >
+                        <Button android:id="@+id/btn_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:layout_gravity="center"
+                            android:layout_margin="0dp"
+                            android:background="@color/colorPrimary"
+                            />
+                        </com.andexert.library.RippleView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Weight:"
+                            android:layout_marginBottom="5dp" />
+
+                        <Spinner
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:id="@+id/idLuggageWeight"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingLeft="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Unit:"
+                            android:layout_marginBottom="5dp"
+                            />
+                        <Spinner
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:id="@+id/spinner3"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:prompt="@string/spinner_unit"
+                            android:entries="@array/unit"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Type:"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"/>
+
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/vehicleType">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/closedType"
+                        android:layout_marginRight="50dp"
+                        android:checked="true"
+                        android:text="@string/vehicle_close_type"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/openType"
+                        android:text="@string/vehicle_open_type"
+                        />
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Vehicle Type:"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp" />
+
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:id="@+id/idVehicleNameSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dimension (in foot)"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_vehicle_height"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:id="@+id/idVehicleHeight"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/hint_height"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_vehicle_length"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:id="@+id/idVehicleLength"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/hint_length" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_vehicle_width"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:id="@+id/idVehicleWidth"
+                                android:clickable="false"
+                                android:cursorVisible="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/hint_width" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <Button android:id="@+id/btn_continue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Continue"
+                        android:background="@drawable/btn_rounded"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:textColor="@android:color/white"
+                        android:layout_gravity="center"/>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

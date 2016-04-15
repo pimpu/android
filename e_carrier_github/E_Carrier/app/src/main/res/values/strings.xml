@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">E-Carrier</string>
+
+    <string name="sharedPrefrence">info.alchemistdigital.e_carrier</string>
+    <string name="action_settings">Setting</string>
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_home">Home</string>
+    <!--<string name="nav_item_book">Book Service</string>-->
+    <!--<string name="nav_item_track">Track</string>-->
+    <string name="nav_item_profile">My Profile</string>
+    <string name="nav_item_logout">Logout</string>
+
+    <string name="vehicle_open_type">Open</string>
+    <string name="vehicle_close_type">Close</string>
+
+    <string name="boolean_login_sharedPref">BooloanLoginSharedPref</string>
+    <string name="loginName">login_name</string>
+    <string name="loginEmail">login_email</string>
+    <string name="loginPhone">login_phone</string>
+    <string name="loginPassword">login_password</string>
+    <string name="userType">user_type</string>
+    <string name="gcmId">gcmId</string>
+    <string name="loginId">loginId</string>
+    <string name="profilePic">profile_pic</string>
+
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <!--<item>@string/nav_item_book</item>-->
+        <!--<item>@string/nav_item_track</item>-->
+        <item>@string/nav_item_profile</item>
+        <item>@string/nav_item_logout</item>
+    </string-array>
+
+    <string name="title_home">Home</string>
+    <string name="title_book">Book Service</string>
+    <string name="title_my_enquiry">My Enquiry</string>
+    <string name="title_track">Track</string>
+    <string name="title_contact">Contact</string>
+    <string name="title_profile">My Profile</string>
+
+    <string name="login">LOGIN</string>
+    <string name="register">REGISTER</string>
+    <string name="title_activity_simple_tabs">Authentication</string>
+    <string name="logo">E-Carrier</string>
+    <string name="toolbar_title_driverView">ENQUIRIES</string>
+    <string name="spinner_unit">Unit</string>
+    <string name="spinner_height">Height</string>
+    <string name="spinner_length">Length</string>
+    <string name="spinner_width">Width</string>
+    <string name="value_added_service">Value added Service</string>
+    <string name="hint_to">To</string>
+    <string name="hint_from">From</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_number">Mobile No.</string>
+    <string name="hint_price">Price</string>
+    <string name="hint_pickup_address">Pickup address</string>
+    <string name="hint_delivery_address">Delivery address</string>
+    <string name="hint_password_reg">Password</string>
+    <string name="hint_password_reg2">Retype Password</string>
+    <string name="hint_origin">Origin</string>
+    <string name="hint_destination">Destination</string>
+    <string name="hint_weight">Weight</string>
+    <string name="hint_height">Height (ft)</string>
+    <string name="hint_length">Length (ft)</string>
+    <string name="hint_width">Width (ft)</string>
+    <string name="hint_vehicle">Vehicle</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
+    <string name="term_condition">Terms and conditions</string>
+    <string name="cash_payment">Cash</string>
+    <string name="cashOnDelivery_payment">Cash on delivery</string>
+    <string name="netbanking_payment">Netbanking</string>
+    <string name="credit_debit_payment">Credit / Debit</string>
+    <string name="Rs">\u20B9</string>
+    <string name="gps_network_not_enabled">Gps network connectivity</string>
+    <string name="open_location_settings">Location Manager</string>
+    <string name="Cancel">Cancel</string>
+    <string name="driver">Driver</string>
+    <string name="customer">Customer</string>
+    <string name="gpsName">GPS</string>
+    <string name="manualName">Manual</string>
+    <string name="chkTextExtraManPower">%1$s%2$s for Extra Manpower (Per Hour and if its above 30Kg one single pc).</string>
+    <string name="chkTextInsurance">.2% of Declared Value on Transit Insurance</string>
+    <string name="chkTextRisk">2% of Declared Value on Transit Risk Charges</string>
+    <string name="chkTextPackaging">Packaging Charges - As per Requirement</string>
+    <string name="chkTextHandling">Special Handling	As applicable</string>
+    <string name="chkTextHolidayDelivery">Holiday Delivery - %1$s</string>
+    <string name="chkTextOddSizeShipment">Odd Size Shipment Delivery - As applicable</string>
+    <string name="chkTextLabourCharges">Labour Charges - %1$s</string>
+    <string name="postalCode">Posatl Code</string>
+    <string name="lats">Latitude</string>
+    <string name="longs">Longitude</string>
+    <string name="hint_extraManPowerKg">30Kg per person</string>
+    <string name="distanceBtwnLatLong">Calculated dist btwn last long</string>
+    <string name="networkStatus">Network Status</string>
+    <string name="track">Track</string>
+    <string name="title_activity_profile__edit">Profile_Edit</string>
+
+
+    <string-array name="unit">
+        <item>Kg</item>
+        <item>Tonne</item>
+    </string-array>
+
+    <string name="title_activity_maps_tracking">Map</string>
+
+
+    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
+
+    <string name="error_config">Please set the %1$s constant and recompile the app.</string>
+    <string name="already_registered">Device is already registered on server.</string>
+    <string name="gcm_registered">From GCM: device successfully registered!</string>
+    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
+    <string name="gcm_message">From GCM: you got message!</string>
+    <string name="gcm_error">From GCM: error (%1$s).</string>
+    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Demo Server.</string>
+    <string name="server_registered">From Demo Server: successfully added device!</string>
+    <string name="server_unregistered">From Demo Server: successfully removed device!</string>
+    <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
+    <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
+
+
+
+</resources>

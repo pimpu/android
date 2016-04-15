@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/nav_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/idUserName"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/profile_image"
+            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/idUserEmail"
+            android:text="ddgfdg"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/idUserName"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/drawerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/nav_header_container"
+        android:paddingTop="15dp" />
+
+
+</RelativeLayout>
