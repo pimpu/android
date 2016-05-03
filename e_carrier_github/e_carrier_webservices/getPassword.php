@@ -5,14 +5,14 @@
 	$response = array();
 	
 	// isset — Determine if a variable is set and is not NULL
-	if( isset($_POST['emailId']) && isset($_POST['loginId']) ){
+	if( isset($_POST['emailId']) && isset($_POST['loginId']) ) {
 		
 		$emailId    = $_POST['emailId'];
 		$loginId	= $_POST['loginId'];
 		
 		$getUserData = mysql_query("SELECT * FROM userLogin WHERE emailId='".$emailId."' AND userId=".$loginId.";");
 		
-		if(mysql_num_rows($getUserData) > 0){
+		if(mysql_num_rows($getUserData) > 0) {
 			$arrayUserData = mysql_fetch_array($getUserData);
 			
 			$subject = "E-Carier ";

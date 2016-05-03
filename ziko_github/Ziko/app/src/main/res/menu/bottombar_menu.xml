@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottomBarItemHome"
+        android:icon="@drawable/ic_home_white"
+        android:title="Home" />
+    <item
+        android:id="@+id/bottomBarItemSearch"
+        android:icon="@drawable/ic_search_white"
+        android:title="Search" />
+    <item
+        android:id="@+id/bottomBarItemCamera"
+        android:icon="@drawable/ic_photo_camera_white"
+        android:title="Camera" />
+    <item
+        android:id="@+id/bottomBarItemLatestActivity"
+        android:icon="@drawable/ic_local_activity_white"
+        android:title="Activity" />
+    <item
+        android:id="@+id/bottomBarItemProfile"
+        android:icon="@drawable/ic_person_white"
+        android:title="Profile" />
+</menu>

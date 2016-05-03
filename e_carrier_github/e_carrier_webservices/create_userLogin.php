@@ -19,13 +19,13 @@
 		if(mysql_num_rows($checkMatchEmailQuery) > 0 ){
 			if(mysql_num_rows($checkIsRegister) > 0 ){
 				$response["success"] = 3;
-				$response["message"] = "You already registered with this app.Please Log In";
+				$response["message"] = "You already registered with this app.Please Log In.";
 			
 				echo json_encode($response);
 			}
 			else{
 				$response["success"] = 2;
-				$response["message"] = "this email id is already exist";
+				$response["message"] = "This email-id is already exist.";
 			
 				echo json_encode($response);
 			}
@@ -51,7 +51,7 @@
 			else 
 			{
 				$response["success"] = 0;
-				$response["message"] = "Required field(s) is missing";
+				$response["message"] = "Required field(s) is missing.";
 				
 				echo json_encode($response);
 			}
