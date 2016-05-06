@@ -13,6 +13,7 @@ import com.alchemistdigital.ziko.R;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,15 +25,13 @@ public class ImageLoaderAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     String file_path;
     private List<String> VideoValues;
-    private String uri;
-    private HashMap<String,String> videoDuration;
     public int selectedPosition;
+    HashMap<String, String> videoDuration;
 
     public ImageLoaderAdapter(Context context,
-                              List<String> VideoValues,
+                              ArrayList<String> VideoValues,
                               String file_path,
-                              HashMap<String, String> videoDuration,
-                              Context applicationContext) {
+                              HashMap<String, String> videoDuration) {
         inflater = LayoutInflater.from(context);
         this.VideoValues = VideoValues;
         this.file_path = file_path;
@@ -57,7 +56,8 @@ public class ImageLoaderAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        String parse = Uri.fromFile(new File(file_path + "/" + VideoValues.get(position))).toString();
+        String fullFilePath = file_path + VideoValues.get(position);
+        String parse = Uri.fromFile(new File(fullFilePath)).toString();
         String decodedUri = Uri.decode(parse);
         final ViewHolder holder;
         View view = convertView;
@@ -75,14 +75,14 @@ public class ImageLoaderAdapter extends BaseAdapter {
         }
 
         // set video duration text
-        holder.gridLabel.setText(videoDuration.get(VideoValues.get(position)));
+        holder.gridLabel.setText( videoDuration.get(fullFilePath));
 
         Glide
             .with(context)
             .load( decodedUri )
             .thumbnail( 0.1f )
             .into(holder.imageView);
-        
+
         if(position == selectedPosition){
             view.setBackgroundResource(R.drawable.grid_selected);
         } else {

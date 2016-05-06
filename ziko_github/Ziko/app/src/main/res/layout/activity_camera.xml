@@ -19,7 +19,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
             android:fitsSystemWindows="true"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:background="@color/bb_darkBackgroundColor" >
@@ -28,11 +27,9 @@
                 android:id="@+id/spinner_nav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:dropDownWidth="match_parent"
-                android:overlapAnchor="false"/>
+                android:dropDownWidth="match_parent" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -63,8 +60,7 @@
                 android:layout_height="wrap_content"
                 android:columnWidth="70dp"
                 android:numColumns="auto_fit"
-                android:gravity="center"
-                android:listSelector="@android:color/transparent" />
+                android:gravity="center" />
 
         </FrameLayout>
 
