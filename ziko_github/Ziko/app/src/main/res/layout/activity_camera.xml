@@ -16,21 +16,38 @@
         <android.support.v7.widget.Toolbar
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/toolbar"
+            android:id="@+id/CameraActivityToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:fitsSystemWindows="true"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:background="@color/bb_darkBackgroundColor" >
 
-            <Spinner
-                android:id="@+id/spinner_nav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:dropDownWidth="match_parent" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
 
+                <Spinner
+                    android:id="@+id/spinner_nav"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:dropDownWidth="match_parent"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    android:layout_weight="5.5"
+                    android:background="@drawable/white_left_border"
+                    android:onClick="goToVideoCutterActivity"
+                    />
+            </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -43,16 +60,21 @@
         android:orientation="vertical"
         android:layout_marginTop="?attr/actionBarSize">
 
-        <VideoView
-            android:id="@+id/video_player_view"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.4" />
-
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" >
+
+            <VideoView
+                android:id="@+id/video_player_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
             <GridView
                 android:id="@+id/gridview"

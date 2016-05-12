@@ -1,13 +1,16 @@
 package com.alchemistdigital.ziko.activities;
 
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.MediaController;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.alchemistdigital.ziko.R;
@@ -29,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.alchemistdigital.ziko.utilities.CommonMethods.getStatusBarHeight;
+
 public class CameraActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinner_nav;
@@ -37,7 +43,8 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
     MediaController media_Controller;
     GridView gridView;
     ArrayAdapter<DirectorySpinnerItem> spinAdapter;
-
+    DirectorySpinnerItem spinnerItemObj;
+    ArrayList<String> selectedmp4FilesList;
     ArrayList<DirectorySpinnerItem> fileDirectoryNames = new ArrayList<DirectorySpinnerItem>();
 
     // used for to generate spinner item
@@ -58,18 +65,26 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
 
         setContentView(R.layout.activity_camera);
 
+        // toolbar set.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.CameraActivityToolbar);
+        setSupportActionBar(toolbar);
+
+        // hide title of activity from toolbar.
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         gridView = (GridView) findViewById(R.id.gridview);
         spinner_nav = (Spinner) findViewById(R.id.spinner_nav);
 
         // create directory from external sdcard memory.
         getMediaMp4Cursor();
 
+        // app get notify by below code when sd card is CRUD by user
+        // means any change in sdcard by users, spinner item get updated by below code
         getContentResolver().registerContentObserver(android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI, true,
                 new ContentObserver(new Handler()) {
                     @Override
                     public void onChange(boolean selfChange) {
                         getMediaMp4Cursor();
-                        System.out.println("test: " + fileDirectoryNames);
                         spinAdapter.notifyDataSetChanged();
                         ImageLoadAdapter.notifyDataSetChanged();
 
@@ -78,44 +93,43 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
                 }
         );
 
-        // toolbar set.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // hide title of activity from toolbar.
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-
         spinAdapter = new ArrayAdapter<DirectorySpinnerItem>(CameraActivity.this,
                 android.R.layout.simple_spinner_item, fileDirectoryNames);
         spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_nav.setAdapter(spinAdapter);
         spinner_nav.setOnItemSelectedListener(CameraActivity.this);
 
-
+        // set height dynamically to video view.
+        int statusbarheight = getStatusBarHeight(CameraActivity.this);
+        int actionbarheight = getSupportActionBar().getHeight();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int visibleHeight = size.y - (actionbarheight + statusbarheight);//visible layout height
 
         video_player_view = (VideoView) findViewById(R.id.video_player_view);
         media_Controller = new MediaController(this);
         media_Controller.setAnchorView(video_player_view);
+
+        video_player_view.getLayoutParams().height = (visibleHeight / 3);
+        video_player_view.requestLayout();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
 
-//        ((TextView) adapter.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorAccent));
-
         // On selecting a spinner item
-        final DirectorySpinnerItem spinnerItem = (DirectorySpinnerItem) adapter.getSelectedItem();
+        spinnerItemObj = (DirectorySpinnerItem) adapter.getSelectedItem();
 
-        final ArrayList<String> selectedmp4FilesList = filename_path_mp4Files.get(spinnerItem.getDirectoryPath());
+        selectedmp4FilesList = filename_path_mp4Files.get(spinnerItemObj.getDirectoryPath());
 
         // play first video of of spinner selected item directory.
-        String videoFilePath = spinnerItem.getDirectoryPath() + selectedmp4FilesList.get(0);
+        String videoFilePath = spinnerItemObj.getDirectoryPath() + selectedmp4FilesList.get(0);
         File newFile = new File(videoFilePath);
         playVideoInVideoView(Uri.fromFile(newFile));
 
         // creating grid view
-        ImageLoadAdapter = new ImageLoaderAdapter(this, selectedmp4FilesList, spinnerItem.getDirectoryPath(), videoDuration);
+        ImageLoadAdapter = new ImageLoaderAdapter(this, selectedmp4FilesList, spinnerItemObj.getDirectoryPath(), videoDuration);
         gridView.setAdapter(ImageLoadAdapter);
 
         // video play when video thumbnail get click.
@@ -124,7 +138,7 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                String videoFilePath = spinnerItem.getDirectoryPath() + selectedmp4FilesList.get(position);
+                String videoFilePath = spinnerItemObj.getDirectoryPath() + selectedmp4FilesList.get(position);
                 File newFile = new File(videoFilePath);
                 playVideoInVideoView(Uri.fromFile(newFile));
 
@@ -140,6 +154,8 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
     private void getMediaMp4Cursor() {
         fileDirectoryNames.clear();
         filename_path_mp4Files.clear();
@@ -155,7 +171,6 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
         String[] selectionArgsPdf = new String[]{mimeType};
         String sortOrder = MediaStore.Video.Media.BUCKET_DISPLAY_NAME;
         Cursor query = getContentResolver().query(uri, projection, selectionMimeType, selectionArgsPdf, sortOrder);
-
 
         createDirecotyArrayList(query);
     }
@@ -236,16 +251,38 @@ public class CameraActivity extends AppCompatActivity implements AdapterView.OnI
         video_player_view.start();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    public void goToVideoCutterActivity(View view) {
+        String videoFilePath = spinnerItemObj.getDirectoryPath() + selectedmp4FilesList.get(ImageLoadAdapter.selectedPosition);
+        // sVidoeduration = "2:00"
+        String sVidoeduration = videoDuration.get(videoFilePath);
 
+        // minutes = 2
+        int minutes = Integer.parseInt(sVidoeduration.substring(0, sVidoeduration.indexOf(":")));
+
+        if( minutes > 2 ) {
+            Toast.makeText(CameraActivity.this,"Clip is too long. try to upload shorter clip.",Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent newIntent = new Intent(CameraActivity.this, VideoCutterActivity.class);
+        newIntent.putExtra("selectedVideoPath", videoFilePath);
+        startActivity(newIntent);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    protected void onResume() {
+        if(selectedmp4FilesList != null) {
+            String videoFilePath = spinnerItemObj.getDirectoryPath() + selectedmp4FilesList.get(ImageLoadAdapter.selectedPosition);
+            File newFile = new File(videoFilePath);
+            playVideoInVideoView(Uri.fromFile(newFile));
+            video_player_view.start();
+        }
+        super.onResume();
     }
 
+    @Override
+    protected void onPause() {
+        video_player_view.stopPlayback();
+        super.onPause();
+    }
 }

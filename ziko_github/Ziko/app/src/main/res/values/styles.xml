@@ -20,7 +20,6 @@
     <style name="ToolBarTheme" parent="@style/Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <!--<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>-->
         <item name="android:actionMenuTextColor">@color/white</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18dp</item>
