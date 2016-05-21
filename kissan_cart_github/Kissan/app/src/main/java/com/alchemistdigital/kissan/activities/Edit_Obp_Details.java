@@ -41,19 +41,19 @@ public class Edit_Obp_Details extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.edit_obp_toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle extras = getIntent().getExtras();
-        str_obp_name = extras.getString("name");
-        str_obp_pwd = extras.getString("password");
-        str_obp_store_name = extras.getString("store_name");
-        str_obp_email = extras.getString("email_id");
-        str_obp_contact = extras.getString("contact");
-        str_obp_address = extras.getString("address");
-        str_obp_pin = String.valueOf(extras.getInt("pincode"));
-        str_obp_city = extras.getString("city");
-        str_obp_state = extras.getString("state");
-        str_obp_country = extras.getString("country");
-        status = extras.getInt("status");
-        localId = extras.getInt("localid");
+        OBP obp_entity = getIntent().getParcelableExtra("OBP_Entity");
+        str_obp_name = obp_entity.obp_name;
+        str_obp_pwd = obp_entity.obp_email_passowrd;
+        str_obp_store_name = obp_entity.obp_store_name;
+        str_obp_email = obp_entity.obp_email_id;
+        str_obp_contact = obp_entity.obp_contact_number;
+        str_obp_address = obp_entity.obp_address;
+        str_obp_pin = String.valueOf(obp_entity.obp_pincode);
+        str_obp_city = obp_entity.obp_city;
+        str_obp_state = obp_entity.obp_state;
+        str_obp_country = obp_entity.obp_country;
+        status = obp_entity.obp_status;
+        localId = obp_entity.obp_id;
 
         txt_obp_name        = (EditText) findViewById(R.id.edittext_id_edit_obp_name);
         txt_obp_contact     = (EditText) findViewById(R.id.edittext_id_edit_obp_contact);

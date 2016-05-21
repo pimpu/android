@@ -3,6 +3,7 @@ package com.alchemistdigital.kissan.asynctask;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -46,6 +47,9 @@ public class GetOBPDetailsAtAdmin extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading ...");
         pDialog.setIndeterminate(false);
@@ -89,9 +93,9 @@ public class GetOBPDetailsAtAdmin extends AsyncTask<String, String, String> {
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -101,6 +105,8 @@ public class GetOBPDetailsAtAdmin extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         pDialog.dismiss();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         try {
             Log.d("get obp Data at admin: ", result.toString());

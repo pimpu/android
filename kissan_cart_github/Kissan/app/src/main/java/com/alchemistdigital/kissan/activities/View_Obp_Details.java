@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.model.OBP;
 
 public class View_Obp_Details extends AppCompatActivity {
 
@@ -20,16 +21,16 @@ public class View_Obp_Details extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.obp_details_toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle extras = getIntent().getExtras();
-        name = extras.getString("name");
-        storeName = extras.getString("store_name");
-        emailId = extras.getString("email_id");
-        contact = extras.getString("contact");
-        address = extras.getString("address");
-        pincode = String.valueOf(extras.getInt("pincode"));
-        city = extras.getString("city");
-        state = extras.getString("state");
-        country = extras.getString("country");
+        OBP obp_entity = getIntent().getParcelableExtra("OBP_Entity");
+        name = obp_entity.obp_name;
+        storeName = obp_entity.obp_store_name;
+        emailId = obp_entity.obp_email_id;
+        contact = obp_entity.obp_contact_number;
+        address = obp_entity.obp_address;
+        pincode = String.valueOf(obp_entity.obp_pincode);
+        city = obp_entity.obp_city;
+        state = obp_entity.obp_state;
+        country = obp_entity.obp_country;
 
         init();
 

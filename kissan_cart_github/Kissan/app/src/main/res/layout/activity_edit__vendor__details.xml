@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/id_EditVendorView"
+    tools:context="com.alchemistdigital.kissan.activities.Edit_Vendor_Details">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/MyMaterialTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/edit_vendor_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/MyMaterialTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/id_input_layout_edit_vendor_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text|textNoSuggestions"
+                        android:id="@+id/edittext_id_edit_vendor_name"
+                        android:hint="@string/hint_vendor_name" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/id_input_layout_edit_vendor_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:id="@+id/edittext_id_edit_vendor_contact"
+                        android:hint="@string/hint_vendor_contact" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/id_input_layout_edit_vendor_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/edittext_id_edit_vendor_email"
+                        android:hint="@string/hint_vendor_email" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/id_input_layout_edit_vendor_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/edittext_id_edit_vendor_address"
+                        android:hint="@string/hint_vendor_address" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="20sp"
+                android:layout_marginLeft="5sp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.andexert.library.RippleView
+                    android:id="@+id/btn_id_edit_vendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    ripple:rv_centered="true"
+                    ripple:rv_zoom="true"
+                    ripple:rv_rippleDuration="200"
+                    ripple:rv_zoomScale="1.1">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/btnColor"
+                        android:textColor="@color/colorWhite"
+                        android:text="@string/edit" />
+
+                </com.andexert.library.RippleView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

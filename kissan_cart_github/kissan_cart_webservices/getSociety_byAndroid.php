@@ -4,7 +4,7 @@
 	error_reporting(0);
 	$response = array();
 	
-	if( isset($_POST['str_obpId']) ){
+	if( isset($_POST['str_obpId']) ) {
 		
 		$str_obpId = $_POST['str_obpId'];
 		

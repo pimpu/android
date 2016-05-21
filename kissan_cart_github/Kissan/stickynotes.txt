@@ -1,12 +1,5 @@
-Enquiry table -
-	- server id column added
-	- in offline, enquiry insert into table with 0 value of server id.
-      - while online app will update server id, when offline data update to server .
-	- creation time of offline row added to server, but in online ,server creation time added to local.
-
 remaining task -
 show all enquiry to admin in view enquiry
-expandable listview dynamic height issue
 
 hold - 
 society validation = online / offline

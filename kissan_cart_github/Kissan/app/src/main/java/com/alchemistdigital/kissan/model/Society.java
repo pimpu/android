@@ -7,11 +7,11 @@ public class Society {
     private int id;
     private int serverId;
     private String creted_at;
+    private int soc_status;
     private int userId;
     private String soc_name;
     private String soc_contact;
     private String soc_email;
-    private int soc_status;
     private String soc_adrs;
 
     private String soc_offline_action;

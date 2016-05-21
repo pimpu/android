@@ -11,12 +11,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.model.Category;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
 import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Order;
+import com.alchemistdigital.kissan.model.Product_Details;
+import com.alchemistdigital.kissan.model.Product_Group;
 import com.alchemistdigital.kissan.model.Society;
+import com.alchemistdigital.kissan.model.Subcategory;
+import com.alchemistdigital.kissan.model.Vendor;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 
@@ -51,6 +56,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_ITEM = "Item";
     private static final String TABLE_OFFLINE = "Offline";
     public static final String TABLE_OBP = "OBP";
+    public static final String TABLE_PRODUCT_GROUP = "ProductGroup";
+    public static final String TABLE_PRODUCT_CATEGORY = "ProductCategory";
+    public static final String TABLE_PRODUCT_SUBCATEGORY = "ProductSubCategory";
+    public static final String TABLE_PRODUCT_DETAILS = "ProductDetails";
+    public static final String TABLE_ENQUIRY_ADMIN = "EnquiryAdmin";
+    public static final String TABLE_VENDORS = "Vendors";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -73,21 +84,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String ENQUIRY_GROUPID = "gID";
     private static final String ENQUIRY_REPLYTO = "repTo";
     private static final String ENQUIRY_REPLIED = "replied";
-    private static final String ENQUIRY_MESSAGE = "eMsg";
-    private static final String ENQUIRY_SOCIETY = "eSociety";
-    private static final String ENQUIRY_SOCIETY_ADDRESS = "eSocAdrs";
-    private static final String ENQUIRY_SOCIETY_CONTACT = "eSocCont";
-    private static final String ENQUIRY_SOCIETY_EMAIL = "eSocEmail";
-    private static final String ENQUIRY_DOCUMENT = "eDoc";
+    private static final String ENQUIRY_SOCIETY_ID = "eSocietyId";
+    private static final String ENQUIRY_SUBCATEGORY_ID = "eSubcategoryId";
+    private static final String ENQUIRY_PRODUCT_ID = "eProductId";
+    private static final String ENQUIRY_QUANTITY = "eQuantity";
 
     // ORDER Table - column names
     private static final String ORDER_USERID = "orderUserId";
     private static final String ORDER_REFERENCE = "enqRef";
     private static final String ORDER_UTR = "UTR";
-   /* private static final String ORDER_ITEM = "ordItem";
-    private static final String ORDER_QUANTITY = "ordQty";
-    private static final String ORDER_PRICE = "ordPrice";
-    private static final String ORDER_TOTAL_AMOUNT = "totamnt";*/
 
     // ITEM Table - column names
     private static final String ITEM_REFERENCE = "referenceNo";
@@ -114,7 +119,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String OBP_STATE = "obp_state";
     private static final String OBP_COUNTRY = "obp_country";
 
+    // Product group table - column names
+    private static final String PRODUCT_GROUP_NAME = "product_group_name";
+    private static final String PRODUCT_GROUP_SERVER_ID = "product_group_server_id";
 
+    // Product category table - column names
+    private static final String PRODUCT_GROUP_ID = "product_group_id";
+    private static final String CATEGORY_SERVER_ID = "category_server_id";
+    private static final String CATEGORY_NAME = "category_name";
+    private static final String CATEGORY_IMAGE = "category_image";
+
+    // Product sub category table - column names
+    private static final String SUBCATEGORY_SERVER_ID = "subcategory_server_id";
+    private static final String CATEGORY_ID = "category_id";
+    // present product_group_id column in this table
+    /* private static final String PRODUCT_GROUP_ID = "product_group_id";*/
+    private static final String SUB_CATEGORY_NAME = "subcategory_name";
+    private static final String SUB_CATEGORY_IAMGE = "subcategory_image";
+
+    // Product details table - column names
+    private static final String PRODUCT_DETAILS_SERVER_ID = "productdetails_server_id";
+    private static final String SUB_CATEGORY_ID = "subcategory_id";
+    // present product_group_id and category_id column in this table
+    /* private static final String PRODUCT_GROUP_ID = "product_group_id";
+     private static final String CATEGORY_ID = "category_id";*/
+    private static final String PRODUCT_NAME = "product_name";
+    private static final String PRODUCT_PATH = "product_path";
+    private static final String PRODUCT_PATH1 = "product_path1";
+    private static final String PRODUCT_PATH2 = "product_path2";
+    private static final String PRODUCT_PATH3 = "product_path3";
+    private static final String PRODUCT_PATH4 = "product_path4";
+    private static final String PRODUCT_DESCRIPTION = "product_description";
+    private static final String PRODUCT_DISCOUNT_TYPE = "product_discount_type";
+
+    // Enquiry Admin table - column names
+    private static final String  ADMIN_ENQUIRY_SERVER_ID= "admin_enquiry_server_id";
+    private static final String  ADMIN_ENQUIRY_USERID= "admin_enquiry_userid";
+    private static final String  ENQUIRY_REFERENCE= "enquiry_reference";
+    private static final String  VENDOR_ID= "vendor_id";
+    // present subcategory_id column in this table
+    /* private static final String SUB_CATEGORY_ID = "subcategory_id";*/
+    private static final String PRODUCT_ID= "product_id";
+    private static final String QUANTITY= "quantity";
+    private static final String PRICE= "price";
+
+
+    // Vendors Table - column names
+    private static final String VENDOR_SERVER_ID= "vendor_server_id";
+    private static final String VENDOR_NAME= "vendor_name";
+    private static final String VENDOR_CONTACT= "vendor_contact";
+    private static final String VENDOR_ADDRESS= "vendor_address";
+    private static final String VENDOR_EMAIL= "vendor_email";
 
 
     public DatabaseHelper(Context context) {
@@ -123,17 +178,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Society Table Create Statements
-    private static final String CREATE_TABLE_SOCIETY =
-        "CREATE TABLE IF NOT EXISTS "+ TABLE_SOCIETY +
-            "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            SOCIETY_SERVER_ID+" INTEGER," +
-            SOCIETY_COLUMN_USERID+" INTEGER," +
-            SOCIETY_COLUMN_NAME+" VARCHAR(100)," +
-            SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
-            SOCIETY_COLUMN_EMAIL+" VARCHAR(100)," +
-            SOCIETY_COLUMN_ADDRESS+" VARCHAR(200)," +
-            KEY_STATUS +" TINYINT(4)," +
-            KEY_CREATED_AT + " DATETIME" + ")";
+        private static final String CREATE_TABLE_SOCIETY =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_SOCIETY +
+                "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SOCIETY_SERVER_ID+" INTEGER," +
+                SOCIETY_COLUMN_USERID+" INTEGER," +
+                SOCIETY_COLUMN_NAME+" VARCHAR(100)," +
+                SOCIETY_COLUMN_CONTACT+" VARCHAR(100), " +
+                SOCIETY_COLUMN_EMAIL+" VARCHAR(100)," +
+                SOCIETY_COLUMN_ADDRESS+" VARCHAR(200)," +
+                KEY_STATUS +" TINYINT(4)," +
+                KEY_CREATED_AT + " DATETIME" + ")";
 
     // Enquiry Table Create Statements
     private static final String CREATE_TABLE_ENQUIRY =
@@ -145,12 +200,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ENQUIRY_GROUPID +" INTEGER," +
             ENQUIRY_REPLYTO +" INTEGER," +
             ENQUIRY_REPLIED +" TINYINT(4)," +
-            ENQUIRY_MESSAGE +" TEXT,"+
-            ENQUIRY_SOCIETY +" VARCHAR(50)," +
-            ENQUIRY_SOCIETY_ADDRESS +" VARCHAR(50)," +
-            ENQUIRY_SOCIETY_CONTACT +" VARCHAR(20)," +
-            ENQUIRY_SOCIETY_EMAIL +" VARCHAR(20)," +
-            ENQUIRY_DOCUMENT +" VARCHAR(50)," +
+            ENQUIRY_SOCIETY_ID + " INTEGER,"+
+            ENQUIRY_SUBCATEGORY_ID + " INTEGER, "+
+            ENQUIRY_PRODUCT_ID + " INTEGER, "+
+            ENQUIRY_QUANTITY + " VARCHAR(100), "+
             KEY_STATUS +" TINYINT(4)," +
             KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -172,10 +225,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ORDER_USERID + " INTEGER,"+
             ORDER_REFERENCE +" VARCHAR(40),"+
             ORDER_UTR + " VARCHAR(40),"+
-           /* ORDER_ITEM + " VARCHAR(40),"+
-            ORDER_QUANTITY + " INTEGER,"+
-            ORDER_PRICE + " VARCHAR(40),"+
-            ORDER_TOTAL_AMOUNT + " VARCHAR(40),"+*/
             KEY_STATUS +" TINYINT(4)," +
             KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -206,7 +255,78 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_STATUS +" TINYINT(4)," +
             KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Product group Table create statement
+    private static final String CREATE_TABLE_PRODUCT_GROUP =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_PRODUCT_GROUP +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    PRODUCT_GROUP_SERVER_ID+" INTEGER," +
+                    PRODUCT_GROUP_NAME+" INTEGER," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
 
+    private static final String CREATE_TABLE_CATEGORY =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_PRODUCT_CATEGORY +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    PRODUCT_GROUP_ID +" INTEGER," +
+                    CATEGORY_SERVER_ID +" INTEGER," +
+                    CATEGORY_NAME +" VARCHAR(50)," +
+                    CATEGORY_IMAGE +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    private static final String CREATE_TABLE_SUBCATEGORY =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_PRODUCT_SUBCATEGORY+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    SUBCATEGORY_SERVER_ID +" INTEGER," +
+                    CATEGORY_ID +" INTEGER," +
+                    PRODUCT_GROUP_ID +" INTEGER," +
+                    SUB_CATEGORY_NAME +" VARCHAR(50)," +
+                    SUB_CATEGORY_IAMGE +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    private static final String CREATE_TABLE_PRODUCT_DETAILS =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_PRODUCT_DETAILS+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    PRODUCT_DETAILS_SERVER_ID +" INTEGER," +
+                    SUB_CATEGORY_ID +" INTEGER," +
+                    CATEGORY_ID +" INTEGER," +
+                    PRODUCT_GROUP_ID +" INTEGER," +
+                    PRODUCT_NAME +" VARCHAR(50)," +
+                    PRODUCT_PATH +" VARCHAR(50)," +
+                    PRODUCT_PATH1 +" VARCHAR(50)," +
+                    PRODUCT_PATH2 +" VARCHAR(50)," +
+                    PRODUCT_PATH3 +" VARCHAR(50)," +
+                    PRODUCT_PATH4 +" VARCHAR(50)," +
+                    PRODUCT_DESCRIPTION +" VARCHAR(50)," +
+                    PRODUCT_DISCOUNT_TYPE +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    private static final String CREATE_TABLE_ENQUIRY_ADMIN =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_ENQUIRY_ADMIN+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    ADMIN_ENQUIRY_SERVER_ID +" INTEGER," +
+                    ADMIN_ENQUIRY_USERID + " INTEGER,"+
+                    ENQUIRY_REFERENCE +" INTEGER," +
+                    VENDOR_ID +" INTEGER," +
+                    SUB_CATEGORY_ID +" INTEGER," +
+                    PRODUCT_ID +" INTEGER," +
+                    QUANTITY +" INTEGER," +
+                    PRICE +" INTEGER," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    private static final String CREATE_TABLE_VENDOR =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_VENDORS +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    VENDOR_SERVER_ID +" INTEGER," +
+                    VENDOR_NAME +" VARCHAR(50)," +
+                    VENDOR_CONTACT +" VARCHAR(50)," +
+                    VENDOR_ADDRESS +" VARCHAR(50)," +
+                    VENDOR_EMAIL +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -217,6 +337,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_ORDER);
         db.execSQL(CREATE_TABLE_OFFLINE);
         db.execSQL(CREATE_TABLE_OBP);
+        db.execSQL(CREATE_TABLE_PRODUCT_GROUP);
+        db.execSQL(CREATE_TABLE_CATEGORY);
+        db.execSQL(CREATE_TABLE_SUBCATEGORY);
+        db.execSQL(CREATE_TABLE_PRODUCT_DETAILS);
+        db.execSQL(CREATE_TABLE_ENQUIRY_ADMIN);
+        db.execSQL(CREATE_TABLE_VENDOR);
+
     }
 
     @Override
@@ -228,6 +355,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OBP);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PRODUCT_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_SUBCATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PRODUCT_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_ENQUIRY_ADMIN);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VENDOR);
 
         // create new tables
         onCreate(db);
@@ -250,7 +383,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // insert row
         long society_id = 0;
         try {
+
+            String whereClause = SOCIETY_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( societyColumn.getServerId() )} ;
+
+            /*int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_SOCIETY,whereClause,whereArgs);
+            if( numRows <= 0 ) {
+            }*/
             society_id = db.insert(TABLE_SOCIETY, null, contentValues);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -278,6 +419,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToFirst();
 
         Society society = new Society();
+        assert c != null;
         society.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         society.setUserId(c.getInt(c.getColumnIndex(SOCIETY_COLUMN_USERID)));
         society.setSoc_name(c.getString(c.getColumnIndex(SOCIETY_COLUMN_NAME)));
@@ -304,6 +446,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToFirst();
 
         Society society = new Society();
+        assert c != null;
         society.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         society.setUserId(c.getInt(c.getColumnIndex(SOCIETY_COLUMN_USERID)));
         society.setSoc_name(c.getString(c.getColumnIndex(SOCIETY_COLUMN_NAME)));
@@ -362,7 +505,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SOCIETY_COLUMN_ADDRESS, society.getSoc_adrs());
         contentValues.put(KEY_STATUS, society.getSoc_status());
 
-        String whereClause = null ;
+        String whereClause = null;
         String[] whereArgs;
 
         // when offline society row updated
@@ -410,12 +553,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all societies
     **/
-    public List<Society> getAllSocieties() {
+    public ArrayList<Society> getAllSocieties() {
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
         int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
 
-        List<Society> array_list = new ArrayList<Society>();
+        ArrayList<Society> array_list = new ArrayList<Society>();
         String selectQuery = "SELECT * FROM "+TABLE_SOCIETY+" WHERE "+SOCIETY_COLUMN_USERID+" = "+uId
                             +" AND "+KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT;
         Log.d(LOG, selectQuery);
@@ -479,12 +622,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(ENQUIRY_GROUPID, enquiryColumn.getEnquiry_groupId());
         contentValues.put(ENQUIRY_REPLYTO, enquiryColumn.getEnquiry_replyTo());
         contentValues.put(ENQUIRY_REPLIED, enquiryColumn.getEnquiry_replied());
-        contentValues.put(ENQUIRY_MESSAGE, enquiryColumn.getEnquiry_message());
-        contentValues.put(ENQUIRY_SOCIETY, enquiryColumn.getEnquiry_society());
-        contentValues.put(ENQUIRY_SOCIETY_ADDRESS, enquiryColumn.getEnquiry_society_address());
-        contentValues.put(ENQUIRY_SOCIETY_CONTACT, enquiryColumn.getEnquiry_society_contact());
-        contentValues.put(ENQUIRY_SOCIETY_EMAIL, enquiryColumn.getEnquiry_society_email());
-        contentValues.put(ENQUIRY_DOCUMENT, enquiryColumn.getEnquiry_document());
+        contentValues.put(ENQUIRY_SOCIETY_ID, enquiryColumn.getEnquiry_societyId());
+        contentValues.put(ENQUIRY_SUBCATEGORY_ID, enquiryColumn.getEnquiry_subCategoryId());
+        contentValues.put(ENQUIRY_PRODUCT_ID, enquiryColumn.getEnquiry_productId());
+        contentValues.put(ENQUIRY_QUANTITY, enquiryColumn.getEnquiry_quantity());
 
         // insert row
         long enquiry_id = db.insert(TABLE_ENQUIRY, null, contentValues);
@@ -498,7 +639,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ENQUIRY_REPLIED, "1");
+        contentValues.put(ENQUIRY_REPLIED, repliedVal);
 
 //      db.update(String table_name,String where_clause,String[] where_args);
         int update = db.update(TABLE_ENQUIRY, contentValues, ENQUIRY_SERVER_ID + " = ? ", new String[]{eId});
@@ -564,12 +705,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
                 enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
                 enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
-                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
-                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
-                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
-                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
-                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
-                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_societyId(res.getInt(res.getColumnIndex(ENQUIRY_SOCIETY_ID)));
+                enquiry.setEnquiry_subCategoryId(res.getInt(res.getColumnIndex(ENQUIRY_SUBCATEGORY_ID)));
+                enquiry.setEnquiry_productId(res.getInt(res.getColumnIndex(ENQUIRY_PRODUCT_ID)));
+                enquiry.setEnquiry_quantity(res.getString(res.getColumnIndex(ENQUIRY_QUANTITY)));
                 enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
@@ -583,7 +722,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting enquiry count using user id
      */
-    public int numberOfEnquiryRowsByUid(){
+    public int numberOfEnquiryRowsByUid() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
@@ -601,7 +740,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param id
      * @return
      */
-    public int numberOfEnquiryRowsByServerID(String id){
+    public int numberOfEnquiryRowsByServerID(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String whereClause = ENQUIRY_SERVER_ID + " = ? ";
@@ -699,12 +838,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
                 enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
                 enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
-                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
-                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
-                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
-                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
-                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
-                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_societyId(res.getInt(res.getColumnIndex(ENQUIRY_SOCIETY_ID)));
+                enquiry.setEnquiry_subCategoryId(res.getInt(res.getColumnIndex(ENQUIRY_SUBCATEGORY_ID)));
+                enquiry.setEnquiry_productId(res.getInt(res.getColumnIndex(ENQUIRY_PRODUCT_ID)));
+                enquiry.setEnquiry_quantity(res.getString(res.getColumnIndex(ENQUIRY_QUANTITY)));
                 enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
@@ -793,12 +930,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
                 enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
                 enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
-                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
-                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
-                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
-                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
-                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
-                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_societyId(res.getInt(res.getColumnIndex(ENQUIRY_SOCIETY_ID)));
+                enquiry.setEnquiry_subCategoryId(res.getInt(res.getColumnIndex(ENQUIRY_SUBCATEGORY_ID)));
+                enquiry.setEnquiry_productId(res.getInt(res.getColumnIndex(ENQUIRY_PRODUCT_ID)));
+                enquiry.setEnquiry_quantity(res.getString(res.getColumnIndex(ENQUIRY_QUANTITY)));
                 enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setCreted_at(formatedDate);
 
@@ -815,7 +950,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param oldSocietyName
      * @return
      */
-    public boolean updateSocietyColumnInEnquiryTable(Enquiry enquiry, String oldSocietyName) {
+   /* public boolean updateSocietyColumnInEnquiryTable(Enquiry enquiry, String oldSocietyName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -827,22 +962,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //      db.update(String table_name,String where_clause,String[] where_args);
         db.update(TABLE_ENQUIRY, contentValues, ENQUIRY_SOCIETY + " = ? ", new String[]{oldSocietyName});
         return true;
-    }
+    }*/
 
     /**
-     *
-     * @param userId
-     * @param msg
-     * @param filename
-     * @return
+     *  @param uId
+     * @param selectedSubcategoryServerId
+     * @param selectedProductServerId
+     * @param str_ref_no
+     * @return numRows
      */
-    public int checkEnquiryEntryPresent(int userId, String msg, String filename){
+    public int checkEnquiryEntryPresent(int uId,
+                                        int selectedSocietyServerId,
+                                        int selectedSubcategoryServerId,
+                                        int selectedProductServerId,
+                                        String str_ref_no) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String whereClause = ENQUIRY_USERID + " = ? AND " + ENQUIRY_MESSAGE + " = ? AND " + ENQUIRY_DOCUMENT + " = ? ";
-        String[] whereArgs = new String[]{ String.valueOf(userId), msg, filename };
+        String whereClause = ENQUIRY_USERID + " = ? AND "
+                + ENQUIRY_REF+ " = ? AND "
+                + ENQUIRY_SOCIETY_ID+ " = ? AND "
+                + ENQUIRY_SUBCATEGORY_ID+" = ? AND "
+                + ENQUIRY_PRODUCT_ID;
+
+        String[] whereArgs = new String[]{ String.valueOf(uId),
+                str_ref_no,
+                String.valueOf(selectedSocietyServerId),
+                String.valueOf(selectedSubcategoryServerId),
+                String.valueOf(selectedProductServerId) };
 
         int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_ENQUIRY, whereClause, whereArgs);
+
         return numRows;
     }
 
@@ -852,7 +1001,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param action
      * @return
      */
-    public List<Enquiry> getEnquiryByID(int id, String action){
+    public List<Enquiry> getEnquiryByID(int id, String action) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Enquiry> array_list = new ArrayList<Enquiry>();
 
@@ -863,7 +1012,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
-        if(res.moveToFirst()){
+        if (res.moveToFirst()){
             do{
                 Enquiry enquiry = new Enquiry();
 
@@ -873,12 +1022,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enquiry.setEnquiry_groupId(res.getInt(res.getColumnIndex(ENQUIRY_GROUPID)));
                 enquiry.setEnquiry_replyTo(res.getInt(res.getColumnIndex(ENQUIRY_REPLYTO)));
                 enquiry.setEnquiry_replied(res.getInt(res.getColumnIndex(ENQUIRY_REPLIED)));
-                enquiry.setEnquiry_message(res.getString(res.getColumnIndex(ENQUIRY_MESSAGE)));
-                enquiry.setEnquiry_society(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY)));
-                enquiry.setEnquiry_society_address(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_ADDRESS)));
-                enquiry.setEnquiry_society_contact(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_CONTACT)));
-                enquiry.setEnquiry_society_email(res.getString(res.getColumnIndex(ENQUIRY_SOCIETY_EMAIL)));
-                enquiry.setEnquiry_document(res.getString(res.getColumnIndex(ENQUIRY_DOCUMENT)));
+                enquiry.setEnquiry_societyId(res.getInt(res.getColumnIndex(ENQUIRY_SOCIETY_ID)));
+                enquiry.setEnquiry_subCategoryId(res.getInt(res.getColumnIndex(ENQUIRY_SUBCATEGORY_ID)));
+                enquiry.setEnquiry_productId(res.getInt(res.getColumnIndex(ENQUIRY_PRODUCT_ID)));
+                enquiry.setEnquiry_quantity(res.getString(res.getColumnIndex(ENQUIRY_QUANTITY)));
                 enquiry.setCreted_at( res.getString(res.getColumnIndex(KEY_CREATED_AT)));
                 enquiry.setEnquiry_server_id(res.getInt(res.getColumnIndex(ENQUIRY_SERVER_ID)));
                 enquiry.setEnquiry_offline_action( action );
@@ -1420,7 +1567,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String whereClause = null ;
         String[] whereArgs;
 
-        // when offline society row updated
+        // when offline obp row updated
         // then server id will be o
         if ( obpObj.getUserID_serverId() == 0 ) {
             whereClause = KEY_ID + " = ? ";
@@ -1457,9 +1604,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_OBP, contentValues, whereClause, whereArgs);
     }
 
-    public List<OBP> getOBPByUserId(int userId) {
+    public OBP getOBPByUserId(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<OBP> array_list = new ArrayList<OBP>();
 
         String selectQuery = "SELECT * FROM " + TABLE_OBP + " WHERE "+KEY_STATUS+" = 1 AND " +
                 OBP_SERVER_ID +" = "+userId+";";
@@ -1468,9 +1614,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
-        if(res.moveToFirst()){
+        OBP obpOjject = new OBP();
+        if(res.moveToFirst()) {
             do{
-                OBP obpOjject = new OBP();
 
                 obpOjject.setObp_id(res.getInt(res.getColumnIndex(KEY_ID)));
                 obpOjject.setUserID_serverId(res.getInt(res.getColumnIndex(OBP_SERVER_ID)));
@@ -1486,11 +1632,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 obpOjject.setObp_country(res.getString(res.getColumnIndex(OBP_COUNTRY)));
                 obpOjject.setObp_status(res.getInt(res.getColumnIndex(KEY_STATUS)));
 
-                array_list.add(obpOjject);
-
             } while (res.moveToNext());
         }
-        return array_list;
+        return obpOjject;
     }
 
     /**
@@ -1511,6 +1655,464 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ------------------------ "OBP" table methods ----------------//
+
+
+    // ------------------------ "Product Group" table methods ----------------//
+    /**
+     * getting product group count
+     */
+    public int numberOfGroupRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_PRODUCT_GROUP);
+        return numRows;
+    }
+
+    public long insertProductGroup(Product_Group groupObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PRODUCT_GROUP_SERVER_ID, groupObj.getServerId());
+        contentValues.put(PRODUCT_GROUP_NAME, groupObj.getGroup_name());
+        contentValues.put(KEY_STATUS, groupObj.getGroup_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long group_id = 0;
+        try {
+            group_id = db.insert(TABLE_PRODUCT_GROUP, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return group_id;
+    }
+
+    /**
+     * getting all Group
+     **/
+    public ArrayList<Product_Group> getAllGroup() {
+
+        ArrayList<Product_Group> array_list = new ArrayList<Product_Group>();
+        String selectQuery = "SELECT * FROM "+TABLE_PRODUCT_GROUP+" WHERE "+KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT;
+        Log.d(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Product_Group groups = new Product_Group();
+
+                groups.setId(res.getInt(res.getColumnIndex(KEY_ID)));
+                groups.setGroup_name(res.getString(res.getColumnIndex(PRODUCT_GROUP_NAME)));
+                groups.setServerId(res.getInt(res.getColumnIndex(PRODUCT_GROUP_SERVER_ID)));
+                array_list.add(groups);
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    // ------------------------ "Product Group" table methods ----------------//
+
+
+    // ------------------------ "Product Category" table methods ----------------//
+    /**
+     * getting category count
+     */
+    public int numberOfCategoryRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_PRODUCT_CATEGORY);
+        return numRows;
+    }
+
+    public long insertCategoryGroup(Category categoryObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PRODUCT_GROUP_ID, categoryObj.getProduct_group_id_InCategory());
+        contentValues.put(CATEGORY_SERVER_ID, categoryObj.getServerId());
+        contentValues.put(CATEGORY_NAME, categoryObj.getCategory_name());
+        contentValues.put(CATEGORY_IMAGE, categoryObj.getCategory_image());
+        contentValues.put(KEY_STATUS, categoryObj.getCategory_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long category_id = 0;
+        try {
+            category_id = db.insert(TABLE_PRODUCT_CATEGORY, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return category_id;
+    }
+
+    /**
+     * getting all Category filter by group id
+     *
+     * @param groupId*/
+    public ArrayList<Category> getAllCategory(int groupId) {
+
+        ArrayList<Category> array_list = new ArrayList<Category>();
+        String selectQuery = "SELECT * FROM "+TABLE_PRODUCT_CATEGORY+" WHERE "+KEY_STATUS+" = 1 AND "
+                            +PRODUCT_GROUP_ID+" = "+groupId +" ORDER BY "+KEY_CREATED_AT;
+        Log.d(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Category category = new Category();
+
+                category.setId(res.getInt(res.getColumnIndex(KEY_ID)));
+                category.setProduct_group_id_InCategory(res.getInt(res.getColumnIndex(PRODUCT_GROUP_ID)));
+                category.setServerId(res.getInt(res.getColumnIndex(CATEGORY_SERVER_ID)));
+                category.setCategory_name(res.getString(res.getColumnIndex(CATEGORY_NAME)));
+                category.setCategory_image(res.getString(res.getColumnIndex(CATEGORY_IMAGE)));
+                array_list.add(category);
+
+            }while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    // ------------------------ "Product Category" table methods ----------------//
+
+
+    // ------------------------ "Product Subcategory" table methods ----------------//
+    /**
+     * getting Subcategory count
+     */
+    public int numberOfSubcategoryRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_PRODUCT_SUBCATEGORY);
+        return numRows;
+    }
+
+    public long insertSubcategoryGroup(Subcategory subcategoryObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SUBCATEGORY_SERVER_ID, subcategoryObj.getServerId());
+        contentValues.put(CATEGORY_ID, subcategoryObj.getCategory_id());
+        contentValues.put(PRODUCT_GROUP_ID, subcategoryObj.getProduct_group_id_InSubcategory());
+        contentValues.put(SUB_CATEGORY_NAME, subcategoryObj.getSubcategory_name());
+        contentValues.put(SUB_CATEGORY_IAMGE, subcategoryObj.getSubcategory_image());
+        contentValues.put(KEY_STATUS, subcategoryObj.getSubcategory_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long subcategory_id = 0;
+        try {
+            subcategory_id = db.insert(TABLE_PRODUCT_SUBCATEGORY, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subcategory_id;
+    }
+
+    /**
+     * getting all SubCategory filter by group id and category id
+     *
+     * @param groupId
+     * @param categoryId
+     * @return
+     */
+
+    public ArrayList<Subcategory> getAllSubcategory(int groupId, int categoryId) {
+
+        ArrayList<Subcategory> array_list = new ArrayList<Subcategory>();
+        String selectQuery = "SELECT * FROM "+TABLE_PRODUCT_SUBCATEGORY+" WHERE "+KEY_STATUS+" = 1 AND "+
+                PRODUCT_GROUP_ID+" = "+groupId+" AND "+
+                CATEGORY_ID+" = "+categoryId+" ORDER BY "+KEY_CREATED_AT;
+        Log.d(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Subcategory subcategory = new Subcategory();
+
+                subcategory.setId(res.getInt(res.getColumnIndex(KEY_ID)));
+                subcategory.setServerId(res.getInt(res.getColumnIndex(SUBCATEGORY_SERVER_ID)));
+                subcategory.setCategory_id(res.getInt(res.getColumnIndex(CATEGORY_ID)));
+                subcategory.setProduct_group_id_InSubcategory(res.getInt(res.getColumnIndex(PRODUCT_GROUP_ID)));
+                subcategory.setSubcategory_name(res.getString(res.getColumnIndex(SUB_CATEGORY_NAME)));
+                subcategory.setSubcategory_image(res.getString(res.getColumnIndex(SUB_CATEGORY_IAMGE)));
+                array_list.add(subcategory);
+
+            } while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    // ------------------------ "Product Subcategory" table methods ----------------//
+
+    // ------------------------ "Product Details" table methods ----------------//
+    /**
+     * getting product details count
+     */
+    public int numberOfProductdetailsRows() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_PRODUCT_DETAILS);
+        return numRows;
+    }
+
+    public long insertProductDetailsGroup(Product_Details productDetailsObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(PRODUCT_DETAILS_SERVER_ID, productDetailsObj.getServerId());
+        contentValues.put(SUB_CATEGORY_ID, productDetailsObj.getSubcategory_id_InProductDetails());
+        contentValues.put(CATEGORY_ID, productDetailsObj.getCategory_id_InProductDetails());
+        contentValues.put(PRODUCT_GROUP_ID, productDetailsObj.getProduct_group_id_InProductDetails());
+        contentValues.put(PRODUCT_NAME, productDetailsObj.getProduct_name());
+        contentValues.put(PRODUCT_PATH, productDetailsObj.getProd_path());
+        contentValues.put(PRODUCT_PATH1, productDetailsObj.getProd_path1());
+        contentValues.put(PRODUCT_PATH2, productDetailsObj.getProd_path2());
+        contentValues.put(PRODUCT_PATH3, productDetailsObj.getProd_path3());
+        contentValues.put(PRODUCT_PATH4, productDetailsObj.getProd_path4());
+        contentValues.put(PRODUCT_DESCRIPTION, productDetailsObj.getProd_description());
+        contentValues.put(PRODUCT_DISCOUNT_TYPE, productDetailsObj.getDiscount_type());
+        contentValues.put(KEY_STATUS, productDetailsObj.getProduct_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long product_id = 0;
+        try {
+            product_id = db.insert(TABLE_PRODUCT_DETAILS, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return product_id;
+    }
+
+    /**
+     * getting all product details filter by group id and category id and subcategory id
+     *
+     * @param groupId
+     * @param categoryId
+     * @param subcategoryId*/
+    public ArrayList<Product_Details> getAllProductdetails(int groupId, int categoryId, int subcategoryId) {
+
+        ArrayList<Product_Details> array_list = new ArrayList<Product_Details>();
+        String selectQuery = "SELECT * FROM "+TABLE_PRODUCT_DETAILS+" WHERE "+KEY_STATUS+" = 1 AND "+
+                PRODUCT_GROUP_ID +" = "+groupId+" AND "+
+                CATEGORY_ID +" = "+categoryId+" AND "+
+                SUB_CATEGORY_ID+" = "+subcategoryId+" ORDER BY "+KEY_CREATED_AT;
+        Log.d(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Product_Details product_details = new Product_Details();
+
+                product_details.setId(res.getInt(res.getColumnIndex(KEY_ID)));
+                product_details.setServerId(res.getInt(res.getColumnIndex(PRODUCT_DETAILS_SERVER_ID)));
+                product_details.setSubcategory_id_InProductDetails(res.getInt(res.getColumnIndex(SUB_CATEGORY_ID)));
+                product_details.setCategory_id_InProductDetails(res.getInt(res.getColumnIndex(CATEGORY_ID)));
+                product_details.setProduct_group_id_InProductDetails(res.getInt(res.getColumnIndex(PRODUCT_GROUP_ID)));
+                product_details.setProduct_name(res.getString(res.getColumnIndex(PRODUCT_NAME)));
+                product_details.setProd_path(res.getString(res.getColumnIndex(PRODUCT_PATH)));
+                product_details.setProd_description(res.getString(res.getColumnIndex(PRODUCT_DESCRIPTION)));
+                product_details.setDiscount_type(res.getString(res.getColumnIndex(PRODUCT_DISCOUNT_TYPE)));
+                array_list.add(product_details);
+
+            } while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    // ------------------------ "Product Details" table methods ----------------//
+
+
+    // ------------------------ "Vendor" table methods ----------------//
+
+    /**
+     * check if any vendor entry exist
+     */
+    public int isAnyVendorPresent() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(context);
+        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
+
+        String selectQuery = "SELECT COUNT(*) FROM " + TABLE_VENDORS + " WHERE "+KEY_STATUS+" = 1;";
+
+        int numRows = (int) DatabaseUtils.longForQuery(db, selectQuery, null);
+
+        return numRows;
+    }
+
+    public List<Vendor> getAllVendors() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Vendor> array_list = new ArrayList<Vendor>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_VENDORS + " WHERE "+KEY_STATUS+" = 1 ;";
+
+        Log.d(LOG, selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                Vendor vendorObject = new Vendor();
+
+                vendorObject.setId(res.getInt(res.getColumnIndex(KEY_ID)));
+                vendorObject.setServerId(res.getInt(res.getColumnIndex(VENDOR_SERVER_ID)));
+                vendorObject.setVendor_name(res.getString(res.getColumnIndex(VENDOR_NAME)));
+                vendorObject.setVendor_contact(res.getString(res.getColumnIndex(VENDOR_CONTACT)));
+                vendorObject.setVendor_Address(res.getString(res.getColumnIndex(VENDOR_ADDRESS)));
+                vendorObject.setVendor_email(res.getString(res.getColumnIndex(VENDOR_EMAIL)));
+                vendorObject.setVendor_status(res.getInt(res.getColumnIndex(KEY_STATUS)));
+
+                array_list.add(vendorObject);
+
+            } while (res.moveToNext());
+        }
+        return array_list;
+    }
+
+    /**
+     * check if vendor is exist
+     * @param str_vendor_email
+     * @return numRows
+     */
+    public int isVendorPresent(String str_vendor_email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = VENDOR_EMAIL + " = ? ";
+        String[] whereArgs = new String[]{ str_vendor_email } ;
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_VENDORS,whereClause,whereArgs);
+        return numRows;
+    }
+
+    public long insertVendorData(Vendor vendorObj) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VENDOR_SERVER_ID, vendorObj.getServerId());
+        contentValues.put(VENDOR_NAME, vendorObj.getVendor_name());
+        contentValues.put(VENDOR_CONTACT, vendorObj.getVendor_contact());
+        contentValues.put(VENDOR_ADDRESS, vendorObj.getVendor_Address());
+        contentValues.put(VENDOR_EMAIL, vendorObj.getVendor_email());
+        contentValues.put(KEY_STATUS, vendorObj.getVendor_status());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long vendor_id = 0;
+        try {
+            vendor_id = db.insert(TABLE_VENDORS, null, contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vendor_id;
+    }
+
+    public List<Vendor> getOfflineVendorById(int offline_row_id, String offline_row_action) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Vendor> array_list = new ArrayList<Vendor>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_VENDORS + " WHERE "
+                + KEY_ID + " = " + offline_row_id ;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null)
+            c.moveToFirst();
+
+        Vendor vendor = new Vendor();
+
+        vendor.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        vendor.setServerId(c.getInt(c.getColumnIndex(VENDOR_SERVER_ID)));
+        vendor.setVendor_name(c.getString(c.getColumnIndex(VENDOR_NAME)));
+        vendor.setVendor_contact(c.getString(c.getColumnIndex(VENDOR_CONTACT)));
+        vendor.setVendor_Address(c.getString(c.getColumnIndex(VENDOR_ADDRESS)));
+        vendor.setVendor_email(c.getString(c.getColumnIndex(VENDOR_EMAIL)));
+        vendor.setCreted_at(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+        vendor.setVendor_status(c.getInt(c.getColumnIndex(KEY_STATUS)));
+        vendor.setVendor_offline_action(offline_row_action);
+
+        array_list.add(vendor);
+
+        return array_list;
+    }
+
+    /**
+     * update server id when offline data inserted on server while internet is on.
+     * function - InsertOfflineVendorDataAsyncTask
+     * @param localVendorId
+     * @param serverId
+     * @return
+     */
+    public boolean updateServerIdOfVendor(String localVendorId, int serverId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VENDOR_SERVER_ID, serverId);
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_VENDORS, contentValues, KEY_ID + " = ? ", new String[]{ localVendorId });
+        return true;
+    }
+
+
+    /**
+     * Deleting a vendor
+     */
+    public Integer deleteVendor (Vendor vendorObj) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_STATUS, "0");
+
+        String whereClause = null ;
+        String[] whereArgs;
+
+        // when offline vendor row updated
+        // then server id will be o
+        whereClause = KEY_ID + " = ? ";
+        whereArgs = new String[]{String.valueOf(vendorObj.getId())} ;
+
+        return db.update(TABLE_VENDORS, contentValues, whereClause, whereArgs);
+    }
+
+    /**
+     * Updating a Vendors
+     */
+    public boolean updateVendor(Vendor vendor) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VENDOR_NAME, vendor.getVendor_name());
+        contentValues.put(VENDOR_CONTACT, vendor.getVendor_contact());
+        contentValues.put(VENDOR_EMAIL, vendor.getVendor_email());
+        contentValues.put(VENDOR_ADDRESS, vendor.getVendor_Address());
+        contentValues.put(KEY_STATUS, vendor.getVendor_status());
+
+        String whereClause = KEY_ID + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(vendor.getId())} ;
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_VENDORS, contentValues, whereClause, whereArgs);
+        return true;
+    }
+
+    // ------------------------ "Vendor" table methods ----------------//
 
     // closing database
     public void closeDB() {

@@ -47,8 +47,8 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
 
         Enquiry current = data.get(position);
         holder.tv_ref.setText("Ref no - "+current.getEnquiry_reference());
-        holder.tv_scoiety.setText("Scoiety - "+current.getEnquiry_society());
-        holder.tv_message.setText("Message - "+current.getEnquiry_message());
+//        holder.tv_scoiety.setText("Scoiety - "+current.getEnquiry_society());
+//        holder.tv_message.setText("Message - "+current.getEnquiry_message());
 
     }
 

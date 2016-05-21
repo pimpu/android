@@ -5,7 +5,7 @@
 	$username = "root";
 	$password = "";
 	$hostname = "localhost";
-	$db_name  = "kissan_cart"	;
+	$db_name  = "kissan_cart_revise";
 	
 	error_reporting(0);
 					

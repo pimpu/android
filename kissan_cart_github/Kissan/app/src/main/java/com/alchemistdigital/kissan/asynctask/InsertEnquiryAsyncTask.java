@@ -18,7 +18,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -26,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -37,33 +35,43 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
     // Progress Dialog
     private ProgressDialog pDialog;
     private String str_ref_no;
-    private String str_name;
-    private String str_contact;
-    private String str_email;
-    private String str_address;
-    private String str_message;
-    private String absolutePath;
     private String strUID;
     private String userType;
     private String eId;
+    private int repToVal;
     private String replyTo;
+    private int gId;
     private String groupId;
+    private int selectedSocietyServerId;
+    String societyId;
+    private int selectedSubcategoryServerId;
+    String subcategoryId;
+    private int selectedProductServerId;
+    String productId;
+    String str_product_qty;
 
-    public InsertEnquiryAsyncTask(Context context, String str_ref_no, String str_name, String str_contact, String str_email, String str_address, String str_message, String absolutePath, String strUID, String userType, String eId, int repToVal, int gId) {
+    public InsertEnquiryAsyncTask(Context context,
+                                  String str_ref_no,
+                                  String strUID,
+                                  int gId,
+                                  int repToVal,
+                                  int selectedSocietyServerId,
+                                  int selectedSubcategoryServerId,
+                                  int selectedProductServerId,
+                                  String str_product_qty,
+                                  String userType,
+                                  String eId) {
         this.context = context;
         this.str_ref_no = str_ref_no;
-        this.str_name = str_name;
-        this.str_contact = str_contact;
-        this.str_email = str_email;
-        this.str_address = str_address;
-        this.str_message = str_message;
-        this.absolutePath = absolutePath;
         this.strUID = strUID;
         this.userType = userType;
         this.eId = eId;
-        replyTo = String.valueOf(repToVal);
-        groupId = String.valueOf(gId);
-
+        this.selectedSocietyServerId = selectedSocietyServerId;
+        this.selectedSubcategoryServerId = selectedSubcategoryServerId;
+        this.selectedProductServerId = selectedProductServerId;
+        this.str_product_qty = str_product_qty;
+        this.repToVal = repToVal;
+        this.gId = gId;
     }
 
     @Override
@@ -87,6 +95,12 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
     private String uploadFile() {
         String responseString = null;
 
+        groupId = String.valueOf(gId);
+        replyTo = String.valueOf(repToVal);
+        societyId = String.valueOf(selectedSocietyServerId);
+        subcategoryId = String.valueOf(selectedSubcategoryServerId);
+        productId = String.valueOf(selectedProductServerId);
+
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(CommonVariables.ENQUIRY_INSERT_SERVER_URL);
 
@@ -100,24 +114,18 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                         }
                     });
 
-            File sourceFile = new File(absolutePath);
-
             // Adding file data to http body
-            entity.addPart("image", new FileBody(sourceFile));
             entity.addPart("refNo", new StringBody(str_ref_no));
-            entity.addPart("name", new StringBody(str_name));
-            entity.addPart("contact", new StringBody(str_contact));
-            entity.addPart("email", new StringBody(str_email));
-            entity.addPart("address", new StringBody(str_address));
-            entity.addPart("message", new StringBody(str_message));
             entity.addPart("uId", new StringBody(strUID));
             entity.addPart("userType", new StringBody(userType));
             entity.addPart("eId", new StringBody(eId));
             entity.addPart("replyTo", new StringBody(replyTo));
             entity.addPart("groupId", new StringBody(groupId));
-            entity.addPart("filepath",new StringBody(CommonVariables.FILE_UPLOAD_URL));
+            entity.addPart("societyId", new StringBody(societyId));
+            entity.addPart("subcategoryId", new StringBody(subcategoryId));
+            entity.addPart("productId", new StringBody(productId));
+            entity.addPart("productQty", new StringBody(str_product_qty));
 
-//            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
 
             // Making server call
@@ -134,9 +142,9 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -160,7 +168,7 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
             JSONObject json = new JSONObject(result);
 
             int success = json.getInt(CommonVariables.TAG_SUCCESS);
-            if(success == 1){
+            if(success == 1) {
                 String message = json.getString(CommonVariables.TAG_MESSAGE);
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
@@ -171,21 +179,11 @@ public class InsertEnquiryAsyncTask extends AsyncTask<String, String, String> {
                 JSONObject c = jsonSociety.getJSONObject(0);
                 int id_enquiry = c.getInt("id");
                 String creted_at = c.getString("timestamp");
-                String fileName=null;
-                int gId = c.getInt("groupId");
-                int repToVal = c.getInt("repToVal");
                 int eUid = Integer.valueOf(strUID);
 
-                //  absolutepath = .../filename.png
-                int cut = absolutePath.lastIndexOf('/');
-                if (cut != -1) {
-                    //  fileName = filename.png
-                    fileName = absolutePath.substring(cut + 1);
-                }
-
                 Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId,
-                                                repToVal, 0, str_message, str_name, str_address,
-                                                str_contact, str_email, fileName, 1);
+                        repToVal, 0, selectedSocietyServerId, selectedSubcategoryServerId, selectedProductServerId,
+                        str_product_qty,1 );
 
                 long enquiryId = dbHelper.insertEnquiry(enquiry);
                 System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);

@@ -77,9 +77,9 @@ public class InsertOfflineOBPDataAsyncTask extends AsyncTask<String, String, Str
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;

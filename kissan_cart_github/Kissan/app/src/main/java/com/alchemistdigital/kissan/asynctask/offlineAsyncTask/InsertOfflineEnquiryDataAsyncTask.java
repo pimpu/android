@@ -15,7 +15,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -23,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -55,21 +53,8 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
                         }
                     });
 
-            JSONArray getFilePathArray = new JSONArray(jsonArrayEnquiryArr);
-
-            for (int i = 0 ; i < getFilePathArray.length() ; i++ ) {
-                JSONObject c = getFilePathArray.getJSONObject(i);
-
-                if ( !(c.getString("enquiry_offline_action")).equals(offlineActionModeEnum.UPDATE.toString()) ){
-                    File attachfilename = new File( CommonVariables.SCAN_FILE_PATH + "/" + c.getString("enquiry_document"));
-                    entity.addPart("image"+i, new FileBody(attachfilename));
-                }
-
-            }
-
             // Adding file data to http body
             entity.addPart("jsonArrayEnquiryArr", new StringBody(jsonArrayEnquiryArr));
-            entity.addPart("filepath",new StringBody(CommonVariables.FILE_UPLOAD_URL));
 
 //            totalSize = entity.getContentLength();
             httppost.setEntity(entity);
@@ -88,11 +73,9 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -116,9 +99,9 @@ public class InsertOfflineEnquiryDataAsyncTask extends AsyncTask<String, String,
                 JSONArray jsonEnquiry = json.getJSONArray(CommonVariables.TAG_MESSAGE);
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
 
-                for( int i = 0 ; i < jsonEnquiry.length() ; i++ ){
+                for( int i = 0 ; i < jsonEnquiry.length() ; i++ ) {
                     JSONObject c = jsonEnquiry.getJSONObject(i);
-                    if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ){
+                    if ( (c.getString("action")).equals( offlineActionModeEnum.INSERT.toString() ) ) {
 
                         String enquiryId = c.getString("enquiryId");
                         int serverId = c.getInt("serverId");

@@ -31,10 +31,10 @@ import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnecting
 public class View_Society extends AppCompatActivity{
 
     private View displaySocietyView;
-    private RecyclerView society_recyclerView;
+    public RecyclerView society_recyclerView;
     public RecyclerView.Adapter society_adapter;
     public static List<Society> data;
-    View emptyView;
+    public View emptyView;
     private FloatingActionButton fabCreateSociety;
 
     @Override
@@ -62,7 +62,7 @@ public class View_Society extends AppCompatActivity{
         String who = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
         // check user is admin or obp
         // on the bases of preference value.
-        if( who.equals("obp") ){
+        if( who.equals("obp") ) {
             fabCreateSociety.setVisibility(View.VISIBLE);
         }
         else {
@@ -184,30 +184,15 @@ public class View_Society extends AppCompatActivity{
 
                                     dbhelper.closeDB();
 
+                                    // reomove deleted society from adapter
+                                    societyData.remove(position);
+                                    society_adapter.notifyItemRemoved(position);
+
                                 } else {
 
-                                    new DeleteSocietyAsyncTask(View_Society.this, data.get(position).getServerId() ).execute();
+                                    new DeleteSocietyAsyncTask(View_Society.this, data.get(position), position ).execute();
 
-                                    societyObj.setServerId( data.get(position).getServerId() );
-                                    societyObj.setId( data.get(position).getId() );
-
-                                    DatabaseHelper dbhelper = new DatabaseHelper(View_Society.this);
-                                    dbhelper.deleteSociety(societyObj);
-                                    dbhelper.closeDB();
-
-
-                                    DatabaseHelper dbHelper = new DatabaseHelper(View_Society.this);
-                                    int len = dbHelper.numberOfSocietyRowsByStatus();
-                                    dbHelper.closeDB();
-
-                                    if(len <= 0) {
-                                        emptyView.setVisibility(View.VISIBLE);
-                                        society_recyclerView.setVisibility(View.GONE);
-                                    }
                                 }
-                                // reomove deleted society from adapter
-                                societyData.remove(position);
-                                society_adapter.notifyItemRemoved(position);
                             }
                         });
 

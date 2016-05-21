@@ -22,10 +22,11 @@
     <string name="nav_enquiry">Enquiry</string>
     <string name="nav_society">Society</string>
     <string name="nav_my_profile">My Profile</string>
+    <string name="nav_vendor">Vendor</string>
     <!--item list for navigation drawer-->
 
     <!--all hints-->
-    <string name="hint_ref_no">Reference number</string>
+    <string name="hint_ref_no">Reference Number</string>
     <string name="hint_society_contact">Society Contact</string>
     <string name="hint_society_email">Society Email</string>
     <string name="hint_society_address">Society Address</string>
@@ -49,6 +50,11 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_image_name">Image Name</string>
+    <string name="hint_product_quantity">Product Quantity</string>
+    <string name="hint_vendor_name">Vendor Name</string>
+    <string name="hint_vendor_contact">Vendor Contact</string>
+    <string name="hint_vendor_address">Vendor Address</string>
+    <string name="hint_vendor_email">Vendor Email</string>
     <!--all hints-->
 
     <string name="sharedPrefrence">info.alchemistdigital.kissan_cart</string>
@@ -67,7 +73,12 @@
     <string name="adminUserId">admin_userId</string>
     <string name="userId">userId</string>
     <string name="title_activity_admin_panel">Admin Panel</string>
-    <string name="title_select_society">Select society -</string>
+    <string name="title_select_society">Select society - </string>
+    <string name="title_select_group">Select group - </string>
+    <string name="title_select_category_spinner">Select category - </string>
+    <string name="title_select_subcategory">Select subcategory - </string>
+    <string name="title_select_product_name">Select product name - </string>
+    <string name="title_product_quantity">Product Quantity - </string>
     <string name="sharedPreference_filepath">preference_filepath</string>
     <string name="bool_scan_image">is_scan_file</string>
     <string name="empty_enquiry_message">No enquiry registered.</string>
@@ -102,5 +113,10 @@
     <string name="details">Details</string>
     <string name="viewObpDetails">OBP Details</string>
     <string name="editObpDetails">Edit OBP</string>
+    <string name="vendorDetails">Vendors</string>
+    <string name="empty_vendor_message">No vendor registered.</string>
+    <string name="createVendor">Create Vendor</string>
+    <string name="singleVendorDetails">Vendor Details</string>
+    <string name="editVendor">Edit Vendor</string>
 
 </resources>

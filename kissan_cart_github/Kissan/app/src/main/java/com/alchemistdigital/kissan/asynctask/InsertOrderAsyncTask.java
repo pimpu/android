@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,6 +47,9 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("inserting ...");
         pDialog.setIndeterminate(false);
@@ -92,9 +96,9 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -103,6 +107,8 @@ public class InsertOrderAsyncTask extends AsyncTask<String,String,String>{
     @Override
     protected void onPostExecute(String result) {
         pDialog.dismiss();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         try {
             Log.d("Order insert Data", result.toString());

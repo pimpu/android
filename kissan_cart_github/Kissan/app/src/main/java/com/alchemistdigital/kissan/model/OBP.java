@@ -1,23 +1,26 @@
 package com.alchemistdigital.kissan.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by user on 4/5/2016.
  */
-public class OBP {
-    private int obp_id;
-    private int userID_serverId; // server id
-    private String obp_name;
-    private String obp_store_name;
-    private String obp_email_id;
-    private String obp_email_passowrd;
-    private String obp_contact_number;
-    private String obp_address;
-    private int obp_pincode;
-    private String obp_city;
-    private String obp_state;
-    private String obp_country;
-    private int obp_status;
-    private String obp_offline_action;
+public class OBP implements Parcelable {
+    public int obp_id;
+    public int userID_serverId; // server id
+    public String obp_name;
+    public String obp_store_name;
+    public String obp_email_id;
+    public String obp_email_passowrd;
+    public String obp_contact_number;
+    public String obp_address;
+    public int obp_pincode;
+    public String obp_city;
+    public String obp_state;
+    public String obp_country;
+    public int obp_status;
+    public String obp_offline_action;
 
     public OBP() {
     }
@@ -179,4 +182,63 @@ public class OBP {
     public void setObp_offline_action(String obp_offline_action) {
         this.obp_offline_action = obp_offline_action;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(obp_id);
+        dest.writeInt(userID_serverId);
+        dest.writeString(obp_name);
+        dest.writeString(obp_store_name);
+        dest.writeString(obp_email_id);
+        dest.writeString(obp_email_passowrd);
+        dest.writeString(obp_contact_number);
+        dest.writeString(obp_address);
+        dest.writeInt(obp_pincode);
+        dest.writeString(obp_city);
+        dest.writeString(obp_state);
+        dest.writeString(obp_country);
+        dest.writeInt(obp_status);
+        dest.writeString(obp_offline_action);
+    }
+
+    /**
+     * Retrieving OBP data from Parcel object
+     * This constructor is invoked by the method createFromParcel(Parcel source) of
+     * the object CREATOR
+     **/
+    private OBP(Parcel in) {
+        obp_id = in.readInt();
+        userID_serverId = in.readInt();
+        obp_name = in.readString();
+        obp_store_name = in.readString();
+        obp_email_id = in.readString();
+        obp_email_passowrd = in.readString();
+        obp_contact_number = in.readString();
+        obp_address = in.readString();
+        obp_pincode = in.readInt();
+        obp_city = in.readString();
+        obp_state = in.readString();
+        obp_country = in.readString();
+        obp_status = in.readInt();
+        obp_offline_action = in.readString();
+    }
+
+    public static final Parcelable.Creator<OBP> CREATOR = new Parcelable.Creator<OBP>() {
+
+        @Override
+        public OBP createFromParcel(Parcel source) {
+            return new OBP(source);
+        }
+
+        @Override
+        public OBP[] newArray(int size) {
+            return new OBP[size];
+        }
+    };
+
 }

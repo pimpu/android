@@ -87,15 +87,13 @@ public class New_Reply extends AppCompatActivity {
                             Intent goToDetailEnquiry = new Intent(New_Reply.this,Enquiry_Detail.class);
 
                             Bundle extras = new Bundle();
-                            extras.putInt("enq_id",data.get(position).getEnquiry_id());
+                            extras.putInt("enq_id", data.get(position).getEnquiry_id());
                             extras.putString("reference", data.get(position).getEnquiry_reference());
                             extras.putString("creationTime",data.get(position).getCreted_at());
-                            extras.putString("society",data.get(position).getEnquiry_society());
-                            extras.putString("society_address",data.get(position).getEnquiry_society_address());
-                            extras.putString("message",data.get(position).getEnquiry_message());
-                            extras.putString("document",data.get(position).getEnquiry_document());
-                            extras.putString("society_contact",data.get(position).getEnquiry_society_contact());
-                            extras.putString("society_email",data.get(position).getEnquiry_society_email());
+                            extras.putInt("societyId", data.get(position).getEnquiry_societyId());
+                            extras.putInt("subcategory", data.get(position).getEnquiry_subCategoryId());
+                            extras.putInt("productId",data.get(position).getEnquiry_productId());
+                            extras.putString("quantity",data.get(position).getEnquiry_quantity());
 
                             goToDetailEnquiry.putExtras(extras);
                             startActivity(goToDetailEnquiry);

@@ -30,10 +30,10 @@ import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnecting
 public class View_Obp extends AppCompatActivity {
 
     private FloatingActionButton fabCreateOBP;
-    private RecyclerView obp_RecyclerView;
+    public RecyclerView obp_RecyclerView;
     public RecyclerView.Adapter obp_Adapter;
     public static List<OBP> data;
-    View emptyView;
+    public View emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,17 +101,7 @@ public class View_Obp extends AppCompatActivity {
                             b.dismiss();
 
                             Intent intent = new Intent(View_Obp.this, View_Obp_Details.class);
-                            Bundle extras = new Bundle();
-                            extras.putString("name", data.get(position).getObp_name());
-                            extras.putString("store_name", data.get(position).getObp_store_name());
-                            extras.putString("email_id", data.get(position).getObp_email_id());
-                            extras.putString("contact", data.get(position).getObp_contact_number());
-                            extras.putString("address", data.get(position).getObp_address());
-                            extras.putInt("pincode", data.get(position).getObp_pincode());
-                            extras.putString("city", data.get(position).getObp_city());
-                            extras.putString("state", data.get(position).getObp_state());
-                            extras.putString("country", data.get(position).getObp_country());
-                            intent.putExtras(extras);
+                            intent.putExtra("OBP_Entity", data.get(position));
                             startActivity(intent);
 
                         }
@@ -141,11 +131,11 @@ public class View_Obp extends AppCompatActivity {
 
                                         DatabaseHelper dbhelper = new DatabaseHelper(View_Obp.this);
 
-                                        // delete society
+                                        // delete obp
                                         dbhelper.deleteObp(obpObj);
 
-                                        // get number of available society to show
-                                        // if any society not found to show
+                                        // get number of available obp to show
+                                        // if any obp not found to show
                                         // then view thw not found xml view.
                                         int len = dbhelper.isAnyOBPPresent();
                                         if (len <= 0) {
@@ -170,26 +160,15 @@ public class View_Obp extends AppCompatActivity {
 
                                         dbhelper.closeDB();
 
+                                        // reomove deleted obp from adapter
+                                        obpAllData.remove(position);
+                                        obp_Adapter.notifyItemRemoved(position);
+
                                     } else {
 
-                                        new DeleteOBPAsyncTask(View_Obp.this, data.get(position).getUserID_serverId()).execute();
+                                        new DeleteOBPAsyncTask(View_Obp.this, data.get(position), position).execute();
 
-                                        obpObj.setUserID_serverId(data.get(position).getUserID_serverId());
-                                        obpObj.setObp_id(data.get(position).getObp_id());
-
-                                        DatabaseHelper dbhelper = new DatabaseHelper(View_Obp.this);
-                                        dbhelper.deleteObp(obpObj);
-                                        int len = dbhelper.isAnyOBPPresent();
-                                        dbhelper.closeDB();
-
-                                        if (len <= 0) {
-                                            emptyView.setVisibility(View.VISIBLE);
-                                            obp_RecyclerView.setVisibility(View.GONE);
-                                        }
                                     }
-                                    // reomove deleted society from adapter
-                                    obpAllData.remove(position);
-                                    obp_Adapter.notifyItemRemoved(position);
                                 }
                             });
 

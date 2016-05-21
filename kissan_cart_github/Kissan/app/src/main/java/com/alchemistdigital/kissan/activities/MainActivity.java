@@ -20,14 +20,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
 import com.alchemistdigital.kissan.R;
+import com.alchemistdigital.kissan.asynctask.GetCategoryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetEnquiryAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetGroupAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetProductDetailsAsyncTask;
 import com.alchemistdigital.kissan.asynctask.GetSocietyAsyncTask;
+import com.alchemistdigital.kissan.asynctask.GetSubcategoryAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineEnquiryDataAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineOBPDataAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineOrderDataAsyncTask;
@@ -92,6 +95,10 @@ public class MainActivity extends AppCompatActivity
         int societyRowsCount = dbHelper.numberOfSocietyRows();
         int enquiryRowsCount = dbHelper.numberOfEnquiryRowsByUid();
         int orderRowsCount = dbHelper.numberOfOrderRowsByUserType("obp");
+        int groupRowsCount = dbHelper.numberOfGroupRows();
+        int categoryRowsCount = dbHelper.numberOfCategoryRows();
+        int subcategoryRowsCount = dbHelper.numberOfSubcategoryRows();
+        int productdetailsRowsCount = dbHelper.numberOfProductdetailsRows();
         dbHelper.closeDB();
 
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
@@ -112,6 +119,24 @@ public class MainActivity extends AppCompatActivity
             if ( orderRowsCount <= 0 ) {
                 new GetOrderAsyncTask(MainActivity.this,strUID,"obp").execute();
             }
+
+            if ( groupRowsCount <= 0 ) {
+                new GetGroupAsyncTask(MainActivity.this).execute();
+            }
+
+            if ( categoryRowsCount <= 0 ) {
+                new GetCategoryAsyncTask(MainActivity.this).execute();
+            }
+
+            if ( subcategoryRowsCount <= 0 ) {
+                new GetSubcategoryAsyncTask(MainActivity.this).execute();
+            }
+
+            if ( productdetailsRowsCount <= 0 ) {
+                new GetProductDetailsAsyncTask(MainActivity.this).execute();
+            }
+
+
         }
 
         // Make sure the device has the proper dependencies.
@@ -162,7 +187,7 @@ public class MainActivity extends AppCompatActivity
     private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if( isConnectingToInternet(context) ) {
-                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
 
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
                 List<Offline> offlineEnquiryData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ENQUIRY);
@@ -223,7 +248,7 @@ public class MainActivity extends AppCompatActivity
                     new InsertOfflineSocietyDataAsyncTask(MainActivity.this,jsonArraySocietyArr).execute();
                 }
 
-                if( jsonOBPArr != null ){
+                if( jsonOBPArr != null ) {
                     String jsonArrayObpArr = jsonOBPArr.replace("null", "")
                             .replaceAll("\\]\\[", ",")
                             .replace(System.getProperty("line.separator"), " <br /> ");
@@ -248,13 +273,13 @@ public class MainActivity extends AppCompatActivity
                             .replaceAll("\\]\\[", ",")
                             .replace(System.getProperty("line.separator"), " <br /> ");
 
-                    System.out.println(jsonArrayOrderArr);
+//                    System.out.println(jsonArrayOrderArr);
                     new InsertOfflineOrderDataAsyncTask(MainActivity.this,jsonArrayOrderArr).execute();
                 }
                 dbHelper.closeDB();
 
             } else {
-                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -396,7 +421,7 @@ public class MainActivity extends AppCompatActivity
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(MainActivity.this);
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
         DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
-        List<OBP> obpByUserId = dbHelper.getOBPByUserId(uId);
+        OBP obpByUserId = dbHelper.getOBPByUserId(uId);
         dbHelper.closeDB();
 
         switch (item.getItemId()) {
@@ -406,17 +431,7 @@ public class MainActivity extends AppCompatActivity
 
                 // send program flow to OBP creation class(Activity)
                 intent = new Intent(MainActivity.this, View_Obp_Details.class);
-                extras = new Bundle();
-                extras.putString("name", obpByUserId.get(0).getObp_name());
-                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
-                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
-                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
-                extras.putString("address", obpByUserId.get(0).getObp_address());
-                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
-                extras.putString("city", obpByUserId.get(0).getObp_city());
-                extras.putString("state", obpByUserId.get(0).getObp_state());
-                extras.putString("country", obpByUserId.get(0).getObp_country());
-                intent.putExtras(extras);
+                intent.putExtra("OBP_Entity", obpByUserId);
                 startActivity(intent);
 
                 return true;
@@ -425,20 +440,7 @@ public class MainActivity extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
                 // send program flow to OBP creation class(Activity)
                 intent = new Intent(MainActivity.this, Edit_Obp_Details.class);
-                extras = new Bundle();
-                extras.putString("name", obpByUserId.get(0).getObp_name());
-                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
-                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
-                extras.putString("password", obpByUserId.get(0).getObp_email_passowrd());
-                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
-                extras.putString("address", obpByUserId.get(0).getObp_address());
-                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
-                extras.putString("city", obpByUserId.get(0).getObp_city());
-                extras.putString("state", obpByUserId.get(0).getObp_state());
-                extras.putString("country", obpByUserId.get(0).getObp_country());
-                extras.putInt("status", obpByUserId.get(0).getObp_status());
-                extras.putInt("localid", obpByUserId.get(0).getObp_id());
-                intent.putExtras(extras);
+                intent.putExtra("OBP_Entity", obpByUserId);
                 startActivity(intent);
 
                 return true;

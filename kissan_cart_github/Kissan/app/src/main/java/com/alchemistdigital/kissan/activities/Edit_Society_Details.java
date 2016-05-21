@@ -11,7 +11,6 @@ import android.widget.EditText;
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.UpdateSocietyAsyncTask;
-import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
@@ -129,12 +128,6 @@ public class Edit_Society_Details extends AppCompatActivity {
                         society.setId(societyId);
                         society.setSoc_status(status);
 
-                        Enquiry enquiry = new Enquiry();
-                        enquiry.setEnquiry_society(str_society_name);
-                        enquiry.setEnquiry_society_contact(str_society_contact);
-                        enquiry.setEnquiry_society_email(str_society_email);
-                        enquiry.setEnquiry_society_address(str_society_address);
-
                         DatabaseHelper dbhelper = new DatabaseHelper(Edit_Society_Details.this);
 
                         Offline offline = new Offline( dbhelper.TABLE_SOCIETY,
@@ -150,7 +143,6 @@ public class Edit_Society_Details extends AppCompatActivity {
                         dbhelper.insertOffline(offline);
 
                         dbhelper.updateSociety(society);
-                        dbhelper.updateSocietyColumnInEnquiryTable(enquiry, oldSocietyName);
                         dbhelper.closeDB();
 
                         Intent intent = new Intent(Edit_Society_Details.this,View_Society.class);

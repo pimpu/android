@@ -42,6 +42,7 @@ public class Create_Society extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_society_toolbar);
         setSupportActionBar(toolbar);
 
+        // this activity is called from create enquiry activity or view society activity
         comesFrom = getIntent().getExtras().getString("comesFrom");
 
         txt_society_name        = (EditText) findViewById(R.id.edittext_id_create_society_name);
@@ -123,12 +124,6 @@ public class Create_Society extends AppCompatActivity{
 
                         onBackPressed();
                     } else {
-                        /*System.out.println(str_society_name);
-                        System.out.println(str_society_contact);
-                        System.out.println(str_society_email);
-                        System.out.println(str_society_address);*/
-
-
                         new InsertSocietyAsyncTask(Create_Society.this,str_society_name,str_society_contact,str_society_email,str_society_address,userId,comesFrom).execute();
                     }
                 }

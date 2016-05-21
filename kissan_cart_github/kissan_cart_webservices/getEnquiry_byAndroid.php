@@ -4,7 +4,7 @@
 	error_reporting(0);
 	$response = array();
 	
-	if( isset($_POST['str_obpId']) ){
+	if( isset($_POST['str_obpId']) ) {
 		
 		$str_obpId = $_POST['str_obpId'];
 		
@@ -29,14 +29,12 @@
 				$enquiry["gId"] = $row["gID"];
 				$enquiry["repToVal"] = $row["repTo"];
 				$enquiry["replied"] = $row["replied"];
-				$enquiry["message"] = $row["eMsg"];
-				$enquiry["society_name"] = $row["eSociety"];
-				$enquiry["society_address"] = $row["eSocAdrs"];
-				$enquiry["society_contact"] = $row["eSocCont"];
-				$enquiry["society_email"] = $row["eSocEmail"];
-				$enquiry["document"] = $row["eDoc"];
+				$enquiry["SocID"] = $row["SocID"];
+				$enquiry["scid"] = $row["scid"];
+				$enquiry["prod_id"] = $row["prod_id"];
+				$enquiry["qty"] = $row["qty"];
 				$enquiry["status"] = $row["status"];
-		 
+
 				// push single enquiry into final response array
 				array_push($response["message"], $enquiry);
 			}
@@ -61,12 +59,10 @@
 				$enquiry["gId"] = $row["gID"];
 				$enquiry["repToVal"] = $row["repTo"];
 				$enquiry["replied"] = $row["replied"];
-				$enquiry["message"] = $row["eMsg"];
-				$enquiry["society_name"] = $row["eSociety"];
-				$enquiry["society_address"] = $row["eSocAdrs"];
-				$enquiry["society_contact"] = $row["eSocCont"];
-				$enquiry["society_email"] = $row["eSocEmail"];
-				$enquiry["document"] = $row["eDoc"];
+				$enquiry["SocID"] = $row["SocID"];
+				$enquiry["scid"] = $row["scid"];
+				$enquiry["prod_id"] = $row["prod_id"];
+				$enquiry["qty"] = $row["qty"];
 				$enquiry["status"] = $row["status"];
 		 
 				// push single enquiry into final response array

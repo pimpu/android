@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
-import com.alchemistdigital.kissan.asynctask.StoreServerImageAtMemory;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Item;
 import com.alchemistdigital.kissan.model.OBP;
@@ -145,15 +144,9 @@ public class GCMIntentService extends GCMBaseIntentService {
             society.setServerId(soc_id);
             society.setSoc_status(soc_status);
 
-            Enquiry enquiry = new Enquiry();
-            enquiry.setEnquiry_society(soc_name);
-            enquiry.setEnquiry_society_contact(soc_contact);
-            enquiry.setEnquiry_society_email(soc_email);
-            enquiry.setEnquiry_society_address(soc_adrs);
 
             DatabaseHelper dbhelper = new DatabaseHelper(context);
             dbhelper.updateSociety(society);
-            dbhelper.updateSocietyColumnInEnquiryTable(enquiry, old_name);
             dbhelper.closeDB();
 
         } catch (JSONException e) {
@@ -217,25 +210,18 @@ public class GCMIntentService extends GCMBaseIntentService {
             int gId = json.getInt("gID");
             int repToVal = json.getInt("repTo");
             int replied = json.getInt("replied");
-            String str_message = json.getString("eMsg");
-            String str_name = json.getString("eSociety");
-            String str_address = json.getString("eSocAdrs");
-            String str_contact = json.getString("eSocCont");
-            String str_email = json.getString("eSocEmail");
-            String fileName = json.getString("eDoc");
+            int socID = json.getInt("SocID");
+            int scid = json.getInt("scid");
+            int prod_id = json.getInt("prod_id");
+            String qty = json.getString("qty");
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
             Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal,
-                    replied, str_message, str_name, str_address,
-                    str_contact, str_email, fileName, 1);
+                    replied, socID, scid, prod_id, qty, 1);
+
             long enquiryId = dbHelper.insertEnquiry(enquiry);
 
             dbHelper.closeDB();
-
-            System.out.println("insert offline enquiry(GCM): " + enquiryId);
-
-            // save uploaded image on server into memory
-            new StoreServerImageAtMemory(context,fileName).execute();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -264,15 +250,9 @@ public class GCMIntentService extends GCMBaseIntentService {
             society.setServerId(soc_id);
             society.setSoc_status(status);
 
-            Enquiry enquiry = new Enquiry();
-            enquiry.setEnquiry_society(soc_name);
-            enquiry.setEnquiry_society_contact(soc_contact);
-            enquiry.setEnquiry_society_email(soc_email);
-            enquiry.setEnquiry_society_address(soc_adrs);
 
             DatabaseHelper dbhelper = new DatabaseHelper(context);
             dbhelper.updateSociety(society);
-            dbhelper.updateSocietyColumnInEnquiryTable(enquiry, old_name);
             dbhelper.closeDB();
 
         } catch (JSONException e) {
@@ -321,31 +301,26 @@ public class GCMIntentService extends GCMBaseIntentService {
             int gId = json.getInt("gID");
             int repToVal = json.getInt("repTo");
             int replied = json.getInt("replied");
-            String str_message = json.getString("eMsg");
-            String str_name = json.getString("eSociety");
-            String str_address = json.getString("eSocAdrs");
-            String str_contact = json.getString("eSocCont");
-            String str_email = json.getString("eSocEmail");
-            String fileName = json.getString("eDoc");
+            int selectedSocietyServerId = json.getInt("SocID");
+            int selectedSubcategoryServerId = json.getInt("scid");
+            int selectedProductServerId = json.getInt("prod_id");
+            String str_product_qty = json.getString("qty");
             String oldEnquiryId = json.getString("oldEnquiryId");
 
             DatabaseHelper dbHelper = new DatabaseHelper(context);
-            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId, repToVal,
-                                            replied, str_message, str_name, str_address,
-                                            str_contact, str_email, fileName, 1);
+
+            Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId,
+                    repToVal, replied, selectedSocietyServerId, selectedSubcategoryServerId, selectedProductServerId,
+                    str_product_qty,1 );
+
             long enquiryId = dbHelper.insertEnquiry(enquiry);
 
-            if( !oldEnquiryId.equals("0") ){
+            if( ! oldEnquiryId.equals("0") ) {
                 int i = dbHelper.updateEnquiryReplied(oldEnquiryId, "1");
                 System.out.println(context.getClass().getSimpleName()+"(update at GCM) : "+i);
             }
 
             dbHelper.closeDB();
-
-            System.out.println("insert enquiry(GCM): " + enquiryId);
-
-            // save uploaded image on server into memory
-            new StoreServerImageAtMemory(context,fileName).execute();
 
         } catch (JSONException e) {
             e.printStackTrace();

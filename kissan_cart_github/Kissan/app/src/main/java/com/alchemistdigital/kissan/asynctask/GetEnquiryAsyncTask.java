@@ -1,7 +1,9 @@
 package com.alchemistdigital.kissan.asynctask;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -42,6 +44,9 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading ...");
         pDialog.setIndeterminate(false);
@@ -85,9 +90,9 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -96,6 +101,8 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         pDialog.dismiss();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         try {
             Log.d("Enquiry per obp Data: ", result.toString());
@@ -124,22 +131,17 @@ public class GetEnquiryAsyncTask extends AsyncTask<String, String, String> {
                     int gId = c.getInt("gId");
                     int repToVal = c.getInt("repToVal");
                     int replied = c.getInt("replied");
-                    String str_message = c.getString("message");
-                    String str_name = c.getString("society_name");
-                    String str_address = c.getString("society_address");
-                    String str_contact = c.getString("society_contact");
-                    String str_email = c.getString("society_email");
-                    String fileName = c.getString("document");
+                    int socID = c.getInt("SocID");
+                    int scid = c.getInt("scid");
+                    int prod_id = c.getInt("prod_id");
+                    String qty = c.getString("qty");
                     int status = c.getInt("status");
 
                     Enquiry enquiry = new Enquiry(id_enquiry, creted_at, str_ref_no, eUid, gId,
-                                                    repToVal, replied, str_message, str_name,
-                                                    str_address,str_contact, str_email,
-                                                    fileName, status );
+                                                    repToVal, replied, socID, scid, prod_id, qty, status );
+
                     long enquiryId = dbHelper.insertEnquiry(enquiry);
 
-                    new StoreServerImageAtMemory(context,fileName).execute();
-//                    System.out.println(context.getClass().getSimpleName() + "(insert) : " + enquiryId);
                 }
 
                 dbHelper.closeDB();

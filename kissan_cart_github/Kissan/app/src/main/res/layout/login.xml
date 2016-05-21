@@ -41,7 +41,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:id="@+id/login_email"
-                android:hint="@string/hint_email"/>
+                android:hint="@string/hint_email" >
+                <requestFocus></requestFocus>
+            </EditText>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -79,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_login"
                 android:text="@string/btn_login"
-                android:background="@color/colorAccent"
+                android:background="@color/btnColor"
                 android:textColor="@color/colorWhite" />
 
         </com.andexert.library.RippleView>

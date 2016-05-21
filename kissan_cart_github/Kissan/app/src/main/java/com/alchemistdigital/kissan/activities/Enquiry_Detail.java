@@ -89,7 +89,7 @@ public class Enquiry_Detail extends AppCompatActivity {
 
         } else {
             new GetOnlineServerImageAsyncTask(Enquiry_Detail.this,imageviewSlip)
-                        .execute(CommonVariables.File_DOWNLOAD_URL + document);
+                        .execute(CommonVariables.FILE_UPLOAD_URL + document);
         }
 
         dbHelper.closeDB();

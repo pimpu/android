@@ -100,12 +100,6 @@ public class View_Enquiry extends AppCompatActivity {
                     extras.putInt("enq_id",data.get(position).getEnquiry_id());
                     extras.putString("reference", data.get(position).getEnquiry_reference());
                     extras.putString("creationTime",data.get(position).getCreted_at());
-                    extras.putString("society",data.get(position).getEnquiry_society());
-                    extras.putString("society_address",data.get(position).getEnquiry_society_address());
-                    extras.putString("message",data.get(position).getEnquiry_message());
-                    extras.putString("document",data.get(position).getEnquiry_document());
-                    extras.putString("society_contact",data.get(position).getEnquiry_society_contact());
-                    extras.putString("society_email",data.get(position).getEnquiry_society_email());
 
                     goToDetailEnquiry.putExtras(extras);
                     startActivity(goToDetailEnquiry);

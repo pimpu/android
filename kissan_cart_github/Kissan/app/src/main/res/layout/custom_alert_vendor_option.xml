@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/viewVendorDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:padding="15dp"
+        android:text="@string/details"
+        android:textSize="20dp" />
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:src="@android:drawable/divider_horizontal_textfield"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/editVendorDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:padding="15dp"
+        android:text="@string/edit"
+        android:textSize="20dp" />
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:src="@android:drawable/divider_horizontal_textfield"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/deleteVendor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:padding="15dp"
+        android:text="@string/delete"
+        android:textSize="20dp" />
+
+</LinearLayout>

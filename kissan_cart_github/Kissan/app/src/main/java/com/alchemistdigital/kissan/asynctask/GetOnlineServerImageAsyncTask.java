@@ -1,7 +1,9 @@
 package com.alchemistdigital.kissan.asynctask;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,6 +28,9 @@ public class GetOnlineServerImageAsyncTask extends AsyncTask<String, Void, Bitma
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("loading ...");
         pDialog.setIndeterminate(false);
@@ -49,6 +54,9 @@ public class GetOnlineServerImageAsyncTask extends AsyncTask<String, Void, Bitma
 
     protected void onPostExecute(Bitmap result) {
         pDialog.dismiss();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
         bmImage.setImageBitmap(result);
     }
 }

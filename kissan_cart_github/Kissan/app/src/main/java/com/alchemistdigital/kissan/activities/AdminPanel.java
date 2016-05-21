@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.Login;
@@ -32,10 +31,12 @@ import com.alchemistdigital.kissan.asynctask.GetOrderAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineEnquiryDataAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineOBPDataAsyncTask;
 import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineSocietyDataAsyncTask;
+import com.alchemistdigital.kissan.asynctask.offlineAsyncTask.InsertOfflineVendorDataAsyncTask;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.OBP;
 import com.alchemistdigital.kissan.model.Offline;
 import com.alchemistdigital.kissan.model.Society;
+import com.alchemistdigital.kissan.model.Vendor;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.SetSharedPreferenceHelper;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -44,7 +45,6 @@ import com.google.android.gcm.GCMRegistrar;
 
 import java.util.List;
 
-import static com.alchemistdigital.kissan.utilities.CommonUtilities.generateNotification;
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 
 /**
@@ -144,19 +144,21 @@ public class AdminPanel extends AppCompatActivity
      */
     private BroadcastReceiver mConnReceiverAtAdmin = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            if( isConnectingToInternet(context) ){
-                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
+            if( isConnectingToInternet(context) ) {
+//                Toast.makeText(getApplicationContext(), "Connected", Toast.LENGTH_LONG).show();
 
                 DatabaseHelper dbHelper = new DatabaseHelper(context);
                 List<Offline> offlineEnquiryData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ENQUIRY);
                 List<Offline> offlineSocietyData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_SOCIETY);
                 List<Offline> offlineOrderData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_ORDER);
                 List<Offline> offlineOBPData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_OBP);
+                List<Offline> offlineVendorData = dbHelper.getOfflineDataByTableName(DatabaseHelper.TABLE_VENDORS);
 
                 String jsonEnquiryArr = null;
                 String jsonSocietyArr = null;
                 String jsonOrderArr = null;
                 String jsonOBPArr = null;
+                String jsonVendorArr = null;
 
                 for (int o = 0 ; o < offlineEnquiryData.size() ; o++ ) {
 
@@ -177,7 +179,7 @@ public class AdminPanel extends AppCompatActivity
                 }
 
                 for (int b = 0 ; b < offlineOrderData.size() ; b++ ) {
-                    System.out.println(offlineEnquiryData.get(b).getOffline_table_name());
+//                    System.out.println(offlineEnquiryData.get(b).getOffline_table_name());
                 }
 
                 for (int q = 0 ; q < offlineOBPData.size() ; q++ ) {
@@ -186,6 +188,14 @@ public class AdminPanel extends AppCompatActivity
                             offlineOBPData.get(q).getOffline_row_action());
 
                     jsonOBPArr = jsonOBPArr + offlineOBPById.toString() ;
+                }
+
+                for (int y = 0 ; y < offlineVendorData.size() ; y++ ) {
+                    List<Vendor> offlineVendorById = dbHelper.getOfflineVendorById(
+                            offlineVendorData.get(y).getOffline_row_id(),
+                            offlineVendorData.get(y).getOffline_row_action());
+
+                    jsonVendorArr = jsonVendorArr + offlineVendorById.toString() ;
                 }
 
                 if(jsonEnquiryArr != null) {
@@ -222,10 +232,17 @@ public class AdminPanel extends AppCompatActivity
                     new InsertOfflineOBPDataAsyncTask(AdminPanel.this,jsonArrayObpArr,gId).execute();
                 }
 
+                if(jsonVendorArr != null) {
+                    String jsonArrayVendorArr = jsonVendorArr.replace("null", "")
+                            .replaceAll("\\]\\[", ",")
+                            .replace(System.getProperty("line.separator"), " <br /> ");
+                    new InsertOfflineVendorDataAsyncTask(AdminPanel.this,jsonArrayVendorArr).execute();
+                }
+
                 dbHelper.closeDB();
 
             } else {
-                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Not Connected", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -241,8 +258,7 @@ public class AdminPanel extends AppCompatActivity
             WakeLocker.acquire(getApplicationContext());
 
             if(newMessage.equals("success")) {
-                Toast.makeText(context,"Admin notification received.",Toast.LENGTH_LONG).show();
-                generateNotification(context, "success");
+
             }
 
             // Releasing wake lock
@@ -320,6 +336,9 @@ public class AdminPanel extends AppCompatActivity
         } else if (id == R.id.id_admin_nav_createOBP) {
             // send program flow to OBP creation class(Activity)
             startActivity(new Intent(AdminPanel.this, View_Obp.class));
+        } else if (id == R.id.id_admin_nav_vendor) {
+            // send program flow to OBP creation class(Activity)
+            startActivity(new Intent(AdminPanel.this, View_Vendor.class));
         }  else if (id == R.id.id_admin_nav_logout) {
             SetSharedPreferenceHelper setPreference = new SetSharedPreferenceHelper(AdminPanel.this);
 
@@ -358,7 +377,7 @@ public class AdminPanel extends AppCompatActivity
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(AdminPanel.this);
         int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
         DatabaseHelper dbHelper = new DatabaseHelper(AdminPanel.this);
-        List<OBP> obpByUserId = dbHelper.getOBPByUserId(uId);
+        OBP obpByUserId = dbHelper.getOBPByUserId(uId);
         dbHelper.closeDB();
 
         switch (item.getItemId()) {
@@ -368,17 +387,7 @@ public class AdminPanel extends AppCompatActivity
 
                 // send program flow to OBP creation class(Activity)
                 intent = new Intent(AdminPanel.this, View_Obp_Details.class);
-                extras = new Bundle();
-                extras.putString("name", obpByUserId.get(0).getObp_name());
-                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
-                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
-                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
-                extras.putString("address", obpByUserId.get(0).getObp_address());
-                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
-                extras.putString("city", obpByUserId.get(0).getObp_city());
-                extras.putString("state", obpByUserId.get(0).getObp_state());
-                extras.putString("country", obpByUserId.get(0).getObp_country());
-                intent.putExtras(extras);
+                intent.putExtra("OBP_Entity", obpByUserId);
                 startActivity(intent);
 
                 return true;
@@ -387,20 +396,7 @@ public class AdminPanel extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
                 // send program flow to OBP creation class(Activity)
                 intent = new Intent(AdminPanel.this, Edit_Obp_Details.class);
-                extras = new Bundle();
-                extras.putString("name", obpByUserId.get(0).getObp_name());
-                extras.putString("store_name", obpByUserId.get(0).getObp_store_name());
-                extras.putString("email_id", obpByUserId.get(0).getObp_email_id());
-                extras.putString("password", obpByUserId.get(0).getObp_email_passowrd());
-                extras.putString("contact", obpByUserId.get(0).getObp_contact_number());
-                extras.putString("address", obpByUserId.get(0).getObp_address());
-                extras.putInt("pincode", obpByUserId.get(0).getObp_pincode());
-                extras.putString("city", obpByUserId.get(0).getObp_city());
-                extras.putString("state", obpByUserId.get(0).getObp_state());
-                extras.putString("country", obpByUserId.get(0).getObp_country());
-                extras.putInt("status", obpByUserId.get(0).getObp_status());
-                extras.putInt("localid", obpByUserId.get(0).getObp_id());
-                intent.putExtras(extras);
+                intent.putExtra("OBP_Entity", obpByUserId);
                 startActivity(intent);
 
                 return true;

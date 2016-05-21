@@ -26,7 +26,7 @@ public class StoreServerImageAtMemory extends AsyncTask<String, String, Bitmap> 
     @Override
     protected Bitmap doInBackground(String... params) {
 
-        String urldisplay = CommonVariables.File_DOWNLOAD_URL + fileName;
+        String urldisplay = CommonVariables.FILE_UPLOAD_URL + fileName;
         Bitmap mIcon11 = null;
         try {
             InputStream in = new java.net.URL(urldisplay).openStream();

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.alchemistdigital.kissan.activities.View_Vendor_Details">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/MyMaterialTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/vendor_details_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/MyMaterialTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <android.support.v7.widget.CardView
+            android:layout_gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp">
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_id_vendor_name"
+                        android:text="vendor name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:padding="8dp"
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_id_vendor_emailId"
+                            android:text="vendor email"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_id_vendor_contact"
+                            android:text="vendor contact"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/tv_id_vendor_address"
+                            android:text="vendor address"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </ScrollView>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+</RelativeLayout>

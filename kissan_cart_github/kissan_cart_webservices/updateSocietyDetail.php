@@ -18,8 +18,6 @@
 		// mysql update row with matched userId
 		$updateSociety = mysql_query("UPDATE society SET soc_name = '".$name."',soc_contact = '".$contact."',soc_email = '".$email."',soc_adrs='".$address."', status=".$status." WHERE id = ".$id);
 
-		$updateEnquiry = mysql_query("UPDATE enquiry SET eSociety = '".$name."',eSocCont = '".$contact."',eSocEmail = '".$email."',eSocAdrs='".$address."' WHERE eSociety = '".$old_name."';");
-
 		$gcm = new GCM();
 		$society = array();
 		$registration_ids = array();

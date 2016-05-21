@@ -6,19 +6,17 @@ package com.alchemistdigital.kissan.model;
 public class Enquiry {
     private int enquiry_id;
     private int enquiry_server_id;
-    private String creted_at;
     private String enquiry_reference;
     private int enquiry_userId;
     private int enquiry_groupId;
     private int enquiry_replyTo;
     private int enquiry_replied;
-    private String enquiry_message;
-    private String enquiry_society;
-    private String enquiry_society_address;
-    private String enquiry_society_contact;
-    private String enquiry_society_email;
-    private String enquiry_document;
+    private int enquiry_societyId;
+    private int enquiry_subCategoryId;
+    private int enquiry_productId;
+    private String enquiry_quantity;
     private int  enquiry_status;
+    private String creted_at;
     private String enquiry_offline_action;
 
     public Enquiry() {
@@ -31,12 +29,10 @@ public class Enquiry {
                    int enquiry_groupId,
                    int enquiry_replyTo,
                    int enquiry_replied,
-                   String enquiry_message,
-                   String enquiry_society,
-                   String enquiry_society_address,
-                   String enquiry_society_contact,
-                   String enquiry_society_email,
-                   String enquiry_document,
+                   int enquiry_societyId,
+                   int enquiry_subCategoryId,
+                   int enquiry_productId,
+                   String enquiry_quantity,
                    int enquiry_status) {
 
         this.enquiry_server_id = enquiry_server_id;
@@ -46,12 +42,10 @@ public class Enquiry {
         this.enquiry_groupId = enquiry_groupId;
         this.enquiry_replyTo = enquiry_replyTo;
         this.enquiry_replied = enquiry_replied;
-        this.enquiry_message = enquiry_message;
-        this.enquiry_society = enquiry_society;
-        this.enquiry_society_address = enquiry_society_address;
-        this.enquiry_society_contact = enquiry_society_contact;
-        this.enquiry_society_email = enquiry_society_email;
-        this.enquiry_document = enquiry_document;
+        this.enquiry_societyId = enquiry_societyId;
+        this.enquiry_subCategoryId = enquiry_subCategoryId;
+        this.enquiry_productId = enquiry_productId;
+        this.enquiry_quantity = enquiry_quantity;
         this.enquiry_status  = enquiry_status;
     }
 
@@ -65,12 +59,10 @@ public class Enquiry {
                 ", \"enquiry_groupId\":\"" + enquiry_groupId + '\"' +
                 ", \"enquiry_replyTo\":\"" + enquiry_replyTo + '\"' +
                 ", \"enquiry_replied\":\"" + enquiry_replied + '\"' +
-                ", \"enquiry_message\":\"" + enquiry_message + '\"' +
-                ", \"enquiry_society\":\"" + enquiry_society + '\"' +
-                ", \"enquiry_society_address\":\"" + enquiry_society_address + '\"' +
-                ", \"enquiry_society_contact\":\"" + enquiry_society_contact + '\"' +
-                ", \"enquiry_society_email\":\"" + enquiry_society_email + '\"' +
-                ", \"enquiry_document\":\"" + enquiry_document + '\"' +
+                ", \"enquiry_societyId\":\"" + enquiry_societyId + '\"' +
+                ", \"enquiry_subCategoryId\":\"" + enquiry_subCategoryId + '\"' +
+                ", \"enquiry_productId\":\"" + enquiry_productId + '\"' +
+                ", \"enquiry_quantity\":\"" + enquiry_quantity + '\"' +
                 ", \"enquiry_creted_at\":\"" + creted_at + '\"' +
                 ", \"enquiry_offline_action\":\"" + enquiry_offline_action + '\"' +
                 '}';
@@ -105,30 +97,6 @@ public class Enquiry {
         return enquiry_replied;
     }
 
-    public String getEnquiry_message() {
-        return enquiry_message;
-    }
-
-    public String getEnquiry_society() {
-        return enquiry_society;
-    }
-
-    public String getEnquiry_society_address() {
-        return enquiry_society_address;
-    }
-
-    public String getEnquiry_society_email() {
-        return enquiry_society_email;
-    }
-
-    public String getEnquiry_society_contact() {
-        return enquiry_society_contact;
-    }
-
-    public String getEnquiry_document() {
-        return enquiry_document;
-    }
-
     public int getEnquiry_status() {
         return enquiry_status;
     }
@@ -139,6 +107,22 @@ public class Enquiry {
 
     public String getEnquiry_offline_action() {
         return enquiry_offline_action;
+    }
+
+    public int getEnquiry_societyId() {
+        return enquiry_societyId;
+    }
+
+    public int getEnquiry_subCategoryId() {
+        return enquiry_subCategoryId;
+    }
+
+    public int getEnquiry_productId() {
+        return enquiry_productId;
+    }
+
+    public String getEnquiry_quantity() {
+        return enquiry_quantity;
     }
 
     // Setters
@@ -170,30 +154,6 @@ public class Enquiry {
         this.enquiry_replied = enquiry_replied;
     }
 
-    public void setEnquiry_message(String enquiry_message) {
-        this.enquiry_message = enquiry_message;
-    }
-
-    public void setEnquiry_society(String enquiry_society) {
-        this.enquiry_society = enquiry_society;
-    }
-
-    public void setEnquiry_society_address(String enquiry_society_address) {
-        this.enquiry_society_address = enquiry_society_address;
-    }
-
-    public void setEnquiry_society_contact(String enquiry_society_contact) {
-        this.enquiry_society_contact = enquiry_society_contact;
-    }
-
-    public void setEnquiry_society_email(String enquiry_society_email) {
-        this.enquiry_society_email = enquiry_society_email;
-    }
-
-    public void setEnquiry_document(String enquiry_document) {
-        this.enquiry_document = enquiry_document;
-    }
-
     public void setEnquiry_status(int enquiry_status) {
         this.enquiry_status = enquiry_status;
     }
@@ -204,5 +164,21 @@ public class Enquiry {
 
     public void setEnquiry_offline_action(String enquiry_offline_action) {
         this.enquiry_offline_action = enquiry_offline_action;
+    }
+
+    public void setEnquiry_societyId(int enquiry_societyId) {
+        this.enquiry_societyId = enquiry_societyId;
+    }
+
+    public void setEnquiry_subCategoryId(int enquiry_subCategoryId) {
+        this.enquiry_subCategoryId = enquiry_subCategoryId;
+    }
+
+    public void setEnquiry_productId(int enquiry_productId) {
+        this.enquiry_productId = enquiry_productId;
+    }
+
+    public void setEnquiry_quantity(String enquiry_quantity) {
+        this.enquiry_quantity = enquiry_quantity;
     }
 }

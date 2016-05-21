@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.activities.View_Society;
-import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Society;
 import com.alchemistdigital.kissan.utilities.AndroidMultiPartEntity;
 import com.alchemistdigital.kissan.utilities.CommonVariables;
@@ -61,6 +61,9 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("updating ...");
         pDialog.setIndeterminate(false);
@@ -110,9 +113,9 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;
@@ -121,6 +124,8 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
     @Override
     protected void onPostExecute(String result) {
         pDialog.dismiss();
+
+        ((Activity)context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
         Log.d("update society Data", result.toString());
 
@@ -137,15 +142,8 @@ public class UpdateSocietyAsyncTask extends AsyncTask<String, String, String>  {
         society.setServerId(societyServerId);
         society.setSoc_status(status);
 
-        Enquiry enquiry = new Enquiry();
-        enquiry.setEnquiry_society(str_society_name);
-        enquiry.setEnquiry_society_contact(str_society_contact);
-        enquiry.setEnquiry_society_email(str_society_email);
-        enquiry.setEnquiry_society_address(str_society_address);
-
         DatabaseHelper dbhelper = new DatabaseHelper(context);
         dbhelper.updateSociety(society);
-        dbhelper.updateSocietyColumnInEnquiryTable(enquiry, oldSocietyName);
         dbhelper.closeDB();
 
         Intent intent = new Intent(context,View_Society.class);

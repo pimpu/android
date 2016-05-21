@@ -14,6 +14,9 @@
         <item
             android:id="@+id/id_admin_nav_createOBP"
             android:title="@string/nav_item_OBP" />
+        <item
+            android:id="@+id/id_admin_nav_vendor"
+            android:title="@string/nav_vendor" />
 
         <item
             android:id="@+id/id_admin_nav_logout"

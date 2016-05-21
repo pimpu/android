@@ -129,13 +129,6 @@ public class Order_Detail extends AppCompatActivity {
 
     }
 
-    private int GetDipsFromPixel(int pixels) {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
-    }
-
     /**
      * Preparing the list data
      */
@@ -177,11 +170,6 @@ public class Order_Detail extends AppCompatActivity {
         TextView tv_societyAddress = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_society_address);
         ImageView closeDialog = (ImageView) dialogView.findViewById(R.id.closeSocietyDetailsAlert);
 
-        tv_societyName.setText( enquiryByUid_reference.get(0).getEnquiry_society());
-        tv_societyContact.setText( enquiryByUid_reference.get(0).getEnquiry_society_contact());
-        tv_societyEmail.setText( enquiryByUid_reference.get(0).getEnquiry_society_email());
-        tv_societyAddress.setText( enquiryByUid_reference.get(0).getEnquiry_society_address());
-
         final AlertDialog b = dialogBuilder.create();
 
         // if button is clicked, close the custom dialog
@@ -198,7 +186,7 @@ public class Order_Detail extends AppCompatActivity {
     public void showObpDetails(View view) {
 //        new GetOBPDetailsAtAdmin( Order_Detail.this,String.valueOf(userId) ).execute();
         DatabaseHelper dbhelper = new DatabaseHelper(Order_Detail.this);
-        List<OBP> obpByUserId = dbhelper.getOBPByUserId(userId);
+        OBP obpByUserId = dbhelper.getOBPByUserId(userId);
 
         // custom dialog
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Order_Detail.this);
@@ -215,11 +203,11 @@ public class Order_Detail extends AppCompatActivity {
         TextView tv_obp_address = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_obp_address);
         ImageView closeDialog = (ImageView) dialogView.findViewById(R.id.closeOBPDetailsAlert);
 
-        tv_obp_name.setText( obpByUserId.get(0).getObp_name() );
-        tv_store_name.setText( obpByUserId.get(0).getObp_store_name());
-        tv_obp_contact.setText( obpByUserId.get(0).getObp_contact_number() );
-        tv_obp_email.setText( obpByUserId.get(0).getObp_email_id() );
-        tv_obp_address.setText( obpByUserId.get(0).getObp_address() );
+        tv_obp_name.setText( obpByUserId.getObp_name() );
+        tv_store_name.setText( obpByUserId.getObp_store_name());
+        tv_obp_contact.setText( obpByUserId.getObp_contact_number() );
+        tv_obp_email.setText( obpByUserId.getObp_email_id() );
+        tv_obp_address.setText( obpByUserId.getObp_address() );
 
         final AlertDialog b = dialogBuilder.create();
 

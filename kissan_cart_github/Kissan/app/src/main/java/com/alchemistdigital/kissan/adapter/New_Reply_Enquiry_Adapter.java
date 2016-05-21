@@ -45,8 +45,8 @@ public class New_Reply_Enquiry_Adapter extends RecyclerView.Adapter<New_Reply_En
     public void onBindViewHolder(EnquiryViewHolder holder, int position) {
         Enquiry current = data.get(position);
         holder.tv_ref.setText("Ref no - "+current.getEnquiry_reference());
-        holder.tv_scoiety.setText("Scoiety - "+current.getEnquiry_society());
-        holder.tv_message.setText("Message - "+current.getEnquiry_message());
+//        holder.tv_scoiety.setText("Scoiety - "+current.getEnquiry_society());
+//        holder.tv_message.setText("Message - "+current.getEnquiry_message());
     }
 
     @Override

@@ -71,9 +71,9 @@ public class GetAllSocietyAsyncTask extends AsyncTask<String, String, String> {
             }
 
         } catch (ClientProtocolException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         } catch (IOException e) {
-            responseString = e.toString();
+            responseString = "Error occurred! "+e.toString();
         }
 
         return responseString;

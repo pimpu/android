@@ -1,21 +1,17 @@
 package com.alchemistdigital.kissan.activities;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,46 +19,43 @@ import android.widget.Toast;
 import com.alchemistdigital.kissan.DBHelper.DatabaseHelper;
 import com.alchemistdigital.kissan.R;
 import com.alchemistdigital.kissan.asynctask.InsertEnquiryAsyncTask;
+import com.alchemistdigital.kissan.model.Category;
 import com.alchemistdigital.kissan.model.Enquiry;
 import com.alchemistdigital.kissan.model.Offline;
+import com.alchemistdigital.kissan.model.Product_Details;
+import com.alchemistdigital.kissan.model.Product_Group;
 import com.alchemistdigital.kissan.model.Society;
+import com.alchemistdigital.kissan.model.Subcategory;
 import com.alchemistdigital.kissan.sharedPrefrenceHelper.GetSharedPreferenceHelper;
-import com.alchemistdigital.kissan.utilities.CommonUtilities;
-import com.alchemistdigital.kissan.utilities.CommonVariables;
 import com.alchemistdigital.kissan.utilities.offlineActionModeEnum;
 import com.andexert.library.RippleView;
-import com.scanlibrary.ScanActivity;
-import com.scanlibrary.ScanConstants;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import static com.alchemistdigital.kissan.utilities.CommonUtilities.getFileName;
 import static com.alchemistdigital.kissan.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.kissan.utilities.DateHelper.getDateToStoreInDb;
 import static com.alchemistdigital.kissan.utilities.DateHelper.getRefStringDate;
-import static com.alchemistdigital.kissan.utilities.Validations.emailValidate;
 import static com.alchemistdigital.kissan.utilities.Validations.isEmptyString;
-import static com.alchemistdigital.kissan.utilities.Validations.phoneValiate;
 
 public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private DatabaseHelper dbHelper;
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Uri filePath;
-    private Bitmap bitmap;
-    private TextView tvFileName;
-    private EditText txt_ref_no, txt_contact, txt_email, txt_address, txt_message;
-    private String selectedFileName, str_ref_no, str_name, str_contact, str_email, str_address, str_message;
-    TextInputLayout refInputLayout, contactInputLayout, emailInputLayout, addressInputLayuot, messageInputLayout;
-    Spinner spinnerSociety;
+    private EditText txt_ref_no, txt_product_qty;
+    private String str_ref_no, str_product_qty;
+    TextInputLayout refInputLayout, productQtyInputLayout;
+    Spinner spinnerSociety, spinnerGroup, spinnerCategory, spinnerSubcategory, spinnerProduct;
+    private ArrayList<Society> allSocieties;
     private ArrayAdapter<String> adapterSociety;
-    private List<Society> allSocieties;
-    private View createEnquiryView;
-    private String eId;
-    private static final int REQUEST_CODE = 99;
+    private ArrayList<Product_Group> allGroup;
+    private ArrayAdapter<Product_Group> adapterGroup;
+    private ArrayList<Category> allCategory;
+    private ArrayAdapter<Category> adapterCategory;
+    private ArrayList<Subcategory> allSubcategory;
+    private ArrayAdapter<Subcategory> adapterSubcategory;
+    private ArrayList<Product_Details> allProductDetails;
+    private ArrayAdapter<Product_Details> adapterProduct;
+    String eId;
+    int selectedSocietyIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +67,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
         String userTypePreference = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
 
+        // if society data not found then show unavailable view to screen.
         if (rowsCount <= 0 && userTypePreference.equals("obp")) {
             setContentView(R.layout.society_unavailable);
             Toolbar toolbar = (Toolbar) findViewById(R.id.create_enquiry_toolbar);
@@ -83,8 +77,6 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
         setContentView(R.layout.activity_create__enquiry);
 
-        createEnquiryView = findViewById(R.id.id_CreateEnquiryView);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.create_enquiry_toolbar);
         setSupportActionBar(toolbar);
 
@@ -92,12 +84,23 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         spinnerSociety = (Spinner) findViewById(R.id.spinner_id_societies);
         spinnerSociety.setOnItemSelectedListener(this);
 
+        spinnerGroup = (Spinner) findViewById(R.id.spinner_id_group);
+        spinnerGroup.setOnItemSelectedListener(this);
+
+        spinnerCategory = (Spinner) findViewById(R.id.spinner_id_category);
+        spinnerCategory.setOnItemSelectedListener(this);
+
+        spinnerSubcategory = (Spinner) findViewById(R.id.spinner_id_subcategory);
+        spinnerSubcategory.setOnItemSelectedListener(this);
+
+        spinnerProduct = (Spinner) findViewById(R.id.spinner_id_product_name);
+        spinnerProduct.setOnItemSelectedListener(this);
+
         // getting all rows of society
         allSocieties = dbHelper.getAllSocieties();
-
         // only get society names
         ArrayList<String> societyNames = new ArrayList<String>();
-        for (int i = 0 ; i < allSocieties.size() ; i++ ){
+        for (int i = 0 ; i < allSocieties.size() ; i++ ) {
             societyNames.add(allSocieties.get(i).getSoc_name());
         }
         adapterSociety = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, societyNames );
@@ -105,40 +108,63 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         spinnerSociety.setAdapter(adapterSociety);
         adapterSociety.notifyDataSetChanged();
 
-        tvFileName = (TextView) findViewById(R.id.tv_id_UploadedImage);
+
+        // getting all rows of group
+        allGroup = dbHelper.getAllGroup();
+        // get only group name
+        adapterGroup = new ArrayAdapter<Product_Group>(this, android.R.layout.simple_spinner_item, allGroup );
+        adapterGroup.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerGroup.setAdapter(adapterGroup);
+        adapterGroup.notifyDataSetChanged();
+
+
+        // getting all rows of category filter by group id
+        allCategory = dbHelper.getAllCategory(allGroup.get(0).getServerId());
+        // get only category name
+        adapterCategory = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_item, allCategory);
+        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(adapterCategory);
+        adapterCategory.notifyDataSetChanged();
+
+        // getting all rows of subcategory filter by group id and category id
+        allSubcategory = dbHelper.getAllSubcategory(allGroup.get(0).getServerId(), allCategory.get(0).getServerId());
+        // get only subcategory name
+        adapterSubcategory = new ArrayAdapter<Subcategory>(this, android.R.layout.simple_spinner_item, allSubcategory);
+        adapterSubcategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSubcategory.setAdapter(adapterSubcategory);
+        adapterSubcategory.notifyDataSetChanged();
+
+
+        // getting all rows of product details filter by group id and category id and subcategory id
+        allProductDetails = dbHelper.getAllProductdetails(allGroup.get(0).getServerId(),
+                                                            allCategory.get(0).getServerId(),
+                                                            allSubcategory.get(0).getServerId());
+        // get only product details name
+        adapterProduct = new ArrayAdapter<Product_Details>(this, android.R.layout.simple_spinner_item, allProductDetails);
+        adapterProduct.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerProduct.setAdapter(adapterProduct);
+        adapterProduct.notifyDataSetChanged();
+
         txt_ref_no = (EditText) findViewById(R.id.edittext_id_ref_no);
+        txt_product_qty = (EditText) findViewById(R.id.edittext_id_product_quantity);
 
         Bundle extras = getIntent().getExtras();
-
-        if(extras != null){
+        if(extras != null) {
             if(extras.getString("callingClass").equals("mainActivity")
                     || extras.getString("callingClass").equals("createSociety") ) {
                 // this intent comes from main activity
                 txt_ref_no.setText( getResources().getString(R.string.refString, getRefStringDate()) );
                 eId = "0";
             }
-            else if(extras.getString("callingClass").equals("newRelpy")){
+            else if(extras.getString("callingClass").equals("newRelpy")) {
                 // this intent comes from new reply with reference no
                 txt_ref_no.setText( extras.getString("ref") );
                 eId = String.valueOf(extras.getInt("enquiryId"));
             }
         }
 
-        txt_contact = (EditText) findViewById(R.id.edittext_id_society_contact);
-        txt_email = (EditText) findViewById(R.id.edittext_id_society_email);
-        txt_address = (EditText) findViewById(R.id.edittext_id_society_address);
-        txt_message = (EditText) findViewById(R.id.edittext_id_enquiry_message);
-
         refInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_ref_no);
-        contactInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_society_contact);
-        emailInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_society_email);
-        addressInputLayuot = (TextInputLayout) findViewById(R.id.id_input_layout_society_address);
-        messageInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_enquiry_message);
-
-        // get society row by id for auto text in society detail's edittext.
-        // for this method, sending the position of spinner data as parameter.
-        // i.e. first position of spinner
-        setSocietyDetailsEdittext(0);
+        productQtyInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_product_quantity);
 
         final RippleView rippleView = (RippleView) findViewById(R.id.btn_id_submit_enquiry);
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -147,21 +173,10 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
             public void onComplete(RippleView rippleView) {
 
                 str_ref_no = txt_ref_no.getText().toString();
-                str_contact = txt_contact.getText().toString();
-                str_email = txt_email.getText().toString();
-                str_address = txt_address.getText().toString();
-                str_message = txt_message.getText().toString();
+                str_product_qty = txt_product_qty.getText().toString();
 
-                Boolean boolFileName = isEmptyString(selectedFileName);
                 Boolean boolRef = isEmptyString(str_ref_no);
-                Boolean boolContact = phoneValiate(str_contact);
-                Boolean boolEmail = emailValidate(str_email);
-                Boolean boolAddress = isEmptyString(str_address);
-                Boolean boolMessage = isEmptyString(str_message);
-
-                if (!boolFileName) {
-                    Toast.makeText(getApplicationContext(), "Please,choose file.", Toast.LENGTH_LONG).show();
-                }
+                Boolean boolProductQty = isEmptyString(str_product_qty);
 
                 if (boolRef) {
                     refInputLayout.setErrorEnabled(false);
@@ -170,36 +185,21 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                     refInputLayout.setError("reference field is empty.");
                 }
 
-                if (boolContact) {
-                    contactInputLayout.setErrorEnabled(false);
+                if (boolProductQty) {
+                    productQtyInputLayout.setErrorEnabled(false);
                 } else {
-                    contactInputLayout.setErrorEnabled(true);
-                    contactInputLayout.setError("contact field is empty.");
+                    productQtyInputLayout.setErrorEnabled(true);
+                    productQtyInputLayout.setError("product quantity field is empty.");
                 }
 
-                if (boolEmail) {
-                    emailInputLayout.setErrorEnabled(false);
-                } else {
-                    emailInputLayout.setErrorEnabled(true);
-                    emailInputLayout.setError("You need to enter correct email-id");
-                }
+                if (boolRef && boolProductQty) {
+                    int selectedSocietySpinnerPosition = spinnerSociety.getSelectedItemPosition();
+                    int selectedSubcategorySpinnerPosition = spinnerSubcategory.getSelectedItemPosition();
+                    int selectedProductSpinnerPosition = spinnerProduct.getSelectedItemPosition();
 
-                if (boolAddress) {
-                    addressInputLayuot.setErrorEnabled(false);
-                } else {
-                    addressInputLayuot.setErrorEnabled(true);
-                    addressInputLayuot.setError("address field is empty.");
-                }
-
-                if (boolMessage) {
-                    messageInputLayout.setErrorEnabled(false);
-                } else {
-                    messageInputLayout.setErrorEnabled(true);
-                    messageInputLayout.setError("message field is empty.");
-                }
-
-
-                if (boolRef && boolContact && boolEmail && boolAddress && boolMessage && boolFileName) {
+                    int selectedSocietyServerId = allSocieties.get(selectedSocietySpinnerPosition).getServerId();
+                    int selectedSubcategoryServerId = allSubcategory.get(selectedSubcategorySpinnerPosition).getServerId();
+                    int selectedProductServerId = allProductDetails.get(selectedProductSpinnerPosition).getServerId();
 
                     GetSharedPreferenceHelper getPreference = new GetSharedPreferenceHelper(Create_Enquiry.this);
                     int uId = getPreference.getUserIdPreference(getResources().getString(R.string.userId));
@@ -207,12 +207,14 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                     String userType = getPreference.getUserTypePreference(getResources().getString(R.string.userType));
 
                     // check if same enquiry present with this userid.
-                    if (dbHelper.checkEnquiryEntryPresent(uId, str_message, tvFileName.getText().toString().trim()) > 0) {
+                    if ( dbHelper.checkEnquiryEntryPresent(uId,
+                            selectedSocietyServerId,
+                            selectedSubcategoryServerId,
+                            selectedProductServerId,
+                            str_ref_no) > 0) {
                         Toast.makeText(Create_Enquiry.this, "This enquiry is already exist.", Toast.LENGTH_LONG).show();
                         return;
                     }
-
-                    String filepath = CommonVariables.SCAN_FILE_PATH + "/" + tvFileName.getText().toString().trim();
 
                     int gId;
                     int repToVal;
@@ -232,8 +234,9 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
                     if (!isConnectingToInternet(Create_Enquiry.this)) {
 
                         Enquiry enquiry = new Enquiry(0, getDateToStoreInDb(), str_ref_no, uId, gId,
-                                repToVal, 0, str_message, str_name, str_address,
-                                str_contact, str_email, tvFileName.getText().toString().trim(), 1);
+                                repToVal, 0, selectedSocietyServerId, selectedSubcategoryServerId, selectedProductServerId,
+                                str_product_qty,1);
+
                         long enquiryId = dbHelper.insertEnquiry(enquiry);
 
                         Offline offline = new Offline( dbHelper.TABLE_ENQUIRY,
@@ -255,31 +258,23 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
 
                         onBackPressed();
                     } else {
-                        new InsertEnquiryAsyncTask(Create_Enquiry.this,
+                        new InsertEnquiryAsyncTask(
+                                Create_Enquiry.this,
                                 str_ref_no,
-                                str_name,
-                                str_contact,
-                                str_email,
-                                str_address,
-                                str_message,
-                                filepath,
                                 strUID,
-                                userType,
-                                eId,
+                                gId,
                                 repToVal,
-                                gId).execute();
+                                selectedSocietyServerId,
+                                selectedSubcategoryServerId,
+                                selectedProductServerId,
+                                str_product_qty,
+                                userType,
+                                eId ).execute();
                     }
                 }
             }
         });
 
-    }
-
-    private void setSocietyDetailsEdittext(int position) {
-        Society societyByIdData = dbHelper.getSocietyById( allSocieties.get(position).getId() );
-        txt_contact.setText(societyByIdData.getSoc_contact());
-        txt_email.setText(societyByIdData.getSoc_email());
-        txt_address.setText(societyByIdData.getSoc_adrs());
     }
 
     public void goToCreateSociety(View v) {
@@ -291,119 +286,80 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         finish();
     }
 
-    public void openFileChooser(View v) {
-        // first check obp directory is exist
-        // if exist then show option for selecting pic from gallery
-        // if not exist then go to a scanner activity.
-        File dir = new File(CommonVariables.SCAN_FILE_PATH);
-        if(dir.exists() && dir.isDirectory()) {
-
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Select from gallery?");
-
-            alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    Uri uri = Uri.parse(CommonVariables.SCAN_FILE_PATH);
-                    intent.setDataAndType(uri, "image/png");
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-                }
-            });
-
-            alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                gotoScannerActivity();
-                }
-            });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        }
-        else {
-
-            gotoScannerActivity();
-        }
-
-    }
-
-    private void gotoScannerActivity() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Create_Enquiry.this);
-        alertDialog.setTitle("File name");
-        alertDialog.setMessage("Enter file name");
-
-        final EditText input = new EditText(Create_Enquiry.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        alertDialog.setView(input);
-
-        alertDialog.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            String name = input.getText().toString();
-            if (name.compareTo("") == 0) {
-                Toast.makeText(getApplicationContext(),
-                        "field is empty.", Toast.LENGTH_LONG).show();
-            }
-            else {
-                selectedFileName = name.replaceAll("\\s","_");
-                startScan(0);
-            }
-            }
-        });
-
-        alertDialog.show();
-    }
-
-    protected void startScan(int preference) {
-        Intent intent = new Intent(this, ScanActivity.class);
-        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, preference);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-
-            filePath = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                selectedFileName = getFileName(Create_Enquiry.this, filePath);
-                tvFileName.setText(selectedFileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getExtras().getParcelable(ScanConstants.SCANNED_RESULT);
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                getContentResolver().delete(uri, null, null);
-
-                tvFileName.setText("PNG_" + selectedFileName + ".png");
-                CommonUtilities.store_Png_InSdcard(this,bitmap, "PNG_" + selectedFileName +".png");
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    int selectedGroupServerId = 0;
+    int selectedCategoryServerId = 0;
+    int selectedSubcategoryServerId = 0;
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
         String item = parent.getItemAtPosition(position).toString();
+
         if(spinner.getId() == R.id.spinner_id_societies){
-            System.out.println("Selected from society spinner: "+item);
-            str_name = item;
-            setSocietyDetailsEdittext(position);
+            selectedSocietyIndex = position;
+        }
+        else if(spinner.getId() == R.id.spinner_id_group) {
+            selectedGroupServerId = allGroup.get(position).getServerId();
+
+            // rendered category spinner
+            allCategory = dbHelper.getAllCategory(selectedGroupServerId);
+            adapterCategory.clear();
+            adapterCategory.addAll(allCategory);
+            adapterCategory.notifyDataSetChanged();
+
+            // get category server id
+            selectedCategoryServerId = allCategory.get(0).getServerId();
+
+            // rendered subcategory spinner
+            allSubcategory = dbHelper.getAllSubcategory(selectedGroupServerId, selectedCategoryServerId);
+            adapterSubcategory.clear();
+            adapterSubcategory.addAll(allSubcategory);
+            adapterSubcategory.notifyDataSetChanged();
+
+            // get subcategory server id
+            selectedSubcategoryServerId = allSubcategory.get(0).getServerId();
+
+            allProductDetails = dbHelper.getAllProductdetails(selectedGroupServerId,
+                    selectedCategoryServerId,
+                    selectedSubcategoryServerId);
+            adapterProduct.clear();
+            adapterProduct.addAll(allProductDetails);
+            adapterProduct.notifyDataSetChanged();
+        }
+        else if(spinner.getId() == R.id.spinner_id_category) {
+            // get category server id
+            selectedCategoryServerId = allCategory.get(position).getServerId();
+
+            // rendered subcategory spinner
+            allSubcategory = dbHelper.getAllSubcategory(selectedGroupServerId, selectedCategoryServerId);
+            adapterSubcategory.clear();
+            adapterSubcategory.addAll(allSubcategory);
+            adapterSubcategory.notifyDataSetChanged();
+
+            // get subcategory server id
+            selectedSubcategoryServerId = allSubcategory.get(0).getServerId();
+
+            allProductDetails = dbHelper.getAllProductdetails(selectedGroupServerId,
+                    selectedCategoryServerId,
+                    selectedSubcategoryServerId);
+            adapterProduct.clear();
+            adapterProduct.addAll(allProductDetails);
+            adapterProduct.notifyDataSetChanged();
+
+        }
+        else if(spinner.getId() == R.id.spinner_id_subcategory) {
+            // get subcategory server id
+            selectedSubcategoryServerId = allSubcategory.get(position).getServerId();
+
+            allProductDetails = dbHelper.getAllProductdetails(selectedGroupServerId,
+                    selectedCategoryServerId,
+                    selectedSubcategoryServerId);
+            adapterProduct.clear();
+            adapterProduct.addAll(allProductDetails);
+            adapterProduct.notifyDataSetChanged();
+        }
+        else if(spinner.getId() == R.id.spinner_id_product_name) {
+
         }
     }
 
@@ -436,5 +392,37 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
     protected void onPause() {
         super.onPause();
         dbHelper.closeDB();
+    }
+
+    public void viewSocietyDetails(View view) {
+        // custom dialog
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_alert_society_detail, null);
+        dialogBuilder.setView(dialogView);
+
+        // set the custom dialog components - text, image and button
+        TextView tv_societyName = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_society_name);
+        TextView tv_societyContact = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_society_contact);
+        TextView tv_societyEmail = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_society_email);
+        TextView tv_societyAddress = (TextView) dialogView.findViewById(R.id.tv_id_inOrderDetails_society_address);
+        ImageView closeDialog = (ImageView) dialogView.findViewById(R.id.closeSocietyDetailsAlert);
+
+        tv_societyName.setText(allSocieties.get(selectedSocietyIndex).getSoc_name());
+        tv_societyContact.setText(allSocieties.get(selectedSocietyIndex).getSoc_contact());
+        tv_societyEmail.setText(allSocieties.get(selectedSocietyIndex).getSoc_email());
+        tv_societyAddress.setText(allSocieties.get(selectedSocietyIndex).getSoc_adrs());
+
+        final AlertDialog b = dialogBuilder.create();
+
+        // if button is clicked, close the custom dialog
+        closeDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                b.dismiss();
+            }
+        });
+
+        b.show();
     }
 }
