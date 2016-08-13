@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    tools:context="com.alchemistdigital.buxa.activities.ServiceParameterActivity">
+
+    <LinearLayout
+        android:id="@+id/id_toolbar_selectService"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_back_white"
+            android:onClick="backPress" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_toolbar_selectService"
+        android:orientation="vertical">
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_commodity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor" >
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_commodity"
+                            android:hint="@string/hint_commodity"
+                            android:textColor="@color/milkyWhite"
+                            android:ems="10" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_size_of_shipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor" >
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_size_of_shipment"
+                            android:hint="@string/hint_size_of_shipment"
+                            android:textColor="@color/milkyWhite"
+                            android:ems="10" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_type_of_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_type_of_package"
+                            android:hint="@string/hint_type_of_package"
+                            android:textColor="@color/milkyWhite"
+                            android:ems="10" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_no_of_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_no_of_package"
+                            android:hint="@string/hint_no_of_package"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_terms_of_shipment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_terms_of_shipment"
+                            android:hint="@string/hint_terms_of_shipment"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_ocean_freight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_ocean_freight"
+                            android:hint="@string/hint_ocean_freight"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_dimensions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_dimensions"
+                            android:hint="@string/hint_dimensions"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_pickUp_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor" >
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_pickUp_location"
+                            android:hint="@string/hint_pickUp_location"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_drop_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_drop_location"
+                            android:hint="@string/hint_drop_location"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_custom_clearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/hintTextColor">
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textMultiLine"
+                            android:id="@+id/id_custom_clearance"
+                            android:hint="@string/hint_custom_clearance"
+                            android:ems="10"
+                            android:textColor="@color/milkyWhite"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="70sp"
+                    android:layout_height="70sp"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="50sp"
+                    android:layout_gravity="center_horizontal"
+                    android:tint="@color/backgroundColor"
+                    app:rippleColor="@color/backgroundColor"
+                    android:src="@drawable/ic_keyboard_arrow_right"/>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</RelativeLayout>

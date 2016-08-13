@@ -1,0 +1,40 @@
+<resources>
+
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/milkyWhite</item>
+
+        <item name="colorControlNormal">@color/milkyWhite</item>
+        <item name="colorControlActivated">@color/milkyWhite</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="android:textColorHighlight">@color/colorBlack</item>
+
+    </style>
+
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="LoginTheme" parent="LoginTheme.Base"></style>
+
+    <style name="LoginTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/milkyWhite</item>
+
+        <item name="colorControlNormal">@color/hintGray</item>
+        <item name="colorControlActivated">#3fa9f5</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="android:textColorHighlight">#3fa9f5</item>
+    </style>
+
+    <style name="LoginTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    tools:context=".activities.SelectServiceActivity">
+
+    <LinearLayout
+        android:id="@+id/id_toolbar_selectService"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_back_white"
+            android:onClick="backPress" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_toolbar_selectService" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/id_tv_strSelectService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:textColor="@color/milkyWhite"
+                android:text="@string/strSelectService"
+                android:textSize="45sp" />
+
+            <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:text="@string/strWantAvail"
+                android:textColor="@color/milkyWhite"
+                android:textSize="18dp" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_id_trans"
+                android:layout_marginTop="70dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:paddingLeft="20dp"
+                android:textSize="25dp"
+                android:textColor="@color/milkyWhite"
+                android:buttonTint="@color/milkyWhite"
+                android:text="@string/strTransportation" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_id_CustomClr"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:paddingLeft="20dp"
+                android:textSize="25dp"
+                android:textColor="@color/milkyWhite"
+                android:buttonTint="@color/milkyWhite"
+                android:text="@string/strCustomClr" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_id_freightForward"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:paddingLeft="20dp"
+                android:textSize="25dp"
+                android:textColor="@color/milkyWhite"
+                android:buttonTint="@color/milkyWhite"
+                android:text="@string/freightForward" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:clickable="true"
+                android:scaleType="fitXY"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="center_horizontal"
+                android:tint="@color/backgroundColor"
+                app:rippleColor="@color/backgroundColor"
+                android:src="@drawable/ic_keyboard_arrow_right"
+                android:onClick="gotoSelectServiceParameter" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

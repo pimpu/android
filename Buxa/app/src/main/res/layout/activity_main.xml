@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0189ba"
+    tools:context="com.alchemistdigital.buxa.activities.MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/milkyWhite"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/id_welcomeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="@string/str_welcome"
+                        android:textSize="40dp" />
+
+                    <ImageView
+                        android:id="@+id/id_buxaLogo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/id_welcomeText"
+                        android:src="@drawable/buxa_logo_welcomescreen_xhdpi"
+                        android:layout_marginTop="35dp"
+                        android:layout_marginBottom="25dp"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0189ba"
+                android:gravity="center_horizontal"
+                android:paddingLeft="20dp"
+                android:paddingBottom="20dp"
+                android:paddingRight="20dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:src="@drawable/arrow"/>
+
+
+                <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="30dp"
+                    android:text="@string/strICEcodeQty"
+                    android:textSize="25dp"
+                    android:textColor="@color/milkyWhite" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="20dp"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/milkyWhite"
+                            android:textColor="#5b5555"
+                            android:text="@string/str_yes"
+                            android:onClick="goToSelectService" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="20dp"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/milkywhiteborder_bgtransparent_no_btn"
+                            android:textColor="@color/milkyWhite"
+                            android:text="@string/str_no"
+                            android:onClick="btnNoClick" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
