@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/splash_background"
+    android:id="@+id/id_xmlRegister"
+    tools:context="com.alchemistdigital.buxa.activities.RegisterActivity">
+
+    <!--<LinearLayout
+        android:id="@+id/id_toolbar_selectService"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_back_white"
+            android:tint="@color/hintGray"
+            android:onClick="backPress" />
+    </LinearLayout>-->
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/id_appBar_registerform"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/id_toolbar_registerform"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="#055f7e">
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/id_noInternet_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:background="@color/error">
+            <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:text="@string/strNoConnection"
+                android:textColor="@color/milkyWhite"/>
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/id_appBar_registerform" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:text="@string/strCompanyRegisterDetails"
+                android:textSize="18dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="#c0c0c0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp"
+                android:layout_centerHorizontal="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/company_code"
+                        android:hint="@string/hint_company_code"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/company_name"
+                        android:hint="@string/hint_company_name"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/company_address"
+                        android:hint="@string/hint_company_address"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_landmark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/company_landmark"
+                        android:hint="@string/hint_company_landmark"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/company_city"
+                        android:hint="@string/hint_company_city"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_zipcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:id="@+id/company_zipcode"
+                        android:hint="@string/hint_company_zipcode"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:text="@string/strIndia"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/company_country" />
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:id="@+id/spinner_id_state"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:prompt="@string/str_spinner_state"/>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_pan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/company_pan"
+                        android:hint="@string/hint_company_pan"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_company_tin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/company_tin"
+                        android:hint="@string/hint_company_tin"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/strCompanyContactPerson"
+                android:textSize="18dp"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="#c0c0c0"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="20dp"
+                android:layout_centerHorizontal="true">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_contact_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/contact_name"
+                        android:hint="@string/hint_contact_name"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_contact_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:id="@+id/contact_mobile"
+                        android:hint="@string/hint_contact_mobile"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_contact_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/contact_email"
+                        android:hint="@string/hint_contact_email"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_contact_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:id="@+id/contact_pwd"
+                        android:hint="@string/hint_contact_pwd"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_contact_conform_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:id="@+id/contact_conform_pwd"
+                        android:hint="@string/hint_contact_confirm_pwd"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        android:id="@+id/id_btn_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/btn_signIn"
+                        android:background="@color/backgroundColor"
+                        android:textColor="@android:color/white"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
