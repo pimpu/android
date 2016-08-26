@@ -26,11 +26,8 @@ class DbHandler {
      * @param String $email User login email id
      * @param String $password User login password
      */
-    public function createUser($code, $company, $address,
-                                $landmark, $country, $state,
-                                $city, $zipcode, $pan,
-                                $tin, $uname, $mobile,
-                                $email, $password, $create_time) {
+    public function createUser($code, $company, $uname, $mobile,
+                                    $email, $password, $create_time) {
         $response = array();
 
         // First check if user already existed in db
@@ -38,38 +35,22 @@ class DbHandler {
 
             // Generating API key
             $api_key = $this->generateApiKey();
-            $result = mysql_query("INSERT INTO db_users( code, 
-                                                        api_key, 
+            $result = mysql_query("INSERT INTO bx_user( api_key, 
+                                                        comp_ref_no, 
+                                                        company,
                                                         uname,
+                                                        mobile,
                                                         email,
                                                         password,
-                                                        company,
-                                                        mobile,
-                                                        pan,
-                                                        tin,
-                                                        address,
-                                                        landmark,
-                                                        city,
-                                                        zipcode,
-                                                        country,
-                                                        state,
                                                         create_time ) 
                                                         VALUES( 
-                                                        '".$code."',
                                                         '".$api_key."',
+                                                        '".$code."',
+                                                        '".$company."',
                                                         '".$uname."',
+                                                        ".$mobile.",
                                                         '".$email."',
                                                         '".$password."',
-                                                        '".$company."',
-                                                        '".$mobile."',
-                                                        '".$pan."',
-                                                        '".$tin."',
-                                                        '".$address."',
-                                                        '".$landmark."',
-                                                        '".$city."',
-                                                        '".$zipcode."',
-                                                        '".$country."',
-                                                        '".$state."',
                                                         '".$create_time."');");
 
 
@@ -98,23 +79,24 @@ class DbHandler {
      * @return boolean User login status success/fail
      */
     public function checkLogin($email, $password) {
-        $getPwd = mysql_query("SELECT password FROM db_users WHERE email='".$email."' AND status=1;");
-
+        $getPwd = mysql_query("SELECT password FROM bx_user WHERE email='".$email."' AND status=1;");
+        $response = array();
         if (mysql_num_rows($getPwd) > 0) {
             $resultArray = mysql_fetch_array($getPwd);
             $sqlPassword = $resultArray["password"];
 
             if ( strcmp($password, $sqlPassword) == 0 ) {
-                // User password is correct
-                return TRUE;
+                $response["result"]= TRUE;
             } else {
-                // user password is incorrect
-                return FALSE;
+                $response["result"]= FALSE;
+                $response["msg"] = "Password is incorrect.";
             }
         } else {
+            $response["result"]= FALSE;
+            $response["msg"] = "Please, Register with Buxa app.";
             // user not existed with the email
-            return FALSE;
         }
+        return $response;
     }
 
     /**
@@ -123,7 +105,7 @@ class DbHandler {
      * @return boolean
      */
     private function isUserExists($email) {
-        $checkMatchEmailQuery = mysql_query("SELECT uid FROM db_users WHERE email='".$email."';");
+        $checkMatchEmailQuery = mysql_query("SELECT uid FROM bx_user WHERE email='".$email."';");
         return mysql_num_rows($checkMatchEmailQuery) > 0 ;
     }
 
@@ -132,7 +114,7 @@ class DbHandler {
      * @param String $email User email id
      */
     public function getUserByEmail($email) {
-        $stmt = mysql_query("SELECT uname, email, api_key, uid FROM db_users WHERE email='".$email."';");
+        $stmt = mysql_query("SELECT uname, email, api_key, uid FROM bx_user WHERE email='".$email."';");
         if ($stmt) {
             $stmtArray = mysql_fetch_array($stmt);
             $user = array();
@@ -140,6 +122,7 @@ class DbHandler {
             $user["email"] = $stmtArray["email"];
             $user["api_key"] = $stmtArray["api_key"];
             $user["id"] = $stmtArray["uid"];
+            $user["companyName"] = $stmtArray["company"];
             return $user;
         } else {
             return NULL;

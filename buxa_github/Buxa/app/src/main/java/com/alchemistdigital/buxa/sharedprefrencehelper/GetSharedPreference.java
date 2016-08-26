@@ -15,10 +15,10 @@ public class GetSharedPreference {
     public GetSharedPreference(Context context) {
         this.context = context;
         sharedPreference =
-                context.getSharedPreferences(context.getResources().getString(R.string.sharedPrefrence), 0);
+                context.getSharedPreferences(context.getResources().getString(R.string.sharedPrefrence), Context.MODE_PRIVATE);
     }
 
-    public Boolean getLoginPreference(String text){
-        return sharedPreference.getBoolean(text,false);
+    public String getLoginPreference(String text) {
+        return sharedPreference.getString(text,"");
     }
 }

@@ -14,13 +14,14 @@ public class SetSharedPreference {
     private SharedPreferences.Editor editor;
 
     public SetSharedPreference(Context context){
-        sharedPreference = context.getSharedPreferences(context.getResources().getString(R.string.sharedPrefrence), 0);
+        sharedPreference =
+                context.getSharedPreferences(context.getResources().getString(R.string.sharedPrefrence), Context.MODE_PRIVATE);
         editor = sharedPreference.edit();
         this.context = context;
     }
 
-    public void setBooleanLogin(String key, Boolean value) {
-        editor.putBoolean(key, value);
+    public void setBooleanLogin(String key, String value) {
+        editor.putString(key, value);
         editor.commit();
     }
 
@@ -43,5 +44,10 @@ public class SetSharedPreference {
         editor.putString(key, loginName);
         editor.commit();
 
+    }
+
+    public void setCompanyName(String key, String companyName) {
+        editor.putString(key, companyName);
+        editor.commit();
     }
 }

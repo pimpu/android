@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Buxa</string>
-    <string name="sharedPrefrence">com.alchemistdigital.buxa</string>
+    <string name="sharedPrefrence">in.alchemistdigital.buxa</string>
     <string name="boolean_login_sharedPref">boolLoginPreference</string>
     <string name="loginId">loginId</string>
     <string name="loginName">loginName</string>
     <string name="loginEmail">loginEmail</string>
+    <string name="companyName">companyName</string>
     <string name="apikey">apikey</string>
     <string name="str_loading">Loading</string>
     <string name="str_welcome">Welcome to</string>
@@ -79,7 +80,7 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="btn_signIn">Sign in</string>
-    <string name="hint_company_name">Name</string>
+    <string name="hint_company_name">Comapny name</string>
     <string name="hint_company_code">Code</string>
     <string name="hint_company_address">Address</string>
     <string name="hint_company_landmark">Landmark</string>
@@ -93,4 +94,7 @@
     <string name="hint_contact_email">Email id</string>
     <string name="hint_contact_pwd">Password</string>
     <string name="hint_contact_confirm_pwd">Confirm password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -12,10 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
 
+        <!--<activity android:name=".activities.StartupActivity"></activity>-->
         <activity
-            android:name=".activities.SplashScreen"
-            android:screenOrientation="portrait"
+            android:name=".activities.StartupActivity"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/LoginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +37,6 @@
             android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
-
     </application>
 
 </manifest>

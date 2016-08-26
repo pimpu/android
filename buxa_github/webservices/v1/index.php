@@ -66,14 +66,6 @@ $app->post('/register', function() use ($app) {
             // reading post params
             $code = $app->request->post('code');
             $company = $app->request->post('company');
-            $address = $app->request->post('address');
-            $landmark = $app->request->post('landmark');
-            $country = $app->request->post('country');
-            $state = $app->request->post('state');
-            $city = $app->request->post('city');
-            $zipcode = $app->request->post('zipcode');
-            $pan = $app->request->post('pan');
-            $tin = $app->request->post('tin');
             $uname = $app->request->post('uname');
             $mobile = $app->request->post('mobile');
             $email = $app->request->post('email');
@@ -81,10 +73,7 @@ $app->post('/register', function() use ($app) {
             $create_time = $app->request->post('create_time');
 
             $db = new DbHandler();
-            $res = $db->createUser($code, $company, $address,
-            						$landmark, $country, $state,
-            						$city, $zipcode, $pan,
-            						$tin, $uname, $mobile,
+            $res = $db->createUser($code, $company, $uname, $mobile,
             						$email, $password, $create_time );
 
             if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
@@ -94,12 +83,13 @@ $app->post('/register', function() use ($app) {
                 $response["api_key"] = $res["api_key"];
                 $response["email"] = $email;
                 $response["loginName"] = $uname;
+                $response["companyName"] = $company;
             } else if ($res["message"] == USER_CREATE_FAILED) {
                 $response["error"] = true;
                 $response["message"] = "Oops! An error occurred while registereing";
             } else if ($res["message"] == USER_ALREADY_EXISTED) {
                 $response["error"] = true;
-                $response["message"] = "Sorry, this email already existed.Please, login with this email.";
+                $response["message"] = "This email id already existed.Please, login with this email.";
             }
             // echo json response
             echoRespnse(201, $response);
@@ -122,7 +112,9 @@ $app->post('/login', function() use ($app) {
 
             $db = new DbHandler();
             // check for correct email and password
-            if ($db->checkLogin($email, $password)) {
+            $res = $db->checkLogin($email, $password);
+
+            if ($res["result"]) {
                 // get the user by email
                 $user = $db->getUserByEmail($email);
 
@@ -132,6 +124,7 @@ $app->post('/login', function() use ($app) {
                     $response['email'] = $user['email'];
                     $response['api_key'] = $user['api_key'];
                     $response['id'] = $user['id'];
+                    $response['companyName'] = $user['companyName'];
                 } else {
                     // unknown error occurred
                     $response['error'] = true;
@@ -140,7 +133,7 @@ $app->post('/login', function() use ($app) {
             } else {
                 // user credentials are wrong
                 $response['error'] = true;
-                $response['message'] = 'Login failed. Incorrect credentials';
+                $response['message'] = $res["msg"];
             }
 
             echoRespnse(200, $response);
