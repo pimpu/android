@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.alchemistdigital.buxa.R;
 
+import java.util.Set;
+
 /**
  * Created by user on 8/2/2016.
  */
@@ -20,5 +22,9 @@ public class GetSharedPreference {
 
     public String getLoginPreference(String text) {
         return sharedPreference.getString(text,"");
+    }
+
+    public Set<String> getSelectedImage(String text) {
+        return sharedPreference.getStringSet(text,null);
     }
 }

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.alchemistdigital.buxa.R;
 
+import java.util.HashSet;
+
 /**
  * Created by user on 8/16/2016.
  */
@@ -48,6 +50,11 @@ public class SetSharedPreference {
 
     public void setCompanyName(String key, String companyName) {
         editor.putString(key, companyName);
+        editor.commit();
+    }
+
+    public void setSelectedImage(String string, HashSet array_list) {
+        editor.putStringSet(string, array_list);
         editor.commit();
     }
 }

@@ -7,21 +7,26 @@
     android:background="@color/backgroundColor"
     tools:context="com.alchemistdigital.buxa.activities.ServiceParameterActivity">
 
-    <LinearLayout
-        android:id="@+id/id_toolbar_selectService"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
-        <ImageView
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_arrow_back_white"
-            android:onClick="backPress" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/id_toolbar_selectServiceParameter"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="@color/backgroundColor">
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/id_toolbar_selectService"
+        android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,72 +41,97 @@
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
                 <LinearLayout
+                    android:id="@+id/layout_commodity"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_commodity"
+
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor" >
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_commodity"
-                            android:hint="@string/hint_commodity"
-                            android:textColor="@color/milkyWhite"
-                            android:ems="10" />
-                    </android.support.design.widget.TextInputLayout>
+                        android:text="@string/hint_commodity"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                        android:id="@+id/id_commodity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_commodity"/>
+
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_shipmentTerm"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_size_of_shipment"
+
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor" >
-                        <EditText
-                            android:layout_width="match_parent"
+                        android:text="@string/hint_terms_of_shipment"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radiogroupTermOfShipment"
+                        android:orientation="horizontal"
+                        android:checkedButton="@+id/rbLcl" >
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_size_of_shipment"
-                            android:hint="@string/hint_size_of_shipment"
-                            android:textColor="@color/milkyWhite"
-                            android:ems="10" />
-                    </android.support.design.widget.TextInputLayout>
+                            android:id="@+id/rbLcl"
+                            android:text="@string/strLcl" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbFcl"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/strFcl" />
+
+                    </RadioGroup>
+
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_PackageType"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_type_of_package"
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor">
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_type_of_package"
-                            android:hint="@string/hint_type_of_package"
-                            android:textColor="@color/milkyWhite"
-                            android:ems="10" />
-                    </android.support.design.widget.TextInputLayout>
+                        android:text="@string/hint_type_of_package"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                        android:id="@+id/id_type_of_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_type_of_package"/>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_NoOfPackage"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -112,10 +142,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/hintTextColor">
-                        <EditText
+                        <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
+                            android:inputType="numberSigned"
                             android:id="@+id/id_no_of_package"
                             android:hint="@string/hint_no_of_package"
                             android:ems="10"
@@ -124,135 +154,279 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_dimension"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_terms_of_shipment"
+
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor">
-                        <EditText
-                            android:layout_width="match_parent"
+                        android:text="@string/hint_dimensions"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_length"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_terms_of_shipment"
-                            android:hint="@string/hint_terms_of_shipment"
-                            android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:layout_weight="1"
+                            android:textColorHint="@color/hintTextColor">
+
+                            <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_length"
+                                android:hint="@string/hint_dimensions_length"
+                                android:ems="10"
+                                android:textColor="@color/milkyWhite"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dimensions_height"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/hintTextColor">
+
+                            <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_height"
+                                android:hint="@string/hint_dimensions_height"
+                                android:ems="10"
+                                android:textColor="@color/milkyWhite"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dimensions_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColorHint="@color/hintTextColor">
+
+                            <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_weight"
+                                android:hint="@string/hint_dimensions_weight"
+                                android:ems="10"
+                                android:textColor="@color/milkyWhite"/>
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_pickup"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:paddingTop="20dp"
                     android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_ocean_freight"
-                        android:layout_width="match_parent"
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor">
-                        <EditText
+                        android:layout_weight=".5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pickup:"
+                            android:textColor="@color/milkyWhite"
+                            android:layout_marginBottom="5dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                            android:id="@+id/id_autoComplete_pickup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_ocean_freight"
-                            android:hint="@string/hint_ocean_freight"
                             android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:textColor="@color/milkyWhite"
+                            android:textColorHint="@color/hintTextColor"
+                            android:hint="@string/hint_pickUp_location">
+                        </com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont>
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_drop"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:paddingTop="20dp"
                     android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_dimensions"
-                        android:layout_width="match_parent"
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor">
-                        <EditText
+                        android:layout_weight=".5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Drop:"
+                            android:textColor="@color/milkyWhite"
+                            android:layout_marginBottom="5dp"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:paddingRight="10dp"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                            android:id="@+id/id_autoComplete_drop"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_dimensions"
-                            android:hint="@string/hint_dimensions"
                             android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:textColor="@color/milkyWhite"
+                            android:textColorHint="@color/hintTextColor"
+                            android:hint="@string/hint_drop_location">
+                        </com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont>
+
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_LRCopy"
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="LR Copy:"
+                            android:textColor="@color/milkyWhite"
+                            android:layout_marginBottom="5dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center_horizontal">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="30dp"
+                            android:text="Upload"
+                            android:textColor="@color/backgroundColor"
+                            android:background="@color/milkyWhite"
+                            android:onClick="gotoFileUpload"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_IEC"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_pickUp_location"
+                        android:id="@+id/input_layout_IEC_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/hintTextColor" >
-                        <EditText
+                        <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_pickUp_location"
-                            android:hint="@string/hint_pickUp_location"
-                            android:ems="10"
-                            android:textColor="@color/milkyWhite" />
+                            android:inputType="text"
+                            android:id="@+id/id_IEC_number"
+                            android:hint="@string/hint_IEC_number"
+                            android:textColor="@color/milkyWhite"
+                            android:ems="10" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_ADCode"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_drop_location"
+                        android:id="@+id/input_layout_AD_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColorHint="@color/hintTextColor">
-                        <EditText
+                        <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_drop_location"
-                            android:hint="@string/hint_drop_location"
+                            android:inputType="text"
+                            android:id="@+id/id_AD_code"
+                            android:hint="@string/hint_AD_Code"
                             android:ems="10"
                             android:textColor="@color/milkyWhite"/>
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_CustomeClearanceLocation"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:gravity="center_horizontal"
                     xmlns:android="http://schemas.android.com/apk/res/android">
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_custom_clearance"
+
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/hintTextColor">
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:id="@+id/id_custom_clearance"
-                            android:hint="@string/hint_custom_clearance"
-                            android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
-                    </android.support.design.widget.TextInputLayout>
+                        android:text="@string/hint_custom_clearance"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                        android:id="@+id/id_custome_clearance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_custom_clearance"/>
+
                 </LinearLayout>
 
                 <android.support.design.widget.FloatingActionButton
@@ -264,7 +438,8 @@
                     android:layout_gravity="center_horizontal"
                     android:tint="@color/backgroundColor"
                     app:rippleColor="@color/backgroundColor"
-                    android:src="@drawable/ic_keyboard_arrow_right"/>
+                    android:src="@drawable/ic_keyboard_arrow_right"
+                    android:onClick="storeTransportEnquiry"/>
 
             </LinearLayout>
         </ScrollView>
