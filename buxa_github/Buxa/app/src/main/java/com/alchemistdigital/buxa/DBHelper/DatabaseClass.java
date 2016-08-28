@@ -52,7 +52,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     // CUSTOM_CLEARANCE_LOCATION Table - column names
     private static final String CCL_SERVER_ID = "ccl_serverId";
-    private static final String ICD_CATEGORY_ID = "icd_category_id";
+    private static final String CC_CATEGORY_ID = "cc_category_id";
     private static final String CCL_NAME = "ccl_name";
     private static final String CCL_LOCATION = "ccl_location";
     private static final String CCL_STATE = "ccl_state";
@@ -91,17 +91,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String TRANSPORT_SERVICE_SERVER_ID = "trans_service_serverId";
     private static final String TRANSPORT_SERVICE_NAME = "trans_service_name";
 
-
-    public static final String  = "CompanyDetails";
-    public static final String  = "Commodity";
-    public static final String  = "CustomClearanceLocation";
-    public static final String  = "CustomClearanceCategory";
-    public static final String TABLE_TERM_OF_SHIPMENT = "TermOfShipment";
-    public static final String TABLE_TRANSPORTATION = "Transportation";
-    public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
-    public static final String TABLE_TRANSPORT_TYPE = "TransportType";
-    public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
-
     // Company Table Create Statements
     private static final String CREATE_TABLE_COMPANY =
             "CREATE TABLE IF NOT EXISTS "+ TABLE_COMPANY +
@@ -135,7 +124,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_CUSTOM_CLEARANCE_LOCATION +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     CCL_SERVER_ID+" INTEGER," +
-                    ICD_CATEGORY_ID+" INTEGER," +
+                    CC_CATEGORY_ID +" INTEGER," +
                     CCL_NAME+" VARCHAR(200)," +
                     CCL_LOCATION+" VARCHAR(200)," +
                     CCL_STATE+" VARCHAR(200)," +
@@ -151,6 +140,60 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Term of shipment Table Create Statements
+    private static final String CREATE_TABLE_TERM_OF_SHIPMENT =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TERM_OF_SHIPMENT+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    TOS_SERVER_ID +" INTEGER," +
+                    TOS_name+" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Transportation Table Create Statements
+    private static final String CREATE_TABLE_TRANSPORTATION =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORTATION+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    TRANSPORTATION_SERVER_ID +" INTEGER," +
+                    COMMODITY_SERVERID +" INTEGER," +
+                    DIMEN_LENGTH +" INTEGER," +
+                    DIMEN_HEIGHT +" INTEGER," +
+                    DIMEN_WEIGHT +" INTEGER," +
+                    SHIPMENT_TERM +" INTEGER," +
+                    NO_OF_PACK +" INTEGER," +
+                    PACK_TYPE +" INTEGER," +
+                    PICKUP +" VARCHAR(200)," +
+                    DROP +" VARCHAR(200)," +
+                    LRCOPY +" VARCHAR(200)," +
+                    AVAIL_OPTION +" TINYINT(4)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    /*// Shipment conformation Table Create Statements
+    private static final String CREATE_TABLE_SHIPMENT_CONFORMATION =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_SHIPMENT_CONFORMATION+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    TOS_SERVER_ID +" INTEGER," +
+                    TOS_name+" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";*/
+
+    // Transport type Table Create Statements
+    private static final String CREATE_TABLE_TRANSPORT_TYPE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORT_TYPE+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    TRANSPORT_TYPE_SERVER_ID +" INTEGER," +
+                    TRANSPORT_TYPE_NAME +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Transport service Table Create Statements
+    private static final String CREATE_TABLE_TRANSPORT_SERVICE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORT_SERVICE+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    TRANSPORT_SERVICE_SERVER_ID +" INTEGER," +
+                    TRANSPORT_SERVICE_NAME +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
 
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -159,11 +202,30 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(CREATE_TABLE_COMPANY);
+        db.execSQL(CREATE_TABLE_COMMODITY);
+        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_LOCATION);
+        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_CATEGORY);
+        db.execSQL(CREATE_TABLE_TERM_OF_SHIPMENT);
+        db.execSQL(CREATE_TABLE_TRANSPORTATION);
+        db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
+        db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        // on upgrade drop older tables
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERM_OF_SHIPMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
+
+        // create new tables
+        onCreate(db);
     }
 }
