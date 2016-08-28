@@ -17,7 +17,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Buxa.db";
 
     // Table Names
-    public static final String TABLE_COMPANY = "CompanyDetailsModel";
+    public static final String TABLE_COMPANY = "CompanyDetailsgit ";
     public static final String TABLE_COMMODITY = "Commodity";
     public static final String TABLE_CUSTOM_CLEARANCE_LOCATION = "CustomClearanceLocation";
     public static final String TABLE_CUSTOM_CLEARANCE_CATEGORY = "CustomClearanceCategory";
