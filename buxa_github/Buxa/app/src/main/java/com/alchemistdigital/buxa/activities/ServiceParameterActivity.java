@@ -35,9 +35,10 @@ import java.util.List;
 public class ServiceParameterActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop;
 
-    LinearLayout commodityLayout, shipmentTermLayout, packageTypeLayout, noOfPackageLayout,
+    public LinearLayout commodityLayout, shipmentTermLayout, packageTypeLayout, noOfPackageLayout,
                 dimensionLayout, pickupLayout, dropLayout, LRCopyLayout, IECLayout, ADCodeLayout,
                 customeClearanceLocationLayout;
+    Boolean boolTrans, boolCutomClr, boolFreight;
 
     //    -------------- place api -------------------
     private static final String LOG_TAG = "Google Places Autocomplete";
@@ -51,6 +52,25 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_parameter);
 
+        toolbarSetup();
+
+        init();
+
+        boolTrans = getIntent().getExtras().getBoolean("Trans");
+        boolCutomClr = getIntent().getExtras().getBoolean("Custom_clr");
+        boolFreight = getIntent().getExtras().getBoolean("Freight");
+
+        if(boolTrans) {
+            transportation();
+        }
+
+        if(boolCutomClr) {
+            customClearance();
+        }
+
+    }
+
+    private void toolbarSetup() {
         // initialise toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_selectServiceParameter);
         setSupportActionBar(toolbar);
@@ -64,8 +84,10 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
                 onBackPressed();
             }
         });
-//        getSupportActionBar().setTitle(getIntent().getStringExtra("callingActivity"));
+        // getSupportActionBar().setTitle(getIntent().getStringExtra("callingActivity"));
+    }
 
+    private void init() {
         commodityLayout = (LinearLayout) findViewById(R.id.layout_commodity);
         shipmentTermLayout = (LinearLayout) findViewById(R.id.layout_shipmentTerm);
         packageTypeLayout = (LinearLayout) findViewById(R.id.layout_PackageType);
@@ -78,15 +100,23 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         ADCodeLayout = (LinearLayout) findViewById(R.id.layout_ADCode);
         customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
 
-        Boolean strTrans = getIntent().getExtras().getBoolean("Trans");
-        Boolean strCutomClr = getIntent().getExtras().getBoolean("Custom_clr");
-        Boolean strFreight = getIntent().getExtras().getBoolean("Freight");
-
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package);
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
+    }
 
+    private void transportation() {
+        commodityLayout.setVisibility(View.VISIBLE);
+        dimensionLayout.setVisibility(View.VISIBLE);
+        shipmentTermLayout.setVisibility(View.VISIBLE);
+        noOfPackageLayout.setVisibility(View.VISIBLE);
+        packageTypeLayout.setVisibility(View.VISIBLE);
+        pickupLayout.setVisibility(View.VISIBLE);
+        dropLayout.setVisibility(View.VISIBLE);
+        LRCopyLayout.setVisibility(View.VISIBLE);
+
+        // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
         String[] dogArr = getResources().getStringArray(R.array.state);
         List<String> dogList = Arrays.asList(dogArr);
@@ -102,9 +132,15 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         txtDrop.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtDrop.setOnItemClickListener(this);
 
-        System.out.println("Trans: " + strTrans);
-        System.out.println("Custom clr: " + strCutomClr);
-        System.out.println("Freight: " + strFreight);
+    }
+
+    private void customClearance() {
+        IECLayout.setVisibility(View.VISIBLE);
+        ADCodeLayout.setVisibility(View.VISIBLE);
+        customeClearanceLocationLayout.setVisibility(View.VISIBLE);
+        if(!boolTrans) {
+            shipmentTermLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
