@@ -13,4 +13,8 @@ public class CommonVariables {
     public static final String COMPANY_LOGIN_SERVER_URL = SERVER_URL + "login";
     public static final String QUERY_COMMODITY_SERVER_URL = SERVER_URL + "commodities";
     public static final String QUERY_CUSTOM_LOACTION_SERVER_URL = SERVER_URL + "customlocation";
+    public static final String QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL = SERVER_URL + "customclearancecategory";
+    public static final String QUERY_SHIPMENT_TERM_SERVER_URL = SERVER_URL + "termsofshipment";
+    public static final String QUERY_TRANSPORT_TYPE_SERVER_URL = SERVER_URL + "transporttype";
+    public static final String QUERY_TRANSPORT_SERVICE_SERVER_URL = SERVER_URL + "transportservice";
 }

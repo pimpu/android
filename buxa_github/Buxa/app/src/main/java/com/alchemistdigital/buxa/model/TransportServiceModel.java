@@ -13,11 +13,10 @@ public class TransportServiceModel {
     public TransportServiceModel() {
     }
 
-    public TransportServiceModel(int serverId, String name, int status, String createdAt) {
+    public TransportServiceModel(int serverId, String name, int status) {
         this.serverId = serverId;
         this.name = name;
         this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getTransServiceId() {

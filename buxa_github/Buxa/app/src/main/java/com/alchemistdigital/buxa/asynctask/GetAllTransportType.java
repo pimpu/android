@@ -5,9 +5,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.activities.SelectServiceActivity;
-import com.alchemistdigital.buxa.model.CommodityModel;
-import com.alchemistdigital.buxa.model.CustomClearanceLocation;
+import com.alchemistdigital.buxa.model.ShipmentTermModel;
+import com.alchemistdigital.buxa.model.TransportTypeModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -17,12 +16,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by user on 8/29/2016.
+ * Created by Pimpu on 8/30/2016.
  */
-public class GetAllCustomLoaction {
+public class GetAllTransportType {
     private static ProgressDialog prgDialog;
 
-    public static void getCL(final Context context, String url) {
+    public static void getTransportType(final Context context, String url) {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
@@ -48,25 +47,22 @@ public class GetAllCustomLoaction {
 
                         DatabaseClass databaseClass = new DatabaseClass(context);
 
-                        JSONArray arrayCustomLoc = json.getJSONArray("customLocation");
+                        JSONArray arrayTT= json.getJSONArray("trasnportType");
 
-                        for (int i = 0 ; i < arrayCustomLoc.length(); i++ ) {
-                            int clServerId = arrayCustomLoc.getJSONObject(i).getInt("id");
-                            int clCategoryId = arrayCustomLoc.getJSONObject(i).getInt("CLCid");
-                            String name = arrayCustomLoc.getJSONObject(i).getString("name");
-                            String location = arrayCustomLoc.getJSONObject(i).getString("location");
-                            String state = arrayCustomLoc.getJSONObject(i).getString("state");
-                            int status = arrayCustomLoc.getJSONObject(i).getInt("status");
+                        for (int i = 0 ; i < arrayTT.length(); i++ ) {
+                            int ttServerId = arrayTT.getJSONObject(i).getInt("id");
+                            String ttName = arrayTT.getJSONObject(i).getString("name");
+                            int ttStatus = arrayTT.getJSONObject(i).getInt("status");
 
-                            long l = databaseClass.insertCustomLoaction(new CustomClearanceLocation(clServerId, clCategoryId, name, location, state, status));
-                            System.out.println("custom loaction id: "+l);
+                            long l = databaseClass.insertTransportType(new TransportTypeModel(ttServerId, ttName, ttStatus));
+                            System.out.println("Transport Type id: "+l);
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
 
-                        // get all custom clearance category from server.
-                        GetAllCustomClearanceCategory.getCCC(context, CommonVariables.QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL);
+                        // get all transport service from server.
+                        GetAllTransportService.getTransportService(context, CommonVariables.QUERY_TRANSPORT_SERVICE_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

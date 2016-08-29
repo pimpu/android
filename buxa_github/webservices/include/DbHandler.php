@@ -211,6 +211,50 @@ class DbHandler {
         return $stmt;
     }
 
+    /*---------------- 'bx_icdcategory' table method --------------*/
+
+    /**
+     * Fetching all custom clearance category
+     * 
+     */
+    public function getAllCustomClearanceCategory() {
+        $stmt = mysql_query("SELECT * FROM bx_icdcategory WHERE status=1;");
+        return $stmt;
+    }
+
+    /*---------------- 'bx_ship_type' table method --------------*/
+
+    /**
+     * Fetching all terms of shipment
+     * 
+     */
+    public function getAllTermOfShipment() {
+        $stmt = mysql_query("SELECT * FROM bx_ship_type WHERE status=1;");
+        return $stmt;
+    }
+
+    /*---------------- 'db_transport' table method --------------*/
+
+    /**
+     * Fetching all trasnport Type
+     * 
+     */
+    public function getAllTransportType() {
+        $stmt = mysql_query("SELECT * FROM db_transport WHERE active_status=1;");
+        return $stmt;
+    }
+
+    /*---------------- 'db_transport_service' table method --------------*/
+
+    /**
+     * Fetching all trasnport services
+     * 
+     */
+    public function getAllTransportService() {
+        $stmt = mysql_query("SELECT * FROM db_transport_service WHERE status=1;");
+        return $stmt;
+    }
+
 
     /* ------------- `tasks` table method ------------------ */
 

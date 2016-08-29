@@ -13,11 +13,10 @@ public class ShipmentTermModel {
     public ShipmentTermModel() {
     }
 
-    public ShipmentTermModel(int serverId, String name, int status, String createdAt) {
+    public ShipmentTermModel(int serverId, String name, int status) {
         this.serverId = serverId;
         this.name = name;
         this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getShipmentTermId() {

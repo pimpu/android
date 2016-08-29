@@ -170,7 +170,7 @@ $app -> get('/customlocation', function() {
     $allCustomLoaction = $db ->  getAllCustomLoaction();
 
     // fetching all custom location
-    $requested["error"] = false;
+    $response["error"] = false;
     $response["customLocation"] = array();
 
     while ($CL = mysql_fetch_array($allCustomLoaction)) {
@@ -186,6 +186,97 @@ $app -> get('/customlocation', function() {
     }
     echoRespnse(200, $response);
 });
+
+$app -> get('/customclearancecategory', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allCustomClearanceCategory = $db -> getAllCustomClearanceCategory();
+
+    // fetching all custom clearance category
+    $response["error"] = false;
+    $response["customClearanceCategory"] = array();
+
+    while ($CCC = mysql_fetch_array($allCustomClearanceCategory)) {
+        $temp = array();
+        $temp["id"] = $CCC["icdid"];
+        $temp["name"] = $CCC["icdname"];
+        $temp["status"] = $CCC["status"];
+
+        array_push($response["customClearanceCategory"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+
+$app -> get('/termsofshipment', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allShipmentTerm = $db -> getAllTermOfShipment();
+
+    // fetching all term of shipment
+    $response["error"] = false;
+    $response["shipmentTerm"] = array();
+
+    while ($term = mysql_fetch_array($allShipmentTerm)) {
+        $temp = array();
+        $temp["id"] = $term["tid"];
+        $temp["name"] = $term["stypename"];
+        $temp["status"] = $term["status"];
+
+        array_push($response["shipmentTerm"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+$app -> get('/transporttype', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allTransportType = $db -> getAllTransportType();
+
+    // fetching all transportation type
+    $response["error"] = false;
+    $response["trasnportType"] = array();
+
+    while ($tt = mysql_fetch_array($allTransportType)) {
+        $temp = array();
+        $temp["id"] = $tt["trid"];
+        $temp["name"] = $tt["tname"];
+        $temp["status"] = $tt["active_status"];
+
+        array_push($response["trasnportType"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+$app -> get('/transportservice', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allTransportService = $db -> getAllTransportService();
+
+    // fetching all transportation service
+    $response["error"] = false;
+    $response["trasnportService"] = array();
+
+    while ($ts = mysql_fetch_array($allTransportService)) {
+        $temp = array();
+        $temp["id"] = $ts["service_id"];
+        $temp["name"] = $ts["servicename"];
+        $temp["status"] = $ts["status"];
+
+        array_push($response["trasnportService"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+
 
 /*
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
