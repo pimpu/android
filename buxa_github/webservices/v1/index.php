@@ -139,6 +139,54 @@ $app->post('/login', function() use ($app) {
             echoRespnse(200, $response);
         });
 
+
+$app -> get('/commodities',function() {
+    $response = array();
+    $db = new DbHandler();
+
+    // fetching all commodities
+    $allComodityResult = $db -> getAllCommodity();
+
+    $response["error"] = false;
+    $response["commodities"] = array();
+
+    // looping through result and preparing commodities array
+    while ($commodity = mysql_fetch_array($allComodityResult) ) {
+        $tmp = array();
+        $tmp["id"] = $commodity["comid"];
+        $tmp["comodity"] = $commodity["comodity"];
+        $tmp["status"] = $commodity["status"];
+        array_push($response["commodities"], $tmp);
+    }
+
+    echoRespnse(200, $response);
+
+});
+
+$app -> get('/customlocation', function() {
+    $response = array();
+    $db =  new DbHandler();
+
+    $allCustomLoaction = $db ->  getAllCustomLoaction();
+
+    // fetching all custom location
+    $requested["error"] = false;
+    $response["customLocation"] = array();
+
+    while ($CL = mysql_fetch_array($allCustomLoaction)) {
+        $temp = array();
+        $temp["id"] = $CL["id"];
+        $temp["CLCid"] = $CL["icdid"];
+        $temp["name"] = $CL["icdname"];
+        $temp["location"] = $CL["location"];
+        $temp["state"] = $CL["state"];
+        $temp["status"] = $CL["status"];
+
+        array_push($response["customLocation"], $temp);
+    }
+    echoRespnse(200, $response);
+});
+
 /*
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
  */

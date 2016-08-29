@@ -3,7 +3,7 @@ package com.alchemistdigital.buxa.model;
 /**
  * Created by Pimpu on 8/29/2016.
  */
-public class customClearanceLocation {
+public class CustomClearanceLocation {
     private int cclId ;
     private int serverId ;
     private int ccCategoryId ;
@@ -13,17 +13,16 @@ public class customClearanceLocation {
     private int status ;
     private String createdAt ;
 
-    public customClearanceLocation() {
+    public CustomClearanceLocation() {
     }
 
-    public customClearanceLocation(int serverId, int ccCategoryId, String name, String location, String state, int status, String createdAt) {
+    public CustomClearanceLocation(int serverId, int ccCategoryId, String name, String location, String state, int status) {
         this.serverId = serverId;
         this.ccCategoryId = ccCategoryId;
         this.name = name;
         this.location = location;
         this.state = state;
         this.status = status;
-        this.createdAt = createdAt;
     }
 
     public int getCclId() {

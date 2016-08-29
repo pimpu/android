@@ -114,7 +114,7 @@ class DbHandler {
      * @param String $email User email id
      */
     public function getUserByEmail($email) {
-        $stmt = mysql_query("SELECT uname, email, api_key, uid FROM bx_user WHERE email='".$email."';");
+        $stmt = mysql_query("SELECT uname, email, api_key, uid, company FROM bx_user WHERE email='".$email."';");
         if ($stmt) {
             $stmtArray = mysql_fetch_array($stmt);
             $user = array();
@@ -188,6 +188,29 @@ class DbHandler {
     private function generateApiKey() {
         return md5(uniqid(rand(), true));
     }
+
+    /*---------------- 'bx_commodity' table method --------------*/
+
+    /**
+     * Fetching all commodity
+     * 
+     */
+    public function getAllCommodity() {
+        $stmt = mysql_query("SELECT * FROM bx_commodity WHERE status=1;");
+        return $stmt;
+    }
+
+    /*---------------- 'bx_icd' table method --------------*/
+
+    /**
+     * Fetching all custom loaction
+     * 
+     */
+    public function getAllCustomLoaction() {
+        $stmt = mysql_query("SELECT * FROM bx_icd WHERE status=1;");
+        return $stmt;
+    }
+
 
     /* ------------- `tasks` table method ------------------ */
 

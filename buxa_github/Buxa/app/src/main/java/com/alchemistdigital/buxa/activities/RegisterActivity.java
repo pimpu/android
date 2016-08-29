@@ -202,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(String response) {
-                prgDialog.hide();
+                prgDialog.cancel();
                 try {
                     JSONObject json = new JSONObject(response);
 

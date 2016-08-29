@@ -170,7 +170,7 @@ public class Login extends Fragment implements View.OnClickListener {
 
             @Override
             public void onSuccess(String response) {
-                prgDialog.hide();
+                prgDialog.cancel();
                 try {
                     JSONObject json = new JSONObject(response);
 

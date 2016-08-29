@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
+import com.alchemistdigital.buxa.asynctask.GetAllCustomLoaction;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.CustomTypefaceSpan;
 
 public class SelectServiceActivity extends AppCompatActivity {
@@ -22,6 +25,9 @@ public class SelectServiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_service);
+
+        // get all pre defined commodity from server.
+        GetAllCommodity.getCommodities(this, CommonVariables.QUERY_COMMODITY_SERVER_URL);
 
         // initialise typeface
         Typeface seogoLight = Typeface.createFromAsset(getAssets(), "fonts/SEGOEUIL.TTF");
