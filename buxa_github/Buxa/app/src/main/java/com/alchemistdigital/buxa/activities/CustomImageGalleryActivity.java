@@ -140,7 +140,6 @@ public class CustomImageGalleryActivity extends AppCompatActivity {
             holder.checkbox.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    // TODO Auto-generated method stub
                     CheckBox cb = (CheckBox) v;
                     int id = cb.getId();
                     if (thumbnailsselection[id]) {
@@ -155,7 +154,6 @@ public class CustomImageGalleryActivity extends AppCompatActivity {
             holder.imageview.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View v) {
-                    // TODO Auto-generated method stub
                     int id = v.getId();
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);

@@ -3,6 +3,7 @@ package com.alchemistdigital.buxa.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 
@@ -12,6 +13,9 @@ public class StartupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
+
+        // create Database
+        DatabaseClass databaseClass = new DatabaseClass(this);
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -3,17 +3,17 @@ package com.alchemistdigital.buxa.model;
 /**
  * Created by Pimpu on 8/29/2016.
  */
-public class customClearanceCategoryModel {
+public class CustomClearanceCategoryModel {
     private int cccId ;
     private int serverId ;
     private String name ;
     private int status ;
     private String createdAt ;
 
-    public customClearanceCategoryModel() {
+    public CustomClearanceCategoryModel() {
     }
 
-    public customClearanceCategoryModel(int serverId, String name, int status, String createdAt) {
+    public CustomClearanceCategoryModel(int serverId, String name, int status, String createdAt) {
         this.serverId = serverId;
         this.name = name;
         this.status = status;
