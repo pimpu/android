@@ -2,11 +2,16 @@ package com.alchemistdigital.buxa.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
+import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.activities.Login;
+import com.alchemistdigital.buxa.activities.SelectServiceActivity;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -19,24 +24,14 @@ import org.json.JSONObject;
  * Created by Pimpu on 8/30/2016.
  */
 public class GetAllTransportService {
-    private static ProgressDialog prgDialog;
 
     public static void getTransportService(final Context context, String url) {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Logging ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-        // Show Progress Dialog
-        prgDialog.show();
 
         RestClient.get(url, null, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(String response) {
-                prgDialog.cancel();
                 try {
                     JSONObject json = new JSONObject(response);
 
@@ -60,6 +55,9 @@ public class GetAllTransportService {
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
+
+                        // sent notification to activities that server calling finished
+                        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
                     }
 
                 } catch (JSONException e) {
@@ -69,8 +67,6 @@ public class GetAllTransportService {
 
             @Override
             public void onFailure(int statusCode, Throwable error, String content) {
-                // Hide Progress Dialog
-                prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");

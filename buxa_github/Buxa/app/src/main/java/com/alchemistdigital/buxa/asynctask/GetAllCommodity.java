@@ -18,25 +18,13 @@ import org.json.JSONObject;
  * Created by user on 8/29/2016.
  */
 public class GetAllCommodity {
-    private static ProgressDialog prgDialog;
-
-
     public static void getCommodities(final Context context, String url) {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Logging ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-        // Show Progress Dialog
-        prgDialog.show();
 
         RestClient.get(url, null, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(String response) {
-                prgDialog.cancel();
                 try {
                     JSONObject json = new JSONObject(response);
 
@@ -44,25 +32,7 @@ public class GetAllCommodity {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-
-                        DatabaseClass databaseClass = new DatabaseClass(context);
-
-                        JSONArray arrayCommodity = json.getJSONArray("commodities");
-
-                        for (int i = 0 ; i < arrayCommodity.length(); i++ ) {
-                            int commodityServerId = arrayCommodity.getJSONObject(i).getInt("id");
-                            String commodityName = arrayCommodity.getJSONObject(i).getString("comodity");
-                            int commodityStatus = arrayCommodity.getJSONObject(i).getInt("status");
-
-                            long l = databaseClass.insertCommodity(new CommodityModel(commodityServerId, commodityName, commodityStatus));
-                            System.out.println("commodity id: "+l);
-                        }
-
-                        // close database in synchronized condition
-                        databaseClass.closeDB();
-
-                        // get all custom loaction from server.
-                        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
+                        new insertCommodityAsyncTask(context, json.getJSONArray("commodities") ).execute();
                     }
 
                 } catch (JSONException e) {
@@ -73,7 +43,6 @@ public class GetAllCommodity {
             @Override
             public void onFailure(int statusCode, Throwable error, String content) {
                 // Hide Progress Dialog
-                prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");

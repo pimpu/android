@@ -229,18 +229,18 @@ class DbHandler {
      * 
      */
     public function getAllTermOfShipment() {
-        $stmt = mysql_query("SELECT * FROM bx_ship_type WHERE status=1;");
+        $stmt = mysql_query("SELECT * FROM bx_ship_term WHERE status=1;");
         return $stmt;
     }
 
-    /*---------------- 'db_transport' table method --------------*/
+    /*---------------- 'db_transport_type' table method --------------*/
 
     /**
-     * Fetching all trasnport Type
+     * Fetching all trasnport Type 
      * 
      */
     public function getAllTransportType() {
-        $stmt = mysql_query("SELECT * FROM db_transport WHERE active_status=1;");
+        $stmt = mysql_query("SELECT * FROM db_transport_type WHERE active_status=1;");
         return $stmt;
     }
 

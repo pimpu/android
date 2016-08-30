@@ -35,44 +35,25 @@
                 android:textColor="@color/milkyWhite"
                 android:textSize="18dp" />
 
-            <CheckBox
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layoutServiceCheckbox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/rb_id_trans"
                 android:layout_marginTop="70dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/strTransportation" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rb_id_CustomClr"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/strCustomClr" />
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rb_id_freightForward"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/freightForward" />
+                <!--<CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_id_trans"
+                    android:paddingLeft="20dp"
+                    android:textSize="25dp"
+                    android:textColor="@color/milkyWhite"
+                    android:buttonTint="@color/milkyWhite"
+                    android:text="@string/strTransportation" />-->
+            </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="70dp"

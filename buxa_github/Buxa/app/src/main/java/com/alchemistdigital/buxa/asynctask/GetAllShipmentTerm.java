@@ -19,24 +19,14 @@ import org.json.JSONObject;
  * Created by Pimpu on 8/30/2016.
  */
 public class GetAllShipmentTerm {
-    private static ProgressDialog prgDialog;
 
     public static void getShipmentTerm(final Context context, String url) {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Logging ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-        // Show Progress Dialog
-        prgDialog.show();
 
         RestClient.get(url, null, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(String response) {
-                prgDialog.cancel();
                 try {
                     JSONObject json = new JSONObject(response);
 
@@ -72,8 +62,6 @@ public class GetAllShipmentTerm {
 
             @Override
             public void onFailure(int statusCode, Throwable error, String content) {
-                // Hide Progress Dialog
-                prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");

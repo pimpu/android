@@ -19,7 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -190,10 +192,18 @@ public class Login extends Fragment implements View.OnClickListener {
                         setSharedPreference.setLoginName(getResources().getString(R.string.loginName), json.getString("loginName"));
                         setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), json.getString("companyName"));
 
-                        Intent intent = new Intent(getActivity(), SelectServiceActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        getActivity().finish();
-                        startActivity(intent);
+                        DatabaseClass dbHelper = new DatabaseClass(getActivity());
+                        if (dbHelper.numberOfComodityRows() <= 0 ) {
+                            getActivity().setContentView(R.layout.activity_splash_screen);
+                            // get all pre defined commodity from server.
+                            GetAllCommodity.getCommodities(getActivity(), CommonVariables.QUERY_COMMODITY_SERVER_URL);
+                        }
+                        else {
+                            Intent intent = new Intent(getActivity(), SelectServiceActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            getActivity().finish();
+                            startActivity(intent);
+                        }
                     }
 
 

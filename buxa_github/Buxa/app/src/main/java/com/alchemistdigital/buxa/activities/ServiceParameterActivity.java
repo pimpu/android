@@ -18,7 +18,10 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CommodityModel;
+import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 
 import org.json.JSONArray;
@@ -36,12 +39,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ServiceParameterActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop;
+    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtCustomClearanceLocation;
 
     public LinearLayout commodityLayout, shipmentTermLayout, packageTypeLayout, noOfPackageLayout,
                 dimensionLayout, pickupLayout, dropLayout, LRCopyLayout, IECLayout, ADCodeLayout,
-                customeClearanceLocationLayout;
-    Boolean boolTrans, boolCutomClr, boolFreight;
+                customeClearanceLocationLayout, isFirstTimeCC;
+
+    DatabaseClass dbClass ;
+    ArrayList<String> ids, names;
+    Boolean isAvail = false;
 
     //    -------------- place api -------------------
     private static final String LOG_TAG = "Google Places Autocomplete";
@@ -59,16 +65,23 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
 
         init();
 
-        boolTrans = getIntent().getExtras().getBoolean("Trans");
-        boolCutomClr = getIntent().getExtras().getBoolean("Custom_clr");
-        boolFreight = getIntent().getExtras().getBoolean("Freight");
+        ids = getIntent().getStringArrayListExtra("ServicesId");
+        names = getIntent().getStringArrayListExtra("ServicesName");
+        dbClass = new DatabaseClass(this);
 
-        if(boolTrans) {
-            transportation();
-        }
+        for (int j = 0 ; j < ids.size() ; j++ ) {
+            switch (names.get(j)) {
+                case "Transportation" :
+                    transportation();
+                    break;
 
-        if(boolCutomClr) {
-            customClearance();
+                case "Freight Forwarding" :
+                    break;
+
+                case "Custom Clearance" :
+                    customClearance();
+                    break;
+            }
         }
 
     }
@@ -102,11 +115,13 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         IECLayout = (LinearLayout) findViewById(R.id.layout_IEC);
         ADCodeLayout = (LinearLayout) findViewById(R.id.layout_ADCode);
         customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
+        isFirstTimeCC = (LinearLayout) findViewById(R.id.layout_isFirstTimeInCustomeClearance);
 
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package);
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
+        txtCustomClearanceLocation = (AutoCompleteTextView) findViewById(R.id.id_custome_clearance);
     }
 
     private void transportation() {
@@ -121,9 +136,7 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
 
         // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
-        String[] dogArr = getResources().getStringArray(R.array.state);
-        List<String> dogList = Arrays.asList(dogArr);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, layoutItemId, dogList);
+        ArrayAdapter<CommodityModel> adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
         txtComodity.setAdapter(adapter);
         txtComodity.setThreshold(1);
 
@@ -141,9 +154,16 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         IECLayout.setVisibility(View.VISIBLE);
         ADCodeLayout.setVisibility(View.VISIBLE);
         customeClearanceLocationLayout.setVisibility(View.VISIBLE);
-        if(!boolTrans) {
+        isFirstTimeCC.setVisibility(View.VISIBLE);
+        if(!names.contains("Transportation")) {
             shipmentTermLayout.setVisibility(View.VISIBLE);
         }
+
+        // initialised custom clearance location autocomplete textfield from database
+        int layoutItemId = android.R.layout.simple_dropdown_item_1line;
+        ArrayAdapter<CustomClearanceLocation> adapter = new ArrayAdapter<CustomClearanceLocation>(this, layoutItemId, dbClass.getCustomClearanceLocationData() );
+        txtCustomClearanceLocation.setAdapter(adapter);
+        txtCustomClearanceLocation.setThreshold(1);
     }
 
     @Override
@@ -192,21 +212,34 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
     }
 
     public void storeTransportEnquiry(View view) {
-        new AlertDialog.Builder(ServiceParameterActivity.this)
-//                .setTitle(null)
-                .setMessage(getResources().getString(R.string.strInTransportMode))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        // before user agree with avail option
+        if( !isAvail ) {
+            // show avil dialog box when user select only transport services
+            if(names.contains("Transportation") && names.size() == 1 ) {
+
+                new AlertDialog.Builder(ServiceParameterActivity.this)
+                        .setMessage(getResources().getString(R.string.strInTransportMode))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                isAvail = true;
+                                customClearance();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"Hello,",Toast.LENGTH_SHORT).show();
+            }
+        }
+        // after user agree with avail option
+        else {
+            Toast.makeText(getApplicationContext(),"after avail option selected.,",Toast.LENGTH_SHORT).show();
+        }
     }
 
     class GooglePlacesAutocompleteAdapter extends ArrayAdapter<String> implements Filterable {

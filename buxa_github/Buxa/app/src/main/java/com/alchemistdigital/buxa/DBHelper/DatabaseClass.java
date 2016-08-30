@@ -19,6 +19,7 @@ import com.alchemistdigital.buxa.model.TransportTypeModel;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by user on 8/26/2016.
@@ -90,7 +91,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     // TABLE_TRANSPORTATION Table - column names
     private static final String  TRANSPORTATION_SERVER_ID = "trans_serverId";
     private static final String  BOOKING_ID = "booking_id";
-    private static final String  COMMODITY_SERVERID = "commodity_serverId";
+    private static final String  COMMODITY_SERVERID_IN_TRANSPORT = "commodity_serverId";
     private static final String  DIMEN_LENGTH = "dimen_length";
     private static final String  DIMEN_HEIGHT = "dimen_height";
     private static final String  DIMEN_WEIGHT = "dimen_weight";
@@ -173,7 +174,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORTATION +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TRANSPORTATION_SERVER_ID +" INTEGER," +
-                    COMMODITY_SERVERID +" INTEGER," +
+                    COMMODITY_SERVERID_IN_TRANSPORT +" INTEGER," +
                     DIMEN_LENGTH +" INTEGER," +
                     DIMEN_HEIGHT +" INTEGER," +
                     DIMEN_WEIGHT +" INTEGER," +
@@ -374,6 +375,53 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return commodity_id;
     }
 
+    /**
+     * getting commodity count
+     */
+    public int numberOfComodityRows(){
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_COMMODITY);
+        return numRows;
+
+    }
+
+    /**
+     * get all commodity to show on service parameter activity
+     */
+    public List<CommodityModel> getCommodityData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CommodityModel> array_list = new ArrayList<CommodityModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCommodityData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CommodityModel commodity = new CommodityModel();
+
+                commodity.setServerId(res.getInt(res.getColumnIndex(COMMODITY_SERVER_ID)));
+                commodity.setName(res.getString(res.getColumnIndex(COMMODITY_NAME)));
+
+                array_list.add(commodity);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
 
     // ------------------------ "CustomClearanceLocation" table methods ----------------//
 
@@ -407,6 +455,44 @@ public class DatabaseClass extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return id;
+    }
+
+    /**
+     * get all custom clearance location to show on service parameter activity
+     */
+    public List<CustomClearanceLocation> getCustomClearanceLocationData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CustomClearanceLocation> array_list = new ArrayList<CustomClearanceLocation>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CUSTOM_CLEARANCE_LOCATION + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCommodityData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CustomClearanceLocation CCL = new CustomClearanceLocation();
+
+                CCL.setServerId(res.getInt(res.getColumnIndex(CCL_SERVER_ID)));
+                CCL.setCcCategoryId(res.getInt(res.getColumnIndex(CC_CATEGORY_ID)));
+                CCL.setName(res.getString(res.getColumnIndex(CCL_NAME)));
+                CCL.setLocation(res.getString(res.getColumnIndex(CCL_LOCATION)));
+                CCL.setState(res.getString(res.getColumnIndex(CCL_STATE)));
+
+                array_list.add(CCL);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
     }
 
     // ------------------------ "CustomClearanceCategory" table methods ----------------//
@@ -527,5 +613,40 @@ public class DatabaseClass extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return id;
+    }
+
+    /**
+     * get transport service to show on service activity
+     */
+    public List<TransportServiceModel> getTransportServiceData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<TransportServiceModel> array_list = new ArrayList<TransportServiceModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                TransportServiceModel service = new TransportServiceModel();
+
+                service.setServerId(res.getInt(res.getColumnIndex(TRANSPORT_SERVICE_SERVER_ID)));
+                service.setName(res.getString(res.getColumnIndex(TRANSPORT_SERVICE_NAME)));
+
+                array_list.add(service);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
     }
 }

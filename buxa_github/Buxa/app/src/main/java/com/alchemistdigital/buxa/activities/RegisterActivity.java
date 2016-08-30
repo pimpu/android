@@ -1,11 +1,15 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -90,6 +97,9 @@ public class RegisterActivity extends AppCompatActivity {
         emailId_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_email);
         pwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_pwd);
         conformPwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_conform_pwd);
+
+        registerReceiver(mHandleServerMessageReceiverInRegisterActivity, new IntentFilter(
+                CommonVariables.DISPLAY_MESSAGE_ACTION));
 
         btnRegister = (Button) findViewById(R.id.id_btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -225,10 +235,19 @@ public class RegisterActivity extends AppCompatActivity {
                         // create shortcut when user Register with this app.
                         CommonUtilities.addShortcut(RegisterActivity.this);
 
-                        Intent intent = new Intent(RegisterActivity.this, SelectServiceActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        RegisterActivity.this.finish();
-                        startActivity(intent);
+                        DatabaseClass dbHelper = new DatabaseClass(RegisterActivity.this);
+                        if (dbHelper.numberOfComodityRows() <= 0 ) {
+                            setContentView(R.layout.activity_splash_screen);
+                            // get all pre defined commodity from server.
+                            GetAllCommodity.getCommodities(RegisterActivity.this, CommonVariables.QUERY_COMMODITY_SERVER_URL);
+                        }
+                        else {
+                            Intent intent = new Intent(RegisterActivity.this, SelectServiceActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            RegisterActivity.this.finish();
+                            startActivity(intent);
+                        }
+
                     }
 
 
@@ -271,13 +290,38 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleServerMessageReceiverInRegisterActivity = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            // this message is come from GetAllTransportService when all default value from server get finished.
+            if(newMessage.equals("allDefaultDataFetched")) {
+                Intent intentServicesActivity = new Intent(RegisterActivity.this, SelectServiceActivity.class);
+                intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                ((RegisterActivity)context).finish();
+                startActivity(intentServicesActivity);
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 
     @Override
-    public void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        try {
+            unregisterReceiver(mHandleServerMessageReceiverInRegisterActivity);
+        } catch (Exception e) {
+            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
+        }
+        super.onDestroy();
     }
+
 }

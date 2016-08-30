@@ -71,6 +71,7 @@
                     android:id="@+id/layout_shipmentTerm"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:visibility="gone"
                     android:gravity="center_horizontal"
@@ -95,14 +96,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/rbLcl"
-                            android:text="@string/strLcl" />
+                            android:text="@string/strLcl"
+                            android:textColor="@color/milkyWhite"/>
 
                         <RadioButton
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/rbFcl"
                             android:layout_marginLeft="50dp"
-                            android:text="@string/strFcl" />
+                            android:text="@string/strFcl"
+                            android:textColor="@color/milkyWhite"/>
 
                     </RadioGroup>
 
@@ -112,6 +115,7 @@
                     android:id="@+id/layout_PackageType"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:visibility="gone"
                     android:gravity="center_horizontal"
@@ -137,6 +141,7 @@
                     android:id="@+id/layout_NoOfPackage"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:visibility="gone"
                     android:gravity="center_horizontal"
@@ -161,6 +166,7 @@
                     android:id="@+id/layout_dimension"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:visibility="gone"
                     android:gravity="center_horizontal"
@@ -235,6 +241,7 @@
                 <LinearLayout
                     android:id="@+id/layout_pickup"
                     android:layout_width="fill_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:paddingTop="20dp"
                     android:visibility="gone"
@@ -281,6 +288,7 @@
                 <LinearLayout
                     android:id="@+id/layout_drop"
                     android:layout_width="fill_parent"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:paddingTop="20dp"
                     android:gravity="center_horizontal"
@@ -329,6 +337,7 @@
                     android:id="@+id/layout_LRCopy"
                     android:layout_width="fill_parent"
                     android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
                     android:paddingTop="20dp"
                     android:gravity="center_horizontal"
                     android:visibility="gone"
@@ -372,6 +381,7 @@
                     android:id="@+id/layout_IEC"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     android:visibility="gone"
@@ -396,6 +406,7 @@
                     android:id="@+id/layout_ADCode"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     android:visibility="gone"
@@ -420,6 +431,7 @@
                     android:id="@+id/layout_CustomeClearanceLocation"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
                     android:visibility="gone"
@@ -429,7 +441,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_custom_clearance"
-                        android:textSize="12dp"
+                        android:textSize="14dp"
                         android:paddingLeft="5dp"
                         android:textColor="@color/milkyWhite"/>
 
@@ -440,6 +452,50 @@
                         android:textColor="@color/milkyWhite"
                         android:textColorHint="@color/hintTextColor"
                         android:hint="@string/hint_custom_clearance"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_isFirstTimeInCustomeClearance"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_first_time_custom_clearance"
+                        android:textSize="14dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radiogroupIsFirstTimeInCC"
+                        android:orientation="horizontal"
+                        android:checkedButton="@+id/rbLcl" >
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbYesCC"
+                            android:text="Yes"
+                            android:textColor="@color/milkyWhite"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbNoCC"
+                            android:layout_marginLeft="50dp"
+                            android:text="No"
+                            android:textColor="@color/milkyWhite"/>
+
+                    </RadioGroup>
 
                 </LinearLayout>
 

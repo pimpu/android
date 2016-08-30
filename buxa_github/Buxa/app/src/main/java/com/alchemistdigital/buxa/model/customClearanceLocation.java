@@ -25,6 +25,11 @@ public class CustomClearanceLocation {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return this.name+", "+this.location+" ("+(this.state).trim()+") ";
+    }
+
     public int getCclId() {
         return cclId;
     }

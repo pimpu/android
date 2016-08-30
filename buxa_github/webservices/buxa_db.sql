@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 27, 2016 at 02:41 PM
+-- Generation Time: Aug 30, 2016 at 02:30 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -523,7 +523,7 @@ INSERT INTO `bx_commodity` (`comid`, `comodity`, `status`) VALUES
 CREATE TABLE IF NOT EXISTS `bx_cusdetail` (
 `cid` int(11) NOT NULL,
   `api_key` varchar(100) NOT NULL,
-  `comp_ref_no` int(11) NOT NULL,
+  `customer_code` int(11) NOT NULL,
   `designation` varchar(110) NOT NULL,
   `name` varchar(100) NOT NULL,
   `contact` int(11) NOT NULL,
@@ -634,7 +634,7 @@ INSERT INTO `bx_icdcategory` (`icdid`, `icdname`, `status`) VALUES
 
 CREATE TABLE IF NOT EXISTS `bx_shipment_confirmation` (
 `cnfrmid` int(11) NOT NULL,
-  `bookid` int(11) NOT NULL,
+  `bookid` varchar(100) NOT NULL,
   `finalrate` int(11) NOT NULL,
   `serviceid` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
@@ -643,20 +643,20 @@ CREATE TABLE IF NOT EXISTS `bx_shipment_confirmation` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bx_ship_type`
+-- Table structure for table `bx_ship_term`
 --
 
-CREATE TABLE IF NOT EXISTS `bx_ship_type` (
+CREATE TABLE IF NOT EXISTS `bx_ship_term` (
 `tid` int(11) NOT NULL,
   `stypename` varchar(100) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bx_ship_type`
+-- Dumping data for table `bx_ship_term`
 --
 
-INSERT INTO `bx_ship_type` (`tid`, `stypename`, `status`) VALUES
+INSERT INTO `bx_ship_term` (`tid`, `stypename`, `status`) VALUES
 (1, 'Full Container Load', 1),
 (2, 'Less than Container Load', 1);
 
@@ -669,6 +669,7 @@ INSERT INTO `bx_ship_type` (`tid`, `stypename`, `status`) VALUES
 CREATE TABLE IF NOT EXISTS `bx_transport` (
 `trnsid` int(11) NOT NULL,
   `customer_code` varchar(100) NOT NULL,
+  `bookid` varchar(100) NOT NULL,
   `commodity_id` int(11) NOT NULL,
   `demlength` int(11) NOT NULL,
   `demwidth` int(11) NOT NULL,
@@ -701,7 +702,7 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
   `password` varchar(100) NOT NULL,
   `create_time` varchar(20) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `bx_user`
@@ -709,69 +710,6 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
 
 INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `comp_ref_no`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
 (4, '5745d7d2661d2ec088eecf609334f5d0', NULL, 'REF260816024118', 'ADM', 'yogesh', '8466356908', 'yogesh@adm.com', 'test', '1472202717624', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `db_cat`
---
-
-CREATE TABLE IF NOT EXISTS `db_cat` (
-`cid` int(11) NOT NULL,
-  `cname` varchar(50) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `db_cat`
---
-
-INSERT INTO `db_cat` (`cid`, `cname`, `status`) VALUES
-(1, 'Import', 1),
-(2, 'Export', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `db_ship_area`
---
-
-CREATE TABLE IF NOT EXISTS `db_ship_area` (
-`spid` int(11) NOT NULL,
-  `spname` varchar(50) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `db_ship_area`
---
-
-INSERT INTO `db_ship_area` (`spid`, `spname`, `status`) VALUES
-(1, 'International', 1),
-(2, 'Domestic', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `db_transport`
---
-
-CREATE TABLE IF NOT EXISTS `db_transport` (
-`trid` int(11) NOT NULL,
-  `tname` varchar(50) NOT NULL,
-  `active_status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `db_transport`
---
-
-INSERT INTO `db_transport` (`trid`, `tname`, `active_status`) VALUES
-(1, 'Ocean', 1),
-(2, 'Trucking', 0),
-(3, 'Air', 0),
-(4, 'Rail', 0),
-(5, 'Courier', 0);
 
 -- --------------------------------------------------------
 
@@ -797,37 +735,25 @@ INSERT INTO `db_transport_service` (`service_id`, `servicename`, `status`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `db_users`
+-- Table structure for table `db_transport_type`
 --
 
-CREATE TABLE IF NOT EXISTS `db_users` (
-`uid` int(11) NOT NULL,
-  `code` varchar(50) NOT NULL,
-  `api_key` varchar(100) NOT NULL,
-  `gcm_id` longtext,
-  `uname` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `company` varchar(50) NOT NULL,
-  `mobile` varchar(50) NOT NULL,
-  `pan` varchar(50) NOT NULL,
-  `tin` varchar(50) NOT NULL,
-  `address` varchar(50) NOT NULL,
-  `landmark` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `zipcode` varchar(50) NOT NULL,
-  `country` varchar(50) NOT NULL,
-  `state` varchar(50) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1',
-  `create_time` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `db_transport_type` (
+`trid` int(11) NOT NULL,
+  `tname` varchar(50) NOT NULL,
+  `active_status` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `db_users`
+-- Dumping data for table `db_transport_type`
 --
 
-INSERT INTO `db_users` (`uid`, `code`, `api_key`, `gcm_id`, `uname`, `email`, `password`, `company`, `mobile`, `pan`, `tin`, `address`, `landmark`, `city`, `zipcode`, `country`, `state`, `status`, `create_time`) VALUES
-(7, 'REF160816060754', '500750447ed5e03c5c9d99bfb27a68b6', NULL, 'yogesh', 'test@test.com', 'test123', 'alchem', '6565656868', 'Hsh2233hss', 'gdghshshhs', 'juinagar sector 11', 'juinagar station', 'navi mumbai', '400011', 'India', 'Maharashtra', 1, '1471351161790');
+INSERT INTO `db_transport_type` (`trid`, `tname`, `active_status`) VALUES
+(1, 'Ocean', 1),
+(2, 'Trucking', 0),
+(3, 'Air', 0),
+(4, 'Rail', 0),
+(5, 'Courier', 0);
 
 --
 -- Indexes for dumped tables
@@ -864,9 +790,9 @@ ALTER TABLE `bx_shipment_confirmation`
  ADD PRIMARY KEY (`cnfrmid`);
 
 --
--- Indexes for table `bx_ship_type`
+-- Indexes for table `bx_ship_term`
 --
-ALTER TABLE `bx_ship_type`
+ALTER TABLE `bx_ship_term`
  ADD PRIMARY KEY (`tid`);
 
 --
@@ -882,34 +808,16 @@ ALTER TABLE `bx_user`
  ADD PRIMARY KEY (`uid`);
 
 --
--- Indexes for table `db_cat`
---
-ALTER TABLE `db_cat`
- ADD PRIMARY KEY (`cid`);
-
---
--- Indexes for table `db_ship_area`
---
-ALTER TABLE `db_ship_area`
- ADD PRIMARY KEY (`spid`);
-
---
--- Indexes for table `db_transport`
---
-ALTER TABLE `db_transport`
- ADD PRIMARY KEY (`trid`);
-
---
 -- Indexes for table `db_transport_service`
 --
 ALTER TABLE `db_transport_service`
  ADD PRIMARY KEY (`service_id`);
 
 --
--- Indexes for table `db_users`
+-- Indexes for table `db_transport_type`
 --
-ALTER TABLE `db_users`
- ADD PRIMARY KEY (`uid`);
+ALTER TABLE `db_transport_type`
+ ADD PRIMARY KEY (`trid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -941,9 +849,9 @@ MODIFY `icdid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 ALTER TABLE `bx_shipment_confirmation`
 MODIFY `cnfrmid` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `bx_ship_type`
+-- AUTO_INCREMENT for table `bx_ship_term`
 --
-ALTER TABLE `bx_ship_type`
+ALTER TABLE `bx_ship_term`
 MODIFY `tid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `bx_transport`
@@ -954,32 +862,17 @@ MODIFY `trnsid` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `bx_user`
 --
 ALTER TABLE `bx_user`
-MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `db_cat`
---
-ALTER TABLE `db_cat`
-MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `db_ship_area`
---
-ALTER TABLE `db_ship_area`
-MODIFY `spid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `db_transport`
---
-ALTER TABLE `db_transport`
-MODIFY `trid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `db_transport_service`
 --
 ALTER TABLE `db_transport_service`
 MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `db_users`
+-- AUTO_INCREMENT for table `db_transport_type`
 --
-ALTER TABLE `db_users`
-MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+ALTER TABLE `db_transport_type`
+MODIFY `trid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
