@@ -225,11 +225,11 @@ class DbHandler {
     /*---------------- 'bx_ship_type' table method --------------*/
 
     /**
-     * Fetching all terms of shipment
+     * Fetching all type of shipment
      * 
      */
     public function getAllTermOfShipment() {
-        $stmt = mysql_query("SELECT * FROM bx_ship_term WHERE status=1;");
+        $stmt = mysql_query("SELECT * FROM bx_ship_type WHERE status=1;");
         return $stmt;
     }
 

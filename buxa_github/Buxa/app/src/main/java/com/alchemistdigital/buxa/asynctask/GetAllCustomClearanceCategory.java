@@ -1,11 +1,9 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -52,7 +50,7 @@ public class GetAllCustomClearanceCategory {
                         databaseClass.closeDB();
 
                         // get all term of shipment from server.
-                        GetAllShipmentTerm.getShipmentTerm(context, CommonVariables.QUERY_SHIPMENT_TERM_SERVER_URL);
+//                        GetAllShipmentType.getShipmentTerm(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

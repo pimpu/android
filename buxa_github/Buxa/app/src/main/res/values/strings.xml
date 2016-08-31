@@ -77,7 +77,7 @@
     <string name="hint_commodity">Commodity</string>
     <string name="hint_type_of_package">Type of Package</string>
     <string name="hint_no_of_package">No of Packages</string>
-    <string name="hint_terms_of_shipment">Terms of Shipment</string>
+    <string name="hint_type_of_shipment">Type of Shipment</string>
     <string name="hint_dimensions">Dimensions (mm)</string>
     <string name="hint_pickUp_location">Pickup Location</string>
     <string name="hint_drop_location">Drop Location</string>

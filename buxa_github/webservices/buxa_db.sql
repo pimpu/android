@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2016 at 02:30 PM
+-- Generation Time: Aug 31, 2016 at 12:15 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -643,20 +643,20 @@ CREATE TABLE IF NOT EXISTS `bx_shipment_confirmation` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bx_ship_term`
+-- Table structure for table `bx_ship_type`
 --
 
-CREATE TABLE IF NOT EXISTS `bx_ship_term` (
+CREATE TABLE IF NOT EXISTS `bx_ship_type` (
 `tid` int(11) NOT NULL,
   `stypename` varchar(100) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bx_ship_term`
+-- Dumping data for table `bx_ship_type`
 --
 
-INSERT INTO `bx_ship_term` (`tid`, `stypename`, `status`) VALUES
+INSERT INTO `bx_ship_type` (`tid`, `stypename`, `status`) VALUES
 (1, 'Full Container Load', 1),
 (2, 'Less than Container Load', 1);
 
@@ -702,7 +702,7 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
   `password` varchar(100) NOT NULL,
   `create_time` varchar(20) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `bx_user`
@@ -790,9 +790,9 @@ ALTER TABLE `bx_shipment_confirmation`
  ADD PRIMARY KEY (`cnfrmid`);
 
 --
--- Indexes for table `bx_ship_term`
+-- Indexes for table `bx_ship_type`
 --
-ALTER TABLE `bx_ship_term`
+ALTER TABLE `bx_ship_type`
  ADD PRIMARY KEY (`tid`);
 
 --
@@ -849,9 +849,9 @@ MODIFY `icdid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 ALTER TABLE `bx_shipment_confirmation`
 MODIFY `cnfrmid` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `bx_ship_term`
+-- AUTO_INCREMENT for table `bx_ship_type`
 --
-ALTER TABLE `bx_ship_term`
+ALTER TABLE `bx_ship_type`
 MODIFY `tid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `bx_transport`
@@ -862,7 +862,7 @@ MODIFY `trnsid` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `bx_user`
 --
 ALTER TABLE `bx_user`
-MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `db_transport_service`
 --

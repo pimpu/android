@@ -3,17 +3,17 @@ package com.alchemistdigital.buxa.model;
 /**
  * Created by Pimpu on 8/29/2016.
  */
-public class ShipmentTermModel {
+public class ShipmentTypeModel {
     private int shipmentTermId ;
     private int serverId ;
     private String name ;
     private int status ;
     private String createdAt ;
 
-    public ShipmentTermModel() {
+    public ShipmentTypeModel() {
     }
 
-    public ShipmentTermModel(int serverId, String name, int status) {
+    public ShipmentTypeModel(int serverId, String name, int status) {
         this.serverId = serverId;
         this.name = name;
         this.status = status;

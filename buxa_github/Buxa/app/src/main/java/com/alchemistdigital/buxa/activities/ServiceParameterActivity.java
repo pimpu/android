@@ -41,7 +41,7 @@ import java.util.List;
 public class ServiceParameterActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtCustomClearanceLocation;
 
-    public LinearLayout commodityLayout, shipmentTermLayout, packageTypeLayout, noOfPackageLayout,
+    public LinearLayout commodityLayout, shipmentTypeLayout, packageTypeLayout, noOfPackageLayout,
                 dimensionLayout, pickupLayout, dropLayout, LRCopyLayout, IECLayout, ADCodeLayout,
                 customeClearanceLocationLayout, isFirstTimeCC;
 
@@ -105,34 +105,34 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
 
     private void init() {
         commodityLayout = (LinearLayout) findViewById(R.id.layout_commodity);
-        shipmentTermLayout = (LinearLayout) findViewById(R.id.layout_shipmentTerm);
+        shipmentTypeLayout = (LinearLayout) findViewById(R.id.layout_shipmentType);
         packageTypeLayout = (LinearLayout) findViewById(R.id.layout_PackageType);
         noOfPackageLayout = (LinearLayout) findViewById(R.id.layout_NoOfPackage);
         dimensionLayout = (LinearLayout) findViewById(R.id.layout_dimension);
         pickupLayout = (LinearLayout) findViewById(R.id.layout_pickup);
         dropLayout = (LinearLayout) findViewById(R.id.layout_drop);
-        LRCopyLayout = (LinearLayout) findViewById(R.id.layout_LRCopy);
+//        LRCopyLayout = (LinearLayout) findViewById(R.id.layout_LRCopy);
         IECLayout = (LinearLayout) findViewById(R.id.layout_IEC);
         ADCodeLayout = (LinearLayout) findViewById(R.id.layout_ADCode);
-        customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
+//        customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
         isFirstTimeCC = (LinearLayout) findViewById(R.id.layout_isFirstTimeInCustomeClearance);
 
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package);
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
-        txtCustomClearanceLocation = (AutoCompleteTextView) findViewById(R.id.id_custome_clearance);
+//        txtCustomClearanceLocation = (AutoCompleteTextView) findViewById(R.id.id_custome_clearance);
     }
 
     private void transportation() {
         commodityLayout.setVisibility(View.VISIBLE);
         dimensionLayout.setVisibility(View.VISIBLE);
-        shipmentTermLayout.setVisibility(View.VISIBLE);
+        shipmentTypeLayout.setVisibility(View.VISIBLE);
         noOfPackageLayout.setVisibility(View.VISIBLE);
         packageTypeLayout.setVisibility(View.VISIBLE);
         pickupLayout.setVisibility(View.VISIBLE);
         dropLayout.setVisibility(View.VISIBLE);
-        LRCopyLayout.setVisibility(View.VISIBLE);
+//        LRCopyLayout.setVisibility(View.VISIBLE);
 
         // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
@@ -153,17 +153,17 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
     private void customClearance() {
         IECLayout.setVisibility(View.VISIBLE);
         ADCodeLayout.setVisibility(View.VISIBLE);
-        customeClearanceLocationLayout.setVisibility(View.VISIBLE);
+//        customeClearanceLocationLayout.setVisibility(View.VISIBLE);
         isFirstTimeCC.setVisibility(View.VISIBLE);
         if(!names.contains("Transportation")) {
-            shipmentTermLayout.setVisibility(View.VISIBLE);
+            shipmentTypeLayout.setVisibility(View.VISIBLE);
         }
 
         // initialised custom clearance location autocomplete textfield from database
-        int layoutItemId = android.R.layout.simple_dropdown_item_1line;
+        /*int layoutItemId = android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<CustomClearanceLocation> adapter = new ArrayAdapter<CustomClearanceLocation>(this, layoutItemId, dbClass.getCustomClearanceLocationData() );
         txtCustomClearanceLocation.setAdapter(adapter);
-        txtCustomClearanceLocation.setThreshold(1);
+        txtCustomClearanceLocation.setThreshold(1);*/
     }
 
     @Override

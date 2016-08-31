@@ -56,6 +56,6 @@ public class insertCustomLoactionAsyncTask extends AsyncTask<String, String, Arr
         databaseClass.closeDB();
 
         // get all custom clearance category from server.
-        GetAllCustomClearanceCategory.getCCC(context, CommonVariables.QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL);
+//        GetAllCustomClearanceCategory.getCCC(context, CommonVariables.QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL);
     }
 }

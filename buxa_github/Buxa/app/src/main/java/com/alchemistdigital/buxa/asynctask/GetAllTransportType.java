@@ -1,11 +1,9 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.model.ShipmentTermModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;

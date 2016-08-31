@@ -56,6 +56,7 @@ public class insertCommodityAsyncTask extends AsyncTask<String, String, ArrayLis
         databaseClass.closeDB();
 
         // get all custom loaction from server.
-        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
+//        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
+        GetAllShipmentType.getShipmentTerm(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
     }
 }

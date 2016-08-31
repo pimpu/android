@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.activities.SplashScreen;
+import com.alchemistdigital.buxa.activities.StartupActivity;
 
 /**
  * Created by user on 8/11/2016.
@@ -39,8 +40,7 @@ public class CommonUtilities {
     public static void addShortcut(Context context) {
         //Adding shortcut for MainActivity
         //on Home screen
-        Intent shortcutIntent = new Intent(context,
-                SplashScreen.class);
+        Intent shortcutIntent = new Intent(context,StartupActivity.class);
 
         shortcutIntent.setAction(Intent.ACTION_MAIN);
 

@@ -13,7 +13,7 @@ import android.util.Log;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
-import com.alchemistdigital.buxa.model.ShipmentTermModel;
+import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
 
@@ -39,7 +39,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_COMMODITY = "Commodity";
     public static final String TABLE_CUSTOM_CLEARANCE_LOCATION = "CustomClearanceLocation";
     public static final String TABLE_CUSTOM_CLEARANCE_CATEGORY = "CustomClearanceCategory";
-    public static final String TABLE_TERM_OF_SHIPMENT = "TermOfShipment";
+    public static final String TABLE_TYPE_OF_SHIPMENT = "TypeOfShipment";
     public static final String TABLE_TRANSPORTATION = "Transportation";
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
@@ -78,7 +78,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String CCC_SERVER_ID = "ccc_serverId";
     private static final String CCC_NAME = "ccc_name";
 
-    // TABLE_TERM_OF_SHIPMENT Table - column names
+    // TABLE_TYPE_OF_SHIPMENT Table - column names
     private static final String TOS_SERVER_ID = "tos_serverId";
     private static final String TOS_name = "tos_name";
 
@@ -161,8 +161,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Term of shipment Table Create Statements
-    private static final String CREATE_TABLE_TERM_OF_SHIPMENT =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_TERM_OF_SHIPMENT+
+    private static final String CREATE_TABLE_TYPE_OF_SHIPMENT =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TYPE_OF_SHIPMENT +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TOS_SERVER_ID +" INTEGER," +
                     TOS_name+" VARCHAR(200)," +
@@ -230,7 +230,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_COMMODITY);
         db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_LOCATION);
         db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_CATEGORY);
-        db.execSQL(CREATE_TABLE_TERM_OF_SHIPMENT);
+        db.execSQL(CREATE_TABLE_TYPE_OF_SHIPMENT);
         db.execSQL(CREATE_TABLE_TRANSPORTATION);
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
@@ -245,7 +245,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERM_OF_SHIPMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_SHIPMENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
@@ -526,15 +526,15 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
     // ------------------------ "TermOfShipment" table methods ----------------//
-    public long insertShipmentTerm(ShipmentTermModel shipmentTermModel) {
+    public long insertShipmentType(ShipmentTypeModel shipmentTypeModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
         SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TOS_SERVER_ID, shipmentTermModel.getServerId());
-        contentValues.put(TOS_name, shipmentTermModel.getName());
-        contentValues.put(KEY_STATUS, shipmentTermModel.getStatus());
+        contentValues.put(TOS_SERVER_ID, shipmentTypeModel.getServerId());
+        contentValues.put(TOS_name, shipmentTypeModel.getName());
+        contentValues.put(KEY_STATUS, shipmentTypeModel.getStatus());
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -542,11 +542,11 @@ public class DatabaseClass extends SQLiteOpenHelper {
         try {
 
             String whereClause = TOS_SERVER_ID+" = ?";
-            String[] whereArgs = new String[]{ String.valueOf( shipmentTermModel.getServerId() )} ;
+            String[] whereArgs = new String[]{ String.valueOf( shipmentTypeModel.getServerId() )} ;
 
-            int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_TERM_OF_SHIPMENT,whereClause,whereArgs);
+            int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_TYPE_OF_SHIPMENT,whereClause,whereArgs);
             if( numRows <= 0 ) {
-                id = db.insert(TABLE_TERM_OF_SHIPMENT, null, contentValues);
+                id = db.insert(TABLE_TYPE_OF_SHIPMENT, null, contentValues);
             }
 
         } catch (Exception e) {

@@ -1,12 +1,10 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
-import com.alchemistdigital.buxa.model.ShipmentTermModel;
+import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Created by Pimpu on 8/30/2016.
  */
-public class GetAllShipmentTerm {
+public class GetAllShipmentType {
 
     public static void getShipmentTerm(final Context context, String url) {
 
@@ -44,8 +42,8 @@ public class GetAllShipmentTerm {
                             String termName = arrayTerm.getJSONObject(i).getString("name");
                             int termStatus = arrayTerm.getJSONObject(i).getInt("status");
 
-                            long l = databaseClass.insertShipmentTerm(new ShipmentTermModel(termServerId, termName, termStatus));
-                            System.out.println("Shipment term id: "+l);
+                            long l = databaseClass.insertShipmentType(new ShipmentTypeModel(termServerId, termName, termStatus));
+                            System.out.println("Shipment type id: "+l);
                         }
 
                         // close database in synchronized condition
