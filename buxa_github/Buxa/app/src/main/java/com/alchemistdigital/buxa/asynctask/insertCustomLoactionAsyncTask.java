@@ -4,7 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
+import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 
 import org.json.JSONArray;
@@ -51,11 +54,15 @@ public class insertCustomLoactionAsyncTask extends AsyncTask<String, String, Arr
 
     @Override
     protected void onPostExecute(ArrayList<String> result) {
-        System.out.println("custom loaction id: "+result);
+//        System.out.println("custom loaction id: "+result);
         // close database in synchronized condition
         databaseClass.closeDB();
 
-        // get all custom clearance category from server.
-//        GetAllCustomClearanceCategory.getCCC(context, CommonVariables.QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL);
+        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+        // it store the Register true value of user for purpose of user is registered with this app.
+        setSharedPreference.setBooleanLogin(context.getString(R.string.boolean_login_sharedPref), "true");
+
+        // sent notification to activities that server calling finished
+        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
     }
 }

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
+import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -42,15 +45,14 @@ public class GetAllCustomClearanceCategory {
                             String cccName = arrayCCC.getJSONObject(i).getString("name");
                             int cccStatus = arrayCCC.getJSONObject(i).getInt("status");
 
-                            long l = databaseClass.insertCustomClearanceCategory(new CustomClearanceCategoryModel(cccServerId, cccName, cccStatus));
-                            System.out.println("Custome clearance category id: "+l);
+                            databaseClass.insertCustomClearanceCategory(new CustomClearanceCategoryModel(cccServerId, cccName, cccStatus));
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
 
-                        // get all term of shipment from server.
-//                        GetAllShipmentType.getShipmentTerm(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
+                        // get all custom clearance category from server.
+                        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

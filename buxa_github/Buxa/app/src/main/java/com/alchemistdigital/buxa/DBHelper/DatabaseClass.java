@@ -525,7 +525,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
-    // ------------------------ "TermOfShipment" table methods ----------------//
+    // ------------------------ "TypeOfShipment" table methods ----------------//
     public long insertShipmentType(ShipmentTypeModel shipmentTypeModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
 

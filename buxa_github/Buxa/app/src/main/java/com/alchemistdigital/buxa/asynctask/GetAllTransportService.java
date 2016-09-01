@@ -11,6 +11,7 @@ import com.alchemistdigital.buxa.activities.Login;
 import com.alchemistdigital.buxa.activities.SelectServiceActivity;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -50,14 +51,13 @@ public class GetAllTransportService {
                             int tsStatus = arrayTS.getJSONObject(i).getInt("status");
 
                             long l = databaseClass.insertTransportService(new TransportServiceModel(tsServerId, tsName, tsStatus));
-                            System.out.println("Transport Service id: "+l);
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
 
-                        // sent notification to activities that server calling finished
-                        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
+                        // get all custom clearance from server.
+                        GetAllCustomClearanceCategory.getCCC(context, CommonVariables.QUERY_CUSTOM_CLEARANCE_CATEGORY_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

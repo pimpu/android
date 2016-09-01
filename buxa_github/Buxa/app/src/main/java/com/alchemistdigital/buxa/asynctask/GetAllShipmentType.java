@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.model.ShipmentTypeModel;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -18,7 +19,7 @@ import org.json.JSONObject;
  */
 public class GetAllShipmentType {
 
-    public static void getShipmentTerm(final Context context, String url) {
+    public static void getShipmentType(final Context context, String url) {
 
         RestClient.get(url, null, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
@@ -35,22 +36,21 @@ public class GetAllShipmentType {
 
                         DatabaseClass databaseClass = new DatabaseClass(context);
 
-                        JSONArray arrayTerm = json.getJSONArray("shipmentTerm");
-
+                        JSONArray arrayTerm = json.getJSONArray("shipmentType");
+                        int commodityRows = json.getInt("commodityRowCount");
                         for (int i = 0 ; i < arrayTerm.length(); i++ ) {
                             int termServerId = arrayTerm.getJSONObject(i).getInt("id");
                             String termName = arrayTerm.getJSONObject(i).getString("name");
                             int termStatus = arrayTerm.getJSONObject(i).getInt("status");
 
-                            long l = databaseClass.insertShipmentType(new ShipmentTypeModel(termServerId, termName, termStatus));
-                            System.out.println("Shipment type id: "+l);
+                            databaseClass.insertShipmentType(new ShipmentTypeModel(termServerId, termName, termStatus));
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
 
-                        // get all transport type from server.
-                        GetAllTransportType.getTransportType(context, CommonVariables.QUERY_TRANSPORT_TYPE_SERVER_URL);
+                        // get all commodities.
+                        GetAllCommodity.getCommodities(context, CommonVariables.QUERY_COMMODITY_SERVER_URL, commodityRows);
                     }
 
                 } catch (JSONException e) {

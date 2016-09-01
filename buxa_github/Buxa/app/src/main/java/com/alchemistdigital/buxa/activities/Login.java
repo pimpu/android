@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
+import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -184,8 +184,6 @@ public class Login extends Fragment implements View.OnClickListener {
                         layout_noConnection.setVisibility(View.GONE);
                         SetSharedPreference setSharedPreference = new SetSharedPreference(getActivity());
 
-                        // it store the Register true value of user for purpose of user is registered with this app.
-                        setSharedPreference.setBooleanLogin(getResources().getString(R.string.boolean_login_sharedPref), "true");
                         setSharedPreference.setLoginId(getResources().getString(R.string.loginId), json.getInt("id"));
                         setSharedPreference.setApiKey(getResources().getString(R.string.apikey), json.getString("api_key"));
                         setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), json.getString("email"));
@@ -195,8 +193,9 @@ public class Login extends Fragment implements View.OnClickListener {
                         DatabaseClass dbHelper = new DatabaseClass(getActivity());
                         if (dbHelper.numberOfComodityRows() <= 0 ) {
                             getActivity().setContentView(R.layout.activity_splash_screen);
-                            // get all pre defined commodity from server.
-                            GetAllCommodity.getCommodities(getActivity(), CommonVariables.QUERY_COMMODITY_SERVER_URL);
+
+                            // get All shipment type
+                            GetAllShipmentType.getShipmentType(getActivity(), CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
                         else {
                             Intent intent = new Intent(getActivity(), SelectServiceActivity.class);

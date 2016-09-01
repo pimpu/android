@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
+import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
@@ -224,8 +225,6 @@ public class RegisterActivity extends AppCompatActivity {
                         layout_noConnection.setVisibility(View.GONE);
                         SetSharedPreference setSharedPreference = new SetSharedPreference(RegisterActivity.this);
 
-                        // it store the Register true value of user for purpose of user is registered with this app.
-                        setSharedPreference.setBooleanLogin(getResources().getString(R.string.boolean_login_sharedPref), "true");
                         setSharedPreference.setLoginId(getResources().getString(R.string.loginId), json.getInt("id"));
                         setSharedPreference.setApiKey(getResources().getString(R.string.apikey), json.getString("api_key"));
                         setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), json.getString("email"));
@@ -238,8 +237,9 @@ public class RegisterActivity extends AppCompatActivity {
                         DatabaseClass dbHelper = new DatabaseClass(RegisterActivity.this);
                         if (dbHelper.numberOfComodityRows() <= 0 ) {
                             setContentView(R.layout.activity_splash_screen);
-                            // get all pre defined commodity from server.
-                            GetAllCommodity.getCommodities(RegisterActivity.this, CommonVariables.QUERY_COMMODITY_SERVER_URL);
+
+                            // get All shipment type
+                            GetAllShipmentType.getShipmentType(RegisterActivity.this, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
                         else {
                             Intent intent = new Intent(RegisterActivity.this, SelectServiceActivity.class);

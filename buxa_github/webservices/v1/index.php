@@ -139,13 +139,19 @@ $app->post('/login', function() use ($app) {
             echoRespnse(200, $response);
         });
 
-
-$app -> get('/commodities',function() {
+$app -> get('/commodities',function() use ($app) {
     $response = array();
     $db = new DbHandler();
 
+    // check for required params
+    verifyRequiredParams(array('start', 'limit'));
+
+    // reading get params
+    $start = $app->request()->get('start');
+    $limit = $app->request()->get('limit');
+
     // fetching all commodities
-    $allComodityResult = $db -> getAllCommodity();
+    $allComodityResult = $db -> getAllCommodity($start, $limit);
 
     $response["error"] = false;
     $response["commodities"] = array();
@@ -210,23 +216,25 @@ $app -> get('/customclearancecategory', function(){
 });
 
 
-$app -> get('/termsofshipment', function(){
+$app -> get('/typeofshipment', function(){
     $response = array();
     $db = new DbHandler();
 
-    $allShipmentTerm = $db -> getAllTermOfShipment();
+    $allShipmentType = $db -> getAllTypeOfShipment();
+    $noOfCommodityRows = $db -> getCommodityRowsCount();
 
     // fetching all term of shipment
     $response["error"] = false;
-    $response["shipmentTerm"] = array();
+    $response["commodityRowCount"] = $noOfCommodityRows;
+    $response["shipmentType"] = array();
 
-    while ($term = mysql_fetch_array($allShipmentTerm)) {
+    while ($type = mysql_fetch_array($allShipmentType)) {
         $temp = array();
-        $temp["id"] = $term["tid"];
-        $temp["name"] = $term["stypename"];
-        $temp["status"] = $term["status"];
+        $temp["id"] = $type["tid"];
+        $temp["name"] = $type["stypename"];
+        $temp["status"] = $type["status"];
 
-        array_push($response["shipmentTerm"], $temp);
+        array_push($response["shipmentType"], $temp);
     }
     echoRespnse(200, $response);
 

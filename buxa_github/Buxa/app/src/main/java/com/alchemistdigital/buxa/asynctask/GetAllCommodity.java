@@ -9,6 +9,7 @@ import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,9 +19,21 @@ import org.json.JSONObject;
  * Created by user on 8/29/2016.
  */
 public class GetAllCommodity {
-    public static void getCommodities(final Context context, String url) {
+    private static int commodityRowsCount;
+    public static void getCommodities(Context context, String url, int commodityRows) {
+        int start = 0, limit = 100;
+        commodityRowsCount = commodityRows;
 
-        RestClient.get(url, null, new AsyncHttpResponseHandler() {
+        getData(context, url, start, limit);
+
+    }
+
+    public static void getData(final Context context, final String url, final int start, final int limit) {
+        RequestParams params = new RequestParams();
+        params.put("start", String.valueOf(start));
+        params.put("limit", String.valueOf(limit));
+
+        RestClient.get(url, params, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
@@ -32,7 +45,8 @@ public class GetAllCommodity {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-                        new insertCommodityAsyncTask(context, json.getJSONArray("commodities") ).execute();
+                        new insertCommodityAsyncTask(context, json.getJSONArray("commodities"),
+                                start, limit, commodityRowsCount, url).execute();
                     }
 
                 } catch (JSONException e) {

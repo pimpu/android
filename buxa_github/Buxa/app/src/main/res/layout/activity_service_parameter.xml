@@ -427,7 +427,7 @@
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
-                <!--<LinearLayout
+                <LinearLayout
                     android:id="@+id/layout_CustomeClearanceLocation"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -453,7 +453,7 @@
                         android:textColorHint="@color/hintTextColor"
                         android:hint="@string/hint_custom_clearance"/>
 
-                </LinearLayout>-->
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_isFirstTimeInCustomeClearance"

@@ -20,9 +20,15 @@ public class insertCommodityAsyncTask extends AsyncTask<String, String, ArrayLis
     Context context;
     JSONArray commodities;
     DatabaseClass databaseClass;
-    public insertCommodityAsyncTask(Context context, JSONArray commodities) {
+    int start, limit, commodityRowsCount;
+    String url;
+    public insertCommodityAsyncTask(Context context, JSONArray commodities, int start, int limit, int commodityRowsCount, String url) {
         this.context = context;
         this.commodities = commodities;
+        this.start = start;
+        this.limit = limit;
+        this.commodityRowsCount = commodityRowsCount;
+        this.url = url;
         databaseClass = new DatabaseClass(context);
     }
 
@@ -50,13 +56,15 @@ public class insertCommodityAsyncTask extends AsyncTask<String, String, ArrayLis
 
     @Override
     protected void onPostExecute(ArrayList<String> result) {
-        System.out.println("Commodities: "+result);
-
         // close database in synchronized condition
         databaseClass.closeDB();
 
-        // get all custom loaction from server.
-//        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
-        GetAllShipmentType.getShipmentTerm(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
+        start = start + 100;
+        if ((start % commodityRowsCount) >= limit) {
+            GetAllCommodity.getData(context, url, start, limit);
+        }
+        // get all transport type from server.
+        GetAllTransportType.getTransportType(context, CommonVariables.QUERY_TRANSPORT_TYPE_SERVER_URL);
+
     }
 }

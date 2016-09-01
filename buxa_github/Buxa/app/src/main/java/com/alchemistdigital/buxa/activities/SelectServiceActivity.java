@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
 import com.alchemistdigital.buxa.asynctask.GetAllCustomLoaction;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;

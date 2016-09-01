@@ -43,7 +43,6 @@ public class GetAllTransportType {
                             int ttStatus = arrayTT.getJSONObject(i).getInt("status");
 
                             long l = databaseClass.insertTransportType(new TransportTypeModel(ttServerId, ttName, ttStatus));
-                            System.out.println("Transport Type id: "+l);
                         }
 
                         // close database in synchronized condition

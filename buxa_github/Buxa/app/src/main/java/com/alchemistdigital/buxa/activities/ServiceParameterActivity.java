@@ -114,7 +114,7 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
 //        LRCopyLayout = (LinearLayout) findViewById(R.id.layout_LRCopy);
         IECLayout = (LinearLayout) findViewById(R.id.layout_IEC);
         ADCodeLayout = (LinearLayout) findViewById(R.id.layout_ADCode);
-//        customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
+        customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
         isFirstTimeCC = (LinearLayout) findViewById(R.id.layout_isFirstTimeInCustomeClearance);
 
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);

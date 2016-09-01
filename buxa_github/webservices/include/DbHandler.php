@@ -195,9 +195,18 @@ class DbHandler {
      * Fetching all commodity
      * 
      */
-    public function getAllCommodity() {
-        $stmt = mysql_query("SELECT * FROM bx_commodity WHERE status=1;");
+    public function getAllCommodity($start, $limit) {
+        $stmt = mysql_query("SELECT * FROM bx_commodity WHERE status=1 LIMIT $start,$limit;");
         return $stmt;
+    }
+
+    /**
+    * Count no of commodities row
+    */
+    public function getCommodityRowsCount() {
+        $stmt = mysql_query("SELECT count(*) as total from bx_commodity;");
+        $data = mysql_fetch_array($stmt);
+        return $data["total"];
     }
 
     /*---------------- 'bx_icd' table method --------------*/
@@ -228,7 +237,7 @@ class DbHandler {
      * Fetching all type of shipment
      * 
      */
-    public function getAllTermOfShipment() {
+    public function getAllTypeOfShipment() {
         $stmt = mysql_query("SELECT * FROM bx_ship_type WHERE status=1;");
         return $stmt;
     }
