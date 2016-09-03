@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundColor"
+    tools:context="com.alchemistdigital.buxa.activities.CustomClearanceActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/id_toolbar_custom_clearance"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="@color/backgroundColor">
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <LinearLayout
+                android:id="@+id/layout_CustomeClearanceLocation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_custom_clearance"
+                    android:textSize="14dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/milkyWhite"/>
+
+                <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                    android:id="@+id/id_custome_clearance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/milkyWhite"
+                    android:textColorHint="@color/hintTextColor"
+                    android:hint="@string/hint_custom_clearance"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_shipmentType"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_type_of_shipment"
+                    android:textSize="12dp"
+                    android:paddingLeft="5dp"
+                    android:textColor="@color/milkyWhite"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radiogroupTypeOfShipment_CC"
+                    android:orientation="horizontal"
+                    android:checkedButton="@+id/rbLcl_cc" >
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rbLcl_cc"
+                        android:text="@string/strLcl"
+                        android:textColor="@color/milkyWhite"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/strFcl_cc"
+                        android:layout_marginLeft="50dp"
+                        android:text="@string/strFcl"
+                        android:textColor="@color/milkyWhite"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50sp"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:padding="10dp" >
+
+                <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_right"
+                    android:drawablePadding="-5dp"
+                    android:gravity="center_vertical"
+                    android:text="Next"
+                    android:textColor="@color/milkyWhite"
+                    android:textSize="25dp"
+                    android:onClick="storeCustomClearanceEnquiry" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,10 +1,9 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,13 +15,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
-import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,19 +35,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class ServiceParameterActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtCustomClearanceLocation;
-
+public class TrasportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop;
+    TextInputLayout CBM_InputLayout;
     public LinearLayout commodityLayout, shipmentTypeLayout, packageTypeLayout, noOfPackageLayout,
-                dimensionLayout, pickupLayout, dropLayout, LRCopyLayout, IECLayout, ADCodeLayout,
-                customeClearanceLocationLayout, isFirstTimeCC;
-
+                dimensionLayout, pickupLayout, dropLayout;
+    RadioGroup rgContainerSize, rgTypeOfShipment;
+    EdittextSegoeLightFont txtCBM;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names;
-    Boolean isAvail = false;
+
 
     //    -------------- place api -------------------
     private static final String LOG_TAG = "Google Places Autocomplete";
@@ -59,7 +57,7 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_service_parameter);
+        setContentView(R.layout.activity_trasport_quotation);
 
         toolbarSetup();
 
@@ -69,26 +67,13 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         names = getIntent().getStringArrayListExtra("ServicesName");
         dbClass = new DatabaseClass(this);
 
-        for (int j = 0 ; j < ids.size() ; j++ ) {
-            switch (names.get(j)) {
-                case "Transportation" :
-                    transportation();
-                    break;
-
-                case "Freight Forwarding" :
-                    break;
-
-                case "Custom Clearance" :
-                    customClearance();
-                    break;
-            }
-        }
+        transportation();
 
     }
 
     private void toolbarSetup() {
         // initialise toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_selectServiceParameter);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_transportQuotation);
         setSupportActionBar(toolbar);
 
         // set back button on toolbar
@@ -100,7 +85,7 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
                 onBackPressed();
             }
         });
-        // getSupportActionBar().setTitle(getIntent().getStringExtra("callingActivity"));
+         getSupportActionBar().setTitle("Transportation Quotation");
     }
 
     private void init() {
@@ -111,29 +96,37 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         dimensionLayout = (LinearLayout) findViewById(R.id.layout_dimension);
         pickupLayout = (LinearLayout) findViewById(R.id.layout_pickup);
         dropLayout = (LinearLayout) findViewById(R.id.layout_drop);
-//        LRCopyLayout = (LinearLayout) findViewById(R.id.layout_LRCopy);
-        IECLayout = (LinearLayout) findViewById(R.id.layout_IEC);
-        ADCodeLayout = (LinearLayout) findViewById(R.id.layout_ADCode);
-        customeClearanceLocationLayout = (LinearLayout) findViewById(R.id.layout_CustomeClearanceLocation);
-        isFirstTimeCC = (LinearLayout) findViewById(R.id.layout_isFirstTimeInCustomeClearance);
+
+        CBM_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_cubic_meter_measurement);
 
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package);
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
-//        txtCustomClearanceLocation = (AutoCompleteTextView) findViewById(R.id.id_custome_clearance);
+        rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040);
+        txtCBM = (EdittextSegoeLightFont) findViewById(R.id.id_cubic_meter_measurement);
+
+        rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_transport);
+        rgTypeOfShipment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbLcl_transport:
+                        rgContainerSize.setVisibility(View.GONE);
+                        CBM_InputLayout.setVisibility(View.VISIBLE);
+                        break;
+
+                    case R.id.rbFcl_transport:
+                        rgContainerSize.setVisibility(View.VISIBLE);
+                        CBM_InputLayout.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
     }
 
     private void transportation() {
-        commodityLayout.setVisibility(View.VISIBLE);
-        dimensionLayout.setVisibility(View.VISIBLE);
-        shipmentTypeLayout.setVisibility(View.VISIBLE);
-        noOfPackageLayout.setVisibility(View.VISIBLE);
-        packageTypeLayout.setVisibility(View.VISIBLE);
-        pickupLayout.setVisibility(View.VISIBLE);
-        dropLayout.setVisibility(View.VISIBLE);
-//        LRCopyLayout.setVisibility(View.VISIBLE);
-
         // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
         ArrayAdapter<CommodityModel> adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
@@ -148,22 +141,6 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         txtDrop.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtDrop.setOnItemClickListener(this);
 
-    }
-
-    private void customClearance() {
-        IECLayout.setVisibility(View.VISIBLE);
-        ADCodeLayout.setVisibility(View.VISIBLE);
-//        customeClearanceLocationLayout.setVisibility(View.VISIBLE);
-        isFirstTimeCC.setVisibility(View.VISIBLE);
-        if(!names.contains("Transportation")) {
-            shipmentTypeLayout.setVisibility(View.VISIBLE);
-        }
-
-        // initialised custom clearance location autocomplete textfield from database
-        /*int layoutItemId = android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<CustomClearanceLocation> adapter = new ArrayAdapter<CustomClearanceLocation>(this, layoutItemId, dbClass.getCustomClearanceLocationData() );
-        txtCustomClearanceLocation.setAdapter(adapter);
-        txtCustomClearanceLocation.setThreshold(1);*/
     }
 
     @Override
@@ -205,40 +182,17 @@ public class ServiceParameterActivity extends AppCompatActivity implements Adapt
         return super.onOptionsItemSelected(item);
     }
 
-    public void gotoFileUpload(View view) {
-        Intent callCustomImageGallery = new Intent(this, CustomImageGalleryActivity.class);
-        callCustomImageGallery.putExtra("callingActivity","Select LR Copy");
-        startActivity(callCustomImageGallery);
-    }
-
     public void storeTransportEnquiry(View view) {
-        // before user agree with avail option
-        if( !isAvail ) {
-            // show avil dialog box when user select only transport services
-            if(names.contains("Transportation") && names.size() == 1 ) {
-
-                new AlertDialog.Builder(ServiceParameterActivity.this)
-                        .setMessage(getResources().getString(R.string.strInTransportMode))
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                isAvail = true;
-                                customClearance();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .show();
-            }
-            else {
-                Toast.makeText(getApplicationContext(),"Hello,",Toast.LENGTH_SHORT).show();
-            }
+        if( names.contains("Custom Clearance") ) {
+            Intent intentForServiceParameterActivity = new Intent(this, CustomClearanceActivity.class);
+            intentForServiceParameterActivity.putStringArrayListExtra("ServicesId",  ids);
+            intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", names);
+            startActivity(intentForServiceParameterActivity);
+        } else if(names.contains("Freight Forwarding")) {
+            Toast.makeText(TrasportQuotationActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
         }
-        // after user agree with avail option
         else {
-            Toast.makeText(getApplicationContext(),"after avail option selected.,",Toast.LENGTH_SHORT).show();
+            Toast.makeText(TrasportQuotationActivity.this, "Quotation Screen", Toast.LENGTH_SHORT).show();
         }
     }
 

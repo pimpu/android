@@ -8,5 +8,6 @@
     <color name="hintTextColor">#3e5e69</color>
     <color name="hintGray">#6c6f6f</color>
     <color name="error">#fa2828</color>
+    <color name="footer_color">#a2018bba</color>
 
 </resources>

@@ -9,7 +9,7 @@ public class CommonVariables {
     public static final String DISPLAY_MESSAGE_ACTION = "com.alchemistdigital.buxa.DISPLAY_MESSAGE";
     public static final String EXTRA_MESSAGE = "message";
 
-    static String SERVER_URL = "http://1adb3b9c.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://63509dd6.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";

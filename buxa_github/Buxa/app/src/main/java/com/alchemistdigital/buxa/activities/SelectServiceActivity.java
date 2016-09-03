@@ -1,9 +1,6 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,15 +14,11 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllCustomLoaction;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
-import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.CustomTypefaceSpan;
-import com.alchemistdigital.buxa.utilities.WakeLocker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class SelectServiceActivity extends AppCompatActivity {
     TextView tv_strSelectService;
@@ -111,10 +104,17 @@ public class SelectServiceActivity extends AppCompatActivity {
     public void gotoSelectServiceParameter(View view) {
 
         if(  selchkboxlistId.size() > 0 ) {
-            Intent intentForServiceParameterActivity = new Intent(this, ServiceParameterActivity.class);
-            intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
-            intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
-            startActivity(intentForServiceParameterActivity);
+            if( selchkboxlistName.contains("Transportation") ) {
+                Intent intentForServiceParameterActivity = new Intent(this, TrasportQuotationActivity.class);
+                intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
+                intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
+                startActivity(intentForServiceParameterActivity);
+            } else if( selchkboxlistName.contains("Custom Clearance") ) {
+                Toast.makeText(SelectServiceActivity.this, "Custom Clearance", Toast.LENGTH_SHORT).show();
+            } else if(selchkboxlistName.contains("Freight Forwarding")) {
+                Toast.makeText(SelectServiceActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
+            }
+
         }
         else {
             Toast.makeText(this, "Please, select any one service. ",Toast.LENGTH_SHORT).show();

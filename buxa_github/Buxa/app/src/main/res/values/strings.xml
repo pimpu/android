@@ -33,6 +33,9 @@
     <string name="btn_signIn">Sign in</string>
     <string name="strSelectedImage">selectedImage</string>
     <string name="strInTransportMode"><![CDATA[Do you avail with freight forwarding & custom clearance ?]]></string>
+    <string name="str20feet">20\'</string>
+    <string name="str40feet">40\'</string>
+    <string name="str40HQfeet">40\' HQ</string>
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -104,4 +107,6 @@
     <string name="hint_dimensions_weight">weight</string>
     <string name="hint_IEC_number">IEC number</string>
     <string name="hint_AD_Code">AD code registration</string>
+    <string name="hint_cubic_meter_measurement">Cubic meter measurement</string>
+    <string name="hint_gross_weight">Gross weight</string>
 </resources>

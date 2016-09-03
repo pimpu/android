@@ -33,7 +33,7 @@
             android:name=".activities.SelectServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ServiceParameterActivity"
+            android:name=".activities.TrasportQuotationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.RegisterActivity"
@@ -44,8 +44,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AndroidDatabaseManager"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light" />
+        <activity android:name=".activities.CustomClearanceActivity"></activity>
     </application>
 
 </manifest>
