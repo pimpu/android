@@ -23,6 +23,7 @@ import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont;
 
 import org.json.JSONArray;
@@ -46,14 +47,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     EdittextSegoeLightFont txtCBM;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names;
-
-
-    //    -------------- place api -------------------
-    private static final String LOG_TAG = "Google Places Autocomplete";
-    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
-    private static final String OUT_JSON = "/json";
-    private static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
+    String strSelectedShipmentType = "LCL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +109,13 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
                     case R.id.rbLcl_transport:
                         rgContainerSize.setVisibility(View.GONE);
                         CBM_InputLayout.setVisibility(View.VISIBLE);
+                        strSelectedShipmentType = "LCL";
                         break;
 
                     case R.id.rbFcl_transport:
                         rgContainerSize.setVisibility(View.VISIBLE);
                         CBM_InputLayout.setVisibility(View.GONE);
+                        strSelectedShipmentType = "FCL";
                         break;
                 }
             }
@@ -195,6 +191,8 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
             Intent intentForServiceParameterActivity = new Intent(this, CustomClearanceActivity.class);
             intentForServiceParameterActivity.putStringArrayListExtra("ServicesId",  ids);
             intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", names);
+            intentForServiceParameterActivity.putExtra("shipmentType", strSelectedShipmentType);
+            intentForServiceParameterActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
             startActivity(intentForServiceParameterActivity);
         } else if(names.contains("Freight Forwarding")) {
             Toast.makeText(TrasportQuotationActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
@@ -257,8 +255,8 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
         try {
-            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
-            sb.append("?key=" + API_KEY);
+            StringBuilder sb = new StringBuilder(CommonVariables.PLACES_API_BASE + CommonVariables.TYPE_AUTOCOMPLETE + CommonVariables.OUT_JSON);
+            sb.append("?key=" + CommonVariables.API_KEY);
             sb.append("&components=country:IN");
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 

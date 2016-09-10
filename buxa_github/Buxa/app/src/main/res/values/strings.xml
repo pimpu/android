@@ -36,6 +36,8 @@
     <string name="str20feet">20\'</string>
     <string name="str40feet">40\'</string>
     <string name="str40HQfeet">40\' HQ</string>
+    <string name="strFactoryStuff">Factory stuffing</string>
+    <string name="strDockStuff">dock stuffing</string>
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -81,7 +83,7 @@
     <string name="hint_type_of_package">Type of Package</string>
     <string name="hint_no_of_package">No of Packages</string>
     <string name="hint_type_of_shipment">Type of Shipment</string>
-    <string name="hint_dimensions">Dimensions (mm)</string>
+    <string name="hint_dimensions">Cargo Dimensions (mm)</string>
     <string name="hint_pickUp_location">Pickup Location</string>
     <string name="hint_drop_location">Drop Location</string>
     <string name="hint_custom_clearance">Custom Clearance Location</string>
@@ -109,4 +111,5 @@
     <string name="hint_AD_Code">AD code registration</string>
     <string name="hint_cubic_meter_measurement">Cubic meter measurement</string>
     <string name="hint_gross_weight">Gross weight</string>
+    <string name="hint_CC_address">Address</string>
 </resources>

@@ -9,6 +9,13 @@ public class CommonVariables {
     public static final String DISPLAY_MESSAGE_ACTION = "com.alchemistdigital.buxa.DISPLAY_MESSAGE";
     public static final String EXTRA_MESSAGE = "message";
 
+    //    -------------- place api -------------------
+    public static final String LOG_TAG = "Google Places Autocomplete";
+    public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    public static final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    public static final String OUT_JSON = "/json";
+    public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
+
     static String SERVER_URL = "http://c828a91c.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
