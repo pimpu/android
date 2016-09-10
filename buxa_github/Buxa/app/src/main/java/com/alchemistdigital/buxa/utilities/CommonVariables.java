@@ -9,7 +9,7 @@ public class CommonVariables {
     public static final String DISPLAY_MESSAGE_ACTION = "com.alchemistdigital.buxa.DISPLAY_MESSAGE";
     public static final String EXTRA_MESSAGE = "message";
 
-    static String SERVER_URL = "http://63509dd6.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://c828a91c.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
@@ -20,4 +20,5 @@ public class CommonVariables {
     public static final String QUERY_SHIPMENT_TYPE_SERVER_URL = SERVER_URL + "typeofshipment";
     public static final String QUERY_TRANSPORT_TYPE_SERVER_URL = SERVER_URL + "transporttype";
     public static final String QUERY_TRANSPORT_SERVICE_SERVER_URL = SERVER_URL + "transportservice";
+    public static final String QUERY_PACKAGING_TYPE_SERVER_URL = SERVER_URL + "packagingtype";
 }

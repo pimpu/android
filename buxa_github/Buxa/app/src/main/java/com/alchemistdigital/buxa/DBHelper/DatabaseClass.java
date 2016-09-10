@@ -13,6 +13,7 @@ import android.util.Log;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
+import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
@@ -44,6 +45,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
+    public static final String TABLE_TYPE_OF_PACKAGE = "TypeOfPackage";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -111,6 +113,9 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String TRANSPORT_SERVICE_SERVER_ID = "trans_service_serverId";
     private static final String TRANSPORT_SERVICE_NAME = "trans_service_name";
 
+    // TABLE_TYPE_OF_PACKAGE Table - column names
+    private static final String PACKAGE_TYPE_SERVER_ID = "package_type_serverId";
+    private static final String PACKAGE_TYPE_NAME = "package_type_name";
 
     // Company Table Create Statements
     private static final String CREATE_TABLE_COMPANY =
@@ -218,6 +223,14 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Package type Table Create Statements
+    private static final String CREATE_TABLE_PACKAGE_TYPE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TYPE_OF_PACKAGE +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    PACKAGE_TYPE_SERVER_ID+" INTEGER," +
+                    PACKAGE_TYPE_NAME+" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
 
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -235,6 +248,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
+        db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
     }
 
     @Override
@@ -250,6 +264,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
 
         // create new tables
         onCreate(db);
@@ -586,6 +601,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
     // ------------------------ "TransportService" table methods ----------------//
+
     public long insertTransportService(TransportServiceModel transportServiceModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
@@ -640,6 +656,69 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 service.setName(res.getString(res.getColumnIndex(TRANSPORT_SERVICE_NAME)));
 
                 array_list.add(service);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
+    // ------------------------ "TypeOfPackage" table methods ----------------//
+
+    public long insertPackageType(PackageTypeModel packageTypeModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PACKAGE_TYPE_SERVER_ID, packageTypeModel.getServerId());
+        contentValues.put(PACKAGE_TYPE_NAME, packageTypeModel.getName());
+        contentValues.put(KEY_STATUS, packageTypeModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long id = 0;
+        try {
+
+            String whereClause = PACKAGE_TYPE_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( packageTypeModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_TYPE_OF_PACKAGE, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = db.insert(TABLE_TYPE_OF_PACKAGE, null, contentValues);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public List<PackageTypeModel> getPackagingTypeData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<PackageTypeModel> array_list = new ArrayList<PackageTypeModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getPackagingType: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                PackageTypeModel types = new PackageTypeModel();
+
+                types.setServerId(res.getInt(res.getColumnIndex(PACKAGE_TYPE_SERVER_ID)));
+                types.setName(res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME)));
+
+                array_list.add(types);
 
             }while (res.moveToNext());
         }

@@ -1,33 +1,20 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.Toast;
 
-import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.activities.Login;
-import com.alchemistdigital.buxa.activities.SelectServiceActivity;
-import com.alchemistdigital.buxa.model.TransportServiceModel;
-import com.alchemistdigital.buxa.model.TransportTypeModel;
-import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
-import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Pimpu on 8/30/2016.
+ * Created by user on 9/10/2016.
  */
-public class GetAllTransportService {
-
-    public static void getTransportService(final Context context, String url) {
-
+public class GetAllPackageType {
+    public static void getPackageType(final Context context, String url) {
         RestClient.get(url, null, new AsyncHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
@@ -40,24 +27,7 @@ public class GetAllTransportService {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-
-                        DatabaseClass databaseClass = new DatabaseClass(context);
-
-                        JSONArray arrayTS= json.getJSONArray("trasnportService");
-
-                        for (int i = 0 ; i < arrayTS.length(); i++ ) {
-                            int tsServerId = arrayTS.getJSONObject(i).getInt("id");
-                            String tsName = arrayTS.getJSONObject(i).getString("name");
-                            int tsStatus = arrayTS.getJSONObject(i).getInt("status");
-
-                            long l = databaseClass.insertTransportService(new TransportServiceModel(tsServerId, tsName, tsStatus));
-                        }
-
-                        // close database in synchronized condition
-                        databaseClass.closeDB();
-
-                        // get all type of packaging from server.
-                        GetAllPackageType.getPackageType(context, CommonVariables.QUERY_PACKAGING_TYPE_SERVER_URL);
+                        new insertPackagingTypeAsyncTask(context, json.getJSONArray("packageType") ).execute();
                     }
 
                 } catch (JSONException e) {

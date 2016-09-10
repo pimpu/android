@@ -264,6 +264,17 @@ class DbHandler {
         return $stmt;
     }
 
+    /*---------------- 'bx_packagetype' table method --------------*/
+
+    /**
+     * Fetching all packaging type data fro table
+     * 
+     */
+    public function getAllPackagingType() {
+        $stmt = mysql_query("SELECT * FROM bx_packagetype WHERE status=1;");
+        return $stmt;
+    }
+
 
     /* ------------- `tasks` table method ------------------ */
 

@@ -63,6 +63,7 @@ public class insertCommodityAsyncTask extends AsyncTask<String, String, ArrayLis
         if ((start % commodityRowsCount) >= limit) {
             GetAllCommodity.getData(context, url, start, limit);
         }
+
         // get all transport type from server.
         GetAllTransportType.getTransportType(context, CommonVariables.QUERY_TRANSPORT_TYPE_SERVER_URL);
 

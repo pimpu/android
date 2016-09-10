@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 31, 2016 at 12:15 PM
+-- Generation Time: Sep 10, 2016 at 11:25 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -629,6 +629,65 @@ INSERT INTO `bx_icdcategory` (`icdid`, `icdname`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bx_packagetype`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_packagetype` (
+`packagetypeid` int(11) NOT NULL,
+  `packagename` varchar(100) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bx_packagetype`
+--
+
+INSERT INTO `bx_packagetype` (`packagetypeid`, `packagename`, `status`) VALUES
+(1, 'Packaging & Printing', 1),
+(2, 'Adhesive Tape', 1),
+(3, 'Air Dunnage Bag', 1),
+(4, 'Aluminum Foil', 1),
+(5, 'Bottles', 1),
+(6, 'Cans', 1),
+(7, 'Crates', 1),
+(8, 'Drums', 1),
+(9, 'Empty Capsules', 1),
+(10, 'FIBC Bag', 1),
+(11, 'FlexiTank', 1),
+(12, 'Flower Sleeve', 1),
+(13, 'Foil Containers', 1),
+(14, 'Gas Cylinders', 1),
+(15, 'Gift Ribbon', 1),
+(16, 'Handles', 1),
+(17, 'Hot Stamping Foil', 1),
+(18, 'Jar', 1),
+(19, 'Lids', 1),
+(20, 'Mailing Bags', 1),
+(21, 'Media Packaging', 1),
+(22, 'Other Packaging Materials', 1),
+(23, 'Packaging Bags', 1),
+(24, 'Packaging Boxes', 1),
+(25, 'Packaging Cup', 1),
+(26, 'Packaging Label', 1),
+(27, 'Packaging Organza Material', 1),
+(28, 'Packaging Product Stocks', 1),
+(29, 'Packaging Rope', 1),
+(30, 'Packaging Tray', 1),
+(31, 'Packaging Tube', 1),
+(32, 'Pallets', 1),
+(33, 'Paper & Paperboard', 1),
+(34, 'Pill Storage Cases', 1),
+(35, 'Plastic Film', 1),
+(36, 'Preforms', 1),
+(37, 'Printing Materials', 1),
+(38, 'Printing Services', 1),
+(39, 'Protective & Cushioning Material', 1),
+(40, 'Pulp', 1),
+(41, 'Strapping', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bx_shipment_confirmation`
 --
 
@@ -784,6 +843,12 @@ ALTER TABLE `bx_icdcategory`
  ADD PRIMARY KEY (`icdid`);
 
 --
+-- Indexes for table `bx_packagetype`
+--
+ALTER TABLE `bx_packagetype`
+ ADD PRIMARY KEY (`packagetypeid`);
+
+--
 -- Indexes for table `bx_shipment_confirmation`
 --
 ALTER TABLE `bx_shipment_confirmation`
@@ -843,6 +908,11 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 ALTER TABLE `bx_icdcategory`
 MODIFY `icdid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `bx_packagetype`
+--
+ALTER TABLE `bx_packagetype`
+MODIFY `packagetypeid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `bx_shipment_confirmation`
 --

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
+import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont;
 
@@ -127,11 +128,18 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     }
 
     private void transportation() {
-        // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
-        ArrayAdapter<CommodityModel> adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
-        txtComodity.setAdapter(adapter);
+
+        // initialised comodity autocomplete textfield from database
+        ArrayAdapter<CommodityModel> commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
+        txtComodity.setAdapter(commodity_adapter);
         txtComodity.setThreshold(1);
+
+        // initialised packaging type autocomplete textfield from database
+        ArrayAdapter<PackageTypeModel> packagingType_adapter = new ArrayAdapter<PackageTypeModel>(this, layoutItemId, dbClass.getPackagingTypeData() );
+        txtTypeOfPackaging.setAdapter(packagingType_adapter);
+        txtTypeOfPackaging.setThreshold(1);
+
 
         // set adapter to pickup location
         txtPickup.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));

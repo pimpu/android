@@ -284,6 +284,28 @@ $app -> get('/transportservice', function(){
 
 });
 
+$app -> get('/packagingtype', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allPackageType = $db -> getAllPackagingType();
+
+    // fetching all transportation service
+    $response["error"] = false;
+    $response["packageType"] = array();
+
+    while ($ts = mysql_fetch_array($allPackageType)) {
+        $temp = array();
+        $temp["id"] = $ts["packagetypeid"];
+        $temp["name"] = $ts["packagename"];
+        $temp["status"] = $ts["status"];
+
+        array_push($response["packageType"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
 
 
 /*
