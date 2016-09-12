@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2016 at 11:25 AM
+-- Generation Time: Sep 12, 2016 at 03:21 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -539,6 +539,38 @@ CREATE TABLE IF NOT EXISTS `bx_cusdetail` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bx_custom_clearance`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_custom_clearance` (
+`clearanceid` int(11) NOT NULL,
+  `bookid` int(11) NOT NULL,
+  `customer_code` varchar(100) NOT NULL,
+  `type_of_shipment` int(11) NOT NULL,
+  `stuffing` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bx_freight_forwarding`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_freight_forwarding` (
+`freightid` int(11) NOT NULL,
+  `bookid` int(11) NOT NULL,
+  `customer_code` int(11) NOT NULL,
+  `type_of_shipment` int(11) NOT NULL,
+  `pod` int(11) NOT NULL,
+  `pol` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bx_icd`
 --
 
@@ -734,6 +766,8 @@ CREATE TABLE IF NOT EXISTS `bx_transport` (
   `demwidth` int(11) NOT NULL,
   `demheight` int(11) NOT NULL,
   `shipment_type` int(11) NOT NULL,
+  `mesurement` int(11) NOT NULL,
+  `gross_weight` float NOT NULL,
   `no_of_pack` int(11) NOT NULL,
   `pack_type` int(11) NOT NULL,
   `source` varchar(100) NOT NULL,
@@ -761,7 +795,7 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
   `password` varchar(100) NOT NULL,
   `create_time` varchar(20) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `bx_user`
@@ -829,6 +863,18 @@ ALTER TABLE `bx_commodity`
 --
 ALTER TABLE `bx_cusdetail`
  ADD PRIMARY KEY (`cid`);
+
+--
+-- Indexes for table `bx_custom_clearance`
+--
+ALTER TABLE `bx_custom_clearance`
+ ADD PRIMARY KEY (`clearanceid`);
+
+--
+-- Indexes for table `bx_freight_forwarding`
+--
+ALTER TABLE `bx_freight_forwarding`
+ ADD PRIMARY KEY (`freightid`);
 
 --
 -- Indexes for table `bx_icd`
@@ -899,6 +945,16 @@ MODIFY `comid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=477;
 ALTER TABLE `bx_cusdetail`
 MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `bx_custom_clearance`
+--
+ALTER TABLE `bx_custom_clearance`
+MODIFY `clearanceid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `bx_freight_forwarding`
+--
+ALTER TABLE `bx_freight_forwarding`
+MODIFY `freightid` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `bx_icd`
 --
 ALTER TABLE `bx_icd`
@@ -932,7 +988,7 @@ MODIFY `trnsid` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `bx_user`
 --
 ALTER TABLE `bx_user`
-MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `db_transport_service`
 --

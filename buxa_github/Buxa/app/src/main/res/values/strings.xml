@@ -38,6 +38,7 @@
     <string name="str40HQfeet">40\' HQ</string>
     <string name="strFactoryStuff">Factory stuffing</string>
     <string name="strDockStuff">dock stuffing</string>
+    <string name="strStartButtom">let\'s start</string>
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -112,4 +113,6 @@
     <string name="hint_cubic_meter_measurement">Cubic meter measurement</string>
     <string name="hint_gross_weight">Gross weight</string>
     <string name="hint_CC_address">Address</string>
+    <string name="hint_pol_address">Port Of Loading</string>
+    <string name="hint_pod_address">Port of Destination</string>
 </resources>

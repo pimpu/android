@@ -242,7 +242,7 @@ public class RegisterActivity extends AppCompatActivity {
                             GetAllShipmentType.getShipmentType(RegisterActivity.this, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
                         else {
-                            Intent intent = new Intent(RegisterActivity.this, SelectServiceActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             RegisterActivity.this.finish();
                             startActivity(intent);
@@ -303,7 +303,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             // this message is come from GetAllTransportService when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
-                Intent intentServicesActivity = new Intent(RegisterActivity.this, SelectServiceActivity.class);
+                Intent intentServicesActivity = new Intent(RegisterActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 ((RegisterActivity)context).finish();
                 startActivity(intentServicesActivity);

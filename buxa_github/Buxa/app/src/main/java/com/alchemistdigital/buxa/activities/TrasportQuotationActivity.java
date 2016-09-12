@@ -25,6 +25,7 @@ import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont;
+import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -160,8 +161,6 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     @Override
     protected void onResume() {
         super.onResume();
-        GetSharedPreference getPreference = new GetSharedPreference(this);
-        System.out.println("selected files: "+getPreference.getSelectedImage(getResources().getString(R.string.strSelectedImage)));
     }
 
     @Override
@@ -188,117 +187,17 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
 
     public void storeTransportEnquiry(View view) {
         if( names.contains("Custom Clearance") ) {
-            Intent intentForServiceParameterActivity = new Intent(this, CustomClearanceActivity.class);
-            intentForServiceParameterActivity.putStringArrayListExtra("ServicesId",  ids);
-            intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", names);
-            intentForServiceParameterActivity.putExtra("shipmentType", strSelectedShipmentType);
-            intentForServiceParameterActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
-            startActivity(intentForServiceParameterActivity);
+            Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
+            intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
+            intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
+            intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
+            intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
+            startActivity(intentForCustomClearanceActivity);
         } else if(names.contains("Freight Forwarding")) {
             Toast.makeText(TrasportQuotationActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
         }
         else {
             Toast.makeText(TrasportQuotationActivity.this, "Quotation Screen", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    class GooglePlacesAutocompleteAdapter extends ArrayAdapter<String> implements Filterable {
-        private ArrayList<String> resultList;
-
-        public GooglePlacesAutocompleteAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-        }
-
-        @Override
-        public int getCount() {
-            return resultList.size();
-        }
-
-        @Override
-        public String getItem(int index) {
-            return resultList.get(index);
-        }
-
-        @Override
-        public Filter getFilter() {
-            Filter filter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-                        // Retrieve the autocomplete results.
-                        resultList = autocomplete(constraint.toString());
-
-                        // Assign the data to the FilterResults
-                        filterResults.values = resultList;
-                        filterResults.count = resultList.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return filter;
-        }
-    }
-
-    public static ArrayList<String> autocomplete(String input) {
-        ArrayList<String> resultList = null;
-
-        HttpURLConnection conn = null;
-        StringBuilder jsonResults = new StringBuilder();
-        try {
-            StringBuilder sb = new StringBuilder(CommonVariables.PLACES_API_BASE + CommonVariables.TYPE_AUTOCOMPLETE + CommonVariables.OUT_JSON);
-            sb.append("?key=" + CommonVariables.API_KEY);
-            sb.append("&components=country:IN");
-            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-
-            URL url = new URL(sb.toString());
-
-//            System.out.println("URL: "+url);
-            conn = (HttpURLConnection) url.openConnection();
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            // Load the results into a StringBuilder
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
-            }
-        } catch (MalformedURLException e) {
-            System.out.println("Error processing Places API URL: " + e);
-            return resultList;
-        } catch (IOException e) {
-            System.out.println("Error connecting to Places API: "+e);
-            return resultList;
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
-
-        try {
-
-            // Create a JSON object hierarchy from the results
-            JSONObject jsonObj = new JSONObject(jsonResults.toString());
-            JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
-
-            // Extract the Place descriptions from the results
-            resultList = new ArrayList<String>(predsJsonArray.length());
-            for (int i = 0; i < predsJsonArray.length(); i++) {
-                resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
-            }
-        } catch (JSONException e) {
-            System.out.println("Cannot process JSON results: "+e);
-        }
-
-        return resultList;
     }
 }

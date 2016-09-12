@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToSelectService(View view) {
-        startActivity(new Intent(this, SelectServiceActivity.class ));
+        startActivity(new Intent(this, WelcomeActivity.class ));
     }
 
     public void btnNoClick(View view) {

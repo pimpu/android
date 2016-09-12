@@ -68,7 +68,7 @@ public class StartupActivity extends AppCompatActivity {
 
             // this message is come from GetAllTransportService when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
-                Intent intentServicesActivity = new Intent(StartupActivity.this, SelectServiceActivity.class);
+                Intent intentServicesActivity = new Intent(StartupActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 ((StartupActivity)context).finish();
                 startActivity(intentServicesActivity);

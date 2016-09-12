@@ -1,6 +1,7 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,9 +14,11 @@ import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
+import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +37,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     RadioGroup rgShipmentType, rgFCLStuffing;
     TextView hintAddress;
     ArrayList<String> arrayServicesId, arrayServicesName;
-    String shipmentType, pickupAddress;
+    String shipmentType = "LCL", pickupAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,9 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         arrayServicesId = getIntent().getExtras().getStringArrayList("ServicesId");
         arrayServicesName = getIntent().getExtras().getStringArrayList("ServicesName");
-        shipmentType = getIntent().getExtras().getString("shipmentType");
+        if ( getIntent().getExtras().getString("shipmentType") != null ) {
+            shipmentType = getIntent().getExtras().getString("shipmentType");
+        }
         pickupAddress = getIntent().getExtras().getString("pickupAddress");
 
         toolbarSetup();
@@ -71,11 +76,13 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                     case R.id.rbLcl_cc:
                         rgFCLStuffing.setVisibility(View.GONE);
                         hintAddress.setText("Vendor CFS Address");
+                        shipmentType = "LCL";
                         break;
 
                     case R.id.rbFcl_cc:
                         rgFCLStuffing.setVisibility(View.VISIBLE);
                         hintAddress.setText("Stuffing Address");
+                        shipmentType = "FCL";
 
                         if ( ((RadioButton)(findViewById(R.id.rbFactoryStuff))).isChecked() ) {
                             hintAddress.setText(getResources().getString(R.string.strFactoryStuff)+" address");
@@ -164,103 +171,16 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
     }
 
-    class GooglePlacesAutocompleteAdapter extends ArrayAdapter<String> implements Filterable {
-        private ArrayList<String> resultList;
-
-        public GooglePlacesAutocompleteAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
+    public void storeCustomClearanceEnquiry(View view) {
+        if(arrayServicesName.contains("Freight Forwarding")) {
+            Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+            intentForFreightForardingActivity.putExtra("shipmentType", shipmentType);
+            startActivity(intentForFreightForardingActivity);
         }
-
-        @Override
-        public int getCount() {
-            return resultList.size();
+        else {
+            Toast.makeText(this, "Quotation Screen", Toast.LENGTH_SHORT).show();
         }
-
-        @Override
-        public String getItem(int index) {
-            return resultList.get(index);
-        }
-
-        @Override
-        public Filter getFilter() {
-            Filter filter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    if (constraint != null) {
-                        // Retrieve the autocomplete results.
-                        resultList = autocomplete(constraint.toString());
-
-                        // Assign the data to the FilterResults
-                        filterResults.values = resultList;
-                        filterResults.count = resultList.size();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return filter;
-        }
-    }
-
-    public static ArrayList<String> autocomplete(String input) {
-        ArrayList<String> resultList = null;
-
-        HttpURLConnection conn = null;
-        StringBuilder jsonResults = new StringBuilder();
-        try {
-            StringBuilder sb = new StringBuilder(CommonVariables.PLACES_API_BASE + CommonVariables.TYPE_AUTOCOMPLETE + CommonVariables.OUT_JSON);
-            sb.append("?key=" + CommonVariables.API_KEY);
-            sb.append("&components=country:IN");
-            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-
-            URL url = new URL(sb.toString());
-
-//            System.out.println("URL: "+url);
-            conn = (HttpURLConnection) url.openConnection();
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
-
-            // Load the results into a StringBuilder
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
-            }
-        } catch (MalformedURLException e) {
-            System.out.println("Error processing Places API URL: " + e);
-            return resultList;
-        } catch (IOException e) {
-            System.out.println("Error connecting to Places API: "+e);
-            return resultList;
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
-        }
-
-        try {
-
-            // Create a JSON object hierarchy from the results
-            JSONObject jsonObj = new JSONObject(jsonResults.toString());
-            JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
-
-            // Extract the Place descriptions from the results
-            resultList = new ArrayList<String>(predsJsonArray.length());
-            for (int i = 0; i < predsJsonArray.length(); i++) {
-                resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
-            }
-        } catch (JSONException e) {
-            System.out.println("Cannot process JSON results: "+e);
-        }
-
-        return resultList;
     }
 }

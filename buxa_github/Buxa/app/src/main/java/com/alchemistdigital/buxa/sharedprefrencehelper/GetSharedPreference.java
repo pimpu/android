@@ -24,7 +24,16 @@ public class GetSharedPreference {
         return sharedPreference.getString(text,"");
     }
 
-    public Set<String> getSelectedImage(String text) {
-        return sharedPreference.getStringSet(text,null);
+    public String getLoginEmail(String text) {
+        return sharedPreference.getString(text,"");
     }
+
+    public String getLoginName(String text) {
+        return sharedPreference.getString(text,"");
+    }
+
+    public String getCompanyName(String text) {
+        return sharedPreference.getString(text,"");
+    }
+
 }

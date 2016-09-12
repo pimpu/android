@@ -38,7 +38,6 @@ public class CommonUtilities {
      * @param context
      */
     public static void addShortcut(Context context) {
-        //Adding shortcut for MainActivity
         //on Home screen
         Intent shortcutIntent = new Intent(context,StartupActivity.class);
 

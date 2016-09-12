@@ -1,18 +1,10 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.activities.Login;
-import com.alchemistdigital.buxa.activities.SelectServiceActivity;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
-import com.alchemistdigital.buxa.model.TransportTypeModel;
-import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
-import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;

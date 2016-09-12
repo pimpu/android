@@ -4,15 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.activities.SelectServiceActivity;
-import com.alchemistdigital.buxa.model.CommodityModel;
-import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

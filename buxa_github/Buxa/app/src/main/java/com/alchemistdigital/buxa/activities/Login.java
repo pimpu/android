@@ -198,7 +198,7 @@ public class Login extends Fragment implements View.OnClickListener {
                             GetAllShipmentType.getShipmentType(getActivity(), CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
                         else {
-                            Intent intent = new Intent(getActivity(), SelectServiceActivity.class);
+                            Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             getActivity().finish();
                             startActivity(intent);

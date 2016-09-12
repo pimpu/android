@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0189ba"
+    tools:context="com.alchemistdigital.buxa.activities.WelcomeActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/milkyWhite"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/id_welcomeText_welcomeScreen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="30dp"
+                        android:text="@string/str_welcome"
+                        android:textSize="40dp" />
+
+                    <ImageView
+                        android:id="@+id/id_buxaLogo_welcomeScreen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/id_welcomeText_welcomeScreen"
+                        android:src="@drawable/buxa_logo_welcomescreen_xhdpi"
+                        android:layout_marginTop="35dp"
+                        android:layout_marginBottom="25dp"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0189ba"
+                android:gravity="center_horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/arrow"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                    android:id="@+id/id_tv_companyName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="30dp"
+                    android:text="Company Name"
+                    android:textSize="25dp"
+                    android:textColor="@color/milkyWhite" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_action_person"
+                    android:tint="@color/milkyWhite" />
+
+                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                    android:id="@+id/id_tv_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"
+                    android:textSize="20dp"
+                    android:text="User name"
+                    android:textColor="@color/milkyWhite" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_action_email"
+                    android:tint="@color/milkyWhite" />
+
+                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                    android:id="@+id/id_tv_userEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="30dp"
+                    android:textSize="20dp"
+                    android:text="User Email"
+                    android:textColor="@color/milkyWhite" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity ="right"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:onClick="goToServiceActivity">
+
+                <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                    android:id="@+id/id_tv_letsStrat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strStartButtom"
+                    android:textSize="25dp"
+                    android:textColor="@color/milkyWhite" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/id_tv_letsStrat"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/ic_keyboard_arrow_right"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

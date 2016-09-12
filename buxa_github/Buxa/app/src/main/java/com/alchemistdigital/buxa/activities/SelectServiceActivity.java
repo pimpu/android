@@ -115,7 +115,10 @@ public class SelectServiceActivity extends AppCompatActivity {
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
                 startActivity(intentForServiceParameterActivity);
             } else if(selchkboxlistName.contains("Freight Forwarding")) {
-                Toast.makeText(SelectServiceActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
+                Intent intentForServiceParameterActivity = new Intent(this, FreightForwardingActivity.class);
+                intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
+                intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
+                startActivity(intentForServiceParameterActivity);
             }
 
         }
