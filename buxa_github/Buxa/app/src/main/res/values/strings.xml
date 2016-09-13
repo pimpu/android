@@ -39,6 +39,11 @@
     <string name="strFactoryStuff">Factory stuffing</string>
     <string name="strDockStuff">dock stuffing</string>
     <string name="strStartButtom">let\'s start</string>
+    <string name="next">Next</string>
+    <string name="company_name">Company\u0020:\u0020\u0020</string>
+    <string name="client">Dear Mr / Mrs.\u0020</string>
+    <string name="strDate">Date\u0020:\u0020\u0020</string>
+    <string name="str_re_quotation_for">Quotation for \u0020</string>
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -115,4 +120,10 @@
     <string name="hint_CC_address">Address</string>
     <string name="hint_pol_address">Port Of Loading</string>
     <string name="hint_pod_address">Port of Destination</string>
+    <string name="str_quote_content">
+        We are greatly privileged to be given this chance to quote for your company. According to
+        your requirement, We came up with a proposal that is appropriate for your needs.
+    </string>
+    <string name="str_quote_footer">For further question, please feel free to contact us.</string>
+
 </resources>

@@ -48,9 +48,10 @@
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:Segoe="segoe_regular"
                     android:text="@string/hint_type_of_shipment"
                     android:textSize="12dp"
                     android:paddingLeft="5dp"
@@ -105,7 +106,8 @@
 
                 </RadioGroup>
 
-                <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    app:Segoe="segoe_regular"
                     android:id="@+id/id_hint_CC_Address_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,34 +117,40 @@
                     android:layout_marginTop="8dp"
                     android:textColor="@color/milkyWhite"/>
 
-                <com.alchemistdigital.buxa.utilities.AutoCompleteSegoeLightFont
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
                     android:id="@+id/id_CC_adresses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/milkyWhite"
                     android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_CC_address"/>
+                    android:hint="@string/hint_CC_address"
+                    app:Segoe="segoe_light"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity ="right"
                 android:layout_marginTop="50sp"
-                android:orientation="horizontal"
-                android:gravity="right"
-                android:padding="10dp" >
+                android:paddingBottom="10dp"
+                android:onClick="storeCustomClearanceEnquiry" >
 
-                <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/id_tv_CC_Next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/ic_keyboard_arrow_right"
-                    android:drawablePadding="-5dp"
-                    android:gravity="center_vertical"
-                    android:text="Next"
-                    android:textColor="@color/milkyWhite"
+                    app:Segoe="segoe_regular"
                     android:textSize="25dp"
-                    android:onClick="storeCustomClearanceEnquiry" />
+                    android:text="@string/next"
+                    android:textColor="@color/milkyWhite" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/id_tv_CC_Next"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/ic_keyboard_arrow_right"/>
             </LinearLayout>
 
         </LinearLayout>

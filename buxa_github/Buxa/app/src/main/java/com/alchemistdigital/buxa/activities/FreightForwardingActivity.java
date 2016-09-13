@@ -72,7 +72,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
-        if( arrayServicesName.contains("Custom Clearance") && arrayServicesId.size() > 0 ) {
+        if( (arrayServicesName.contains("Transportation") || arrayServicesName.contains("Custom Clearance"))
+                && arrayServicesId.size() > 0 ) {
             if(shipmentType.equals("LCL")) {
                 rgShipmentType.check(R.id.rbLcl_ff);
                 layoutPortAddress.setVisibility(View.GONE);

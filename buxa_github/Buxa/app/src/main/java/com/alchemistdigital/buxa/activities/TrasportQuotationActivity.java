@@ -1,6 +1,5 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -12,31 +11,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
-import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
-import com.alchemistdigital.buxa.utilities.CommonVariables;
-import com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont;
+import com.alchemistdigital.buxa.utilities.SegoeFontEdittext;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class TrasportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -45,7 +29,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     public LinearLayout commodityLayout, shipmentTypeLayout, packageTypeLayout, noOfPackageLayout,
                 dimensionLayout, pickupLayout, dropLayout;
     RadioGroup rgContainerSize, rgTypeOfShipment;
-    EdittextSegoeLightFont txtCBM;
+    SegoeFontEdittext txtCBM;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names;
     String strSelectedShipmentType = "LCL";
@@ -81,7 +65,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
                 onBackPressed();
             }
         });
-         getSupportActionBar().setTitle("Transportation Quotation");
+        getSupportActionBar().setTitle("Transportation Quotation");
     }
 
     private void init() {
@@ -100,7 +84,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040);
-        txtCBM = (EdittextSegoeLightFont) findViewById(R.id.id_cubic_meter_measurement);
+        txtCBM = (SegoeFontEdittext) findViewById(R.id.id_cubic_meter_measurement);
 
         rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_transport);
         rgTypeOfShipment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -194,10 +178,17 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
             intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
             startActivity(intentForCustomClearanceActivity);
         } else if(names.contains("Freight Forwarding")) {
-            Toast.makeText(TrasportQuotationActivity.this, "Freight Forwarding", Toast.LENGTH_SHORT).show();
+            Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
+            intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
+            startActivity(intentForFreightForardingActivity);
         }
         else {
-            Toast.makeText(TrasportQuotationActivity.this, "Quotation Screen", Toast.LENGTH_SHORT).show();
+            Intent intentForFreightForardingActivity = new Intent(this, QuotationActivity.class);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
+            startActivity(intentForFreightForardingActivity);
         }
     }
 }

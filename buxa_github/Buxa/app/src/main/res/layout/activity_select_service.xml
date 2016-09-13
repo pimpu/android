@@ -21,18 +21,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
+                android:layout_marginTop="80dp"
                 android:textColor="@color/milkyWhite"
                 android:text="@string/strSelectService"
                 android:textSize="45sp" />
 
-            <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/strWantAvail"
                 android:textColor="@color/milkyWhite"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                app:Segoe="segoe_light" />
 
             <LinearLayout
                 android:id="@+id/layoutServiceCheckbox"
