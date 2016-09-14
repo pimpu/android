@@ -20,6 +20,7 @@ import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.utilities.SegoeFontEdittext;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
+import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,10 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         names = getIntent().getStringArrayListExtra("ServicesName");
         dbClass = new DatabaseClass(this);
 
+        ArrayList<String> availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
+        System.out.println("Trans ids: "+ids);
+        System.out.println("Trans availedServicesId: "+availedServicesId);
+
         transportation();
 
     }
@@ -65,7 +70,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
                 onBackPressed();
             }
         });
-        getSupportActionBar().setTitle("Transportation Quotation");
+        getSupportActionBar().setTitle("Transportation");
     }
 
     private void init() {
@@ -170,25 +175,28 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     }
 
     public void storeTransportEnquiry(View view) {
-        if( names.contains("Custom Clearance") ) {
+        if( names.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
             Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
             intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
             intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
             intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
             intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
             startActivity(intentForCustomClearanceActivity);
-        } else if(names.contains("Freight Forwarding")) {
+            finish();
+        } else if(names.contains(enumServices.FREIGHT_FORWARDING.toString())) {
             Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
             intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
             startActivity(intentForFreightForardingActivity);
+            finish();
         }
         else {
             Intent intentForFreightForardingActivity = new Intent(this, QuotationActivity.class);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
             startActivity(intentForFreightForardingActivity);
+            finish();
         }
     }
 }

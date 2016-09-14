@@ -3,16 +3,16 @@ package com.alchemistdigital.buxa.utilities;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.widget.EditText;
 
 import com.alchemistdigital.buxa.R;
 
 /**
  * Created by user on 8/10/2016.
  */
-public class SegoeFontEdittext extends TextInputEditText {
+public class SegoeFontEdittext extends EditText {
 
     private final static int SEGOE_LIGHT = 0;
     private final static int SEGOE_REGULAR = 1;

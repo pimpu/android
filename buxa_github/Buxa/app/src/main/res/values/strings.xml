@@ -32,7 +32,7 @@
     <string name="strManualName">Manual</string>
     <string name="btn_signIn">Sign in</string>
     <string name="strSelectedImage">selectedImage</string>
-    <string name="strInTransportMode"><![CDATA[Do you avail with freight forwarding & custom clearance ?]]></string>
+    <!--<string name="strInTransportMode">Do you avail with %1$s</string>-->
     <string name="str20feet">20\'</string>
     <string name="str40feet">40\'</string>
     <string name="str40HQfeet">40\' HQ</string>
@@ -43,7 +43,12 @@
     <string name="company_name">Company\u0020:\u0020\u0020</string>
     <string name="client">Dear Mr / Mrs.\u0020</string>
     <string name="strDate">Date\u0020:\u0020\u0020</string>
-    <string name="str_re_quotation_for">Quotation for \u0020</string>
+    <string name="str_quote_content">
+        We are greatly privileged to be given this chance to quote for your company. According to
+        your requirement, we came up with a proposal that is appropriate for your needs.
+    </string>
+    <string name="str_quote_footer">For further question, please feel free to contact us.</string>
+
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -120,10 +125,5 @@
     <string name="hint_CC_address">Address</string>
     <string name="hint_pol_address">Port Of Loading</string>
     <string name="hint_pod_address">Port of Destination</string>
-    <string name="str_quote_content">
-        We are greatly privileged to be given this chance to quote for your company. According to
-        your requirement, We came up with a proposal that is appropriate for your needs.
-    </string>
-    <string name="str_quote_footer">For further question, please feel free to contact us.</string>
 
 </resources>

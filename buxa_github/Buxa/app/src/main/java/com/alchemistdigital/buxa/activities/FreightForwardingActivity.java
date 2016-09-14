@@ -1,5 +1,6 @@
 package com.alchemistdigital.buxa.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
+import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
@@ -72,7 +74,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
-        if( (arrayServicesName.contains("Transportation") || arrayServicesName.contains("Custom Clearance"))
+        if( (arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) ||
+                arrayServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()))
                 && arrayServicesId.size() > 0 ) {
             if(shipmentType.equals("LCL")) {
                 rgShipmentType.check(R.id.rbLcl_ff);
@@ -106,7 +109,11 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     }
 
     public void storeFreightForwardingEnquiry(View view) {
-        Toast.makeText(this, "Quotation Screen", Toast.LENGTH_SHORT).show();
+        Intent intentForFreightForardingActivity = new Intent(this, QuotationActivity.class);
+        intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+        intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+        startActivity(intentForFreightForardingActivity);
+        finish();
     }
 
     @Override

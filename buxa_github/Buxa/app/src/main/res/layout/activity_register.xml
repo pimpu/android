@@ -81,7 +81,7 @@
                 android:paddingBottom="20dp"
                 android:layout_centerHorizontal="true">-->
 
-                <android.support.design.widget.TextInputLayout
+                <!--<android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_company_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -96,7 +96,7 @@
                         android:focusableInTouchMode="false"
                         android:id="@+id/company_code"
                         android:hint="@string/hint_company_code"/>
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_company_name"
@@ -106,6 +106,7 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:Segoe="segoe_light"
                         android:inputType="text"
                         android:id="@+id/company_name"
                         android:hint="@string/hint_company_name"/>
@@ -147,7 +148,8 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        app:Segoe="segoe_light"
+                        android:inputType="textCapWords"
                         android:id="@+id/contact_name"
                         android:hint="@string/hint_contact_name"/>
                 </android.support.design.widget.TextInputLayout>
@@ -160,10 +162,11 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:Segoe="segoe_light"
                         android:inputType="number"
                         android:maxLength="10"
                         android:id="@+id/contact_mobile"
-                        android:hint="@string/hint_contact_mobile"/>
+                        android:hint="@string/hint_contact_mobile" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -174,6 +177,7 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:Segoe="segoe_light"
                         android:inputType="textEmailAddress"
                         android:id="@+id/contact_email"
                         android:hint="@string/hint_contact_email"/>
@@ -187,6 +191,7 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:Segoe="segoe_light"
                         android:inputType="textPassword"
                         android:id="@+id/contact_pwd"
                         android:hint="@string/hint_contact_pwd"/>
@@ -200,6 +205,7 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:Segoe="segoe_light"
                         android:inputType="textPassword"
                         android:id="@+id/contact_conform_pwd"
                         android:hint="@string/hint_contact_confirm_pwd"/>

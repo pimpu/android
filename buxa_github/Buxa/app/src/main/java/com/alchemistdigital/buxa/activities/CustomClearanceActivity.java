@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
+import com.alchemistdigital.buxa.utilities.enumServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,12 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         arrayServicesId = getIntent().getExtras().getStringArrayList("ServicesId");
         arrayServicesName = getIntent().getExtras().getStringArrayList("ServicesName");
+
+        ArrayList<String> availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
+        System.out.println("Cust clr ids: "+arrayServicesId);
+        System.out.println("Cust clr availedServicesId: "+availedServicesId);
+
+
         if ( getIntent().getExtras().getString("shipmentType") != null ) {
             shipmentType = getIntent().getExtras().getString("shipmentType");
         }
@@ -102,7 +109,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                 switch (checkedId) {
                     case R.id.rbFactoryStuff:
                         hintAddress.setText(getResources().getString(R.string.strFactoryStuff)+" address");
-                        if( arrayServicesName.contains("Transportation") && arrayServicesId.size() > 0 ) {
+                        if( arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0 ) {
                             txtCCAddress.setText(pickupAddress);
                             txtCCAddress.setClickable(false);
                             txtCCAddress.setCursorVisible(false);
@@ -114,7 +121,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
                     case R.id.rbDockStuff:
                         hintAddress.setText(getResources().getString(R.string.strDockStuff)+" address");
-                        if( arrayServicesName.contains("Transportation") && arrayServicesId.size() > 0 ) {
+                        if( arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0 ) {
                             txtCCAddress.setText("");
                             // set address to location
                             txtCCAddress.setAdapter(new GooglePlacesAutocompleteAdapter(CustomClearanceActivity.this, R.layout.list_item));
@@ -131,7 +138,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         });
 
         // auto selection of field is did when user comes from Transportation page.
-        if( arrayServicesName.contains("Transportation") && arrayServicesId.size() > 0 ) {
+        if( arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0 ) {
             if(shipmentType.equals("LCL")) {
                 rgFCLStuffing.setVisibility(View.GONE);
                 rgShipmentType.check(R.id.rbLcl_cc);
@@ -172,15 +179,20 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     }
 
     public void storeCustomClearanceEnquiry(View view) {
-        if(arrayServicesName.contains("Freight Forwarding")) {
+        if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
             Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
             intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
             intentForFreightForardingActivity.putExtra("shipmentType", shipmentType);
             startActivity(intentForFreightForardingActivity);
+            finish();
         }
         else {
-            Toast.makeText(this, "Quotation Screen", Toast.LENGTH_SHORT).show();
+            Intent intentForFreightForardingActivity = new Intent(this, QuotationActivity.class);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+            startActivity(intentForFreightForardingActivity);
+            finish();
         }
     }
 }

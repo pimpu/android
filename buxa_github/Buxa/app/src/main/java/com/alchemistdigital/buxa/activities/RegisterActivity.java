@@ -41,7 +41,7 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 import static com.alchemistdigital.buxa.utilities.Validations.phoneValiate;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText txtCode, txtCompanyName, txtContactName, txtMobile, txtEmailId, txtPwd, txtConformPwd;
+    EditText txtCompanyName, txtContactName, txtMobile, txtEmailId, txtPwd, txtConformPwd;
     Button btnRegister;
     TextInputLayout companyName_InputLayout, contactName_InputLayout, mobile_InputLayout, emailId_InputLayout,
             pwd_InputLayout, conformPwd_InputLayout;
@@ -80,9 +80,9 @@ public class RegisterActivity extends AppCompatActivity {
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 
-        txtCode = (EditText) findViewById(R.id.company_code);
+        /*txtCode = (EditText) findViewById(R.id.company_code);
         Date date = new Date();
-        txtCode.setText(getResources().getString(R.string.codeString, noFormatDateSdf.format(date)));
+        txtCode.setText(getResources().getString(R.string.codeString, noFormatDateSdf.format(date)));*/
 
         errorMessage = (TextView) findViewById(R.id.register_error_msg);
         txtCompanyName = (EditText) findViewById(R.id.company_name);
@@ -188,7 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
         RequestParams params;
         params = new RequestParams();
 
-        params.put("code", txtCode.getText().toString());
+//        params.put("code", txtCode.getText().toString());
         params.put("company", txtCompanyName.getText().toString());
         params.put("uname", txtContactName.getText().toString());
         params.put("mobile", txtMobile.getText().toString());

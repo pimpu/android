@@ -16,6 +16,7 @@ import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.utilities.CustomTypefaceSpan;
+import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,17 +105,17 @@ public class SelectServiceActivity extends AppCompatActivity {
     public void gotoSelectServiceParameter(View view) {
 
         if(  selchkboxlistId.size() > 0 ) {
-            if( selchkboxlistName.contains("Transportation") ) {
+            if( selchkboxlistName.contains(enumServices.TRANSPORTATION.toString()) ) {
                 Intent intentForServiceParameterActivity = new Intent(this, TrasportQuotationActivity.class);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
                 startActivity(intentForServiceParameterActivity);
-            } else if( selchkboxlistName.contains("Custom Clearance") ) {
+            } else if( selchkboxlistName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
                 Intent intentForServiceParameterActivity = new Intent(this, CustomClearanceActivity.class);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
                 startActivity(intentForServiceParameterActivity);
-            } else if(selchkboxlistName.contains("Freight Forwarding")) {
+            } else if(selchkboxlistName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
                 Intent intentForServiceParameterActivity = new Intent(this, FreightForwardingActivity.class);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);

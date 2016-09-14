@@ -8,6 +8,7 @@
     tools:context="com.alchemistdigital.buxa.activities.QuotationActivity">
 
     <ScrollView
+        android:id="@+id/id_scrollview_Quote"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -130,13 +131,6 @@
                         app:Segoe="segoe_regular" />
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/str_re_quotation_for"
-                        android:textColor="@color/milkyWhite"
-                        app:Segoe="segoe_light" />
-
-                    <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                         android:id="@+id/id_tv_quotation_subject"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -186,6 +180,15 @@
                     android:text="@string/str_quote_content"
                     android:textColor="@color/milkyWhite"
                     app:Segoe="segoe_light"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_tables_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
 
             </LinearLayout>
 

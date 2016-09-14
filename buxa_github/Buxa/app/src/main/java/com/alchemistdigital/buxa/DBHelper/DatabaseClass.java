@@ -666,6 +666,32 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public int getTransportServiceServerId(String serviceName) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+TRANSPORT_SERVICE_NAME+" = '"+serviceName + "';";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        int anInt = 0;
+        if(res.moveToFirst()) {
+            do{
+                TransportServiceModel service = new TransportServiceModel();
+
+                anInt = res.getInt(res.getColumnIndex(TRANSPORT_SERVICE_SERVER_ID));
+
+            }while (res.moveToNext());
+        }
+
+        sqLiteDatabase.closeDatabase();
+
+        return anInt;
+    }
+
     // ------------------------ "TypeOfPackage" table methods ----------------//
 
     public long insertPackageType(PackageTypeModel packageTypeModel) {
