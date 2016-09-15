@@ -36,4 +36,8 @@ public class GetSharedPreference {
         return sharedPreference.getString(text,"");
     }
 
+    public int getLoginId(String text) {
+        return sharedPreference.getInt(text,0);
+    }
+
 }

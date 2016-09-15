@@ -1,7 +1,9 @@
 package com.alchemistdigital.buxa.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RadioButton;
@@ -17,7 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
+import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
@@ -37,8 +42,9 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     AutoCompleteTextView txtCCAddress;
     RadioGroup rgShipmentType, rgFCLStuffing;
     TextView hintAddress;
-    ArrayList<String> arrayServicesId, arrayServicesName;
-    String shipmentType = "LCL", pickupAddress;
+    ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
+    String shipmentType = "LCL", pickupAddress, bookId;
+    private EditText txtBookId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,25 +53,46 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         arrayServicesId = getIntent().getExtras().getStringArrayList("ServicesId");
         arrayServicesName = getIntent().getExtras().getStringArrayList("ServicesName");
-
-        ArrayList<String> availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
-        System.out.println("Cust clr ids: "+arrayServicesId);
-        System.out.println("Cust clr availedServicesId: "+availedServicesId);
-
+        availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
+        availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
 
         if ( getIntent().getExtras().getString("shipmentType") != null ) {
             shipmentType = getIntent().getExtras().getString("shipmentType");
         }
         pickupAddress = getIntent().getExtras().getString("pickupAddress");
+        bookId = getIntent().getExtras().getString("bookId");
 
         toolbarSetup();
 
         init();
 
-
+        // this intent fire when back button of QuotationActivity pressed
+        registerReceiver(broadcast_reciever, new IntentFilter("finish_activity_from_quotation_activity"));
     }
 
+    BroadcastReceiver broadcast_reciever = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals("finish_activity_from_quotation_activity")) {
+                finish();
+            }
+        }
+    };
+
     private void init() {
+        txtBookId = (EditText) findViewById(R.id.book_id_CC);
+
+        GetSharedPreference getSharedPreference = new GetSharedPreference(this);
+        if(bookId == null){
+            int loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
+
+            txtBookId.setText( getResources().getString(R.string.codeString, DateHelper.getBookId(),loginId));
+        }
+        else {
+            txtBookId.setText( bookId );
+        }
 
         rgShipmentType = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_CC);
         hintAddress = (TextView) findViewById(R.id.id_hint_CC_Address_label);
@@ -138,7 +165,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         });
 
         // auto selection of field is did when user comes from Transportation page.
-        if( arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0 ) {
+        if( availedServicesName != null || (arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0) ) {
             if(shipmentType.equals("LCL")) {
                 rgFCLStuffing.setVisibility(View.GONE);
                 rgShipmentType.check(R.id.rbLcl_cc);
@@ -179,20 +206,54 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     }
 
     public void storeCustomClearanceEnquiry(View view) {
-        if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-            Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
-            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-            intentForFreightForardingActivity.putExtra("shipmentType", shipmentType);
-            startActivity(intentForFreightForardingActivity);
-            finish();
+        if( availedServicesName != null ) {
+
+            if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+                intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForFreightForardingActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                intentForFreightForardingActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                intentForFreightForardingActivity.putExtra("shipmentType", shipmentType);
+                intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                startActivity(intentForFreightForardingActivity);
+            }
+            else {
+                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                intentForQuoteActivity.putExtra("shipmentType", shipmentType);
+                intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                startActivity(intentForQuoteActivity);
+            }
+
         }
         else {
-            Intent intentForFreightForardingActivity = new Intent(this, QuotationActivity.class);
-            intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-            intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-            startActivity(intentForFreightForardingActivity);
-            finish();
+
+            if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+                intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForFreightForardingActivity.putExtra("shipmentType", shipmentType);
+                intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                startActivity(intentForFreightForardingActivity);
+            }
+            else {
+                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForQuoteActivity.putExtra("shipmentType", shipmentType);
+                intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                startActivity(intentForQuoteActivity);
+            }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcast_reciever);
     }
 }

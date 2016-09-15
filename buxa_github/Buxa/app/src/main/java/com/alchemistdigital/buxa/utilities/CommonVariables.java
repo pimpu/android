@@ -16,7 +16,7 @@ public class CommonVariables {
     public static final String OUT_JSON = "/json";
     public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
 
-    static String SERVER_URL = "http://4d39b6cc.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://1ea7160a.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";

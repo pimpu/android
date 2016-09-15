@@ -40,11 +40,43 @@
             xmlns:android="http://schemas.android.com/apk/res/android">
 
             <LinearLayout
+                android:id="@+id/layout_bookId_trans"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_bookid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/milkyWhite">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:id="@+id/book_id_trans"
+                        android:hint="@string/hint_bookId"
+                        android:ems="10"
+                        android:textColor="@color/milkyWhite"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layout_pickup"
                 android:layout_width="fill_parent"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
                 <LinearLayout

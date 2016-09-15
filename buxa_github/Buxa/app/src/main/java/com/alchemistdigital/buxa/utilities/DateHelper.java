@@ -15,8 +15,8 @@ public class DateHelper {
     private final static SimpleDateFormat HOURS = new SimpleDateFormat("hh");
     private final static SimpleDateFormat MINUTE= new SimpleDateFormat("mm");
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
-    private final static SimpleDateFormat quotationDate = new SimpleDateFormat("dd-MM-yyyy");
-
+    private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd-MM-yyyy");
+    private final static SimpleDateFormat sdfBookId = new SimpleDateFormat("ddMMyyhhmmss");
     /**
      *
      * @param dateFormili in format "yyyy/mm/dd"
@@ -41,9 +41,13 @@ public class DateHelper {
 
     public static String convertToString_Quotation(long millis) {
         Date dates = new Date(millis);
-        return quotationDate.format(dates);
+        return sdfQuotationDate.format(dates);
     }
 
+    public static String getBookId(){
+        Date dates = new Date();
+        return sdfBookId.format(dates);
+    }
     public static String getMonth(long millis) {
         Date currentDate = new Date(millis);
         return MONTH.format(currentDate);

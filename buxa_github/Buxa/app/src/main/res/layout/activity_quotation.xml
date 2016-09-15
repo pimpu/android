@@ -76,6 +76,27 @@
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/strBookNo"
+                    android:textColor="@color/milkyWhite"
+                    app:Segoe="segoe_regular"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/id_tv_bookId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:text="Booking Date"
+                    android:textColor="@color/milkyWhite" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/strDate"
                     android:textColor="@color/milkyWhite"
                     app:Segoe="segoe_regular"/>
