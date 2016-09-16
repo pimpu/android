@@ -37,4 +37,5 @@
     </style>
 
     <style name="LoginTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

@@ -1,11 +1,12 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
@@ -24,6 +25,7 @@ public class QuotationActivity extends AppCompatActivity {
     ArrayList<String> arrayComparingIdArray = new ArrayList<String>();
     String strAvailServiceOption = "Do you avail with ";
     private String bookId, shipmentType;
+    LinearLayout layoutPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,65 @@ public class QuotationActivity extends AppCompatActivity {
     }
 
     private void initQuoteTable() {
+        if ( availedServicesName == null ) {
+            for (int x = 0 ; x < arrayServicesName.size() ; x++) {
+                switch (arrayServicesName.get(x)) {
+                    case "Transportation":
+                        beforeAvailOption_transportation();
+                        break;
+
+                    case "Custom Clearance":
+                        beforeAvailOption_custom_clearance();
+                        break;
+
+                    case "Freight Forwarding":
+                        beforeAvailOption_freight_forwarding();
+                        break;
+                }
+            }
+        }
+        else {
+            beforeAvailOption_transportation();
+            beforeAvailOption_custom_clearance();
+            beforeAvailOption_freight_forwarding();
+        }
 
     }
 
+    private void beforeAvailOption_freight_forwarding() {
+        customTextView(enumServices.FREIGHT_FORWARDING.toString());
+    }
+
+    private void beforeAvailOption_custom_clearance() {
+        customTextView(enumServices.CUSTOM_CLEARANCE.toString());
+    }
+
+    private void beforeAvailOption_transportation() {
+        customTextView(enumServices.TRANSPORTATION.toString());
+    }
+
+    private void customTextView(String strName) {
+        TextView name = new TextView(this);
+        TextView quote = new TextView(this);
+
+        Typeface segoeRegularFace= Typeface.createFromAsset(getAssets(), "fonts/SEGOEUI.TTF");
+        name.setText(strName+" :");
+        name.setTypeface(segoeRegularFace);
+        name.setTextSize(20);
+        name.setTextColor(getResources().getColor(R.color.milkyWhite));
+        layoutPrice.addView(name);
+
+        quote.setText("Quote price");
+        quote.setTypeface(segoeRegularFace);
+        quote.setTextSize(16);
+        quote.setTextColor(getResources().getColor(R.color.milkyWhite));
+        layoutPrice.addView(quote);
+    }
+
     private void init() {
+
+        layoutPrice = (LinearLayout) findViewById(R.id.id_tables_layout);
+
         tvCompanyName = (TextView) findViewById(R.id.id_tv_companyName_quotation);
         tvClientName = (TextView) findViewById(R.id.id_tv_clientName_quotation);
         tvBookingNo = (TextView) findViewById(R.id.id_tv_bookId);
@@ -93,6 +150,21 @@ public class QuotationActivity extends AppCompatActivity {
                 strSelectedServices = strSelectedServices + arrayServicesName.get(i) + ", ";
             }
         }
+
+        // this portion of code run when availed option is selected
+        if( availedServicesName != null ) {
+            strSelectedServices = strSelectedServices.replace(". ",", ");
+            for (int j = 0 ; j < availedServicesName.size() ; j++ ) {
+                if ( (availedServicesName.size() - 1) == j ) {
+                    strSelectedServices = strSelectedServices + availedServicesName.get(j) + ". ";
+                }
+                else {
+                    strSelectedServices = strSelectedServices + availedServicesName.get(j) + ", ";
+                }
+            }
+        }
+        // this portion of code run when availed option is selected
+
         tvQuotationSubject.setText(strSelectedServices);
     }
 

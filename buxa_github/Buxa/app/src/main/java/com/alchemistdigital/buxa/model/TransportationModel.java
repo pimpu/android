@@ -10,7 +10,7 @@ public class TransportationModel {
     private int dimenLength ;
     private int dimenHeight ;
     private int dimenWeight ;
-    private int shipmentTerm ;
+    private int shipmentType ;
     private int noOfPack ;
     private int packType ;
     private String  pickUp ;
@@ -19,20 +19,24 @@ public class TransportationModel {
     private int availOption ;
     private int status ;
     private String  createdAt ;
+    private String bookingId;
+    private int measurement;
+    private float grossWeight;
 
     public TransportationModel() {
     }
 
     public TransportationModel(int serverId, int commodityServerId, int dimenLength,
-                               int dimenHeight, int dimenWeight, int shipmentTerm, int noOfPack,
+                               int dimenHeight, int dimenWeight, int shipmentType, int noOfPack,
                                int packType, String pickUp, String drop, String lrCopy,
-                               int availOption, int status, String createdAt) {
+                               int availOption, int status, String createdAt, String bookingId,
+                               int measurement, float grossWeight) {
         this.serverId = serverId;
         this.commodityServerId = commodityServerId;
         this.dimenLength = dimenLength;
         this.dimenHeight = dimenHeight;
         this.dimenWeight = dimenWeight;
-        this.shipmentTerm = shipmentTerm;
+        this.shipmentType = shipmentType;
         this.noOfPack = noOfPack;
         this.packType = packType;
         this.pickUp = pickUp;
@@ -41,6 +45,9 @@ public class TransportationModel {
         this.availOption = availOption;
         this.status = status;
         this.createdAt = createdAt;
+        this.bookingId = bookingId;
+        this.measurement = measurement;
+        this.grossWeight = grossWeight;
     }
 
     public int getTransportationId() {
@@ -91,12 +98,36 @@ public class TransportationModel {
         this.dimenWeight = dimenWeight;
     }
 
-    public int getShipmentTerm() {
-        return shipmentTerm;
+    public int getShipmentType() {
+        return shipmentType;
     }
 
-    public void setShipmentTerm(int shipmentTerm) {
-        this.shipmentTerm = shipmentTerm;
+    public void setShipmentType(int shipmentType) {
+        this.shipmentType = shipmentType;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public int getMeasurement() {
+        return measurement;
+    }
+
+    public void setMeasurement(int measurement) {
+        this.measurement = measurement;
+    }
+
+    public float getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(float grossWeight) {
+        this.grossWeight = grossWeight;
     }
 
     public int getNoOfPack() {

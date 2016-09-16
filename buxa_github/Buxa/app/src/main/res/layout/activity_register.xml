@@ -107,7 +107,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:Segoe="segoe_light"
-                        android:inputType="text"
+                        android:inputType="textCapWords"
                         android:id="@+id/company_name"
                         android:hint="@string/hint_company_name"/>
                 </android.support.design.widget.TextInputLayout>

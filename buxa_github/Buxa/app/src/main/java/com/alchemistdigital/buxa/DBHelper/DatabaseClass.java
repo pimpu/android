@@ -42,6 +42,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_CUSTOM_CLEARANCE_CATEGORY = "CustomClearanceCategory";
     public static final String TABLE_TYPE_OF_SHIPMENT = "TypeOfShipment";
     public static final String TABLE_TRANSPORTATION = "Transportation";
+    public static final String TABLE_CUSTOM_CLEARANCE_SERVICE = "CustomClearance";
+    public static final String TABLE_FREIGHT_FORWARDING_SERVICE = "FreightForwarding";
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
@@ -54,7 +56,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     // TABLE_COMPANY Table - column names
     private static final String COMPANY_SERVER_ID = "company_serverId";
-    private static final String COMPANY_REFERENCE_NO = "company_reference_no";
+    private static final String USER_REFERENCE_NO = "company_reference_no";
     private static final String COMPANY_USER_DESIGNATION = "company_user_designation";
     private static final String COMPANY_NAME = "company_name";
     private static final String COMPANY_CONTACT = "company_contact";
@@ -97,13 +99,33 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String  DIMEN_LENGTH = "dimen_length";
     private static final String  DIMEN_HEIGHT = "dimen_height";
     private static final String  DIMEN_WEIGHT = "dimen_weight";
-    private static final String  SHIPMENT_TERM = "shipment_term";
+    private static final String  SHIPMENT_TYPE = "shipment_type";
+    private static final String  MEASUREMENT = "measurement";
+    private static final String  GROSS_WEIGHT = "gross_weight";
     private static final String  NO_OF_PACK = "no_of_pack";
     private static final String  PACK_TYPE = "pack_type";
     private static final String  PICKUP = "pickup";
     private static final String  DROP = "dropLocation";
     private static final String  LRCOPY = "lr_copy";
     private static final String  AVAIL_OPTION = "avail_option";
+
+    // TABLE_CUSTOM_CLEARANCE_SERVICE Table - column names
+    private static final String CUSTOM_CLEARANCE_SERVER_ID = "CC_ServerId";
+    // booking id
+    // shipment type
+    // avail option
+    private static final String STUFFING_TYPE = "stuffing_type";
+    private static final String STUFFING_ADDRESS = "stuffing_address";
+
+
+    // TABLE_FREIGHT_FORWARDING_SERVICE Table - column names
+    private static final String FREIGHT_FORWARDING_SERVER_ID = "FF_ServerId";
+    // booking id
+    // shipment type
+    // avail option
+    private static final String PORT_OF_LOADING = "port_of_loading";
+    private static final String PORT_OF_DESTINATION = "port_of_destination";
+
 
     // TABLE_TRANSPORT_TYPE Table - column names
     private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
@@ -122,7 +144,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_COMPANY +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COMPANY_SERVER_ID+" INTEGER," +
-                    COMPANY_REFERENCE_NO+" INTEGER," +
+                    USER_REFERENCE_NO+" INTEGER," +
                     COMPANY_USER_DESIGNATION+" VARCHAR(100)," +
                     COMPANY_NAME+" VARCHAR(100), " +
                     COMPANY_CONTACT+" INTEGER," +
@@ -179,17 +201,45 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORTATION +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TRANSPORTATION_SERVER_ID +" INTEGER," +
+                    BOOKING_ID +" VARCHAR(50)," +
+                    PICKUP +" VARCHAR(200)," +
+                    DROP +" VARCHAR(200)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    MEASUREMENT +" INTEGER," +
+                    GROSS_WEIGHT +" REAL," +
+                    PACK_TYPE +" INTEGER," +
+                    NO_OF_PACK +" INTEGER," +
                     COMMODITY_SERVERID_IN_TRANSPORT +" INTEGER," +
                     DIMEN_LENGTH +" INTEGER," +
                     DIMEN_HEIGHT +" INTEGER," +
                     DIMEN_WEIGHT +" INTEGER," +
-                    SHIPMENT_TERM +" INTEGER," +
-                    NO_OF_PACK +" INTEGER," +
-                    PACK_TYPE +" INTEGER," +
-                    BOOKING_ID +" VARCHAR(200)," +
-                    PICKUP +" VARCHAR(200)," +
-                    DROP +" VARCHAR(200)," +
+                    AVAIL_OPTION +" TINYINT(4)," +
                     LRCOPY +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Custom Clearance Table Create Statements
+    private static final String CREATE_TABLE_CUSTOM_CLEARANCE_SERVICE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_CUSTOM_CLEARANCE_SERVICE+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    CUSTOM_CLEARANCE_SERVER_ID +" INTEGER," +
+                    BOOKING_ID +" VARCHAR(50)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    STUFFING_TYPE + "  VARCHAR(50),"+
+                    STUFFING_ADDRESS + "  VARCHAR(50),"+
+                    AVAIL_OPTION +" TINYINT(4)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Freight forwarding Table Create Statement
+    private static final String CREATE_TABLE_FREIGHT_FORWARDING_SERVICE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_FREIGHT_FORWARDING_SERVICE+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    FREIGHT_FORWARDING_SERVER_ID +" INTEGER," +
+                    BOOKING_ID +" VARCHAR(50)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    PORT_OF_LOADING + " VARCHAR(100),"+
+                    PORT_OF_DESTINATION + " VARCHAR(100),"+
                     AVAIL_OPTION +" TINYINT(4)," +
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
@@ -247,6 +297,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TRANSPORTATION);
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
+        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_SERVICE);
+        db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING_SERVICE);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
         db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
     }
@@ -263,6 +315,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_SERVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING_SERVICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
 
@@ -321,7 +375,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
         MatrixCursor Cursor2= new MatrixCursor(columns);
         alc.add(null);
         alc.add(null);
-
 
         try{
             String maxQuery = Query ;

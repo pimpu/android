@@ -79,28 +79,12 @@
                 android:layout_marginTop="10dp"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="Pickup:"
-                        android:textColor="@color/milkyWhite"
-                        android:layout_marginBottom="5dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pick_up"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:paddingRight="10dp"
-                    android:orientation="vertical"
-                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    android:textColorHint="@color/hintTextColor">
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
                         android:id="@+id/id_autoComplete_pickup"
@@ -112,7 +96,8 @@
                         android:hint="@string/hint_pickUp_location"
                         app:Segoe="segoe_light" />
 
-                </LinearLayout>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -120,34 +105,15 @@
                 android:layout_width="fill_parent"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:paddingTop="20dp"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_drop"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Drop:"
-                        android:paddingLeft="5dp"
-                        android:textColor="@color/milkyWhite"
-                        android:layout_marginBottom="5dp"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:paddingRight="10dp"
-                    android:orientation="vertical"
-                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    android:textColorHint="@color/hintTextColor">
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
                         android:id="@+id/id_autoComplete_drop"
@@ -159,7 +125,9 @@
                         android:hint="@string/hint_drop_location"
                         app:Segoe="segoe_light" />
 
-                </LinearLayout>
+                </android.support.design.widget.TextInputLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -209,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/radiogroup2040"
                     android:visibility="gone"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:checkedButton="@+id/feet20" >
 
@@ -242,6 +210,7 @@
                     android:id="@+id/input_layout_cubic_meter_measurement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:textColorHint="@color/hintTextColor">
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
@@ -292,23 +261,23 @@
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pack_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_type_of_package"
-                    android:textSize="12dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular" />
+                    android:textColorHint="@color/hintTextColor">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                    android:id="@+id/id_type_of_package"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/milkyWhite"
-                    android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_type_of_package"
-                    app:Segoe="segoe_light"/>
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_type_of_package"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_type_of_package"
+                        app:Segoe="segoe_light"/>
+
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -344,23 +313,21 @@
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_commodity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_commodity"
-                    android:textSize="12dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular"/>
+                    android:textColorHint="@color/hintTextColor">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                    android:id="@+id/id_commodity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/milkyWhite"
-                    android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_commodity"
-                    app:Segoe="segoe_light"/>
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_commodity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_commodity"
+                        app:Segoe="segoe_light"/>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -388,7 +355,7 @@
                     xmlns:android="http://schemas.android.com/apk/res/android">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_length"
+                        android:id="@+id/input_layout_dimensions_length"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
