@@ -18,11 +18,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
+import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.SegoeFontEdittext;
@@ -37,8 +39,6 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     ArrayAdapter<CommodityModel> commodity_adapter;
     ArrayAdapter<PackageTypeModel> packagingType_adapter;
     AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop;
-    private LinearLayout commodityLayout, shipmentTypeLayout, packageTypeLayout, noOfPackageLayout,
-                dimensionLayout, pickupLayout, dropLayout;
     RadioGroup rgContainerSize, rgTypeOfShipment;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names, availedServicesId, availedServicesName;
@@ -48,7 +48,7 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     TextInputLayout inputLayout_pickUp, inputLayout_drop, inputLayout_cubicMeter, inputLayout_grossWeight,
                     inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
                     inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_weight;
-    private int iSelectedCommodityId;
+    private int iSelectedCommodityId, iSelectedPackageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,15 +104,6 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
     }
 
     private void init() {
-        // initialised all linear layout
-        /*commodityLayout = (LinearLayout) findViewById(R.id.layout_commodity);
-        shipmentTypeLayout = (LinearLayout) findViewById(R.id.layout_shipmentType);
-        packageTypeLayout = (LinearLayout) findViewById(R.id.layout_PackageType);
-        noOfPackageLayout = (LinearLayout) findViewById(R.id.layout_NoOfPackage);
-        dimensionLayout = (LinearLayout) findViewById(R.id.layout_dimension);
-        pickupLayout = (LinearLayout) findViewById(R.id.layout_pickup);
-        dropLayout = (LinearLayout) findViewById(R.id.layout_drop);*/
-
         // initialised all Text Input Layout
         inputLayout_pickUp = (TextInputLayout) findViewById(R.id.input_layout_pick_up);
         inputLayout_drop = (TextInputLayout) findViewById(R.id.input_layout_drop);
@@ -162,12 +153,16 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
                         rgContainerSize.setVisibility(View.GONE);
                         inputLayout_cubicMeter.setVisibility(View.VISIBLE);
                         strSelectedShipmentType = "LCL";
+                        strSelectedContainerSize = null;
+                        rgContainerSize.clearCheck();
                         break;
 
                     case R.id.rbFcl_transport:
                         rgContainerSize.setVisibility(View.VISIBLE);
                         inputLayout_cubicMeter.setVisibility(View.GONE);
                         strSelectedShipmentType = "FCL";
+                        strSelectedContainerSize = null;
+                        txtCBM.setText("");
                         break;
                 }
             }
@@ -180,14 +175,17 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
                 switch (checkedId) {
                     case R.id.feet20:
                         strSelectedContainerSize = getResources().getString(R.string.str20feet);
+                        txtCBM.setText("");
                         break;
 
                     case R.id.feet40:
                         strSelectedContainerSize = getResources().getString(R.string.str40feet);
+                        txtCBM.setText("");
                         break;
 
                     case R.id.feet40HQfeet:
                         strSelectedContainerSize = getResources().getString(R.string.str40HQfeet);
+                        txtCBM.setText("");
                         break;
                 }
             }
@@ -226,6 +224,12 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         packagingType_adapter = new ArrayAdapter<PackageTypeModel>(this, layoutItemId, dbClass.getPackagingTypeData() );
         txtTypeOfPackaging.setAdapter(packagingType_adapter);
         txtTypeOfPackaging.setThreshold(1);
+        txtTypeOfPackaging.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                iSelectedPackageType = packagingType_adapter.getItem(position).getServerId();
+            }
+        });
 
 
         // set adapter to pickup location
@@ -296,12 +300,16 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         }
 
         if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
-
             if (boolCBM) {
                 inputLayout_cubicMeter.setErrorEnabled(false);
             } else {
                 inputLayout_cubicMeter.setErrorEnabled(true);
                 inputLayout_cubicMeter.setError("Cubic meter measurement field is empty.");
+            }
+        }
+        else {
+            if(strSelectedContainerSize == null){
+                Toast.makeText(getApplicationContext(), "Container size of FCL should be checked.",Toast.LENGTH_LONG).show();
             }
         }
 
@@ -357,73 +365,119 @@ public class TrasportQuotationActivity extends AppCompatActivity implements Adap
         if (boolPickUp && boolDrop && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
                 && boolDimenHeight && boolDimenWeight && boolCommodity) {
 
-            if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM ) {
+            if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
+                return;
+            }
+            else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
                 return;
             }
 
-        }
-        /*if( availedServicesName != null ) {
-
-            if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
-                Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
-                intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
-                intentForCustomClearanceActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-                intentForCustomClearanceActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-                intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
-                intentForCustomClearanceActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForCustomClearanceActivity);
-            } else if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
-                intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
-                intentForFreightForardingActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-                intentForFreightForardingActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-                intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForFreightForardingActivity);
+            String measurment = null;
+            if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
+                measurment = txtCBM.getText().toString();
             }
             else {
-                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForQuoteActivity.putStringArrayListExtra("ServicesName", names);
-                intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-                intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-                intentForQuoteActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForQuoteActivity);
+                measurment = strSelectedContainerSize;
             }
 
-        }
-        else {
+            System.out.println("Book id: "+txtBookId.getText().toString());
+            System.out.println("Pick up: "+txtPickup.getText().toString());
+            System.out.println("Drop: "+txtDrop.getText().toString());
+            System.out.println("Shipment type: "+strSelectedShipmentType+", "+dbClass.getShipmentTypeServerId(strSelectedShipmentType));
+            System.out.println("Cubic mtr: "+txtCBM.getText().toString());
+            System.out.println("Container size: "+strSelectedContainerSize);
+            System.out.println("Gross wt: "+txtGrossWt.getText().toString());
+            System.out.println("Pack Type: "+txtTypeOfPackaging.getText().toString());
+            System.out.println("No of pack: "+txt_noOfPack.getText().toString());
+            System.out.println("Commodity: "+txtComodity.getText().toString()+", "+iSelectedCommodityId);
+            System.out.println("Len: "+txtDimenLen.getText().toString());
+            System.out.println("Height: "+txtDimenHeight.getText().toString());
+            System.out.println("Weight: "+txtDimenWeight.getText().toString());
 
-            if( names.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
-                Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
-                intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
-                intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
-                intentForCustomClearanceActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForCustomClearanceActivity);
-            } else if(names.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
-                intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
-                intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForFreightForardingActivity);
+            TransportationModel transportationModel = new TransportationModel(
+                    0,
+                    iSelectedCommodityId,
+                    Integer.parseInt(txtDimenLen.getText().toString()),
+                    Integer.parseInt(txtDimenHeight.getText().toString()),
+                    Integer.parseInt(txtDimenWeight.getText().toString()),
+                    dbClass.getShipmentTypeServerId(strSelectedShipmentType),
+                    Integer.parseInt(txt_noOfPack.getText().toString()),
+                    iSelectedPackageType,
+                    txtPickup.getText().toString(),
+                    txtDrop.getText().toString(),
+                    null,
+                    0,
+                    1,
+                    ""+DateHelper.convertToMillis(),
+                    txtBookId.getText().toString(),
+                    measurment,
+                    Float.parseFloat(txtGrossWt.getText().toString())
+            );
+            int l = dbClass.insertTransportation(transportationModel);
+
+            /*if( availedServicesName != null ) {
+
+                if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
+                    Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                    intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
+                    intentForCustomClearanceActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForCustomClearanceActivity);
+                } else if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                    Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForFreightForardingActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                    intentForFreightForardingActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                    intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForFreightForardingActivity);
+                }
+                else {
+                    Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                    intentForQuoteActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForQuoteActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                    intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                    intentForQuoteActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForQuoteActivity);
+                }
+
             }
             else {
-                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  ids);
-                intentForQuoteActivity.putStringArrayListExtra("ServicesName", names);
-                intentForQuoteActivity.putExtra("shipmentType", strSelectedShipmentType);
-                intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-                startActivity(intentForQuoteActivity);
-            }
 
-        }*/
+                if( names.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
+                    Intent intentForCustomClearanceActivity = new Intent(this, CustomClearanceActivity.class);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForCustomClearanceActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForCustomClearanceActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForCustomClearanceActivity.putExtra("pickupAddress", txtPickup.getText().toString().trim());
+                    intentForCustomClearanceActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForCustomClearanceActivity);
+                } else if(names.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                    Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
+                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForFreightForardingActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForFreightForardingActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForFreightForardingActivity);
+                }
+                else {
+                    Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                    intentForQuoteActivity.putStringArrayListExtra("ServicesId",  ids);
+                    intentForQuoteActivity.putStringArrayListExtra("ServicesName", names);
+                    intentForQuoteActivity.putExtra("shipmentType", strSelectedShipmentType);
+                    intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
+                    startActivity(intentForQuoteActivity);
+                }
+
+            }*/
+        }
     }
 
     @Override

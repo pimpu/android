@@ -131,7 +131,7 @@ public class QuotationActivity extends AppCompatActivity {
         DatabaseClass databaseClass = new DatabaseClass(this);
         for (int y = 0 ; y < arrayComparingNameArray.size() ; y++ ) {
 
-            arrayComparingIdArray.add(""+databaseClass.getTransportServiceServerId(arrayComparingNameArray.get(y)) );
+            arrayComparingIdArray.add( ""+databaseClass.getTransportServiceServerId(arrayComparingNameArray.get(y)) );
 
             if ( (arrayComparingNameArray.size() - 1) == y ) {
                 strAvailServiceOption = strAvailServiceOption + arrayComparingNameArray.get(y) + ". ";

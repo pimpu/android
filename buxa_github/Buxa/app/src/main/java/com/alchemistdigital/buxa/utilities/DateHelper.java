@@ -17,15 +17,11 @@ public class DateHelper {
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
     private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd-MM-yyyy");
     private final static SimpleDateFormat sdfBookId = new SimpleDateFormat("ddMMyyhhmmss");
-    /**
-     *
-     * @param dateFormili in format "yyyy/mm/dd"
-     * @return long value in millis
-     * @throws ParseException
-     */
-    public static long convertToMillis (String dateFormili) throws ParseException {
-        Date date = sdf.parse(dateFormili);
-        return date.getTime();
+
+
+    public static long convertToMillis () {
+        Date dates = new Date();
+        return dates.getTime();
     }
 
     /**

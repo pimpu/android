@@ -4,24 +4,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
-import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 import com.alchemistdigital.buxa.utilities.enumServices;
@@ -38,13 +37,17 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
+
 public class CustomClearanceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     AutoCompleteTextView txtCCAddress;
     RadioGroup rgShipmentType, rgFCLStuffing;
     TextView hintAddress;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
-    String shipmentType = "LCL", pickupAddress, bookId;
+    String shipmentType = "LCL", pickupAddress, bookId, strSelectedStuffing;
     private EditText txtBookId;
+    TextInputLayout inputLayout_cc_address;
+    DatabaseClass dbClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,10 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     };
 
     private void init() {
+        dbClass = new DatabaseClass(this);
+
+        inputLayout_cc_address = (TextInputLayout) findViewById(R.id.input_layout_cc_address);
+
         txtBookId = (EditText) findViewById(R.id.book_id_CC);
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
@@ -102,6 +109,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         // set address to location
         txtCCAddress.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtCCAddress.setOnItemClickListener(this);
+        txtCCAddress.setThreshold(1);
 
         rgShipmentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -111,6 +119,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                         rgFCLStuffing.setVisibility(View.GONE);
                         hintAddress.setText("Vendor CFS Address");
                         shipmentType = "LCL";
+                        strSelectedStuffing = null;
                         break;
 
                     case R.id.rbFcl_cc:
@@ -143,7 +152,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                             txtCCAddress.setFocusable(false);
                             txtCCAddress.setFocusableInTouchMode(false);
                         }
-
+                        strSelectedStuffing = getResources().getString(R.string.strFactoryStuff);
                         break;
 
                     case R.id.rbDockStuff:
@@ -159,6 +168,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                             txtCCAddress.setFocusable(true);
                             txtCCAddress.setFocusableInTouchMode(true);
                         }
+                        strSelectedStuffing = getResources().getString(R.string.strDockStuff);
                         break;
                 }
             }
@@ -206,7 +216,48 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     }
 
     public void storeCustomClearanceEnquiry(View view) {
-        if( availedServicesName != null ) {
+        Boolean boolAddress = isEmptyString(txtCCAddress.getText().toString());
+
+        if (boolAddress) {
+            inputLayout_cc_address.setErrorEnabled(false);
+        } else {
+            inputLayout_cc_address.setErrorEnabled(true);
+            inputLayout_cc_address.setError(hintAddress.getText().toString()+" field is empty.");
+        }
+
+        if( shipmentType.equals("FCL") && strSelectedStuffing == null ) {
+            Toast.makeText(getApplicationContext(), "Stuffing type of FCL should be checked", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (boolAddress) {
+            String stuffingType;
+            if( shipmentType.equals("LCL") ) {
+                stuffingType = "Vendor CFS";
+            }
+            else {
+                stuffingType = strSelectedStuffing;
+            }
+            System.out.println("Code: "+txtBookId.getText().toString());
+            System.out.println("Shipment type: "+shipmentType+", "+dbClass.getShipmentTypeServerId(shipmentType));
+            System.out.println("stuffing type: "+stuffingType);
+            System.out.println("Address: "+txtCCAddress.getText().toString());
+
+            CustomClearanceModel customClearanceModel = new CustomClearanceModel(
+                 0,
+                 txtBookId.getText().toString(),
+                 dbClass.getShipmentTypeServerId(shipmentType),
+                 stuffingType,
+                 txtCCAddress.getText().toString(),
+                 0,
+                 1,
+                 ""+DateHelper.convertToMillis()
+            );
+
+            int l = dbClass.insertCustomClearance(customClearanceModel);
+        }
+
+        /*if( availedServicesName != null ) {
 
             if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
                 Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
@@ -248,7 +299,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                 intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
                 startActivity(intentForQuoteActivity);
             }
-        }
+        }*/
     }
 
     @Override

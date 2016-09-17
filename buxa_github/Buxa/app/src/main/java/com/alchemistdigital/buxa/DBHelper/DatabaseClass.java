@@ -13,10 +13,12 @@ import android.util.Log;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
+import com.alchemistdigital.buxa.model.TransportationModel;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +44,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_CUSTOM_CLEARANCE_CATEGORY = "CustomClearanceCategory";
     public static final String TABLE_TYPE_OF_SHIPMENT = "TypeOfShipment";
     public static final String TABLE_TRANSPORTATION = "Transportation";
-    public static final String TABLE_CUSTOM_CLEARANCE_SERVICE = "CustomClearance";
+    public static final String TABLE_CUSTOM_CLEARANCE = "CustomClearance";
     public static final String TABLE_FREIGHT_FORWARDING_SERVICE = "FreightForwarding";
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
@@ -109,7 +111,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String  LRCOPY = "lr_copy";
     private static final String  AVAIL_OPTION = "avail_option";
 
-    // TABLE_CUSTOM_CLEARANCE_SERVICE Table - column names
+    // TABLE_CUSTOM_CLEARANCE Table - column names
     private static final String CUSTOM_CLEARANCE_SERVER_ID = "CC_ServerId";
     // booking id
     // shipment type
@@ -205,7 +207,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     PICKUP +" VARCHAR(200)," +
                     DROP +" VARCHAR(200)," +
                     SHIPMENT_TYPE +" INTEGER," +
-                    MEASUREMENT +" INTEGER," +
+                    MEASUREMENT +" VARCHAR(10)," +
                     GROSS_WEIGHT +" REAL," +
                     PACK_TYPE +" INTEGER," +
                     NO_OF_PACK +" INTEGER," +
@@ -219,8 +221,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Custom Clearance Table Create Statements
-    private static final String CREATE_TABLE_CUSTOM_CLEARANCE_SERVICE =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_CUSTOM_CLEARANCE_SERVICE+
+    private static final String CREATE_TABLE_CUSTOM_CLEARANCE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_CUSTOM_CLEARANCE+
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     CUSTOM_CLEARANCE_SERVER_ID +" INTEGER," +
                     BOOKING_ID +" VARCHAR(50)," +
@@ -297,7 +299,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TRANSPORTATION);
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
-        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_SERVICE);
+        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE);
         db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING_SERVICE);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
         db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
@@ -315,7 +317,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_SERVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING_SERVICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
@@ -623,6 +625,37 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
+    public int getShipmentTypeServerId(String serviceName) {
+        String name = null;
+        if( serviceName.equals("LCL") ) {
+            name = "Less than Container Load";
+        }
+        else {
+            name = "Full Container Load";
+        }
+
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_SHIPMENT + " WHERE "
+                + KEY_STATUS + " = 1 AND "+TOS_name+" = '"+name + "';";
+
+//        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        int anInt = 0;
+        if(res.moveToFirst()) {
+            do{
+                anInt = res.getInt(res.getColumnIndex(TOS_SERVER_ID));
+            }while (res.moveToNext());
+        }
+
+        sqLiteDatabase.closeDatabase();
+
+        return anInt;
+    }
+
     // ------------------------ "TransportType" table methods ----------------//
     public long insertTransportType(TransportTypeModel transportTypeModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -806,5 +839,81 @@ public class DatabaseClass extends SQLiteOpenHelper {
         sqLiteDatabase.closeDatabase();
 
         return array_list;
+    }
+
+    // ------------------------ "Transportation" table methods ----------------//
+
+    public int insertTransportation(TransportationModel transportationModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRANSPORTATION_SERVER_ID, transportationModel.getServerId());
+        contentValues.put(BOOKING_ID, transportationModel.getBookingId());
+        contentValues.put(PICKUP, transportationModel.getPickUp());
+        contentValues.put(DROP, transportationModel.getDrop());
+        contentValues.put(SHIPMENT_TYPE, transportationModel.getShipmentType());
+        contentValues.put(MEASUREMENT, transportationModel.getMeasurement());
+        contentValues.put(GROSS_WEIGHT, transportationModel.getGrossWeight());
+        contentValues.put(PACK_TYPE, transportationModel.getPackType());
+        contentValues.put(NO_OF_PACK, transportationModel.getNoOfPack());
+        contentValues.put(COMMODITY_SERVERID_IN_TRANSPORT, transportationModel.getCommodityServerId());
+        contentValues.put(DIMEN_LENGTH, transportationModel.getDimenLength());
+        contentValues.put(DIMEN_HEIGHT, transportationModel.getDimenHeight());
+        contentValues.put(DIMEN_WEIGHT, transportationModel.getDimenWeight());
+        contentValues.put(AVAIL_OPTION, transportationModel.getAvailOption());
+        contentValues.put(LRCOPY, transportationModel.getLrCopy());
+        contentValues.put(KEY_STATUS, transportationModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, transportationModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = TRANSPORTATION_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( transportationModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_TRANSPORTATION, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_TRANSPORTATION, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    // ------------------------ "Transportation" table methods ----------------//
+    public int insertCustomClearance(CustomClearanceModel customClearanceModel) {
+
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CUSTOM_CLEARANCE_SERVER_ID, customClearanceModel.getServerId());
+        contentValues.put(BOOKING_ID, customClearanceModel.getBookingId());
+        contentValues.put(SHIPMENT_TYPE, customClearanceModel.getShipmentType());
+        contentValues.put(STUFFING_TYPE, customClearanceModel.getStuffingType());
+        contentValues.put(STUFFING_ADDRESS, customClearanceModel.getStuffingAddress());
+        contentValues.put(AVAIL_OPTION, customClearanceModel.getAvailOption());
+        contentValues.put(KEY_STATUS, customClearanceModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, customClearanceModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = CUSTOM_CLEARANCE_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( customClearanceModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CUSTOM_CLEARANCE, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_CUSTOM_CLEARANCE, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+
     }
 }

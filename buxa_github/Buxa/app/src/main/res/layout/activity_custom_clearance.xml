@@ -140,14 +140,19 @@
                     android:layout_marginTop="8dp"
                     android:textColor="@color/milkyWhite"/>
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                    android:id="@+id/id_CC_adresses"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_cc_address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/milkyWhite"
-                    android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_CC_address"
-                    app:Segoe="segoe_light"/>
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_CC_adresses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        app:Segoe="segoe_light"/>
+
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 

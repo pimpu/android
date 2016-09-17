@@ -178,8 +178,7 @@
                     android:id="@+id/radiogroup2040"
                     android:visibility="gone"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-                    android:checkedButton="@+id/feet20" >
+                    android:orientation="horizontal" >
 
                     <RadioButton
                         android:layout_width="wrap_content"
