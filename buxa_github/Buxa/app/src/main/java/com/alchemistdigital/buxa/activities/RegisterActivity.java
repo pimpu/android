@@ -19,21 +19,21 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllCommodity;
 import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.emailValidate;
@@ -208,28 +208,28 @@ public class RegisterActivity extends AppCompatActivity {
         prgDialog.show();
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.COMPANY_REGISTER_SERVER_URL, params, new AsyncHttpResponseHandler() {
+        RestClient.post(CommonVariables.COMPANY_REGISTER_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 prgDialog.cancel();
                 try {
-                    JSONObject json = new JSONObject(response);
+//                    JSONObject json = new JSONObject(response);
 
-                    Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
+                    Boolean error = response.getBoolean(CommonVariables.TAG_ERROR);
                     if (error) {
                         layout_noConnection.setVisibility(View.VISIBLE);
-                        errorMessage.setText(json.getString(CommonVariables.TAG_MESSAGE));
+                        errorMessage.setText(response.getString(CommonVariables.TAG_MESSAGE));
                     } else {
                         layout_noConnection.setVisibility(View.GONE);
                         SetSharedPreference setSharedPreference = new SetSharedPreference(RegisterActivity.this);
 
-                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), json.getInt("id"));
-                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), json.getString("api_key"));
-                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), json.getString("email"));
-                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), json.getString("loginName"));
-                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), json.getString("companyName"));
+                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), response.getInt("id"));
+                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), response.getString("api_key"));
+                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), response.getString("email"));
+                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), response.getString("loginName"));
+                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), response.getString("companyName"));
 
                         // create shortcut when user Register with this app.
                         CommonUtilities.addShortcut(RegisterActivity.this);
@@ -257,7 +257,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 // Hide Progress Dialog
                 prgDialog.hide();
                 // When Http response code is '404'

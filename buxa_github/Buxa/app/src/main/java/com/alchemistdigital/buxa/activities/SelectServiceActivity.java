@@ -106,7 +106,7 @@ public class SelectServiceActivity extends AppCompatActivity {
 
         if(  selchkboxlistId.size() > 0 ) {
             if( selchkboxlistName.contains(enumServices.TRANSPORTATION.toString()) ) {
-                Intent intentForServiceParameterActivity = new Intent(this, TrasportQuotationActivity.class);
+                Intent intentForServiceParameterActivity = new Intent(this, TransportQuotationActivity.class);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
                 intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
                 startActivity(intentForServiceParameterActivity);

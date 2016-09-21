@@ -10,10 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
@@ -45,7 +47,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_TYPE_OF_SHIPMENT = "TypeOfShipment";
     public static final String TABLE_TRANSPORTATION = "Transportation";
     public static final String TABLE_CUSTOM_CLEARANCE = "CustomClearance";
-    public static final String TABLE_FREIGHT_FORWARDING_SERVICE = "FreightForwarding";
+    public static final String TABLE_FREIGHT_FORWARDING = "FreightForwarding";
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
@@ -100,7 +102,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String  COMMODITY_SERVERID_IN_TRANSPORT = "commodity_serverId";
     private static final String  DIMEN_LENGTH = "dimen_length";
     private static final String  DIMEN_HEIGHT = "dimen_height";
-    private static final String  DIMEN_WEIGHT = "dimen_weight";
+    private static final String  DIMEN_WIDTH = "dimen_width";
     private static final String  SHIPMENT_TYPE = "shipment_type";
     private static final String  MEASUREMENT = "measurement";
     private static final String  GROSS_WEIGHT = "gross_weight";
@@ -214,7 +216,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     COMMODITY_SERVERID_IN_TRANSPORT +" INTEGER," +
                     DIMEN_LENGTH +" INTEGER," +
                     DIMEN_HEIGHT +" INTEGER," +
-                    DIMEN_WEIGHT +" INTEGER," +
+                    DIMEN_WIDTH +" INTEGER," +
                     AVAIL_OPTION +" TINYINT(4)," +
                     LRCOPY +" VARCHAR(200)," +
                     KEY_STATUS +" TINYINT(4)," +
@@ -234,8 +236,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Freight forwarding Table Create Statement
-    private static final String CREATE_TABLE_FREIGHT_FORWARDING_SERVICE =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_FREIGHT_FORWARDING_SERVICE+
+    private static final String CREATE_TABLE_FREIGHT_FORWARDING =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_FREIGHT_FORWARDING+
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     FREIGHT_FORWARDING_SERVER_ID +" INTEGER," +
                     BOOKING_ID +" VARCHAR(50)," +
@@ -300,7 +302,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
         db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE);
-        db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING_SERVICE);
+        db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
         db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
     }
@@ -318,7 +320,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING_SERVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
 
@@ -861,7 +863,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         contentValues.put(COMMODITY_SERVERID_IN_TRANSPORT, transportationModel.getCommodityServerId());
         contentValues.put(DIMEN_LENGTH, transportationModel.getDimenLength());
         contentValues.put(DIMEN_HEIGHT, transportationModel.getDimenHeight());
-        contentValues.put(DIMEN_WEIGHT, transportationModel.getDimenWeight());
+        contentValues.put(DIMEN_WIDTH, transportationModel.getDimenWidth());
         contentValues.put(AVAIL_OPTION, transportationModel.getAvailOption());
         contentValues.put(LRCOPY, transportationModel.getLrCopy());
         contentValues.put(KEY_STATUS, transportationModel.getStatus());
@@ -883,7 +885,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
-    // ------------------------ "Transportation" table methods ----------------//
+    // ------------------------ "CustomClearance" table methods ----------------//
     public int insertCustomClearance(CustomClearanceModel customClearanceModel) {
 
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -915,5 +917,74 @@ public class DatabaseClass extends SQLiteOpenHelper {
         }
         return id;
 
+    }
+
+    /**
+     * avail option is selected by user
+     * get pick up address when user select transportation avail option
+     * and user already selected Custom clearance FCL shipment type and Factory stuffing
+     *
+     * @param bookingId
+     * @return
+     */
+    public String getPickUpAddress(Context context, String bookingId) {
+        String address = null;
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT " +STUFFING_ADDRESS+  " FROM " + TABLE_CUSTOM_CLEARANCE + " WHERE "
+                + KEY_STATUS + " = 1 AND "
+                + BOOKING_ID +" = '"+bookingId+" AND "
+                + SHIPMENT_TYPE +" = 1 AND "
+                + STUFFING_TYPE +" = "+context.getResources().getString(R.string.strFactoryStuff)
+                + "';";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                address = res.getString(res.getColumnIndex(STUFFING_ADDRESS));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return address;
+    }
+
+    // ------------------------ "FreightForwarding" table methods ----------------//
+    public int insertFreightForwarding(FreightForwardingModel freightForwardingModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FREIGHT_FORWARDING_SERVER_ID, freightForwardingModel.getServerId());
+        contentValues.put(BOOKING_ID, freightForwardingModel.getBookingId());
+        contentValues.put(SHIPMENT_TYPE, freightForwardingModel.getShipmentType());
+        contentValues.put(PORT_OF_LOADING, freightForwardingModel.getPortOfLoading());
+        contentValues.put(PORT_OF_DESTINATION, freightForwardingModel.getPortOfDestination());
+        contentValues.put(AVAIL_OPTION, freightForwardingModel.getAvailOption());
+        contentValues.put(KEY_STATUS, freightForwardingModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, freightForwardingModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = FREIGHT_FORWARDING_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( freightForwardingModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_FREIGHT_FORWARDING, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_FREIGHT_FORWARDING, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 }

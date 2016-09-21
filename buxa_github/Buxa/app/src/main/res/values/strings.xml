@@ -118,7 +118,7 @@
     <string name="hint_contact_confirm_pwd">Confirm password</string>
     <string name="hint_dimensions_length">length</string>
     <string name="hint_dimensions_height">height</string>
-    <string name="hint_dimensions_weight">weight</string>
+    <string name="hint_dimensions_width">width</string>
     <string name="hint_IEC_number">IEC number</string>
     <string name="hint_AD_Code">AD code registration</string>
     <string name="hint_cubic_meter_measurement">Cubic meter measurement</string>

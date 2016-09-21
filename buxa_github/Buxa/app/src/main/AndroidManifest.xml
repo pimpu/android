@@ -32,7 +32,7 @@
             android:name=".activities.SelectServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.TrasportQuotationActivity"
+            android:name=".activities.TransportQuotationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.RegisterActivity"

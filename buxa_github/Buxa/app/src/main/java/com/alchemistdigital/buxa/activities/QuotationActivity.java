@@ -3,15 +3,19 @@ package com.alchemistdigital.buxa.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
+import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
@@ -26,6 +30,9 @@ public class QuotationActivity extends AppCompatActivity {
     String strAvailServiceOption = "Do you avail with ";
     private String bookId, shipmentType;
     LinearLayout layoutPrice;
+    TransportationModel transportDataModel;
+    CustomClearanceModel customClearanceModel;
+    FreightForwardingModel freightForwardingModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +44,22 @@ public class QuotationActivity extends AppCompatActivity {
         availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
         availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
 
-        shipmentType = getIntent().getExtras().getString("shipmentType");
-        bookId = getIntent().getExtras().getString("bookId");
+        transportDataModel = getIntent().getExtras().getParcelable("transportData");
+        customClearanceModel = getIntent().getExtras().getParcelable("customClearanceData");
+        freightForwardingModel = getIntent().getExtras().getParcelable("freightForwardingModel");
+
+        if ( transportDataModel  != null ) {
+            shipmentType = transportDataModel.getStrShipmentType();
+            bookId = transportDataModel.getBookingId();
+        }
+        else if( customClearanceModel != null) {
+            shipmentType = customClearanceModel.getStrShipmentType();
+            bookId = customClearanceModel.getBookingId();
+        }
+        else if( freightForwardingModel != null) {
+            shipmentType = freightForwardingModel.getStrShipmentType();
+            bookId = freightForwardingModel.getBookingId();
+        }
 
         init();
 
@@ -128,6 +149,7 @@ public class QuotationActivity extends AppCompatActivity {
 
         // remove duplicate contain from arrayComparingArray
         arrayComparingNameArray.removeAll(arrayServicesName);
+
         DatabaseClass databaseClass = new DatabaseClass(this);
         for (int y = 0 ; y < arrayComparingNameArray.size() ; y++ ) {
 
@@ -170,11 +192,17 @@ public class QuotationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent("finish_activity_from_quotation_activity");
+        Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
+        intent.putExtra(CommonVariables.EXTRA_MESSAGE, "finishingActivity");
         sendBroadcast(intent);
 
+        // check whether transport service option is left to select by user.
+        // if not, then availedServicesName is null
+        // and yes then availedServicesName is filled with unselected service option
+        // ***************************
+        // when user comes here first time, arrayComparingNameArray was full.
+        // when user selected avail option and he comes here, availedServicesName was full.
         if ( availedServicesName == null && arrayComparingNameArray.size() > 0) {
-
 
             new AlertDialog.Builder(QuotationActivity.this)
                     .setMessage(strAvailServiceOption)
@@ -183,7 +211,7 @@ public class QuotationActivity extends AppCompatActivity {
 
                             if( arrayComparingNameArray.contains(enumServices.TRANSPORTATION.toString()) ) {
 
-                                Intent intentTransportActivity = new Intent(QuotationActivity.this, TrasportQuotationActivity.class);
+                                Intent intentTransportActivity = new Intent(QuotationActivity.this, TransportQuotationActivity.class);
                                 intentTransportActivity.putStringArrayListExtra("availedServicesId", arrayComparingIdArray);
                                 intentTransportActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
                                 intentTransportActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);

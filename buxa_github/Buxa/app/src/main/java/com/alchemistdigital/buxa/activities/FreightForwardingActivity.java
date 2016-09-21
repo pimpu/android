@@ -4,8 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,15 +15,22 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
+import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
+
+import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class FreightForwardingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     LinearLayout layoutPortAddress;
@@ -32,6 +40,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     private AutoCompleteTextView txtPOLAddress, txtPODAddress;
     private String bookId;
     private EditText txtBookId;
+    TextInputLayout inputLayout_pol, inputLayout_pod;
+    private DatabaseClass dbClass;
+    TransportationModel transportDataModel;
+    CustomClearanceModel customClearanceModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,31 +55,51 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
         availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
 
-        if (getIntent().getExtras().getString("shipmentType") != null){
-            shipmentType = getIntent().getExtras().getString("shipmentType");
+        transportDataModel = getIntent().getExtras().getParcelable("transportData");
+        customClearanceModel = getIntent().getExtras().getParcelable("customClearanceData");
+
+        if ( transportDataModel  != null ) {
+            shipmentType = transportDataModel.getStrShipmentType();
+            bookId = transportDataModel.getBookingId();
         }
-        bookId = getIntent().getExtras().getString("bookId");
+        else if( customClearanceModel != null) {
+            shipmentType = customClearanceModel.getStrShipmentType();
+            bookId = customClearanceModel.getBookingId();
+        }
+
+        dbClass = new DatabaseClass(this);
 
         toolbarSetup();
 
         init();
 
         // this intent fire when back button of QuotationActivity pressed
-        registerReceiver(broadcast_reciever, new IntentFilter("finish_activity_from_quotation_activity"));
+        registerReceiver(broadcast_reciever, new IntentFilter(CommonVariables.DISPLAY_MESSAGE_ACTION));
     }
 
     BroadcastReceiver broadcast_reciever = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context arg0, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals("finish_activity_from_quotation_activity")) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            if (newMessage.equals("finishingActivity")) {
                 finish();
             }
+
+            // Releasing wake lock
+            WakeLocker.release();
         }
     };
 
     private void init() {
+        inputLayout_pol = (TextInputLayout) findViewById(R.id.input_layout_POL);
+        inputLayout_pod = (TextInputLayout) findViewById(R.id.input_layout_POD);
+        layoutPortAddress = (LinearLayout) findViewById(R.id.layout_port_address);
+
         txtBookId = (EditText) findViewById(R.id.book_id_FF);
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
@@ -80,17 +112,18 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             txtBookId.setText( bookId );
         }
 
-        layoutPortAddress = (LinearLayout) findViewById(R.id.layout_port_address);
         txtPOLAddress = (AutoCompleteTextView) findViewById(R.id.id_POL_adresses);
         txtPODAddress = (AutoCompleteTextView) findViewById(R.id.id_POD_adresses);
 
         // set google place library to autocomplete textview of port of loading
         txtPOLAddress.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtPOLAddress.setOnItemClickListener(this);
+        txtPOLAddress.setThreshold(1);
 
         // set google place library to autocomplete textview of port of destination
         txtPODAddress.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtPODAddress.setOnItemClickListener(this);
+        txtPODAddress.setThreshold(1);
 
         // radiogroup for type of shipment
         rgShipmentType = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_FF);
@@ -146,23 +179,70 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     }
 
     public void storeFreightForwardingEnquiry(View view) {
-        if( availedServicesName != null ) {
-            Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-            intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-            intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-            intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-            intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-            intentForQuoteActivity.putExtra("shipmentType", shipmentType);
-            intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-            startActivity(intentForQuoteActivity);
+        Boolean boolPOL = isEmptyString(txtPOLAddress.getText().toString());
+        Boolean boolPOD = isEmptyString(txtPODAddress.getText().toString());
+
+        if (shipmentType.equals("FCL")) {
+
+            if (boolPOL) {
+                inputLayout_pol.setErrorEnabled(false);
+            } else {
+                inputLayout_pol.setErrorEnabled(true);
+                inputLayout_pol.setError("POL address field is empty.");
+            }
+
+            if (boolPOD) {
+                inputLayout_pod.setErrorEnabled(false);
+            } else {
+                inputLayout_pod.setErrorEnabled(true);
+                inputLayout_pod.setError("POD address field is empty.");
+            }
         }
-        else {
-            Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-            intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-            intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-            intentForQuoteActivity.putExtra("shipmentType", shipmentType);
-            intentForQuoteActivity.putExtra("bookId", txtBookId.getText().toString().trim());
-            startActivity(intentForQuoteActivity);
+
+        if( shipmentType.equals("FCL") && boolPOL && boolPOD  ) {
+
+            if( availedServicesName != null ) {
+
+                FreightForwardingModel freightForwardingModel = new FreightForwardingModel(
+                        txtBookId.getText().toString(),
+                        txtPOLAddress.getText().toString(),
+                        txtPODAddress.getText().toString(),
+                        1,
+                        1,
+                        ""+DateHelper.convertToMillis(),
+                        shipmentType
+                );
+
+                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                intentForQuoteActivity.putExtra("freightForwardingModel", freightForwardingModel);
+                intentForQuoteActivity.putExtra("customClearanceData", customClearanceModel);
+                intentForQuoteActivity.putExtra("transportData", transportDataModel);
+                startActivity(intentForQuoteActivity);
+            }
+            else {
+
+                FreightForwardingModel freightForwardingModel = new FreightForwardingModel(
+                        txtBookId.getText().toString(),
+                        txtPOLAddress.getText().toString(),
+                        txtPODAddress.getText().toString(),
+                        0,
+                        1,
+                        ""+DateHelper.convertToMillis(),
+                        shipmentType
+                );
+
+                Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentForQuoteActivity.putExtra("freightForwardingModel", freightForwardingModel);
+                intentForQuoteActivity.putExtra("customClearanceData", customClearanceModel);
+                intentForQuoteActivity.putExtra("transportData", transportDataModel);
+                startActivity(intentForQuoteActivity);
+            }
         }
     }
 

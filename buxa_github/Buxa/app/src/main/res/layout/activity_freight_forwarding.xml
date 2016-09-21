@@ -115,44 +115,40 @@
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_hint_POL_Address_label"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_POL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_pol_address"
-                    android:textSize="13dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular" />
+                    android:textColorHint="@color/hintTextColor">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                    android:id="@+id/id_POL_adresses"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/milkyWhite"
-                    android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_pol_address"
-                    app:Segoe="segoe_light"/>
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_POL_adresses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_pol_address"
+                        app:Segoe="segoe_light"/>
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_hint_POD_Address_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/hint_pod_address"
-                    android:textSize="13dp"
-                    android:layout_marginTop="8dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular"/>
+                </android.support.design.widget.TextInputLayout>
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                    android:id="@+id/id_POD_adresses"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_POD"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/milkyWhite"
-                    android:textColorHint="@color/hintTextColor"
-                    android:hint="@string/hint_pod_address"
-                    app:Segoe="segoe_light"/>
+                    android:layout_marginTop="10dp"
+                    android:textColorHint="@color/hintTextColor">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_POD_adresses"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/milkyWhite"
+                        android:textColorHint="@color/hintTextColor"
+                        android:hint="@string/hint_pod_address"
+                        app:Segoe="segoe_light"/>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout

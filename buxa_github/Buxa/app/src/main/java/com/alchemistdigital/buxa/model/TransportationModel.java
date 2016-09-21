@@ -7,12 +7,13 @@ import android.os.Parcelable;
  * Created by Pimpu on 8/29/2016.
  */
 public class TransportationModel implements Parcelable {
+    private int  userId ;
     private int  transportationId ;
     private int serverId ;
     private int commodityServerId ;
     private int dimenLength ;
     private int dimenHeight ;
-    private int dimenWeight ;
+    private int dimenWidth;
     private int shipmentType ;
     private int noOfPack ;
     private int packType ;
@@ -25,12 +26,13 @@ public class TransportationModel implements Parcelable {
     private String bookingId;
     private String measurement;
     private float grossWeight;
+    private String strShipmentType;
 
     public TransportationModel() {
     }
 
     public TransportationModel(int serverId, int commodityServerId, int dimenLength,
-                               int dimenHeight, int dimenWeight, int shipmentType, int noOfPack,
+                               int dimenHeight, int dimenWidth, int shipmentType, int noOfPack,
                                int packType, String pickUp, String drop, String lrCopy,
                                int availOption, int status, String createdAt, String bookingId,
                                String measurement, float grossWeight) {
@@ -38,7 +40,7 @@ public class TransportationModel implements Parcelable {
         this.commodityServerId = commodityServerId;
         this.dimenLength = dimenLength;
         this.dimenHeight = dimenHeight;
-        this.dimenWeight = dimenWeight;
+        this.dimenWidth = dimenWidth;
         this.shipmentType = shipmentType;
         this.noOfPack = noOfPack;
         this.packType = packType;
@@ -51,6 +53,75 @@ public class TransportationModel implements Parcelable {
         this.bookingId = bookingId;
         this.measurement = measurement;
         this.grossWeight = grossWeight;
+    }
+
+    public TransportationModel(
+            int commodityServerId,
+            int dimenLength,
+            int dimenHeight,
+            int dimenWidth,
+            int noOfPack,
+            int packType,
+            String pickUp,
+            String drop,
+            int availOption,
+            int status,
+            String createdAt,
+            String bookingId,
+            String measurement,
+            float grossWeight,
+            String strShipmentType,
+            int shipmentType,
+            int userId) {
+        this.commodityServerId = commodityServerId;
+        this.dimenLength = dimenLength;
+        this.dimenHeight = dimenHeight;
+        this.dimenWidth = dimenWidth;
+        this.noOfPack = noOfPack;
+        this.packType = packType;
+        this.pickUp = pickUp;
+        this.drop = drop;
+        this.availOption = availOption;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.bookingId = bookingId;
+        this.measurement = measurement;
+        this.grossWeight = grossWeight;
+        this.strShipmentType = strShipmentType;
+        this.shipmentType = shipmentType;
+        this.userId = userId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"commodityServerId\":\"" +commodityServerId + '\"' +
+                ",\"dimenLength\":\"" + dimenLength + '\"' +
+                ",\"dimenHeight\":\"" + dimenHeight + '\"' +
+                ",\"dimenWidth\":\"" + dimenWidth + '\"' +
+                ",\"noOfPack\":\"" + noOfPack + '\"' +
+                ",\"packType\":\"" + packType + '\"' +
+                ",\"pickUp\":\"" + pickUp + '\"' +
+                ",\"drop\":\"" + drop + '\"' +
+                ",\"availOption\":\"" + availOption + '\"' +
+                ",\"status\":\"" + status + '\"' +
+                ",\"createdAt\":\"" + createdAt + '\"' +
+                ",\"bookingId\":\"" + bookingId + '\"' +
+                ",\"measurement\":\"" + measurement + '\"' +
+                ",\"grossWeight\":\"" + grossWeight + '\"' +
+                ",\"strShipmentType\":\"" + strShipmentType + '\"' +
+                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                ",\"userId\":\"" + userId + '\"' +
+                '}';
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getTransportationId() {
@@ -93,12 +164,12 @@ public class TransportationModel implements Parcelable {
         this.dimenHeight = dimenHeight;
     }
 
-    public int getDimenWeight() {
-        return dimenWeight;
+    public int getDimenWidth() {
+        return dimenWidth;
     }
 
-    public void setDimenWeight(int dimenWeight) {
-        this.dimenWeight = dimenWeight;
+    public void setDimenWidth(int dimenWidth) {
+        this.dimenWidth = dimenWidth;
     }
 
     public int getShipmentType() {
@@ -197,6 +268,14 @@ public class TransportationModel implements Parcelable {
         this.createdAt = createdAt;
     }
 
+    public String getStrShipmentType() {
+        return strShipmentType;
+    }
+
+    public void setStrShipmentType(String strShipmentType) {
+        this.strShipmentType = strShipmentType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -204,11 +283,12 @@ public class TransportationModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(userId);
         dest.writeInt(serverId);
         dest.writeInt(commodityServerId);
         dest.writeInt(dimenLength);
         dest.writeInt(dimenHeight);
-        dest.writeInt(dimenWeight);
+        dest.writeInt(dimenWidth);
         dest.writeInt(shipmentType);
         dest.writeInt(noOfPack);
         dest.writeInt(packType);
@@ -221,26 +301,29 @@ public class TransportationModel implements Parcelable {
         dest.writeString(bookingId);
         dest.writeString(measurement);
         dest.writeFloat(grossWeight);
+        dest.writeString(strShipmentType);
     }
 
     private TransportationModel(Parcel in) {
+        userId = in.readInt();
         serverId = in.readInt();
         commodityServerId = in.readInt();
         dimenLength = in.readInt();
         dimenHeight = in.readInt();
-        dimenWeight = in.readInt();
+        dimenWidth = in.readInt();
         shipmentType = in.readInt();
         noOfPack = in.readInt();
         packType = in.readInt();
-        pickUp = in.readString();;
-        drop = in.readString();;
-        lrCopy = in.readString();;
+        pickUp = in.readString();
+        drop = in.readString();
+        lrCopy = in.readString();
         availOption = in.readInt();
         status = in.readInt();
-        createdAt = in.readString();;
-        bookingId = in.readString();;
-        measurement = in.readString();;
+        createdAt = in.readString();
+        bookingId = in.readString();
+        measurement = in.readString();
         grossWeight = in.readFloat();
+        strShipmentType = in.readString();
     }
 
     public static final Parcelable.Creator<TransportationModel> CREATOR = new Parcelable.Creator<TransportationModel>() {

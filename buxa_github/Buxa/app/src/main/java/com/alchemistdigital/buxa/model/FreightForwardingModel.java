@@ -4,65 +4,66 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by user on 9/17/2016.
+ * Created by user on 9/19/2016.
  */
-public class CustomClearanceModel implements Parcelable {
-    private int customeClearanceId;
+public class FreightForwardingModel implements Parcelable {
+
+    private int freightForwardingId;
     private int serverId;
     private String bookingId;
     private int shipmentType;
-    private String stuffingType;
-    private String stuffingAddress;
+    private String portOfLoading;
+    private String portOfDestination;
     private int availOption ;
     private int status ;
     private String  createdAt ;
     private String strShipmentType;
 
-    public CustomClearanceModel() {
+    public FreightForwardingModel() {
     }
 
-    public CustomClearanceModel(
-            int serverId,
+    public FreightForwardingModel(
             String bookingId,
             int shipmentType,
-            String stuffingType,
-            String stuffingAddress,
+            String portOfLoading,
+            String portOfDestination,
             int availOption,
             int status,
-            String createdAt) {
-        this.serverId = serverId;
+            String createdAt,
+            int serverId) {
         this.bookingId = bookingId;
         this.shipmentType = shipmentType;
-        this.stuffingType = stuffingType;
-        this.stuffingAddress = stuffingAddress;
+        this.portOfLoading = portOfLoading;
+        this.portOfDestination = portOfDestination;
         this.availOption = availOption;
         this.status = status;
         this.createdAt = createdAt;
+        this.serverId = serverId;
     }
 
-    public CustomClearanceModel(
+    public FreightForwardingModel(
             String bookingId,
-            String stuffingType,
-            String stuffingAddress,
+            String portOfLoading,
+            String portOfDestination,
             int availOption,
             int status,
             String createdAt,
             String strShipmentType) {
         this.bookingId = bookingId;
-        this.stuffingType = stuffingType;
-        this.stuffingAddress = stuffingAddress;
+        this.portOfLoading = portOfLoading;
+        this.portOfDestination = portOfDestination;
         this.availOption = availOption;
         this.status = status;
         this.createdAt = createdAt;
         this.strShipmentType = strShipmentType;
     }
 
-    public int getCustomeClearanceId() {
-        return customeClearanceId;
+    public int getFreightForwardingId() {
+        return freightForwardingId;
     }
 
-    public void setCustomeClearanceId(int customeClearanceId) {
-        this.customeClearanceId = customeClearanceId;
+    public void setFreightForwardingId(int freightForwardingId) {
+        this.freightForwardingId = freightForwardingId;
     }
 
     public int getServerId() {
@@ -89,20 +90,20 @@ public class CustomClearanceModel implements Parcelable {
         this.shipmentType = shipmentType;
     }
 
-    public String getStuffingType() {
-        return stuffingType;
+    public String getPortOfLoading() {
+        return portOfLoading;
     }
 
-    public void setStuffingType(String stuffingType) {
-        this.stuffingType = stuffingType;
+    public void setPortOfLoading(String portOfLoading) {
+        this.portOfLoading = portOfLoading;
     }
 
-    public String getStuffingAddress() {
-        return stuffingAddress;
+    public String getPortOfDestination() {
+        return portOfDestination;
     }
 
-    public void setStuffingAddress(String stuffingAddress) {
-        this.stuffingAddress = stuffingAddress;
+    public void setPortOfDestination(String portOfDestination) {
+        this.portOfDestination = portOfDestination;
     }
 
     public int getAvailOption() {
@@ -147,36 +148,36 @@ public class CustomClearanceModel implements Parcelable {
         dest.writeInt(serverId);
         dest.writeString(bookingId);
         dest.writeInt(shipmentType);
-        dest.writeString(stuffingType);
-        dest.writeString(stuffingAddress);
+        dest.writeString(portOfLoading);
+        dest.writeString(portOfDestination);
         dest.writeInt(availOption);
         dest.writeInt(status);
         dest.writeString(createdAt);
         dest.writeString(strShipmentType);
     }
 
-    private CustomClearanceModel(Parcel in) {
+    protected FreightForwardingModel(Parcel in) {
         serverId = in.readInt();
         bookingId = in.readString();
         shipmentType = in.readInt();
-        stuffingType = in.readString();
-        stuffingAddress = in.readString();
+        portOfLoading = in.readString();
+        portOfDestination = in.readString();
         availOption = in.readInt();
         status = in.readInt();
         createdAt = in.readString();
         strShipmentType = in.readString();
     }
 
-    public static final Parcelable.Creator<CustomClearanceModel> CREATOR = new Parcelable.Creator<CustomClearanceModel>() {
-
+    public static final Creator<FreightForwardingModel> CREATOR = new Creator<FreightForwardingModel>() {
         @Override
-        public CustomClearanceModel createFromParcel(Parcel source) {
-            return new CustomClearanceModel(source);
+        public FreightForwardingModel createFromParcel(Parcel in) {
+            return new FreightForwardingModel(in);
         }
 
         @Override
-        public CustomClearanceModel[] newArray(int size) {
-            return new CustomClearanceModel[size];
+        public FreightForwardingModel[] newArray(int size) {
+            return new FreightForwardingModel[size];
         }
     };
+
 }

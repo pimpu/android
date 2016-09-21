@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundColor"
-    tools:context=".activities.TrasportQuotationActivity">
+    tools:context=".activities.TransportQuotationActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -367,7 +367,8 @@
                             android:id="@+id/id_dimensions_length"
                             android:hint="@string/hint_dimensions_length"
                             android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
+                            android:textColor="@color/milkyWhite"
+                            android:imeOptions="actionNext"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -384,11 +385,12 @@
                             android:id="@+id/id_dimensions_height"
                             android:hint="@string/hint_dimensions_height"
                             android:ems="10"
-                            android:textColor="@color/milkyWhite"/>
+                            android:textColor="@color/milkyWhite"
+                            android:imeOptions="actionNext"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_dimensions_weight"
+                        android:id="@+id/input_layout_dimensions_width"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -398,8 +400,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberSigned"
-                            android:id="@+id/id_dimensions_weight"
-                            android:hint="@string/hint_dimensions_weight"
+                            android:id="@+id/id_dimensions_width"
+                            android:hint="@string/hint_dimensions_width"
                             android:ems="10"
                             android:textColor="@color/milkyWhite"/>
                     </android.support.design.widget.TextInputLayout>
