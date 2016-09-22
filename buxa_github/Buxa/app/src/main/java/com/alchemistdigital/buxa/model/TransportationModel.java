@@ -7,8 +7,8 @@ import android.os.Parcelable;
  * Created by Pimpu on 8/29/2016.
  */
 public class TransportationModel implements Parcelable {
-    private int  userId ;
-    private int  transportationId ;
+    private int userId ;
+    private int transportationId ;
     private int serverId ;
     private int commodityServerId ;
     private int dimenLength ;

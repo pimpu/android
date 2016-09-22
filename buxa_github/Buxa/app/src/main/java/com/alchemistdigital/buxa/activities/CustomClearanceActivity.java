@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertCustomClearanceAsyncTask;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
@@ -30,6 +31,7 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
+import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class CustomClearanceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -37,11 +39,12 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     RadioGroup rgShipmentType, rgFCLStuffing;
     TextView hintAddress;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
-    String shipmentType = "LCL", pickupAddress, bookId, strSelectedStuffing;
+    String strShipmentType = "LCL", pickupAddress, bookId, strSelectedStuffing;
     private EditText txtBookId;
     TextInputLayout inputLayout_cc_address;
     DatabaseClass dbClass;
     TransportationModel transportDataModel;
+    int loginId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,16 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         arrayServicesName = getIntent().getExtras().getStringArrayList("ServicesName");
         availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
         availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
-
         transportDataModel = getIntent().getExtras().getParcelable("transportData");
+
+        // shipmentType and bookId intent is comes from quotation activity
+        if ( getIntent().getExtras().getString("shipmentType") != null ) {
+            strShipmentType = getIntent().getExtras().getString("shipmentType");
+        }
+        bookId = getIntent().getExtras().getString("bookId");
+
         if ( transportDataModel != null ) {
-            shipmentType = transportDataModel.getStrShipmentType();
+            strShipmentType = transportDataModel.getStrShipmentType();
             pickupAddress = transportDataModel.getPickUp();
             bookId = transportDataModel.getBookingId();
         }
@@ -80,11 +89,44 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             if (newMessage.equals("finishingActivity")) {
                 finish();
             }
+            else if(newMessage.equals("gotoNextActivity_CC")) {
+                intentActions(intent);
+            }
 
             // Releasing wake lock
             WakeLocker.release();
         }
     };
+
+    private void intentActions(Intent intent) {
+        Intent intentActivity;
+        if( availedServicesName != null ) {
+            if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(this, QuotationActivity.class);
+            }
+        }
+        else {
+            if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(this, QuotationActivity.class);
+            }
+        }
+
+        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
+
+        intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+        intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+        intentActivity.putExtra("customClearanceData", customClearanceModel);
+        intentActivity.putExtra("transportData", transportDataModel);
+        startActivity(intentActivity);
+    }
 
     private void init() {
         dbClass = new DatabaseClass(this);
@@ -95,7 +137,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
         if(bookId == null){
-            int loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
+            loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
 
             txtBookId.setText( getResources().getString(R.string.codeString, DateHelper.getBookId(),loginId));
         }
@@ -120,14 +162,14 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                     case R.id.rbLcl_cc:
                         rgFCLStuffing.setVisibility(View.GONE);
                         hintAddress.setText("Vendor CFS Address");
-                        shipmentType = "LCL";
+                        strShipmentType = "LCL";
                         strSelectedStuffing = null;
                         break;
 
                     case R.id.rbFcl_cc:
                         rgFCLStuffing.setVisibility(View.VISIBLE);
                         hintAddress.setText("Stuffing Address");
-                        shipmentType = "FCL";
+                        strShipmentType = "FCL";
 
                         if ( ((RadioButton)(findViewById(R.id.rbFactoryStuff))).isChecked() ) {
                             hintAddress.setText(getResources().getString(R.string.strFactoryStuff)+" address");
@@ -180,7 +222,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         // auto selection of field is did when user comes from Transportation page.
         if( availedServicesName != null || (arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0) ) {
-            if(shipmentType.equals("LCL")) {
+            if(strShipmentType.equals("LCL")) {
                 rgFCLStuffing.setVisibility(View.GONE);
                 rgShipmentType.check(R.id.rbLcl_cc);
                 hintAddress.setText("Vendor CFS Address");
@@ -229,82 +271,48 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             inputLayout_cc_address.setError(hintAddress.getText().toString()+" field is empty.");
         }
 
-        if( shipmentType.equals("FCL") && strSelectedStuffing == null ) {
+        if( strShipmentType.equals("FCL") && strSelectedStuffing == null ) {
             Toast.makeText(getApplicationContext(), "Stuffing type of FCL should be checked", Toast.LENGTH_LONG).show();
             return;
         }
 
         if (boolAddress) {
             String stuffingType;
-            if( shipmentType.equals("LCL") ) {
+            if( strShipmentType.equals("LCL") ) {
                 stuffingType = "Vendor CFS";
             }
             else {
                 stuffingType = strSelectedStuffing;
             }
 
+            int iAvail = 0;
             if( availedServicesName != null ) {
-
-                CustomClearanceModel customClearanceModel = new CustomClearanceModel(
-                        txtBookId.getText().toString(),
-                        stuffingType,
-                        txtCCAddress.getText().toString(),
-                        1,
-                        1,
-                        ""+DateHelper.convertToMillis(),
-                        shipmentType
-                );
-
-                if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                    Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
-                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                    intentForFreightForardingActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-                    intentForFreightForardingActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-                    intentForFreightForardingActivity.putExtra("customClearanceData", customClearanceModel);
-                    intentForFreightForardingActivity.putExtra("transportData", transportDataModel);
-                    startActivity(intentForFreightForardingActivity);
-                }
-                else {
-                    Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-                    intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-                    intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                    intentForQuoteActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-                    intentForQuoteActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-                    intentForQuoteActivity.putExtra("customClearanceData", customClearanceModel);
-                    intentForQuoteActivity.putExtra("transportData", transportDataModel);
-                    startActivity(intentForQuoteActivity);
-                }
-
+                iAvail = 1;
             }
-            else {
 
-                CustomClearanceModel customClearanceModel = new CustomClearanceModel(
-                        txtBookId.getText().toString(),
-                        stuffingType,
-                        txtCCAddress.getText().toString(),
-                        0,
-                        1,
-                        ""+DateHelper.convertToMillis(),
-                        shipmentType
-                );
+            CustomClearanceModel customClearanceModel = new CustomClearanceModel(
+                    txtBookId.getText().toString(),
+                    stuffingType,
+                    txtCCAddress.getText().toString(),
+                    iAvail,
+                    1,
+                    ""+DateHelper.convertToMillis(),
+                    strShipmentType,
+                    loginId,
+                    dbClass.getShipmentTypeServerId(strShipmentType)
+            );
 
-                if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                    Intent intentForFreightForardingActivity = new Intent(this, FreightForwardingActivity.class);
-                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-                    intentForFreightForardingActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                    intentForFreightForardingActivity.putExtra("customClearanceData", customClearanceModel);
-                    intentForFreightForardingActivity.putExtra("transportData", transportDataModel);
-                    startActivity(intentForFreightForardingActivity);
-                }
-                else {
-                    Intent intentForQuoteActivity = new Intent(this, QuotationActivity.class);
-                    intentForQuoteActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-                    intentForQuoteActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                    intentForQuoteActivity.putExtra("customClearanceData", customClearanceModel);
-                    intentForQuoteActivity.putExtra("transportData", transportDataModel);
-                    startActivity(intentForQuoteActivity);
-                }
+            // get quotation of transportation from server
+
+            // Check if Internet present
+            if (!isConnectingToInternet(CustomClearanceActivity.this)) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
+                // stop executing code by return
+                return;
+            } else {
+                InsertCustomClearanceAsyncTask.postCustomClearanceData(
+                        CustomClearanceActivity.this,
+                        customClearanceModel);
             }
         }
 

@@ -16,7 +16,7 @@ public class CommonVariables {
     public static final String OUT_JSON = "/json";
     public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
 
-    static String SERVER_URL = "http://c9122351.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://ba86a353.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
@@ -29,4 +29,6 @@ public class CommonVariables {
     public static final String QUERY_TRANSPORT_SERVICE_SERVER_URL = SERVER_URL + "transportservice";
     public static final String QUERY_PACKAGING_TYPE_SERVER_URL = SERVER_URL + "packagingtype";
     public static final String INSERT_TRANSPOERTATION_SERVER_URL = SERVER_URL + "inserttransport";
+    public static final String INSERT_CUSTOM_CLEARANCE_SERVER_URL = SERVER_URL + "insertcustomclearance";
+    public static final String INSERT_FREIGHT_FORWARDING_SERVER_URL = SERVER_URL + "insertfreightforwarding";
 }

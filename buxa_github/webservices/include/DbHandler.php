@@ -26,7 +26,7 @@ class DbHandler {
      * @param String $email User login email id
      * @param String $password User login password
      */
-    public function createUser($code, $company, $uname, $mobile,
+    public function createUser($company, $uname, $mobile,
                                     $email, $password, $create_time) {
         $response = array();
 
@@ -36,7 +36,6 @@ class DbHandler {
             // Generating API key
             $api_key = $this->generateApiKey();
             $result = mysql_query("INSERT INTO bx_user( api_key, 
-                                                        comp_ref_no, 
                                                         company,
                                                         uname,
                                                         mobile,
@@ -45,7 +44,6 @@ class DbHandler {
                                                         create_time ) 
                                                         VALUES( 
                                                         '".$api_key."',
-                                                        '".$code."',
                                                         '".$company."',
                                                         '".$uname."',
                                                         ".$mobile.",
@@ -130,56 +128,15 @@ class DbHandler {
     }
 
     /**
-     * Fetching user api key
-     * @param String $user_id user id primary key in user table
-     */
-    public function getApiKeyById($user_id) {
-        $stmt = $this->conn->prepare("SELECT api_key FROM users WHERE id = ?");
-        $stmt->bind_param("i", $user_id);
-        if ($stmt->execute()) {
-            // $api_key = $stmt->get_result()->fetch_assoc();
-            // TODO
-            $stmt->bind_result($api_key);
-            $stmt->close();
-            return $api_key;
-        } else {
-            return NULL;
-        }
-    }
-
-    /**
-     * Fetching user id by api key
-     * @param String $api_key user api key
-     */
-    public function getUserId($api_key) {
-        $stmt = $this->conn->prepare("SELECT id FROM users WHERE api_key = ?");
-        $stmt->bind_param("s", $api_key);
-        if ($stmt->execute()) {
-            $stmt->bind_result($user_id);
-            $stmt->fetch();
-            // TODO
-            // $user_id = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-            return $user_id;
-        } else {
-            return NULL;
-        }
-    }
-
-    /**
      * Validating user api key
      * If the api key is there in db, it is a valid key
      * @param String $api_key user api key
      * @return boolean
      */
     public function isValidApiKey($api_key) {
-        $stmt = $this->conn->prepare("SELECT id from users WHERE api_key = ?");
-        $stmt->bind_param("s", $api_key);
-        $stmt->execute();
-        $stmt->store_result();
-        $num_rows = $stmt->num_rows;
-        $stmt->close();
-        return $num_rows > 0;
+        $stmt = mysql_query("SELECT uid from bx_user WHERE api_key = '".$api_key."';");
+        $data = mysql_num_rows($stmt);
+        return $data > 0;
     }
 
     /**
@@ -275,75 +232,184 @@ class DbHandler {
         return $stmt;
     }
 
+    /* ------------- `bx_transport` table method ------------------ */
 
-    /* ------------- `tasks` table method ------------------ */
+    public function createTransportData($transportData) {
+        $response = array();
+        $decodedData = json_decode($transportData, true);
 
-    /**
-     * Creating new task
-     * @param String $user_id user id to whom task belongs to
-     * @param String $task task text
-     */
-    public function createTask($user_id, $task) {
-        $stmt = $this->conn->prepare("INSERT INTO tasks(task) VALUES(?)");
-        $stmt->bind_param("s", $task);
-        $result = $stmt->execute();
-        $stmt->close();
+        if (!$this->isTransportBookingExists($decodedData["bookingId"])) {
 
-        if ($result) {
-            // task row created
-            // now assign the task to user
-            $new_task_id = $this->conn->insert_id;
-            $res = $this->createUserTask($user_id, $new_task_id);
-            if ($res) {
-                // task created successfully
-                return $new_task_id;
+            $result = mysql_query("INSERT INTO bx_transport(
+                customer_code, 
+                bookid,
+                commodity_id,
+                demlength,
+                demwidth,
+                demheight,
+                shipment_type,
+                mesurement,
+                gross_weight,
+                no_of_pack,
+                pack_type,
+                source,
+                destination,
+                lrcopy,
+                avail_option,
+                create_time ) 
+                VALUES( 
+                ".$decodedData["userId"].",
+                '".$decodedData["bookingId"]."',
+                ".$decodedData["commodityServerId"].",
+                ".$decodedData["dimenLength"].",
+                ".$decodedData["dimenWidth"].",
+                ".$decodedData["dimenHeight"].",
+                ".$decodedData["shipmentType"].",
+                '".$decodedData["measurement"]."',
+                ".$decodedData["grossWeight"].",
+                ".$decodedData["noOfPack"].",
+                ".$decodedData["packType"].",
+                '".$decodedData["pickUp"]."',
+                '".$decodedData["drop"]."',
+                '',
+                ".$decodedData["availOption"].",
+                '".$decodedData["createdAt"]."');") or die(mysql_error());
+
+
+            // Check for successful insertion
+            if ($result) {
+                $response["message"] = USER_CREATED_SUCCESSFULLY;
+                $response["id"] = mysql_insert_id();
+
             } else {
-                // task failed to create
-                return NULL;
+                // Failed to create user
+                $response["message"] =  USER_CREATE_FAILED;
             }
         } else {
-            // task failed to create
-            return NULL;
-        }
+            // User with same email already existed in the db
+            $response["message"] =  USER_ALREADY_EXISTED;
+        } 
+
+        return $response; 
     }
 
     /**
-     * Fetching single task
-     * @param String $task_id id of the task
+     * Checking for duplicate transport enquiry by booking id
+     * @param String $bookingId to check in db
+     * @return boolean
      */
-    public function getTask($task_id, $user_id) {
-        $stmt = $this->conn->prepare("SELECT t.id, t.task, t.status, t.created_at from tasks t, user_tasks ut WHERE t.id = ? AND ut.task_id = t.id AND ut.user_id = ?");
-        $stmt->bind_param("ii", $task_id, $user_id);
-        if ($stmt->execute()) {
-            $res = array();
-            $stmt->bind_result($id, $task, $status, $created_at);
-            // TODO
-            // $task = $stmt->get_result()->fetch_assoc();
-            $stmt->fetch();
-            $res["id"] = $id;
-            $res["task"] = $task;
-            $res["status"] = $status;
-            $res["created_at"] = $created_at;
-            $stmt->close();
-            return $res;
+    private function isTransportBookingExists($bookingId) {
+        $checkMatchTransportQuery = mysql_query("SELECT trnsid FROM bx_transport WHERE bookid='".$bookingId."';");
+        return mysql_num_rows($checkMatchTransportQuery) > 0 ;
+    }
+
+
+    /* ------------- `bx_custom_clearance` table method ------------------ */
+
+    public function createCustomClearanceData($customClearancedata) {
+        $response = array();
+        $decodedData = json_decode($customClearancedata, true);
+
+        if (!$this->isCustomClearanceBookingExists($decodedData["bookingId"])) {
+
+            $result = mysql_query("INSERT INTO bx_custom_clearance(
+                bookid,
+                customer_code,
+                type_of_shipment,
+                stuffing,
+                address,
+                avail_option,
+                create_time ) 
+                VALUES( 
+                '".$decodedData["bookingId"]."',
+                ".$decodedData["userId"].",
+                ".$decodedData["iShipmentType"].",
+                '".$decodedData["stuffingType"]."',
+                '".$decodedData["stuffingAddress"]."',
+                ".$decodedData["availOption"].",
+                '".$decodedData["createdAt"]."');") or die(mysql_error());
+
+            // Check for successful insertion
+            if ($result) {
+                $response["message"] = USER_CREATED_SUCCESSFULLY;
+                $response["id"] = mysql_insert_id();
+
+            } else {
+                // Failed to create user
+                $response["message"] =  USER_CREATE_FAILED;
+            }
         } else {
-            return NULL;
-        }
+            // User with same email already existed in the db
+            $response["message"] =  USER_ALREADY_EXISTED;
+        } 
+
+        return $response; 
     }
 
     /**
-     * Fetching all user tasks
-     * @param String $user_id id of the user
+     * Checking for duplicate custom clearance enquiry by booking id
+     * @param String $bookingId to check in db
+     * @return boolean
      */
-    public function getAllUserTasks($user_id) {
-        $stmt = $this->conn->prepare("SELECT t.* FROM tasks t, user_tasks ut WHERE t.id = ut.task_id AND ut.user_id = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $tasks = $stmt->get_result();
-        $stmt->close();
-        return $tasks;
+    private function isCustomClearanceBookingExists($bookingId) {
+        $checkMatchTransportQuery = mysql_query("SELECT clearanceid FROM bx_custom_clearance WHERE bookid='".$bookingId."';");
+        return mysql_num_rows($checkMatchTransportQuery) > 0 ;
     }
 
+
+    /* ------------- `bx_freight_forwarding` table method ------------------ */
+
+    public function createFreightForwardingData($freightForwardingdata) {
+        $response = array();
+        $decodedData = json_decode($freightForwardingdata, true);
+
+        if (!$this->isFreightForwardingBookingExists($decodedData["bookingId"])) {
+
+            $result = mysql_query("INSERT INTO bx_freight_forwarding(
+                bookid,
+                customer_code,
+                type_of_shipment,
+                pol,
+                pod,
+                avail_option,
+                create_time ) 
+                VALUES( 
+                '".$decodedData["bookingId"]."',
+                ".$decodedData["userId"].",
+                ".$decodedData["shipmentType"].",
+                '".$decodedData["portOfLoading"]."',
+                '".$decodedData["portOfDestination"]."',
+                ".$decodedData["availOption"].",
+                '".$decodedData["createdAt"]."');") or die(mysql_error());
+
+            // Check for successful insertion
+            if ($result) {
+                $response["message"] = USER_CREATED_SUCCESSFULLY;
+                $response["id"] = mysql_insert_id();
+
+            } else {
+                // Failed to create user
+                $response["message"] =  USER_CREATE_FAILED;
+            }
+        } else {
+            // User with same email already existed in the db
+            $response["message"] =  USER_ALREADY_EXISTED;
+        } 
+
+        return $response; 
+    }
+
+    /**
+     * Checking for duplicate freight forwarding enquiry by booking id
+     * @param String $bookingId to check in db
+     * @return boolean
+     */
+    private function isFreightForwardingBookingExists($bookingId) {
+        $checkMatchTransportQuery = mysql_query("SELECT freightid FROM bx_freight_forwarding WHERE bookid='".$bookingId."';");
+        return mysql_num_rows($checkMatchTransportQuery) > 0 ;
+    }
+
+    
     /**
      * Updating task
      * @param String $task_id id of the task
@@ -371,26 +437,6 @@ class DbHandler {
         $stmt->close();
         return $num_affected_rows > 0;
     }
-
-    /* ------------- `user_tasks` table method ------------------ */
-
-    /**
-     * Function to assign a task to user
-     * @param String $user_id id of the user
-     * @param String $task_id id of the task
-     */
-    public function createUserTask($user_id, $task_id) {
-        $stmt = $this->conn->prepare("INSERT INTO user_tasks(user_id, task_id) values(?, ?)");
-        $stmt->bind_param("ii", $user_id, $task_id);
-        $result = $stmt->execute();
-
-        if (false === $result) {
-            die('execute() failed: ' . htmlspecialchars($stmt->error));
-        }
-        $stmt->close();
-        return $result;
-    }
-
 }
 
 ?>

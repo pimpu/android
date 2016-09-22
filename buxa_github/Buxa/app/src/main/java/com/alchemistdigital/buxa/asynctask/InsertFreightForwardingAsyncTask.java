@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.model.TransportationModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -20,14 +20,13 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by user on 9/19/2016.
+ * Created by user on 9/22/2016.
  */
-public class InsertTransportationAsyncTask {
+public class InsertFreightForwardingAsyncTask {
     private static ProgressDialog prgDialog;
     private static GetSharedPreference getSharedPreference;
 
-    public static void postTransportationData(Context context, TransportationModel transportationModel) {
-
+    public static void postFreightForwardingData(Context context, FreightForwardingModel freightForwardingModel) {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
@@ -40,22 +39,19 @@ public class InsertTransportationAsyncTask {
         RequestParams params;
         params = new RequestParams();
 
-//        System.out.println(transportationModel.toString());
+        params.put("freightForwardingdata", freightForwardingModel.toString());
 
-        params.put("transportdata", transportationModel.toString());
-
-        invokeWS(context, params, transportationModel);
-
+        invokeWS(context, params, freightForwardingModel);
     }
 
-    private static void invokeWS(final Context context, RequestParams params, final TransportationModel transportationModel) {
+    private static void invokeWS(final Context context, RequestParams params, final FreightForwardingModel freightForwardingModel) {
         // Show Progress Dialog
         prgDialog.show();
 
         String apiKeyHeader = getSharedPreference.getApiKey(context.getResources().getString(R.string.apikey));
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.postWithHeader(CommonVariables.INSERT_TRANSPOERTATION_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
+        RestClient.postWithHeader(CommonVariables.INSERT_FREIGHT_FORWARDING_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
@@ -70,32 +66,23 @@ public class InsertTransportationAsyncTask {
                     } else {
                         DatabaseClass dbHelper = new DatabaseClass(context);
 
-                        TransportationModel dbInsertTransportData = new TransportationModel(
-                                json.getInt("id"),
-                                transportationModel.getCommodityServerId(),
-                                transportationModel.getDimenLength(),
-                                transportationModel.getDimenHeight(),
-                                transportationModel.getDimenWidth(),
-                                transportationModel.getShipmentType(),
-                                transportationModel.getNoOfPack(),
-                                transportationModel.getPackType(),
-                                transportationModel.getPickUp(),
-                                transportationModel.getDrop(),
-                                "",
-                                transportationModel.getAvailOption(),
-                                transportationModel.getStatus(),
-                                transportationModel.getCreatedAt(),
-                                transportationModel.getBookingId(),
-                                transportationModel.getMeasurement(),
-                                transportationModel.getGrossWeight()
+                        FreightForwardingModel dbInsertFFData = new FreightForwardingModel(
+                                freightForwardingModel.getBookingId(),
+                                freightForwardingModel.getShipmentType(),
+                                freightForwardingModel.getPortOfLoading(),
+                                freightForwardingModel.getPortOfDestination(),
+                                freightForwardingModel.getAvailOption(),
+                                freightForwardingModel.getStatus(),
+                                freightForwardingModel.getCreatedAt(),
+                                json.getInt("id")
                         );
 
-                        int i = dbHelper.insertTransportation(dbInsertTransportData);
+                        int i = dbHelper.insertFreightForwarding(dbInsertFFData);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity");
-                            intent.putExtra("transportData",transportationModel);
+                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity_FF");
+                            intent.putExtra("FFData",freightForwardingModel);
                             context.sendBroadcast(intent);
                         }
                     }
@@ -140,7 +127,6 @@ public class InsertTransportationAsyncTask {
                     }
                 }
             }
-
         });
     }
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2016 at 03:21 PM
+-- Generation Time: Sep 22, 2016 at 02:47 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -544,13 +544,25 @@ CREATE TABLE IF NOT EXISTS `bx_cusdetail` (
 
 CREATE TABLE IF NOT EXISTS `bx_custom_clearance` (
 `clearanceid` int(11) NOT NULL,
-  `bookid` int(11) NOT NULL,
-  `customer_code` varchar(100) NOT NULL,
+  `bookid` varchar(100) NOT NULL,
+  `customer_code` int(11) NOT NULL,
   `type_of_shipment` int(11) NOT NULL,
   `stuffing` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `avail_option` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `create_time` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bx_custom_clearance`
+--
+
+INSERT INTO `bx_custom_clearance` (`clearanceid`, `bookid`, `customer_code`, `type_of_shipment`, `stuffing`, `address`, `avail_option`, `status`, `create_time`) VALUES
+(1, 'BUXA2209160308355', 5, 2, 'Vendor CFS', 'Thane West, Thane, Maharashtra, India', 0, 1, '1474537255796'),
+(2, 'BUXA2209160342325', 5, 1, 'Dock stuffing', 'Forum Bus Stop, Hosur Road, 7th Block, Bengaluru, Karnataka, India', 0, 1, '1474539169775'),
+(3, 'BUXA2209160351595', 5, 1, 'Factory stuffing', 'Thane West, Thane, Maharashtra, India', 0, 1, '1474539728625'),
+(4, 'BUXA2209160608265', 0, 1, 'Dock stuffing', 'Yercaud, Tamil Nadu, India', 1, 1, '1474548235317');
 
 -- --------------------------------------------------------
 
@@ -560,13 +572,23 @@ CREATE TABLE IF NOT EXISTS `bx_custom_clearance` (
 
 CREATE TABLE IF NOT EXISTS `bx_freight_forwarding` (
 `freightid` int(11) NOT NULL,
-  `bookid` int(11) NOT NULL,
+  `bookid` varchar(100) NOT NULL,
   `customer_code` int(11) NOT NULL,
   `type_of_shipment` int(11) NOT NULL,
-  `pod` int(11) NOT NULL,
-  `pol` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `pol` varchar(100) NOT NULL,
+  `pod` varchar(100) NOT NULL,
+  `avail_option` tinyint(4) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `create_time` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bx_freight_forwarding`
+--
+
+INSERT INTO `bx_freight_forwarding` (`freightid`, `bookid`, `customer_code`, `type_of_shipment`, `pol`, `pod`, `avail_option`, `status`, `create_time`) VALUES
+(1, 'BUXA2209160519355', 5, 1, 'Yudhister Setu, Shastri Park, New Delhi, Delhi, India', 'Tirupati, Andhra Pradesh, India', 0, 1, '1474544998177'),
+(2, 'BUXA2209160608265', 5, 1, 'Raipur, Chhattisgarh, India', 'Thane West, Thane, Maharashtra, India', 0, 1, '1474548048759');
 
 -- --------------------------------------------------------
 
@@ -759,14 +781,14 @@ INSERT INTO `bx_ship_type` (`tid`, `stypename`, `status`) VALUES
 
 CREATE TABLE IF NOT EXISTS `bx_transport` (
 `trnsid` int(11) NOT NULL,
-  `customer_code` varchar(100) NOT NULL,
+  `customer_code` int(11) NOT NULL,
   `bookid` varchar(100) NOT NULL,
   `commodity_id` int(11) NOT NULL,
   `demlength` int(11) NOT NULL,
   `demwidth` int(11) NOT NULL,
   `demheight` int(11) NOT NULL,
   `shipment_type` int(11) NOT NULL,
-  `mesurement` int(11) NOT NULL,
+  `mesurement` varchar(10) NOT NULL,
   `gross_weight` float NOT NULL,
   `no_of_pack` int(11) NOT NULL,
   `pack_type` int(11) NOT NULL,
@@ -774,8 +796,20 @@ CREATE TABLE IF NOT EXISTS `bx_transport` (
   `destination` varchar(100) NOT NULL,
   `lrcopy` varchar(500) NOT NULL,
   `avail_option` tinyint(4) NOT NULL DEFAULT '0',
-  `status` tinyint(4) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  `create_time` varchar(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bx_transport`
+--
+
+INSERT INTO `bx_transport` (`trnsid`, `customer_code`, `bookid`, `commodity_id`, `demlength`, `demwidth`, `demheight`, `shipment_type`, `mesurement`, `gross_weight`, `no_of_pack`, `pack_type`, `source`, `destination`, `lrcopy`, `avail_option`, `status`, `create_time`) VALUES
+(1, 5, 'BUXA2109160543395', 76, 5, 3, 63, 2, '50', 500, 9, 15, 'Thane, Maharashtra, India', 'FDA Bhawan, Kotla Marg, New Delhi, Delhi, India', '', 0, 1, '1474460303903'),
+(2, 5, 'BUXA2109160644475', 56, 5, 6, 9, 2, '50', 500, 25, 26, 'Nhava Sheva, Navi Mumbai, Maharashtra, India', 'Ratnagiri, Chiplun, Maharashtra, India', '', 0, 1, '1474463745266'),
+(3, 5, 'BUXA2109160648155', 76, 2, 6, 3, 1, '40', 1, 2, 14, 'Frazer Town, Bengaluru, Karnataka, India', 'Thane, Maharashtra, India', '', 0, 1, '1474464070221'),
+(4, 0, 'BUXA2209160351595', 56, 5, 6, 2, 1, '40', 5, 2, 30, 'Ghaziabad, Uttar Pradesh, India', 'Yelahanka, Bengaluru, Karnataka, India', '', 1, 1, '1474539795220'),
+(5, 0, 'BUXA2209160608265', 56, 5, 9, 6, 1, '40', 25, 25, 17, 'JGI Jain University Jain College, Bengaluru, Karnataka, India', 'Gdh Securities Pvt Ltd, Hyderabad, Telangana, Indiag', '', 1, 1, '1474548220963');
 
 -- --------------------------------------------------------
 
@@ -787,7 +821,6 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
 `uid` int(11) NOT NULL,
   `api_key` varchar(100) NOT NULL,
   `gcm_id` longtext,
-  `comp_ref_no` varchar(100) NOT NULL,
   `company` varchar(100) NOT NULL,
   `uname` varchar(100) NOT NULL,
   `mobile` varchar(20) NOT NULL,
@@ -801,8 +834,8 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
 -- Dumping data for table `bx_user`
 --
 
-INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `comp_ref_no`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
-(4, '5745d7d2661d2ec088eecf609334f5d0', NULL, 'REF260816024118', 'ADM', 'yogesh', '8466356908', 'yogesh@adm.com', 'test', '1472202717624', 1);
+INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
+(5, '6c13b559a3224bcba3a9e1a52b43c0d4', NULL, 'ADM', 'Yogesh Pimpalkar', '8466525807', 'yogesh@adm.com', 'test', '1473837432596', 1);
 
 -- --------------------------------------------------------
 
@@ -948,12 +981,12 @@ MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
 -- AUTO_INCREMENT for table `bx_custom_clearance`
 --
 ALTER TABLE `bx_custom_clearance`
-MODIFY `clearanceid` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `clearanceid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `bx_freight_forwarding`
 --
 ALTER TABLE `bx_freight_forwarding`
-MODIFY `freightid` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `freightid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `bx_icd`
 --
@@ -983,7 +1016,7 @@ MODIFY `tid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 -- AUTO_INCREMENT for table `bx_transport`
 --
 ALTER TABLE `bx_transport`
-MODIFY `trnsid` int(11) NOT NULL AUTO_INCREMENT;
+MODIFY `trnsid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `bx_user`
 --

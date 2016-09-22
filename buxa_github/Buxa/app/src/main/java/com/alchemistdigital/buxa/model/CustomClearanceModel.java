@@ -7,10 +7,10 @@ import android.os.Parcelable;
  * Created by user on 9/17/2016.
  */
 public class CustomClearanceModel implements Parcelable {
-    private int customeClearanceId;
+    private int userId ;
     private int serverId;
     private String bookingId;
-    private int shipmentType;
+    private int iShipmentType;
     private String stuffingType;
     private String stuffingAddress;
     private int availOption ;
@@ -24,7 +24,7 @@ public class CustomClearanceModel implements Parcelable {
     public CustomClearanceModel(
             int serverId,
             String bookingId,
-            int shipmentType,
+            int iShipmentType,
             String stuffingType,
             String stuffingAddress,
             int availOption,
@@ -32,7 +32,7 @@ public class CustomClearanceModel implements Parcelable {
             String createdAt) {
         this.serverId = serverId;
         this.bookingId = bookingId;
-        this.shipmentType = shipmentType;
+        this.iShipmentType = iShipmentType;
         this.stuffingType = stuffingType;
         this.stuffingAddress = stuffingAddress;
         this.availOption = availOption;
@@ -47,7 +47,9 @@ public class CustomClearanceModel implements Parcelable {
             int availOption,
             int status,
             String createdAt,
-            String strShipmentType) {
+            String strShipmentType,
+            int userId,
+            int iShipmentType) {
         this.bookingId = bookingId;
         this.stuffingType = stuffingType;
         this.stuffingAddress = stuffingAddress;
@@ -55,14 +57,31 @@ public class CustomClearanceModel implements Parcelable {
         this.status = status;
         this.createdAt = createdAt;
         this.strShipmentType = strShipmentType;
+        this.userId = userId;
+        this.iShipmentType = iShipmentType;
     }
 
-    public int getCustomeClearanceId() {
-        return customeClearanceId;
+    @Override
+    public String toString() {
+        return "{" +
+                "\"bookingId\":\""+bookingId + '\"' +
+                ",\"stuffingType\":\""+stuffingType + '\"' +
+                ",\"stuffingAddress\":\""+stuffingAddress + '\"' +
+                ",\"availOption\":\""+availOption + '\"' +
+                ",\"status\":\""+status + '\"' +
+                ",\"createdAt\":\""+createdAt + '\"' +
+                ",\"strShipmentType\":\""+strShipmentType + '\"' +
+                ",\"userId\":\"" + userId + '\"' +
+                ",\"iShipmentType\":\""+iShipmentType + '\"' +
+                '}';
     }
 
-    public void setCustomeClearanceId(int customeClearanceId) {
-        this.customeClearanceId = customeClearanceId;
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getServerId() {
@@ -81,12 +100,12 @@ public class CustomClearanceModel implements Parcelable {
         this.bookingId = bookingId;
     }
 
-    public int getShipmentType() {
-        return shipmentType;
+    public int getiShipmentType() {
+        return iShipmentType;
     }
 
-    public void setShipmentType(int shipmentType) {
-        this.shipmentType = shipmentType;
+    public void setiShipmentType(int iShipmentType) {
+        this.iShipmentType = iShipmentType;
     }
 
     public String getStuffingType() {
@@ -144,9 +163,10 @@ public class CustomClearanceModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(userId);
         dest.writeInt(serverId);
         dest.writeString(bookingId);
-        dest.writeInt(shipmentType);
+        dest.writeInt(iShipmentType);
         dest.writeString(stuffingType);
         dest.writeString(stuffingAddress);
         dest.writeInt(availOption);
@@ -156,9 +176,10 @@ public class CustomClearanceModel implements Parcelable {
     }
 
     private CustomClearanceModel(Parcel in) {
+        userId = in.readInt();
         serverId = in.readInt();
         bookingId = in.readString();
-        shipmentType = in.readInt();
+        iShipmentType = in.readInt();
         stuffingType = in.readString();
         stuffingAddress = in.readString();
         availOption = in.readInt();

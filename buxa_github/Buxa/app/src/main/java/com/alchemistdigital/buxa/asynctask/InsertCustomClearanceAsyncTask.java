@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.model.TransportationModel;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -20,13 +20,13 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by user on 9/19/2016.
+ * Created by user on 9/22/2016.
  */
-public class InsertTransportationAsyncTask {
+public class InsertCustomClearanceAsyncTask {
     private static ProgressDialog prgDialog;
     private static GetSharedPreference getSharedPreference;
 
-    public static void postTransportationData(Context context, TransportationModel transportationModel) {
+    public static void postCustomClearanceData(Context context, CustomClearanceModel customClearanceModel) {
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
@@ -40,22 +40,22 @@ public class InsertTransportationAsyncTask {
         RequestParams params;
         params = new RequestParams();
 
-//        System.out.println(transportationModel.toString());
+        System.out.println(customClearanceModel.toString());
 
-        params.put("transportdata", transportationModel.toString());
+        params.put("customClearancedata", customClearanceModel.toString());
 
-        invokeWS(context, params, transportationModel);
+        invokeWS(context, params, customClearanceModel);
 
     }
 
-    private static void invokeWS(final Context context, RequestParams params, final TransportationModel transportationModel) {
+    private static void invokeWS(final Context context, RequestParams params, final CustomClearanceModel customClearanceModel) {
         // Show Progress Dialog
         prgDialog.show();
 
         String apiKeyHeader = getSharedPreference.getApiKey(context.getResources().getString(R.string.apikey));
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.postWithHeader(CommonVariables.INSERT_TRANSPOERTATION_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
+        RestClient.postWithHeader(CommonVariables.INSERT_CUSTOM_CLEARANCE_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
@@ -70,32 +70,23 @@ public class InsertTransportationAsyncTask {
                     } else {
                         DatabaseClass dbHelper = new DatabaseClass(context);
 
-                        TransportationModel dbInsertTransportData = new TransportationModel(
+                        CustomClearanceModel dbInsertCCData = new CustomClearanceModel(
                                 json.getInt("id"),
-                                transportationModel.getCommodityServerId(),
-                                transportationModel.getDimenLength(),
-                                transportationModel.getDimenHeight(),
-                                transportationModel.getDimenWidth(),
-                                transportationModel.getShipmentType(),
-                                transportationModel.getNoOfPack(),
-                                transportationModel.getPackType(),
-                                transportationModel.getPickUp(),
-                                transportationModel.getDrop(),
-                                "",
-                                transportationModel.getAvailOption(),
-                                transportationModel.getStatus(),
-                                transportationModel.getCreatedAt(),
-                                transportationModel.getBookingId(),
-                                transportationModel.getMeasurement(),
-                                transportationModel.getGrossWeight()
+                                customClearanceModel.getBookingId(),
+                                customClearanceModel.getiShipmentType(),
+                                customClearanceModel.getStuffingType(),
+                                customClearanceModel.getStuffingAddress(),
+                                customClearanceModel.getAvailOption(),
+                                customClearanceModel.getStatus(),
+                                customClearanceModel.getCreatedAt()
                         );
 
-                        int i = dbHelper.insertTransportation(dbInsertTransportData);
+                        int i = dbHelper.insertCustomClearance(dbInsertCCData);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity");
-                            intent.putExtra("transportData",transportationModel);
+                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity_CC");
+                            intent.putExtra("CCData",customClearanceModel);
                             context.sendBroadcast(intent);
                         }
                     }

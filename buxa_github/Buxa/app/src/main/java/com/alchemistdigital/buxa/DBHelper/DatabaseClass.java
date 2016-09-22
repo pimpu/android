@@ -895,7 +895,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CUSTOM_CLEARANCE_SERVER_ID, customClearanceModel.getServerId());
         contentValues.put(BOOKING_ID, customClearanceModel.getBookingId());
-        contentValues.put(SHIPMENT_TYPE, customClearanceModel.getShipmentType());
+        contentValues.put(SHIPMENT_TYPE, customClearanceModel.getiShipmentType());
         contentValues.put(STUFFING_TYPE, customClearanceModel.getStuffingType());
         contentValues.put(STUFFING_ADDRESS, customClearanceModel.getStuffingAddress());
         contentValues.put(AVAIL_OPTION, customClearanceModel.getAvailOption());

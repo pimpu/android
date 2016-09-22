@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by user on 9/19/2016.
  */
 public class FreightForwardingModel implements Parcelable {
-
+    private int userId;
     private int freightForwardingId;
     private int serverId;
     private String bookingId;
@@ -48,7 +48,9 @@ public class FreightForwardingModel implements Parcelable {
             int availOption,
             int status,
             String createdAt,
-            String strShipmentType) {
+            String strShipmentType,
+            int userId,
+            int shipmentType) {
         this.bookingId = bookingId;
         this.portOfLoading = portOfLoading;
         this.portOfDestination = portOfDestination;
@@ -56,6 +58,23 @@ public class FreightForwardingModel implements Parcelable {
         this.status = status;
         this.createdAt = createdAt;
         this.strShipmentType = strShipmentType;
+        this.userId = userId;
+        this.shipmentType = shipmentType;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"userId\":\""+ userId + '\"' +
+                ",\"bookingId\":\"" + bookingId + '\"' +
+                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                ",\"portOfLoading\":\"" + portOfLoading + '\"' +
+                ",\"portOfDestination\":\"" + portOfDestination + '\"' +
+                ",\"availOption\":\"" + availOption + '\"' +
+                ",\"status\":\"" + status + '\"' +
+                ",\"createdAt\":\"" + createdAt + '\"' +
+                ",\"strShipmentType\":\"" + strShipmentType + '\"' +
+                '}';
     }
 
     public int getFreightForwardingId() {

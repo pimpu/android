@@ -28,7 +28,7 @@ public class QuotationActivity extends AppCompatActivity {
     ArrayList<String> arrayComparingNameArray = new ArrayList<String>();
     ArrayList<String> arrayComparingIdArray = new ArrayList<String>();
     String strAvailServiceOption = "Do you avail with ";
-    private String bookId, shipmentType;
+    private String bookId, strShipmentType;
     LinearLayout layoutPrice;
     TransportationModel transportDataModel;
     CustomClearanceModel customClearanceModel;
@@ -49,15 +49,15 @@ public class QuotationActivity extends AppCompatActivity {
         freightForwardingModel = getIntent().getExtras().getParcelable("freightForwardingModel");
 
         if ( transportDataModel  != null ) {
-            shipmentType = transportDataModel.getStrShipmentType();
+            strShipmentType = transportDataModel.getStrShipmentType();
             bookId = transportDataModel.getBookingId();
         }
         else if( customClearanceModel != null) {
-            shipmentType = customClearanceModel.getStrShipmentType();
+            strShipmentType = customClearanceModel.getStrShipmentType();
             bookId = customClearanceModel.getBookingId();
         }
         else if( freightForwardingModel != null) {
-            shipmentType = freightForwardingModel.getStrShipmentType();
+            strShipmentType = freightForwardingModel.getStrShipmentType();
             bookId = freightForwardingModel.getBookingId();
         }
 
@@ -216,7 +216,7 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentTransportActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
                                 intentTransportActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentTransportActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                                intentTransportActivity.putExtra("shipmentType", shipmentType);
+                                intentTransportActivity.putExtra("shipmentType", strShipmentType);
                                 intentTransportActivity.putExtra("bookId", bookId);
                                 startActivity(intentTransportActivity);
 
@@ -227,7 +227,7 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentCCActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
                                 intentCCActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentCCActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                                intentCCActivity.putExtra("shipmentType", shipmentType);
+                                intentCCActivity.putExtra("shipmentType", strShipmentType);
                                 intentCCActivity.putExtra("bookId", bookId);
                                 startActivity(intentCCActivity);
 
@@ -238,7 +238,7 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentFFActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
                                 intentFFActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentFFActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-                                intentFFActivity.putExtra("shipmentType", shipmentType);
+                                intentFFActivity.putExtra("shipmentType", strShipmentType);
                                 intentFFActivity.putExtra("bookId", bookId);
                                 startActivity(intentFFActivity);
 
