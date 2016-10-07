@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -171,6 +172,11 @@ public class RegisterActivity extends AppCompatActivity {
                             return;
                         } else {
                             layout_noConnection.setVisibility(View.GONE);
+                            View view = RegisterActivity.this.getCurrentFocus();
+                            if (view != null) {
+                                InputMethodManager imm = (InputMethodManager)RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
                             registerCompanyForBuxa();
                         }
                     } else {
@@ -301,7 +307,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from GetAllTransportService when all default value from server get finished.
+            // this message is come from GetAllPackageType when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
                 Intent intentServicesActivity = new Intent(RegisterActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

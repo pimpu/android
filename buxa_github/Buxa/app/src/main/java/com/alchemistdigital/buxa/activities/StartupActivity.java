@@ -66,7 +66,7 @@ public class StartupActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from GetAllTransportService when all default value from server get finished.
+            // this message is come from GetAllPackageType when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
                 Intent intentServicesActivity = new Intent(StartupActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

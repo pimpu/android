@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
@@ -23,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class QuotationActivity extends AppCompatActivity {
-    TextView tvCompanyName, tvClientName, tvQuotationDate, tvQuotationSubject, tvBookingNo;
+    TextView tvCompanyName, tvQuotationDate, tvBookingNo;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     ArrayList<String> arrayComparingNameArray = new ArrayList<String>();
     ArrayList<String> arrayComparingIdArray = new ArrayList<String>();
     String strAvailServiceOption = "Do you avail with ";
     private String bookId, strShipmentType;
-    LinearLayout layoutPrice;
+//    LinearLayout layoutPrice;
     TransportationModel transportDataModel;
     CustomClearanceModel customClearanceModel;
     FreightForwardingModel freightForwardingModel;
@@ -63,7 +62,7 @@ public class QuotationActivity extends AppCompatActivity {
 
         init();
 
-        initQuoteTable();
+//        initQuoteTable();
     }
 
     private void initQuoteTable() {
@@ -113,31 +112,31 @@ public class QuotationActivity extends AppCompatActivity {
         name.setTypeface(segoeRegularFace);
         name.setTextSize(20);
         name.setTextColor(getResources().getColor(R.color.milkyWhite));
-        layoutPrice.addView(name);
+//        layoutPrice.addView(name);
 
         quote.setText("Quote price");
         quote.setTypeface(segoeRegularFace);
         quote.setTextSize(16);
         quote.setTextColor(getResources().getColor(R.color.milkyWhite));
-        layoutPrice.addView(quote);
+//        layoutPrice.addView(quote);
     }
 
     private void init() {
 
-        layoutPrice = (LinearLayout) findViewById(R.id.id_tables_layout);
+//        layoutPrice = (LinearLayout) findViewById(R.id.id_tables_layout);
 
         tvCompanyName = (TextView) findViewById(R.id.id_tv_companyName_quotation);
-        tvClientName = (TextView) findViewById(R.id.id_tv_clientName_quotation);
+//        tvClientName = (TextView) findViewById(R.id.id_tv_clientName_quotation);
         tvBookingNo = (TextView) findViewById(R.id.id_tv_bookId);
         tvQuotationDate = (TextView) findViewById(R.id.id_tv_date_quotation);
-        tvQuotationSubject = (TextView) findViewById(R.id.id_tv_quotation_subject);
+//        tvQuotationSubject = (TextView) findViewById(R.id.id_tv_quotation_subject);
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
         String companyName = getSharedPreference.getCompanyName(getResources().getString(R.string.companyName));
         String loginName = getSharedPreference.getLoginName(getResources().getString(R.string.loginName));
 
         tvCompanyName.setText(companyName);
-        tvClientName.setText(loginName);
+//        tvClientName.setText(loginName);
         tvBookingNo.setText(bookId);
         tvQuotationDate.setText(DateHelper.convertToString_Quotation( new Date().getTime() ) );
 
@@ -163,7 +162,7 @@ public class QuotationActivity extends AppCompatActivity {
             }
         }
 
-        String strSelectedServices="Quotation for ";
+        /*String strSelectedServices="Quotation for ";
         for (int i = 0 ; i < arrayServicesName.size() ; i++ ) {
             if ( (arrayServicesName.size() - 1) == i ) {
                 strSelectedServices = strSelectedServices + arrayServicesName.get(i) + ". ";
@@ -187,7 +186,7 @@ public class QuotationActivity extends AppCompatActivity {
         }
         // this portion of code run when availed option is selected
 
-        tvQuotationSubject.setText(strSelectedServices);
+        tvQuotationSubject.setText(strSelectedServices);*/
     }
 
     @Override
@@ -229,6 +228,7 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentCCActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentCCActivity.putExtra("shipmentType", strShipmentType);
                                 intentCCActivity.putExtra("bookId", bookId);
+                                intentCCActivity.putExtra("transportData",transportDataModel);
                                 startActivity(intentCCActivity);
 
                             } else if(arrayComparingNameArray.contains(enumServices.FREIGHT_FORWARDING.toString())) {
@@ -240,6 +240,8 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentFFActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentFFActivity.putExtra("shipmentType", strShipmentType);
                                 intentFFActivity.putExtra("bookId", bookId);
+                                intentFFActivity.putExtra("transportData", transportDataModel);
+                                intentFFActivity.putExtra("customClearanceData", customClearanceModel);
                                 startActivity(intentFFActivity);
 
                             }

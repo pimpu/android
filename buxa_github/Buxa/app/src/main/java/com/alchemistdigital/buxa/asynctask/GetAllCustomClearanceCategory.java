@@ -63,6 +63,7 @@ public class GetAllCustomClearanceCategory {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
+                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
             }
 
             @Override

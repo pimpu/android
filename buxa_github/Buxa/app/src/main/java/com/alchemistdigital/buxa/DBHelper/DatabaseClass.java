@@ -495,6 +495,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public String getCommodityDataByServerID(int serverId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT "+ COMMODITY_NAME +" FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ COMMODITY_SERVER_ID+" = "+ serverId +"; ";
+
+        System.out.println("getCommodityDataByServerID: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(COMMODITY_NAME));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
+    }
+
     // ------------------------ "CustomClearanceLocation" table methods ----------------//
 
     public long insertCustomLoaction(CustomClearanceLocation customClearanceLocation) {
@@ -843,6 +868,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
+    public String getPackagingTypeDataByServerId(int packTypeServerId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT "+ PACKAGE_TYPE_NAME +" FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ PACKAGE_TYPE_SERVER_ID+" = "+ packTypeServerId +"; ";
+
+        System.out.println("getPackagingTypeDataByServerId: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
+    }
+
     // ------------------------ "Transportation" table methods ----------------//
 
     public int insertTransportation(TransportationModel transportationModel) {
@@ -987,4 +1037,5 @@ public class DatabaseClass extends SQLiteOpenHelper {
         }
         return id;
     }
+
 }

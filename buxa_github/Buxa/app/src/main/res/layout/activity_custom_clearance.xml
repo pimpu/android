@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/backgroundColor"
+    android:background="@drawable/splash_background"
     tools:context="com.alchemistdigital.buxa.activities.CustomClearanceActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -47,18 +47,22 @@
                 android:layout_height="wrap_content"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_bookid_CC"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:id="@+id/book_id_CC"
-                    android:hint="@string/hint_bookId"
-                    android:ems="10"
-                    android:textColor="@color/milkyWhite"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:layout_height="wrap_content">
+                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:id="@+id/book_id_CC"
+                        android:hint="@string/hint_bookId"
+                        android:ems="10"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -77,8 +81,7 @@
                     app:Segoe="segoe_regular"
                     android:text="@string/hint_type_of_shipment"
                     android:textSize="12dp"
-                    android:paddingLeft="5dp"
-                    android:textColor="@color/milkyWhite"/>
+                    android:paddingLeft="5dp"/>
 
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -91,16 +94,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rbLcl_cc"
-                        android:text="@string/strLcl"
-                        android:textColor="@color/milkyWhite"/>
+                        android:text="@string/strLcl"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rbFcl_cc"
                         android:layout_marginLeft="50dp"
-                        android:text="@string/strFcl"
-                        android:textColor="@color/milkyWhite"/>
+                        android:text="@string/strFcl"/>
 
                 </RadioGroup>
 
@@ -116,16 +117,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rbFactoryStuff"
-                        android:text="@string/strFactoryStuff"
-                        android:textColor="@color/milkyWhite"/>
+                        android:text="@string/strFactoryStuff"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rbDockStuff"
                         android:layout_marginLeft="30dp"
-                        android:text="@string/strDockStuff"
-                        android:textColor="@color/milkyWhite"/>
+                        android:text="@string/strDockStuff"/>
 
                 </RadioGroup>
 
@@ -137,8 +136,7 @@
                     android:text="sadsdsds"
                     android:textSize="13dp"
                     android:paddingLeft="5dp"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/milkyWhite"/>
+                    android:layout_marginTop="8dp"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_cc_address"
@@ -149,7 +147,7 @@
                         android:id="@+id/id_CC_adresses"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/milkyWhite"
+                        android:ems="10"
                         app:Segoe="segoe_light"/>
 
                 </android.support.design.widget.TextInputLayout>
@@ -170,14 +168,14 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_regular"
                     android:textSize="25dp"
-                    android:text="@string/next"
-                    android:textColor="@color/milkyWhite" />
+                    android:text="@string/next"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignRight="@+id/id_tv_CC_Next"
                     android:layout_marginTop="3dp"
+                    android:tint="@color/black_semi_transparent"
                     android:src="@drawable/ic_keyboard_arrow_right"/>
             </LinearLayout>
 

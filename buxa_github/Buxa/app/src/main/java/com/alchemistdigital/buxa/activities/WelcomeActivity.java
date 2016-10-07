@@ -2,13 +2,15 @@ package com.alchemistdigital.buxa.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 
 public class WelcomeActivity extends AppCompatActivity {
     TextView tv_welcome, tv_CompanyName, tv_UserName, tv_UserEmail;
@@ -38,5 +40,24 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void goToServiceActivity(View view) {
         startActivity(new Intent(this, SelectServiceActivity.class));
+    }
+
+    public void btnEnquiryClick(View view) {
+//        startActivity(new Intent(this, EnquiriesActivity.class));
+        Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
+    }
+
+    public void btnLogout(View view) {
+        SetSharedPreference setSharedPreference = new SetSharedPreference(this);
+        // signout from app.
+        setSharedPreference.setBooleanLogin(getString(R.string.boolean_login_sharedPref), "false");
+
+        Intent intent = new Intent(this, StartupActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+
     }
 }

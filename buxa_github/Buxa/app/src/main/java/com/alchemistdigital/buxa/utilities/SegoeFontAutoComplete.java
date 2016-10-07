@@ -44,6 +44,7 @@ public class SegoeFontAutoComplete extends AutoCompleteTextView {
     }
 
     public void init(Context context, AttributeSet attrs) {
+
         TypedArray values = context.obtainStyledAttributes(attrs, R.styleable.TypefacedTextView);
 
         int typefaceValue = values.getInt(R.styleable.TypefacedTextView_Segoe, 0);
@@ -77,4 +78,5 @@ public class SegoeFontAutoComplete extends AutoCompleteTextView {
         }
         return typeface;
     }
+
 }

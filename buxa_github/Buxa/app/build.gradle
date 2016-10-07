@@ -49,4 +49,11 @@ dependencies {
 
     // fuzzy image load with glide gallery
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // futuresimple/android-floating-action-button
+    compile 'com.getbase:floatingactionbutton:1.10.1'
+
+    // send gcm notification
+    compile files('libs/gcm.jar')
+
 }

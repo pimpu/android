@@ -109,6 +109,7 @@ public class InsertTransportationAsyncTask {
                 prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
+                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
             }
 
             @Override

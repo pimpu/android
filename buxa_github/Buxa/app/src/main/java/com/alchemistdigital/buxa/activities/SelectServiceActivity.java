@@ -70,7 +70,7 @@ public class SelectServiceActivity extends AppCompatActivity {
             CheckBox cb = new CheckBox(this);
             cb.setId(transportServiceData.get(i).getServerId());
             cb.setText(transportServiceData.get(i).getName());
-            cb.setTextColor(getResources().getColor(R.color.milkyWhite));
+            cb.setTextColor(getResources().getColor(R.color.backgroundColor));
             cb.setTextSize(getResources().getDimension(R.dimen.serviceCheckBoxTextSize));
             cb.setPadding(50, 0, 0, 0);
             cb.setTypeface(seogoLight);

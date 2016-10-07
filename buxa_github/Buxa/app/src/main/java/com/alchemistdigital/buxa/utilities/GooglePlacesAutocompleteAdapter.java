@@ -49,7 +49,7 @@ public class GooglePlacesAutocompleteAdapter extends ArrayAdapter<String> implem
 
                     // Assign the data to the FilterResults
                     filterResults.values = resultList;
-                    filterResults.count = resultList.size();
+                            filterResults.count = resultList.size();
                 }
                 return filterResults;
             }

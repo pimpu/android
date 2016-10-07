@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.InsertCustomClearanceAsyncTask;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
@@ -31,7 +30,6 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
-import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class CustomClearanceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -90,7 +88,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                 finish();
             }
             else if(newMessage.equals("gotoNextActivity_CC")) {
-                intentActions(intent);
+//                intentActions(intent);
             }
 
             // Releasing wake lock
@@ -98,8 +96,8 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         }
     };
 
-    private void intentActions(Intent intent) {
-        Intent intentActivity;
+    private void intentActions(CustomClearanceModel customClearanceModel) {
+        Intent intentActivity = null;
         if( availedServicesName != null ) {
             if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
                 intentActivity = new Intent(this, FreightForwardingActivity.class);
@@ -117,7 +115,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             }
         }
 
-        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
+//        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
 
         intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
         intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
@@ -302,7 +300,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                     dbClass.getShipmentTypeServerId(strShipmentType)
             );
 
-            // get quotation of transportation from server
+            /*// get quotation of transportation from server
 
             // Check if Internet present
             if (!isConnectingToInternet(CustomClearanceActivity.this)) {
@@ -313,7 +311,9 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                 InsertCustomClearanceAsyncTask.postCustomClearanceData(
                         CustomClearanceActivity.this,
                         customClearanceModel);
-            }
+            }*/
+
+            intentActions(customClearanceModel);
         }
 
     }
@@ -323,4 +323,5 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         super.onDestroy();
         unregisterReceiver(broadcast_reciever);
     }
+
 }

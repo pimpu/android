@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#0189ba"
+    android:background="@drawable/splash_background"
     tools:context="com.alchemistdigital.buxa.activities.QuotationActivity">
 
     <ScrollView
@@ -40,29 +40,29 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="3dp"
                         android:text="@string/app_name"
-                        android:textColor="@color/milkyWhite"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp"
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="Buxa Address"
-                        android:textColor="@color/milkyWhite"/>
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="Buxa email"
-                        android:textColor="@color/milkyWhite"/>
+                        android:textColor="@color/colorPrimaryDark"/>
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:text="Buxa contact number"
-                        android:textColor="@color/milkyWhite"/>
+                        android:textColor="@color/colorPrimaryDark"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -77,8 +77,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/strBookNo"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular"/>
+                    app:Segoe="segoe_regular"
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:id="@+id/id_tv_bookId"
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
                     android:text="Booking Date"
-                    android:textColor="@color/milkyWhite" />
+                    android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
 
             <LinearLayout
@@ -98,8 +98,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/strDate"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular"/>
+                    app:Segoe="segoe_regular"
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:id="@+id/id_tv_date_quotation"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
                     android:text="Quotation Date"
-                    android:textColor="@color/milkyWhite" />
+                    android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
 
             <LinearLayout
@@ -120,8 +120,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/company_name"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_regular"/>
+                    app:Segoe="segoe_regular"
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:id="@+id/id_tv_companyName_quotation"
@@ -129,10 +129,25 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
                     android:text="@string/companyName"
-                    android:textColor="@color/milkyWhite" />
+                    android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:text="@string/str_thanking_toast"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -148,7 +163,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ref: "
-                        android:textColor="@color/milkyWhite"
                         app:Segoe="segoe_regular" />
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontTextView
@@ -156,12 +170,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:Segoe="segoe_light"
-                        android:text="Subject"
-                        android:textColor="@color/milkyWhite" />
+                        android:text="Subject"/>
                 </LinearLayout>
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -171,7 +184,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/client"
-                    android:textColor="@color/milkyWhite"
                     app:Segoe="segoe_regular"/>
 
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView
@@ -179,17 +191,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
-                    android:text="@string/loginName"
-                    android:textColor="@color/milkyWhite" />
+                    android:text="@string/loginName"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=","
-                    android:textColor="@color/milkyWhite"/>
-            </LinearLayout>
+                    android:text=","/>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -199,21 +209,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_quote_content"
-                    android:textColor="@color/milkyWhite"
                     app:Segoe="segoe_light"/>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/id_tables_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="20dp">
 
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -223,10 +232,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_quote_footer"
-                    android:textColor="@color/milkyWhite"
                     app:Segoe="segoe_light"/>
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
     </ScrollView>

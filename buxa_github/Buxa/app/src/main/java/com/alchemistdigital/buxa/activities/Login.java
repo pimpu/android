@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -142,6 +143,12 @@ public class Login extends Fragment implements View.OnClickListener {
                         return;
                     } else {
                         layout_noConnection.setVisibility(View.GONE);
+                        View view = getActivity().getCurrentFocus();
+                        if (view != null) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+
                         LoginCompanyForBuxa();
                     }
                 }
@@ -200,8 +207,14 @@ public class Login extends Fragment implements View.OnClickListener {
                             GetAllShipmentType.getShipmentType(getActivity(), CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
                         else {
+
+                            // sign in from app.
+                            setSharedPreference.setBooleanLogin(getString(R.string.boolean_login_sharedPref), "true");
+
                             Intent intent = new Intent(getActivity(), WelcomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             getActivity().finish();
                             startActivity(intent);
                         }
@@ -215,8 +228,15 @@ public class Login extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                // Hide Progress Dialog
-                prgDialog.hide();
+                prgDialog.cancel();
+                System.out.println("status code: "+statusCode);
+                System.out.println("responseString: "+responseString);
+                Toast.makeText(getActivity(), "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -229,8 +249,18 @@ public class Login extends Fragment implements View.OnClickListener {
                 }
                 // When Http response code other than 404, 500
                 else {
-                    System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                    Toast.makeText(getActivity(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    try {
+                        if( errorResponse.getBoolean("error") ) {
+                            System.out.println(errorResponse.getString("message"));
+                            Toast.makeText(getActivity(), errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
+                            Toast.makeText(getActivity(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

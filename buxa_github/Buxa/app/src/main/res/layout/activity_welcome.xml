@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#0189ba"
+    android:background="@color/backgroundColor"
     tools:context="com.alchemistdigital.buxa.activities.WelcomeActivity">
 
     <ScrollView
@@ -44,17 +45,13 @@
                         android:layout_marginBottom="25dp"
                         android:layout_centerHorizontal="true"/>
                 </RelativeLayout>
-
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#0189ba"
+                android:background="@color/backgroundColor"
                 android:gravity="center_horizontal"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -63,74 +60,124 @@
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/arrow"/>
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_tv_companyName"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:Segoe="segoe_regular"
-                    android:paddingBottom="30dp"
-                    android:text="Company Name"
-                    android:textSize="25dp"
-                    android:textColor="@color/milkyWhite" />
+                    android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_action_person"
-                    android:tint="@color/milkyWhite" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_tv_userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="20dp"
-                    android:textSize="20dp"
-                    android:text="User name"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_light"/>
+                        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                            android:id="@+id/id_tv_companyName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:Segoe="segoe_regular"
+                            android:paddingBottom="30dp"
+                            android:text="Company Name"
+                            android:textSize="25dp"
+                            android:textColor="@color/milkyWhite" />
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_action_email"
-                    android:tint="@color/milkyWhite" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_action_person"
+                            android:tint="@color/milkyWhite" />
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_tv_userEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="30dp"
-                    android:textSize="20dp"
-                    android:text="User Email"
-                    android:textColor="@color/milkyWhite"
-                    app:Segoe="segoe_light" />
+                        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                            android:id="@+id/id_tv_userName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="20dp"
+                            android:textSize="20dp"
+                            android:text="User name"
+                            android:textColor="@color/milkyWhite"
+                            app:Segoe="segoe_light"/>
 
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_action_email"
+                            android:tint="@color/milkyWhite" />
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                            android:id="@+id/id_tv_userEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="30dp"
+                            android:textSize="20dp"
+                            android:text="User Email"
+                            android:textColor="@color/milkyWhite"
+                            app:Segoe="segoe_light" />
+                    </LinearLayout>
+
+                    <com.getbase.floatingactionbutton.FloatingActionsMenu
+                        android:id="@+id/right_labels"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="70dp"
+                        fab:fab_addButtonColorNormal="@color/milkyWhite"
+                        fab:fab_addButtonColorPressed="@color/white_pressed"
+                        fab:fab_addButtonPlusIconColor="@color/half_black"
+                        fab:fab_addButtonSize="normal"
+                        fab:fab_labelStyle="@style/menu_labels_style"
+                        fab:fab_labelsPosition="right">
+
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_icon="@drawable/ic_exit_to_app_black"
+                            fab:fab_colorNormal="@color/milkyWhite"
+                            fab:fab_size="mini"
+                            fab:fab_title="Log Out"
+                            fab:fab_colorPressed="@color/white_pressed"
+                            android:onClick="btnLogout"/>
+
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_icon="@drawable/ic_assignment_black"
+                            fab:fab_colorNormal="@color/milkyWhite"
+                            fab:fab_size="mini"
+                            fab:fab_title="Enquiry"
+                            fab:fab_colorPressed="@color/white_pressed"
+                            android:onClick="btnEnquiryClick"/>
+
+                    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity ="right|bottom"
+                        android:paddingBottom="10dp"
+                        android:onClick="goToServiceActivity">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                            android:id="@+id/id_tv_letsStrat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:Segoe="segoe_regular"
+                            android:textSize="25dp"
+                            android:text="@string/strStartButtom"
+                            android:textColor="@color/milkyWhite" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/id_tv_letsStrat"
+                            android:layout_marginTop="3dp"
+                            android:src="@drawable/ic_keyboard_arrow_right"/>
+                    </LinearLayout>
+
+                </FrameLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity ="right"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:onClick="goToServiceActivity">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:id="@+id/id_tv_letsStrat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:Segoe="segoe_regular"
-                    android:textSize="25dp"
-                    android:text="@string/strStartButtom"
-                    android:textColor="@color/milkyWhite" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/id_tv_letsStrat"
-                    android:layout_marginTop="3dp"
-                    android:src="@drawable/ic_keyboard_arrow_right"/>
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

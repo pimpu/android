@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
@@ -34,7 +33,6 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
-import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class TransportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -91,7 +89,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 finish();
             }
             else if(newMessage.equals("gotoNextActivity")) {
-                intentActions(intent);
+//                intentActions(intent);
             }
 
             // Releasing wake lock
@@ -99,7 +97,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         }
     };
 
-    private void intentActions(Intent intent) {
+    private void intentActions(TransportationModel transportationModel) {
 
         Intent intentActivity;
         if( availedServicesName != null ) {
@@ -123,7 +121,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
         }
 
-        TransportationModel transportationModel = intent.getExtras().getParcelable("transportData");
+//        TransportationModel transportationModel = intent.getExtras().getParcelable("transportData");
 
         intentActivity.putStringArrayListExtra("ServicesId",  ids);
         intentActivity.putStringArrayListExtra("ServicesName", names);
@@ -464,7 +462,9 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                     loginId
             );
 
-            // get quotation of transportation from server
+            intentActions(transportationModel);
+
+            /*// get quotation of transportation from server
 
             // Check if Internet present
             if (!isConnectingToInternet(TransportQuotationActivity.this)) {
@@ -475,7 +475,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 InsertTransportationAsyncTask.postTransportationData(
                         TransportQuotationActivity.this,
                         transportationModel);
-            }
+            }*/
         }
     }
 
