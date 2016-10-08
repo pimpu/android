@@ -1,6 +1,7 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -219,8 +221,6 @@ public class Login extends Fragment implements View.OnClickListener {
                             startActivity(intent);
                         }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -265,4 +265,24 @@ public class Login extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getActivity());
+
+            if(newMessage.equals("success")) {
+
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 }

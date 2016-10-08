@@ -223,7 +223,7 @@
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberSigned"
+                        android:inputType="numberDecimal"
                         android:id="@+id/id_gross_weight"
                         android:hint="@string/hint_gross_weight"
                         android:ems="10"/>

@@ -22,4 +22,8 @@ public class RestClient {
         client.addHeader("Authorization", apiKeyHeader);
         client.post(url, params, responseHandler);
     }
+
+    public static void put(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+        client.put(url, params, responseHandler);
+    }
 }

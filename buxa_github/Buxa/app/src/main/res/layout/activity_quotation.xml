@@ -147,6 +147,21 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:text="Happy Shipping."
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+
             <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

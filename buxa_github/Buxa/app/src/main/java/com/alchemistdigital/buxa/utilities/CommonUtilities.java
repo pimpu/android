@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.activities.SplashScreen;
 import com.alchemistdigital.buxa.activities.StartupActivity;
 
 /**

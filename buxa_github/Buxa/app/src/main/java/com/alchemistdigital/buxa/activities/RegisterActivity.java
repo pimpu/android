@@ -247,12 +247,12 @@ public class RegisterActivity extends AppCompatActivity {
                             // get All shipment type
                             GetAllShipmentType.getShipmentType(RegisterActivity.this, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                         }
-                        else {
+                        /*else {
                             Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                             RegisterActivity.this.finish();
                             startActivity(intent);
-                        }
+                        }*/
 
                     }
 

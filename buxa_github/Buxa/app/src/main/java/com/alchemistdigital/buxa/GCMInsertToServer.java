@@ -3,6 +3,8 @@ package com.alchemistdigital.buxa;
 import android.content.Context;
 import android.util.Log;
 
+import com.alchemistdigital.buxa.asynctask.updateGCMID;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.google.android.gcm.GCMRegistrar;
 
 /**
@@ -12,11 +14,10 @@ public class GCMInsertToServer {
     public static void register(Context context, String regId) {
         Log.i(context.getClass().getSimpleName(), "registering device (regId = " + regId + ")");
 
-        /*GetSharedPreference getPreference = new GetSharedPreference(context);
-        int uId = getPreference.getUserIdPreference(context.getResources().getString(R.string.userId));
-        String strUID = String.valueOf(uId);
+        GetSharedPreference getPreference = new GetSharedPreference(context);
+        int uId = getPreference.getLoginId(context.getResources().getString(R.string.loginId));
 
-        new UpdateGCMRegIdAsyncTask(context,regId,strUID).execute();*/
+        new updateGCMID(context,regId,uId);
 
     }
 

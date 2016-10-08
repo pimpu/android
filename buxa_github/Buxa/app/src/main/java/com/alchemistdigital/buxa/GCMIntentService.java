@@ -3,6 +3,7 @@ package com.alchemistdigital.buxa;
 import android.content.Context;
 import android.content.Intent;
 
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -18,6 +19,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(Context context, Intent intent) {
         String message = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+        CommonUtilities.displayMessage(context, "success");
     }
 
     @Override

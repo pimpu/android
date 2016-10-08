@@ -7,20 +7,20 @@ public class CommonVariables {
     public static final String TAG_ERROR = "error";
     public static final String TAG_MESSAGE = "message";
     public static final String DISPLAY_MESSAGE_ACTION = "com.alchemistdigital.buxa.DISPLAY_MESSAGE";
-    public static final String EXTRA_MESSAGE = "message";
 
+    public static final String EXTRA_MESSAGE = "message";
     //    -------------- place api -------------------
     public static final String LOG_TAG = "Google Places Autocomplete";
     public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     public static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     public static final String OUT_JSON = "/json";
-    public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
 
+    public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
     // Google project number
     public static final String SENDER_ID = "931228915270";
 
-//    static String SERVER_URL = "http://847bbb35.ngrok.io/buxa/v1/";
-    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
+    static String SERVER_URL = "http://bfc8661f.ngrok.io/buxa/v1/";
+//    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
     public static final String COMPANY_LOGIN_SERVER_URL = SERVER_URL + "login";
@@ -34,4 +34,5 @@ public class CommonVariables {
     public static final String INSERT_TRANSPOERTATION_SERVER_URL = SERVER_URL + "inserttransport";
     public static final String INSERT_CUSTOM_CLEARANCE_SERVER_URL = SERVER_URL + "insertcustomclearance";
     public static final String INSERT_FREIGHT_FORWARDING_SERVER_URL = SERVER_URL + "insertfreightforwarding";
+    public static final String UPDATE_GCM_REGISTERED_ID_SERVER_URL = SERVER_URL + "updategcmid";
 }

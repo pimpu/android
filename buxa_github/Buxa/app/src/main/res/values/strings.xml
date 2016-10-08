@@ -49,7 +49,8 @@
         your requirement, we came up with a proposal that is appropriate for your needs.
     </string>
     <string name="str_quote_footer">For further question, please feel free to contact us.</string>
-    <string name="str_thanking_toast">Thank you for your request. We will revert back to you within 3 hrs.</string>
+    <string name="str_thanking_toast">Thank you for your interest in enquiry, Our Team will revert
+        within 03 hours with our best quote for your consideration and confirmation.</string>
 
     <string-array name="incoterms">
         <item>Ex. Works (EXW)</item>
@@ -146,5 +147,6 @@
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="hint_incoterm">INCOTERMS</string>
+    <string name="hint_hc_code">Harmonized System Code</string>
 
 </resources>
