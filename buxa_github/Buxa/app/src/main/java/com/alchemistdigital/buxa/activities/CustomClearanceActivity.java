@@ -175,11 +175,6 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             txtBookId.setText( sBookId );
         }
 
-        // set address to location
-        txtCCAddress.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtCCAddress.setOnItemClickListener(this);
-        txtCCAddress.setThreshold(1);
-
         rgShipmentType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -192,6 +187,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                         break;
 
                     case R.id.rbFcl_cc:
+
                         layout_cc_fcl_adddress.setVisibility(View.VISIBLE);
                         rgFCLStuffing.setVisibility(View.VISIBLE);
                         hintAddress.setText("Stuffing Address");
@@ -203,6 +199,11 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                         else if ( ((RadioButton)(findViewById(R.id.rbDockStuff))).isChecked() ) {
                             hintAddress.setText(getResources().getString(R.string.strDockStuff)+" address");
                         }
+
+                        // set address to location
+                        txtCCAddress.setAdapter(new GooglePlacesAutocompleteAdapter(CustomClearanceActivity.this, R.layout.list_item));
+                        txtCCAddress.setOnItemClickListener(CustomClearanceActivity.this);
+                        txtCCAddress.setThreshold(1);
                         break;
                 }
             }
@@ -332,12 +333,16 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             inputLayout_hsc.setError("HSC field is empty.");
         }
 
-        if( strShipmentType.equals("FCL") && strSelectedStuffing == null ) {
+        if( strShipmentType.equals("FCL") && strSelectedStuffing == null  ) {
             Toast.makeText(getApplicationContext(), "Stuffing type of FCL should be checked", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (boolAddress && boolCommodity && boolGrossWt && boolHSC) {
+        if (boolCommodity && boolGrossWt && boolHSC) {
+
+            if( strShipmentType.equals("FCL") && ! boolAddress ) {
+                return;
+            }
 
             int iAvail = 0;
             if( availedServicesName != null ) {

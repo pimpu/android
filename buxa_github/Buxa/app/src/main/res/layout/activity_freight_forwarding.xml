@@ -84,6 +84,34 @@
                     app:Segoe="segoe_light"/>
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_local_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                    android:id="@+id/id_autoComplete_local_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_local_address"
+                    app:Segoe="segoe_light"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_cfs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                    android:id="@+id/id_cfs_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_cfs_address"
+                    app:Segoe="segoe_light"/>
+            </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -111,38 +139,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_pick_up_ff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                        android:id="@+id/id_autoComplete_pickup_ff"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_pickUp_location"
-                        app:Segoe="segoe_light" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_drop_ff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                        android:id="@+id/id_autoComplete_drop_ff"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_drop_location"
-                        app:Segoe="segoe_light" />
-
-                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_shipmentType_ff"

@@ -51,6 +51,7 @@
     <string name="str_quote_footer">For further question, please feel free to contact us.</string>
     <string name="str_thanking_toast">Thank you for your interest in enquiry, Our Team will revert
         within 03 hours with our best quote for your consideration and confirmation.</string>
+    <string name="empty_enquiry_message">No new enquiry found.</string>
 
     <string-array name="incoterms">
         <item>Ex. Works (EXW)</item>
@@ -142,11 +143,13 @@
     <string name="hint_pol_address">Port Of Loading</string>
     <string name="hint_pod_address">Port of Destination</string>
     <string name="hint_bookId">Booking id</string>
-    <string name="empty_enquiry_message">No new enquiry found.</string>
+    <string name="hint_cfs_address">Container freight station</string>
+
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="hint_incoterm">INCOTERMS</string>
     <string name="hint_hc_code">Harmonized System Code</string>
+    <string name="hint_local_address">Local location address</string>
 
 </resources>

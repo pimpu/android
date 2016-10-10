@@ -4,7 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.model.TransportServiceModel;
+import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -16,12 +16,11 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by Pimpu on 8/30/2016.
+ * Created by user on 10/10/2016.
  */
-public class GetAllTransportService {
+public class GetAllCFSAddress {
 
-    public static void getTransportService(final Context context, String url) {
-
+    public static void getCfsAddress(final Context context, String url) {
         RestClient.get(url, null, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
@@ -37,22 +36,22 @@ public class GetAllTransportService {
 
                         DatabaseClass databaseClass = new DatabaseClass(context);
 
-                        JSONArray arrayTS= json.getJSONArray("trasnportService");
+                        JSONArray arrayCfs= json.getJSONArray("cfsAddress");
 
-                        for (int i = 0 ; i < arrayTS.length(); i++ ) {
-                            int tsServerId = arrayTS.getJSONObject(i).getInt("id");
-                            String tsName = arrayTS.getJSONObject(i).getString("name");
-                            int tsStatus = arrayTS.getJSONObject(i).getInt("status");
+                        for (int i = 0 ; i < arrayCfs.length(); i++ ) {
+                            int cfsServerId = arrayCfs.getJSONObject(i).getInt("id");
+                            String cfsName = arrayCfs.getJSONObject(i).getString("name");
+                            int cfsStatus = arrayCfs.getJSONObject(i).getInt("status");
 
-                            long l = databaseClass.insertTransportService(new TransportServiceModel(tsServerId, tsName, tsStatus));
+                            long l = databaseClass.insertCFSAddress(new CFSAddressModel(cfsServerId,
+                                    cfsName, cfsStatus));
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
 
-                        // get all container freight station address
-                        GetAllCFSAddress.getCfsAddress(context, CommonVariables.QUERY_CFS_ADDRESS_SERVER_URL);
-
+                        // get all type of packaging from server.
+                        GetAllPackageType.getPackageType(context, CommonVariables.QUERY_PACKAGING_TYPE_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

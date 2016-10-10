@@ -74,7 +74,7 @@ $app->post('/register', function() use ($app) {
 
             $db = new DbHandler();
             $res = $db->createUser($company, $uname, $mobile,
-                                    $email, $password, $create_time );
+            						$email, $password, $create_time );
 
             if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
                 $response["error"] = false;
@@ -306,6 +306,53 @@ $app -> get('/packagingtype', function(){
 
 });
 
+$app -> get('/getcfsadresses', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allCfsAddress = $db -> getCfsAddress();
+
+    // fetching all transportation service
+    $response["error"] = false;
+    $response["cfsAddress"] = array();
+
+    while ($ts = mysql_fetch_array($allCfsAddress)) {
+        $temp = array();
+        $temp["id"] = $ts["cfs_id"];
+        $temp["name"] = $ts["cfs_address"];
+        $temp["status"] = $ts["status"];
+
+        array_push($response["cfsAddress"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+$app->put('/updategcmid', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('registerId', 'userId'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $registerId = $app->request->put('registerId');
+    $userId = $app->request->put('userId');
+
+    $res = $db->updateGcmID($registerId, $userId);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "successfully update GCM id";
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while updating";
+    }
+
+    echoRespnse(200, $response);
+
+});
 
 /*
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
@@ -397,37 +444,6 @@ $app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
     echoRespnse(200, $response);
 
 });
-
-/**
- * Updating existing task
- * method PUT
- * params task, status
- * url - /tasks/:id
- */
-$app->put('/tasks/:id', 'authenticate', function($task_id) use($app) {
-            // check for required params
-            verifyRequiredParams(array('task', 'status'));
-
-            global $user_id;            
-            $task = $app->request->put('task');
-            $status = $app->request->put('status');
-
-            $db = new DbHandler();
-            $response = array();
-
-            // updating task
-            $result = $db->updateTask($user_id, $task_id, $task, $status);
-            if ($result) {
-                // task updated successfully
-                $response["error"] = false;
-                $response["message"] = "Task updated successfully";
-            } else {
-                // task failed to update
-                $response["error"] = true;
-                $response["message"] = "Task failed to update. Please try again!";
-            }
-            echoRespnse(200, $response);
-        });
 
 /**
  * Deleting task. Users can delete only their tasks

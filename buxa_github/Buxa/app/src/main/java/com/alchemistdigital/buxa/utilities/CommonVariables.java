@@ -19,8 +19,8 @@ public class CommonVariables {
     // Google project number
     public static final String SENDER_ID = "931228915270";
 
-    static String SERVER_URL = "http://bfc8661f.ngrok.io/buxa/v1/";
-//    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
+//    static String SERVER_URL = "http://0d83328c.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
     public static final String COMPANY_LOGIN_SERVER_URL = SERVER_URL + "login";
@@ -35,4 +35,5 @@ public class CommonVariables {
     public static final String INSERT_CUSTOM_CLEARANCE_SERVER_URL = SERVER_URL + "insertcustomclearance";
     public static final String INSERT_FREIGHT_FORWARDING_SERVER_URL = SERVER_URL + "insertfreightforwarding";
     public static final String UPDATE_GCM_REGISTERED_ID_SERVER_URL = SERVER_URL + "updategcmid";
+    public static final String QUERY_CFS_ADDRESS_SERVER_URL = SERVER_URL + "getcfsadresses";
 }

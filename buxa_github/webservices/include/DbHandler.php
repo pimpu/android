@@ -18,7 +18,7 @@ class DbHandler {
         $this->conn = $db->connect();
     }
 
-    /* ------------- `users` table method ------------------ */
+    /* ------------- `bx_user` table method ------------------ */
 
     /**
      * Creating new user
@@ -65,6 +65,28 @@ class DbHandler {
         } else {
             // User with same email already existed in the db
             $response["message"] =  USER_ALREADY_EXISTED;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Updating gcm registration id
+     * @param String $regId Registration id
+     * @param String $uId User login id
+     */
+    public function updateGcmID($regId, $uId) {
+        $response = array();
+
+        $result = mysql_query("UPDATE bx_user SET gcm_id = '".$regId."' WHERE uid = ".$uId);
+
+        // Check for successful insertion
+        if ($result) {
+            $response["message"] = USER_CREATED_SUCCESSFULLY;
+
+        } else {
+            // Failed to create user
+            $response["message"] =  USER_CREATE_FAILED;
         }
 
         return $response;
@@ -224,11 +246,22 @@ class DbHandler {
     /*---------------- 'bx_packagetype' table method --------------*/
 
     /**
-     * Fetching all packaging type data fro table
+     * Fetching all packaging type data from table
      * 
      */
     public function getAllPackagingType() {
         $stmt = mysql_query("SELECT * FROM bx_packagetype WHERE status=1;");
+        return $stmt;
+    }
+
+    /*---------------- 'bx_cfs_addresses' table method --------------*/
+
+    /**
+     * Fetching all container freight station from table
+     * 
+     */
+    public function getCfsAddress() {
+        $stmt = mysql_query("SELECT * FROM bx_cfs_addresses WHERE status=1;") or die(mysql_error());
         return $stmt;
     }
 
@@ -410,21 +443,6 @@ class DbHandler {
     }
 
     
-    /**
-     * Updating task
-     * @param String $task_id id of the task
-     * @param String $task task text
-     * @param String $status task status
-     */
-    public function updateTask($user_id, $task_id, $task, $status) {
-        $stmt = $this->conn->prepare("UPDATE tasks t, user_tasks ut set t.task = ?, t.status = ? WHERE t.id = ? AND t.id = ut.task_id AND ut.user_id = ?");
-        $stmt->bind_param("siii", $task, $status, $task_id, $user_id);
-        $stmt->execute();
-        $num_affected_rows = $stmt->affected_rows;
-        $stmt->close();
-        return $num_affected_rows > 0;
-    }
-
     /**
      * Deleting a task
      * @param String $task_id id of the task to delete

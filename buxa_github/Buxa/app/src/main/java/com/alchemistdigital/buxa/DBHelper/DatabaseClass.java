@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
@@ -52,6 +53,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
     public static final String TABLE_TYPE_OF_PACKAGE = "TypeOfPackage";
+    public static final String TABLE_CFS_ADDRESS = "CfsAddress";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -131,9 +133,9 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String PORT_OF_DESTINATION = "port_of_destination";
 
 
-    // TABLE_TRANSPORT_TYPE Table - column names
-    private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
-    private static final String TRANSPORT_TYPE_NAME = "trans_type_name";
+    // TABLE_CFS_ADDRESS Table - column names
+    private static final String CFS_ADDRESS_SERVER_ID = "cfs_address_serverId";
+    private static final String CFS_ADDRESS_NAME = "cfs_address_name";
 
     // TABLE_TRANSPORT_SERVICE Table - column names
     private static final String TRANSPORT_SERVICE_SERVER_ID = "trans_service_serverId";
@@ -142,6 +144,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
     // TABLE_TYPE_OF_PACKAGE Table - column names
     private static final String PACKAGE_TYPE_SERVER_ID = "package_type_serverId";
     private static final String PACKAGE_TYPE_NAME = "package_type_name";
+
+    // TABLE_TRANSPORT_TYPE Table - column names
+    private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
+    private static final String TRANSPORT_TYPE_NAME = "trans_type_name";
 
     // Company Table Create Statements
     private static final String CREATE_TABLE_COMPANY =
@@ -286,6 +292,15 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Container freight station(cfs) Table Create Statements
+    private static final String CREATE_TABLE_CFS_ADDRESS =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_CFS_ADDRESS +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    CFS_ADDRESS_SERVER_ID + " INTEGER," +
+                    CFS_ADDRESS_NAME +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -305,6 +320,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
         db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
+        db.execSQL(CREATE_TABLE_CFS_ADDRESS);
     }
 
     @Override
@@ -323,6 +339,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
 
         // create new tables
         onCreate(db);
@@ -891,6 +908,69 @@ public class DatabaseClass extends SQLiteOpenHelper {
         sqLiteDatabase.closeDatabase();
 
         return name;
+    }
+
+    // ------------------------ "CfsAddress" table methods ----------------//
+
+    public long insertCFSAddress(CFSAddressModel cfsAddressModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CFS_ADDRESS_SERVER_ID, cfsAddressModel.getServerId());
+        contentValues.put(CFS_ADDRESS_NAME, cfsAddressModel.getName());
+        contentValues.put(KEY_STATUS, cfsAddressModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long id = 0;
+        try {
+
+            String whereClause = CFS_ADDRESS_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( cfsAddressModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CFS_ADDRESS, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = db.insert(TABLE_CFS_ADDRESS, null, contentValues);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public List<CFSAddressModel> getCfsData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CFSAddressModel> array_list = new ArrayList<CFSAddressModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CFS_ADDRESS + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCfsData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CFSAddressModel types = new CFSAddressModel();
+
+                types.setServerId(res.getInt(res.getColumnIndex(CFS_ADDRESS_SERVER_ID)));
+                types.setName(res.getString(res.getColumnIndex(CFS_ADDRESS_NAME)));
+
+                array_list.add(types);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
     }
 
     // ------------------------ "Transportation" table methods ----------------//

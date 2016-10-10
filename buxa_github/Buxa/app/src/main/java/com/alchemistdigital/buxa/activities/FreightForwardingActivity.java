@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.FreightForwardingModel;
@@ -40,21 +41,23 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     LinearLayout layoutCommomTransFeild;
     ArrayAdapter<CommodityModel> commodity_adapter;
     ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtPolAdr, txtPodAdr;
+    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtLocalAdr, txtPolAdr, txtPodAdr,
+                txtCfsAdr;
     RadioGroup rgContainerSize, rgTypeOfShipment;
     DatabaseClass dbClass ;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     String strShipmentType = "LCL", bookId, strSelectedContainerSize = null;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack, txtDimenLen,
             txtDimenHeight, txtDimenWidth;
-    TextInputLayout inputLayout_pickUp, inputLayout_drop, inputLayout_cubicMeter, inputLayout_grossWeight,
+    TextInputLayout inputLayout_local_adr, inputLayout_cubicMeter, inputLayout_grossWeight,
             inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
             inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width,
-            inputLayout_POLAddress, inputLayout_PODAddress;
-    private int iSelectedCommodityId, iSelectedPackageType;
+            inputLayout_POLAddress, inputLayout_PODAddress, inputLayout_CfsAddress;
+    private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
     private int loginId;
     private TransportationModel transportDataModel;
     private CustomClearanceModel customClearanceModel;
+    private ArrayAdapter<CFSAddressModel> cfs_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +140,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         // initialised all Text Input Layout
         inputLayout_POLAddress = (TextInputLayout) findViewById(R.id.input_layout_POL);
         inputLayout_PODAddress = (TextInputLayout) findViewById(R.id.input_layout_POD);
-        inputLayout_pickUp = (TextInputLayout) findViewById(R.id.input_layout_pick_up_ff);
-        inputLayout_drop = (TextInputLayout) findViewById(R.id.input_layout_drop_ff);
+        inputLayout_CfsAddress = (TextInputLayout) findViewById(R.id.input_layout_cfs);
+        inputLayout_local_adr = (TextInputLayout) findViewById(R.id.input_layout_local_location);
         inputLayout_cubicMeter = (TextInputLayout) findViewById(R.id.input_layout_cubic_meter_measurement_ff);
         inputLayout_grossWeight = (TextInputLayout) findViewById(R.id.input_layout_gross_weight_ff);
         inputLayout_packType = (TextInputLayout) findViewById(R.id.input_layout_pack_type_ff);
@@ -160,10 +163,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity_ff);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package_ff);
-        txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup_ff);
-        txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop_ff);
+        txtLocalAdr = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_local_location);
         txtPolAdr = (AutoCompleteTextView) findViewById(R.id.id_POL_addresses);
         txtPodAdr = (AutoCompleteTextView) findViewById(R.id.id_POD_addresses);
+        txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
 
         // initialised all Radio Group
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040_ff);
@@ -202,16 +205,21 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
+        // initialised cfs address autocomplete textfield from database
+        cfs_adapter = new ArrayAdapter<CFSAddressModel>(this, layoutItemId, dbClass.getCfsData() );
+        txtCfsAdr.setAdapter(cfs_adapter);
+        txtCfsAdr.setThreshold(1);
+        txtCfsAdr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                iSelectedCfsAdr = cfs_adapter.getItem(position).getServerId();
+            }
+        });
 
-        // set adapter to pickup location
-        txtPickup.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtPickup.setOnItemClickListener(this);
-        txtPickup.setThreshold(1);
-
-        // set adapter to drop location
-        txtDrop.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtDrop.setOnItemClickListener(this);
-        txtDrop.setThreshold(1);
+        // set adapter to local location
+        txtLocalAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
+        txtLocalAdr.setOnItemClickListener(this);
+        txtLocalAdr.setThreshold(1);
 
         // set adapter to drop location
         txtPolAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
@@ -315,13 +323,13 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
         Boolean boolPOL = isEmptyString(txtPolAdr.getText().toString());
         Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
-        Boolean boolPickUp = isEmptyString(txtPickup.getText().toString());
-        Boolean boolDrop = isEmptyString(txtDrop.getText().toString());
+        Boolean boolLocalAdr = isEmptyString(txtLocalAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
         Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
         Boolean boolCommodity = isEmptyString(txtComodity.getText().toString());
+        Boolean boolCFS = isEmptyString(txtCfsAdr.getText().toString());
         Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());
         Boolean boolDimenHeight = isEmptyString(txtDimenHeight.getText().toString());
         Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());
@@ -340,18 +348,11 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_PODAddress.setError("Port of destination address field is empty.");
         }
 
-        if (boolPickUp) {
-            inputLayout_pickUp.setErrorEnabled(false);
+        if (boolLocalAdr) {
+            inputLayout_local_adr.setErrorEnabled(false);
         } else {
-            inputLayout_pickUp.setErrorEnabled(true);
-            inputLayout_pickUp.setError("Pick up address field is empty.");
-        }
-
-        if (boolDrop) {
-            inputLayout_drop.setErrorEnabled(false);
-        } else {
-            inputLayout_drop.setErrorEnabled(true);
-            inputLayout_drop.setError("Drop address field is empty.");
+            inputLayout_local_adr.setErrorEnabled(true);
+            inputLayout_local_adr.setError("Local location address field is empty.");
         }
 
         if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
@@ -396,6 +397,13 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_commodity.setError("Commodity field is empty.");
         }
 
+        if (boolCFS) {
+            inputLayout_CfsAddress.setErrorEnabled(false);
+        } else {
+            inputLayout_CfsAddress.setErrorEnabled(true);
+            inputLayout_CfsAddress.setError(getResources().getString(R.string.hint_cfs_address)+" field is empty.");
+        }
+
         if (boolDimenLen) {
             inputLayout_dimen_len.setErrorEnabled(false);
         } else {
@@ -417,7 +425,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_dimen_width.setError("width.");
         }
 
-        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolPOD) {
+        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolPOD && boolCFS && boolLocalAdr) {
             int iAvail = 0;
             if( availedServicesName != null ) {
                 iAvail = 1;
@@ -437,8 +445,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             intentActions(freightForwardingModel);
         }
-        else if ( boolPickUp && boolDrop && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
-                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolPOD ) {
+        else if ( boolLocalAdr && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
+                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolPOD && boolCFS) {
 
             if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
                 return;

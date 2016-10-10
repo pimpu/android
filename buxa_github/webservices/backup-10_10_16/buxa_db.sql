@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2016 at 02:47 PM
+-- Generation Time: Oct 10, 2016 at 03:41 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -19,6 +19,57 @@ SET time_zone = "+00:00";
 --
 -- Database: `buxa_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bx_cfs_addresses`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_cfs_addresses` (
+`cfs_id` int(11) NOT NULL,
+  `cfs_address` longtext NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bx_cfs_addresses`
+--
+
+INSERT INTO `bx_cfs_addresses` (`cfs_id`, `cfs_address`, `status`) VALUES
+(1, 'Central Ware Housing Corporation, Kalamboli, Navi Mumbai - 400218', 1),
+(2, 'CWC Dronagiri, Node Navi Mumbai - 400707', 1),
+(3, 'CWC, Logistics Park, (Hind Terminal)Distripark D''node, Navi Mumbai - 400707', 1),
+(4, 'CWC, Impex Park, Sector-1, D''node, Tal : Uran, Dist. Raigad, Maharashtra - 400707', 1),
+(5, 'CWC, Distripark Ltd., Sector - 7, D''node, Navi Mumbai - 400707', 1),
+(6, 'Speedy Multimode Ltd, CFS, Jawaharlal Nehru Port, Navi Mumbai', 1),
+(7, 'Maharasthra State Warehousing Corpn., Plot No. 89, Sector-1, D''node, Sheva, Navi Mumbai - 400707', 1),
+(8, 'Container Corporation Of India Ltd., Dronagiri Rail Terminal, Sector 2, Plot No. 33, 34 35, Navi Mumbai-400707', 1),
+(9, 'Balmer & Lawrie Co. Ltd., Sector No. 7, Plot No.1, P.O. Box No. 8, Dronagiri Road, Navi Mumbai - 400707', 1),
+(10, 'Punjab State Container & Warehousing corp Ltd.,(A Govt. of Punjab undertaking), CFS, Plot No./ 2, Sector - 2, Dronagiri Node, Navi Mumbai - 410 707', 1),
+(11, 'Gateway Distriparks Ltd, Sector-6, Dronagiri, Dist-Raigad, Navi Mumbai - 400707', 1),
+(12, 'United Liner Agencies of India (P) Ltd., Sector - 8, Dronagiri, P.O. Box No. 5, (jnpt), Opp Bhendhkal Village, Tal Uran, Dist Raigad, Navi Mumbai', 1),
+(13, 'APM (Maersk India Pvt. Ltd), CFS Divn., Lot No. 100, Block No. 5, Sector 2, Dronagiri Warehousing Complex, Navi Mumbai - 400707', 1),
+(14, 'APM (Maersk India Pvt. Ltd), CFS Divn. (Annex), Plot No. - 5-18, Sector-6, Dronagiri, Navi Mumbai', 1),
+(15, 'All Cargo Logistics Ltd., CFS, Village - Koprali (JNP Area), Tal. Uran, Dist. - Raigad, Maharashtra - 410212', 1),
+(16, 'TG TERMINALS Pvt LTD., Veshvi, Navi Mumbai - 400702', 1),
+(17, 'Continental Warehousing (Nhava Sheva) Ltd., D.No. 1088, Khopta Village, Taluka Uran, Dist Raigad, Navi Mumbai', 1),
+(18, 'Seabird Marine Services Pvt Ltd., Plot No. 70-81, Sector - 1, Dronagiri Node, Navi Mumbai - 400707', 1),
+(19, 'JWC Logistics Park Ltd, 69-91, National Highway No. 17, Palspe Panvel, Maharashtra - 410206', 1),
+(20, 'Preeti Logistics Ltd. (Old), Survery No. 137/1A/1, At New Ajivali Village, Old Mumbai - Pune NH-4, Tal Panvel - 410212', 1),
+(21, 'Preeti Logistics Ltd (New), CFS Survey No. 137/1A/1, New Ajivali Village, Old Mumbai - Pune NH4, Tal. Panvel, Dist Raigad, Maharashtra - 410212', 1),
+(22, 'Ameya Logistics Pvt. Ltd., Village Dhasakhoshi, Taluka - Uran, Post-Khopte, Dist : Raigad - 410212', 1),
+(23, 'Ashte Logistics Pvt. Ltd., Ashte Village, Taluke Panvel, Dist. Raigad', 1),
+(24, 'Navkar Corporation Ltd., Somatane, on Kon - Savla Road, Taluka - Panvel, Dist - Raigad', 1),
+(25, 'Apollo Logisolutions Ltd., Kone Rasayani Road, Somatane Village, Tal : Panvel, Dist : Raigad, Maharashtra', 1),
+(26, 'Ocean Gate Container Terminals Pvt. Ltd., Plot No. 75-1/A/B, 75-2/A/D/K, 77-3/A, 86-2, Phalaspe, Panvel-Goa Highway, Panvel, Raigad.', 1),
+(27, 'Vaishno Logistics Yard, CFS, Near Chirle Village, At-Post-Jasai, Tal. Uran, Dist. Raigad - 410206.', 1),
+(28, 'Indev Logistics Pvt. Ltd., Plot No. 10, Somathane Village, Kone-Savla Rasayani Road, SH 82, Panvel Taluka, Raigad-410206', 1),
+(29, 'M/s SBW Logistics Pvt. Ltd, Gutt No.55, Village-Khairane, Taluka - Panvel , Dist. - Raigad, Maharashtra', 1),
+(30, 'M/s. Transindia Logistics Park Pvt. Ltd., At-Khopta, Po-Koprali, Tal-Uran, Raigad., Pin - 410212, Maharashtra', 1),
+(31, 'M/s. JWR Logistics Pvt. Ltd., 13-45, National Highway 4B, Panvel-JNPT Highway, Village Padeghar, Post Kundevahal, Panvel - 410206. Maharashtra', 1),
+(32, 'EFC Logistics India Pvt Ltd., Village-Veshvi, Post-Dighore, Taluka-Uran, Dist-Raigad-410207', 1),
+(33, 'TAKE CARE LOGISTICSPARK (INDIA) PVT LTD, SURVEY NO.96/1,87/3,4,5 & 6, MUMBAI GOA HIGHWAY, PALASPE VILLAGE, PANVEL, Dist-Raigad-410206', 1);
 
 -- --------------------------------------------------------
 
@@ -748,6 +799,7 @@ INSERT INTO `bx_packagetype` (`packagetypeid`, `packagename`, `status`) VALUES
 CREATE TABLE IF NOT EXISTS `bx_shipment_confirmation` (
 `cnfrmid` int(11) NOT NULL,
   `bookid` varchar(100) NOT NULL,
+  `enquiry_status` tinyint(11) NOT NULL DEFAULT '1',
   `finalrate` int(11) NOT NULL,
   `serviceid` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1'
@@ -835,7 +887,7 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
 --
 
 INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
-(5, '6c13b559a3224bcba3a9e1a52b43c0d4', NULL, 'ADM', 'Yogesh Pimpalkar', '8466525807', 'yogesh@adm.com', 'test', '1473837432596', 1);
+(5, '6c13b559a3224bcba3a9e1a52b43c0d4', 'APA91bHiJoK_5EqkkeOzTp_a0hZIu1YRaLICcyAEazxZQm7m11lBBof5WC0Y-hDo6nM4tEwao7788oxm6o_qFu--wAYy6s3N-SZarYquhLUCuWY9Awh_F4WQD8_9N5Ts6N9YFr_x8t_H', 'ADM', 'Yogesh Pimpalkar', '8466525807', 'yogesh@adm.com', 'test', '1473837432596', 1);
 
 -- --------------------------------------------------------
 
@@ -884,6 +936,12 @@ INSERT INTO `db_transport_type` (`trid`, `tname`, `active_status`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `bx_cfs_addresses`
+--
+ALTER TABLE `bx_cfs_addresses`
+ ADD PRIMARY KEY (`cfs_id`);
 
 --
 -- Indexes for table `bx_commodity`
@@ -967,6 +1025,11 @@ ALTER TABLE `db_transport_type`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `bx_cfs_addresses`
+--
+ALTER TABLE `bx_cfs_addresses`
+MODIFY `cfs_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `bx_commodity`
 --
