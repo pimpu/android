@@ -1,31 +1,40 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.emailValidate;
@@ -33,7 +42,7 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 import static com.alchemistdigital.buxa.utilities.Validations.phoneValiate;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText txtCode, txtCompanyName, txtContactName, txtMobile, txtEmailId, txtPwd, txtConformPwd;
+    EditText txtCompanyName, txtContactName, txtMobile, txtEmailId, txtPwd, txtConformPwd;
     Button btnRegister;
     TextInputLayout companyName_InputLayout, contactName_InputLayout, mobile_InputLayout, emailId_InputLayout,
             pwd_InputLayout, conformPwd_InputLayout;
@@ -72,9 +81,9 @@ public class RegisterActivity extends AppCompatActivity {
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 
-        txtCode = (EditText) findViewById(R.id.company_code);
+        /*txtCode = (EditText) findViewById(R.id.company_code);
         Date date = new Date();
-        txtCode.setText(getResources().getString(R.string.codeString, noFormatDateSdf.format(date)));
+        txtCode.setText(getResources().getString(R.string.codeString, noFormatDateSdf.format(date)));*/
 
         errorMessage = (TextView) findViewById(R.id.register_error_msg);
         txtCompanyName = (EditText) findViewById(R.id.company_name);
@@ -90,6 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
         emailId_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_email);
         pwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_pwd);
         conformPwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_conform_pwd);
+
+        registerReceiver(mHandleServerMessageReceiverInRegisterActivity, new IntentFilter(
+                CommonVariables.DISPLAY_MESSAGE_ACTION));
 
         btnRegister = (Button) findViewById(R.id.id_btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +172,11 @@ public class RegisterActivity extends AppCompatActivity {
                             return;
                         } else {
                             layout_noConnection.setVisibility(View.GONE);
+                            View view = RegisterActivity.this.getCurrentFocus();
+                            if (view != null) {
+                                InputMethodManager imm = (InputMethodManager)RegisterActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
                             registerCompanyForBuxa();
                         }
                     } else {
@@ -177,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
         RequestParams params;
         params = new RequestParams();
 
-        params.put("code", txtCode.getText().toString());
+//        params.put("code", txtCode.getText().toString());
         params.put("company", txtCompanyName.getText().toString());
         params.put("uname", txtContactName.getText().toString());
         params.put("mobile", txtMobile.getText().toString());
@@ -197,38 +214,46 @@ public class RegisterActivity extends AppCompatActivity {
         prgDialog.show();
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.COMPANY_REGISTER_SERVER_URL, params, new AsyncHttpResponseHandler() {
+        RestClient.post(CommonVariables.COMPANY_REGISTER_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 prgDialog.cancel();
                 try {
-                    JSONObject json = new JSONObject(response);
+//                    JSONObject json = new JSONObject(response);
 
-                    Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
+                    Boolean error = response.getBoolean(CommonVariables.TAG_ERROR);
                     if (error) {
                         layout_noConnection.setVisibility(View.VISIBLE);
-                        errorMessage.setText(json.getString(CommonVariables.TAG_MESSAGE));
+                        errorMessage.setText(response.getString(CommonVariables.TAG_MESSAGE));
                     } else {
                         layout_noConnection.setVisibility(View.GONE);
                         SetSharedPreference setSharedPreference = new SetSharedPreference(RegisterActivity.this);
 
-                        // it store the Register true value of user for purpose of user is registered with this app.
-                        setSharedPreference.setBooleanLogin(getResources().getString(R.string.boolean_login_sharedPref), "true");
-                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), json.getInt("id"));
-                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), json.getString("api_key"));
-                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), json.getString("email"));
-                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), json.getString("loginName"));
-                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), json.getString("companyName"));
+                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), response.getInt("id"));
+                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), response.getString("api_key"));
+                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), response.getString("email"));
+                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), response.getString("loginName"));
+                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), response.getString("companyName"));
 
                         // create shortcut when user Register with this app.
                         CommonUtilities.addShortcut(RegisterActivity.this);
 
-                        Intent intent = new Intent(RegisterActivity.this, SelectServiceActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        RegisterActivity.this.finish();
-                        startActivity(intent);
+                        DatabaseClass dbHelper = new DatabaseClass(RegisterActivity.this);
+                        if (dbHelper.numberOfComodityRows() <= 0 ) {
+                            setContentView(R.layout.activity_splash_screen);
+
+                            new InsertInternationalDestinationPort(RegisterActivity.this).execute();
+
+                        }
+                        /*else {
+                            Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            RegisterActivity.this.finish();
+                            startActivity(intent);
+                        }*/
+
                     }
 
 
@@ -238,7 +263,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 // Hide Progress Dialog
                 prgDialog.hide();
                 // When Http response code is '404'
@@ -271,13 +296,38 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleServerMessageReceiverInRegisterActivity = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            // this message is come from GetAllPackageType when all default value from server get finished.
+            if(newMessage.equals("allDefaultDataFetched")) {
+                Intent intentServicesActivity = new Intent(RegisterActivity.this, WelcomeActivity.class);
+                intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                ((RegisterActivity)context).finish();
+                startActivity(intentServicesActivity);
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 
     @Override
-    public void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        try {
+            unregisterReceiver(mHandleServerMessageReceiverInRegisterActivity);
+        } catch (Exception e) {
+            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
+        }
+        super.onDestroy();
     }
+
 }

@@ -8,25 +8,24 @@ require '.././libs/Slim/Slim.php';
 
 $app = new \Slim\Slim();
 
-// User id from db - Global Variable
-$user_id = NULL;
-
 /**
  * Adding Middle Layer to authenticate every request
  * Checking if the request has valid api key in the 'Authorization' header
  */
 function authenticate(\Slim\Route $route) {
     // Getting request headers
-    $headers = apache_request_headers();
+    // $headers = apache_request_headers();
     $response = array();
     $app = \Slim\Slim::getInstance();
+ 
+    // get the api key
+    $api_key = $app->request->headers("Authorization");
+
 
     // Verifying Authorization Header
-    if (isset($headers['Authorization'])) {
+    if ($api_key != null ) {
         $db = new DbHandler();
-
-        // get the api key
-        $api_key = $headers['Authorization'];
+ 
         // validating api key
         if (!$db->isValidApiKey($api_key)) {
             // api key is not present in users table
@@ -34,11 +33,13 @@ function authenticate(\Slim\Route $route) {
             $response["message"] = "Access Denied. Invalid Api key";
             echoRespnse(401, $response);
             $app->stop();
-        } else {
+        }/* else {
             global $user_id;
             // get user primary key id
-            $user_id = $db->getUserId($api_key);
-        }
+            $user = $db->getUserId($api_key);
+            if ($user != NULL)
+                $user_id = $user["id"];
+        }*/
     } else {
         // api key is missing in header
         $response["error"] = true;
@@ -64,7 +65,6 @@ $app->post('/register', function() use ($app) {
             $response = array();
 
             // reading post params
-            $code = $app->request->post('code');
             $company = $app->request->post('company');
             $uname = $app->request->post('uname');
             $mobile = $app->request->post('mobile');
@@ -73,7 +73,7 @@ $app->post('/register', function() use ($app) {
             $create_time = $app->request->post('create_time');
 
             $db = new DbHandler();
-            $res = $db->createUser($code, $company, $uname, $mobile,
+            $res = $db->createUser($company, $uname, $mobile,
             						$email, $password, $create_time );
 
             if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
@@ -139,13 +139,19 @@ $app->post('/login', function() use ($app) {
             echoRespnse(200, $response);
         });
 
-
-$app -> get('/commodities',function() {
+$app -> get('/commodities',function() use ($app) {
     $response = array();
     $db = new DbHandler();
 
+    // check for required params
+    verifyRequiredParams(array('start', 'limit'));
+
+    // reading get params
+    $start = $app->request()->get('start');
+    $limit = $app->request()->get('limit');
+
     // fetching all commodities
-    $allComodityResult = $db -> getAllCommodity();
+    $allComodityResult = $db -> getAllCommodity($start, $limit);
 
     $response["error"] = false;
     $response["commodities"] = array();
@@ -210,23 +216,25 @@ $app -> get('/customclearancecategory', function(){
 });
 
 
-$app -> get('/termsofshipment', function(){
+$app -> get('/typeofshipment', function(){
     $response = array();
     $db = new DbHandler();
 
-    $allShipmentTerm = $db -> getAllTermOfShipment();
+    $allShipmentType = $db -> getAllTypeOfShipment();
+    $noOfCommodityRows = $db -> getCommodityRowsCount();
 
     // fetching all term of shipment
     $response["error"] = false;
-    $response["shipmentTerm"] = array();
+    $response["commodityRowCount"] = $noOfCommodityRows;
+    $response["shipmentType"] = array();
 
-    while ($term = mysql_fetch_array($allShipmentTerm)) {
+    while ($type = mysql_fetch_array($allShipmentType)) {
         $temp = array();
-        $temp["id"] = $term["tid"];
-        $temp["name"] = $term["stypename"];
-        $temp["status"] = $term["status"];
+        $temp["id"] = $type["tid"];
+        $temp["name"] = $type["stypename"];
+        $temp["status"] = $type["status"];
 
-        array_push($response["shipmentTerm"], $temp);
+        array_push($response["shipmentType"], $temp);
     }
     echoRespnse(200, $response);
 
@@ -276,130 +284,166 @@ $app -> get('/transportservice', function(){
 
 });
 
+$app -> get('/packagingtype', function(){
+    $response = array();
+    $db = new DbHandler();
 
+    $allPackageType = $db -> getAllPackagingType();
+
+    // fetching all transportation service
+    $response["error"] = false;
+    $response["packageType"] = array();
+
+    while ($ts = mysql_fetch_array($allPackageType)) {
+        $temp = array();
+        $temp["id"] = $ts["packagetypeid"];
+        $temp["name"] = $ts["packagename"];
+        $temp["status"] = $ts["status"];
+
+        array_push($response["packageType"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+$app -> get('/getcfsadresses', function(){
+    $response = array();
+    $db = new DbHandler();
+
+    $allCfsAddress = $db -> getCfsAddress();
+
+    // fetching all transportation service
+    $response["error"] = false;
+    $response["cfsAddress"] = array();
+
+    while ($ts = mysql_fetch_array($allCfsAddress)) {
+        $temp = array();
+        $temp["id"] = $ts["cfs_id"];
+        $temp["name"] = $ts["cfs_address"];
+        $temp["status"] = $ts["status"];
+
+        array_push($response["cfsAddress"], $temp);
+    }
+    echoRespnse(200, $response);
+
+});
+
+$app->put('/updategcmid', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('registerId', 'userId'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $registerId = $app->request->put('registerId');
+    $userId = $app->request->put('userId');
+
+    $res = $db->updateGcmID($registerId, $userId);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "successfully update GCM id";
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while updating";
+    }
+
+    echoRespnse(200, $response);
+
+});
 
 /*
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
  */
 
-/**
- * Listing all tasks of particual user
- * method GET
- * url /tasks          
- */
-$app->get('/tasks', 'authenticate', function() {
-            global $user_id;
-            $response = array();
-            $db = new DbHandler();
+$app -> post('/inserttransport', 'authenticate', function() use ($app) {
 
-            // fetching all user tasks
-            $result = $db->getAllUserTasks($user_id);
+    // check for required params
+    verifyRequiredParams(array('transportdata'));
 
-            $response["error"] = false;
-            $response["tasks"] = array();
+    $db = new DbHandler();
+    $response = array();
 
-            // looping through result and preparing tasks array
-            while ($task = $result->fetch_assoc()) {
-                $tmp = array();
-                $tmp["id"] = $task["id"];
-                $tmp["task"] = $task["task"];
-                $tmp["status"] = $task["status"];
-                $tmp["createdAt"] = $task["created_at"];
-                array_push($response["tasks"], $tmp);
-            }
+    // reading post params
+    $transportdata = $app->request->post('transportdata');
 
-            echoRespnse(200, $response);
-        });
+    $res = $db->createTransportData($transportdata);
 
-/**
- * Listing single task of particual user
- * method GET
- * url /tasks/:id
- * Will return 404 if the task doesn't belongs to user
- */
-$app->get('/tasks/:id', 'authenticate', function($task_id) {
-            global $user_id;
-            $response = array();
-            $db = new DbHandler();
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "Transportation enquiry created successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while creating";
+    } else if ($res["message"] == USER_ALREADY_EXISTED) {
+        $response["error"] = true;
+        $response["message"] = "This booking already existed.";
+    }
 
-            // fetch task
-            $result = $db->getTask($task_id, $user_id);
+    echoRespnse(200, $response);
 
-            if ($result != NULL) {
-                $response["error"] = false;
-                $response["id"] = $result["id"];
-                $response["task"] = $result["task"];
-                $response["status"] = $result["status"];
-                $response["createdAt"] = $result["created_at"];
-                echoRespnse(200, $response);
-            } else {
-                $response["error"] = true;
-                $response["message"] = "The requested resource doesn't exists";
-                echoRespnse(404, $response);
-            }
-        });
+});
 
-/**
- * Creating new task in db
- * method POST
- * params - name
- * url - /tasks/
- */
-$app->post('/tasks', 'authenticate', function() use ($app) {
-            // check for required params
-            verifyRequiredParams(array('task'));
+$app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
 
-            $response = array();
-            $task = $app->request->post('task');
+    // check for required params
+    verifyRequiredParams(array('customClearancedata'));
 
-            global $user_id;
-            $db = new DbHandler();
+    $db = new DbHandler();
+    $response = array();
 
-            // creating new task
-            $task_id = $db->createTask($user_id, $task);
+    // reading post params
+    $customClearancedata = $app->request->post('customClearancedata');
 
-            if ($task_id != NULL) {
-                $response["error"] = false;
-                $response["message"] = "Task created successfully";
-                $response["task_id"] = $task_id;
-                echoRespnse(201, $response);
-            } else {
-                $response["error"] = true;
-                $response["message"] = "Failed to create task. Please try again";
-                echoRespnse(200, $response);
-            }            
-        });
+    $res = $db->createCustomClearanceData($customClearancedata);
 
-/**
- * Updating existing task
- * method PUT
- * params task, status
- * url - /tasks/:id
- */
-$app->put('/tasks/:id', 'authenticate', function($task_id) use($app) {
-            // check for required params
-            verifyRequiredParams(array('task', 'status'));
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "Custom clearance enquiry created successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while creating";
+    } else if ($res["message"] == USER_ALREADY_EXISTED) {
+        $response["error"] = true;
+        $response["message"] = "This booking already existed.";
+    }
 
-            global $user_id;            
-            $task = $app->request->put('task');
-            $status = $app->request->put('status');
+    echoRespnse(200, $response);
 
-            $db = new DbHandler();
-            $response = array();
+});
 
-            // updating task
-            $result = $db->updateTask($user_id, $task_id, $task, $status);
-            if ($result) {
-                // task updated successfully
-                $response["error"] = false;
-                $response["message"] = "Task updated successfully";
-            } else {
-                // task failed to update
-                $response["error"] = true;
-                $response["message"] = "Task failed to update. Please try again!";
-            }
-            echoRespnse(200, $response);
-        });
+$app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('freightForwardingdata'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $freightForwardingdata = $app->request->post('freightForwardingdata');
+
+    $res = $db->createFreightForwardingData($freightForwardingdata);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "Freight forwarding enquiry created successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while creating";
+    } else if ($res["message"] == USER_ALREADY_EXISTED) {
+        $response["error"] = true;
+        $response["message"] = "This booking already existed.";
+    }
+
+    echoRespnse(200, $response);
+
+});
 
 /**
  * Deleting task. Users can delete only their tasks

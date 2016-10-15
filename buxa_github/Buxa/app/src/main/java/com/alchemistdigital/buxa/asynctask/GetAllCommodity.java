@@ -1,68 +1,50 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
-import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by user on 8/29/2016.
  */
 public class GetAllCommodity {
-    private static ProgressDialog prgDialog;
+    private static int commodityRowsCount;
+    public static void getCommodities(Context context, String url, int commodityRows) {
+        int start = 0, limit = 100;
+        commodityRowsCount = commodityRows;
 
+        getData(context, url, start, limit);
 
-    public static void getCommodities(final Context context, String url) {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Logging ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-        // Show Progress Dialog
-        prgDialog.show();
+    }
 
-        RestClient.get(url, null, new AsyncHttpResponseHandler() {
+    public static void getData(final Context context, final String url, final int start, final int limit) {
+        RequestParams params = new RequestParams();
+        params.put("start", String.valueOf(start));
+        params.put("limit", String.valueOf(limit));
+
+        RestClient.get(url, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
-            public void onSuccess(String response) {
-                prgDialog.cancel();
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 try {
-                    JSONObject json = new JSONObject(response);
+//                    JSONObject json = new JSONObject(response);
 
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-
-                        DatabaseClass databaseClass = new DatabaseClass(context);
-
-                        JSONArray arrayCommodity = json.getJSONArray("commodities");
-
-                        for (int i = 0 ; i < arrayCommodity.length(); i++ ) {
-                            int commodityServerId = arrayCommodity.getJSONObject(i).getInt("id");
-                            String commodityName = arrayCommodity.getJSONObject(i).getString("comodity");
-                            int commodityStatus = arrayCommodity.getJSONObject(i).getInt("status");
-
-                            long l = databaseClass.insertCommodity(new CommodityModel(commodityServerId, commodityName, commodityStatus));
-                            System.out.println("commodity id: "+l);
-                        }
-
-                        // close database in synchronized condition
-                        databaseClass.closeDB();
-
-                        // get all custom loaction from server.
-                        GetAllCustomLoaction.getCL(context, CommonVariables.QUERY_CUSTOM_LOACTION_SERVER_URL);
+                        new InsertCommodityAsyncTask(context, json.getJSONArray("commodities"),
+                                start, limit, commodityRowsCount, url).execute();
                     }
 
                 } catch (JSONException e) {
@@ -71,9 +53,15 @@ public class GetAllCommodity {
             }
 
             @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("status code: "+statusCode);
+                System.out.println("responseString: "+responseString);
+                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 // Hide Progress Dialog
-                prgDialog.hide();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -86,8 +74,18 @@ public class GetAllCommodity {
                 }
                 // When Http response code other than 404, 500
                 else {
-                    System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                    Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    try {
+                        if( errorResponse.getBoolean("error") ) {
+                            System.out.println(errorResponse.getString("message"));
+                            Toast.makeText(context, errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
+                            Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

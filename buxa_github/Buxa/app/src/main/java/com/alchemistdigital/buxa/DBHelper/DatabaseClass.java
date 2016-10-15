@@ -10,15 +10,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
-import com.alchemistdigital.buxa.model.ShipmentTermModel;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
+import com.alchemistdigital.buxa.model.PackageTypeModel;
+import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
+import com.alchemistdigital.buxa.model.TransportationModel;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by user on 8/26/2016.
@@ -38,11 +45,16 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_COMMODITY = "Commodity";
     public static final String TABLE_CUSTOM_CLEARANCE_LOCATION = "CustomClearanceLocation";
     public static final String TABLE_CUSTOM_CLEARANCE_CATEGORY = "CustomClearanceCategory";
-    public static final String TABLE_TERM_OF_SHIPMENT = "TermOfShipment";
+    public static final String TABLE_TYPE_OF_SHIPMENT = "TypeOfShipment";
     public static final String TABLE_TRANSPORTATION = "Transportation";
+    public static final String TABLE_CUSTOM_CLEARANCE = "CustomClearance";
+    public static final String TABLE_FREIGHT_FORWARDING = "FreightForwarding";
     public static final String TABLE_SHIPMENT_CONFORMATION = "ShipmentConformation";
     public static final String TABLE_TRANSPORT_TYPE = "TransportType";
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
+    public static final String TABLE_TYPE_OF_PACKAGE = "TypeOfPackage";
+    public static final String TABLE_CFS_ADDRESS = "CfsAddress";
+    public static final String TABLE_INTERNATIONAL_DESTINATION_PORT = "InterDestiPorts";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -51,7 +63,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     // TABLE_COMPANY Table - column names
     private static final String COMPANY_SERVER_ID = "company_serverId";
-    private static final String COMPANY_REFERENCE_NO = "company_reference_no";
+    private static final String USER_REFERENCE_NO = "company_reference_no";
     private static final String COMPANY_USER_DESIGNATION = "company_user_designation";
     private static final String COMPANY_NAME = "company_name";
     private static final String COMPANY_CONTACT = "company_contact";
@@ -77,7 +89,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String CCC_SERVER_ID = "ccc_serverId";
     private static final String CCC_NAME = "ccc_name";
 
-    // TABLE_TERM_OF_SHIPMENT Table - column names
+    // TABLE_TYPE_OF_SHIPMENT Table - column names
     private static final String TOS_SERVER_ID = "tos_serverId";
     private static final String TOS_name = "tos_name";
 
@@ -90,11 +102,13 @@ public class DatabaseClass extends SQLiteOpenHelper {
     // TABLE_TRANSPORTATION Table - column names
     private static final String  TRANSPORTATION_SERVER_ID = "trans_serverId";
     private static final String  BOOKING_ID = "booking_id";
-    private static final String  COMMODITY_SERVERID = "commodity_serverId";
+    private static final String  COMMODITY_SERVERID_IN_TRANSPORT = "commodity_serverId";
     private static final String  DIMEN_LENGTH = "dimen_length";
     private static final String  DIMEN_HEIGHT = "dimen_height";
-    private static final String  DIMEN_WEIGHT = "dimen_weight";
-    private static final String  SHIPMENT_TERM = "shipment_term";
+    private static final String  DIMEN_WIDTH = "dimen_width";
+    private static final String  SHIPMENT_TYPE = "shipment_type";
+    private static final String  MEASUREMENT = "measurement";
+    private static final String  GROSS_WEIGHT = "gross_weight";
     private static final String  NO_OF_PACK = "no_of_pack";
     private static final String  PACK_TYPE = "pack_type";
     private static final String  PICKUP = "pickup";
@@ -102,21 +116,50 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String  LRCOPY = "lr_copy";
     private static final String  AVAIL_OPTION = "avail_option";
 
-    // TABLE_TRANSPORT_TYPE Table - column names
-    private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
-    private static final String TRANSPORT_TYPE_NAME = "trans_type_name";
+    // TABLE_CUSTOM_CLEARANCE Table - column names
+    private static final String CUSTOM_CLEARANCE_SERVER_ID = "CC_ServerId";
+    // booking id
+    // shipment type
+    // avail option
+    private static final String STUFFING_TYPE = "stuffing_type";
+    private static final String STUFFING_ADDRESS = "stuffing_address";
+
+
+    // TABLE_FREIGHT_FORWARDING_SERVICE Table - column names
+    private static final String FREIGHT_FORWARDING_SERVER_ID = "FF_ServerId";
+    // booking id
+    // shipment type
+    // avail option
+    private static final String PORT_OF_LOADING = "port_of_loading";
+    private static final String PORT_OF_DESTINATION = "port_of_destination";
+
+
+    // TABLE_CFS_ADDRESS Table - column names
+    private static final String CFS_ADDRESS_SERVER_ID = "cfs_address_serverId";
+    private static final String CFS_ADDRESS_NAME = "cfs_address_name";
 
     // TABLE_TRANSPORT_SERVICE Table - column names
     private static final String TRANSPORT_SERVICE_SERVER_ID = "trans_service_serverId";
     private static final String TRANSPORT_SERVICE_NAME = "trans_service_name";
 
+    // TABLE_TYPE_OF_PACKAGE Table - column names
+    private static final String PACKAGE_TYPE_SERVER_ID = "package_type_serverId";
+    private static final String PACKAGE_TYPE_NAME = "package_type_name";
+
+    // TABLE_TRANSPORT_TYPE Table - column names
+    private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
+    private static final String TRANSPORT_TYPE_NAME = "trans_type_name";
+
+    // TABLE_INTERNATIONAL_DESTIANTION_PORT Table - column names
+    private static final String INTER_DESTI_PORT_NAME = "inter_desti_ports_name";
+    private static final String INTER_DESTI_PORT_COUNTRY = "inter_desti_ports_country";
 
     // Company Table Create Statements
     private static final String CREATE_TABLE_COMPANY =
             "CREATE TABLE IF NOT EXISTS "+ TABLE_COMPANY +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COMPANY_SERVER_ID+" INTEGER," +
-                    COMPANY_REFERENCE_NO+" INTEGER," +
+                    USER_REFERENCE_NO+" INTEGER," +
                     COMPANY_USER_DESIGNATION+" VARCHAR(100)," +
                     COMPANY_NAME+" VARCHAR(100), " +
                     COMPANY_CONTACT+" INTEGER," +
@@ -160,8 +203,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Term of shipment Table Create Statements
-    private static final String CREATE_TABLE_TERM_OF_SHIPMENT =
-            "CREATE TABLE IF NOT EXISTS "+ TABLE_TERM_OF_SHIPMENT+
+    private static final String CREATE_TABLE_TYPE_OF_SHIPMENT =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TYPE_OF_SHIPMENT +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TOS_SERVER_ID +" INTEGER," +
                     TOS_name+" VARCHAR(200)," +
@@ -173,17 +216,45 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_TRANSPORTATION +
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     TRANSPORTATION_SERVER_ID +" INTEGER," +
-                    COMMODITY_SERVERID +" INTEGER," +
-                    DIMEN_LENGTH +" INTEGER," +
-                    DIMEN_HEIGHT +" INTEGER," +
-                    DIMEN_WEIGHT +" INTEGER," +
-                    SHIPMENT_TERM +" INTEGER," +
-                    NO_OF_PACK +" INTEGER," +
-                    PACK_TYPE +" INTEGER," +
-                    BOOKING_ID +" VARCHAR(200)," +
+                    BOOKING_ID +" VARCHAR(50)," +
                     PICKUP +" VARCHAR(200)," +
                     DROP +" VARCHAR(200)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    MEASUREMENT +" VARCHAR(10)," +
+                    GROSS_WEIGHT +" REAL," +
+                    PACK_TYPE +" INTEGER," +
+                    NO_OF_PACK +" INTEGER," +
+                    COMMODITY_SERVERID_IN_TRANSPORT +" INTEGER," +
+                    DIMEN_LENGTH +" INTEGER," +
+                    DIMEN_HEIGHT +" INTEGER," +
+                    DIMEN_WIDTH +" INTEGER," +
+                    AVAIL_OPTION +" TINYINT(4)," +
                     LRCOPY +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Custom Clearance Table Create Statements
+    private static final String CREATE_TABLE_CUSTOM_CLEARANCE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_CUSTOM_CLEARANCE+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    CUSTOM_CLEARANCE_SERVER_ID +" INTEGER," +
+                    BOOKING_ID +" VARCHAR(50)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    STUFFING_TYPE + "  VARCHAR(50),"+
+                    STUFFING_ADDRESS + "  VARCHAR(50),"+
+                    AVAIL_OPTION +" TINYINT(4)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Freight forwarding Table Create Statement
+    private static final String CREATE_TABLE_FREIGHT_FORWARDING =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_FREIGHT_FORWARDING+
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    FREIGHT_FORWARDING_SERVER_ID +" INTEGER," +
+                    BOOKING_ID +" VARCHAR(50)," +
+                    SHIPMENT_TYPE +" INTEGER," +
+                    PORT_OF_LOADING + " VARCHAR(100),"+
+                    PORT_OF_DESTINATION + " VARCHAR(100),"+
                     AVAIL_OPTION +" TINYINT(4)," +
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
@@ -217,6 +288,32 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    // Package type Table Create Statements
+    private static final String CREATE_TABLE_PACKAGE_TYPE =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_TYPE_OF_PACKAGE +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    PACKAGE_TYPE_SERVER_ID+" INTEGER," +
+                    PACKAGE_TYPE_NAME+" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // Container freight station(cfs) Table Create Statements
+    private static final String CREATE_TABLE_CFS_ADDRESS =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_CFS_ADDRESS +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    CFS_ADDRESS_SERVER_ID + " INTEGER," +
+                    CFS_ADDRESS_NAME +" VARCHAR(200)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
+    // international destination port Table Create Statements
+    private static final String CREATE_TABLE_INTERNATIONAL_DESTINATION_PORT =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_INTERNATIONAL_DESTINATION_PORT +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    INTER_DESTI_PORT_COUNTRY +" VARCHAR(50)," +
+                    INTER_DESTI_PORT_NAME +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
 
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -229,11 +326,16 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_COMMODITY);
         db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_LOCATION);
         db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE_CATEGORY);
-        db.execSQL(CREATE_TABLE_TERM_OF_SHIPMENT);
+        db.execSQL(CREATE_TABLE_TYPE_OF_SHIPMENT);
         db.execSQL(CREATE_TABLE_TRANSPORTATION);
         db.execSQL(CREATE_TABLE_TRANSPORT_TYPE);
         db.execSQL(CREATE_TABLE_TRANSPORT_SERVICE);
+        db.execSQL(CREATE_TABLE_CUSTOM_CLEARANCE);
+        db.execSQL(CREATE_TABLE_FREIGHT_FORWARDING);
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
+        db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
+        db.execSQL(CREATE_TABLE_CFS_ADDRESS);
+        db.execSQL(CREATE_TABLE_INTERNATIONAL_DESTINATION_PORT);
     }
 
     @Override
@@ -244,11 +346,16 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TERM_OF_SHIPMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_SHIPMENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INTERNATIONAL_DESTINATION_PORT);
 
         // create new tables
         onCreate(db);
@@ -305,7 +412,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
         MatrixCursor Cursor2= new MatrixCursor(columns);
         alc.add(null);
         alc.add(null);
-
 
         try{
             String maxQuery = Query ;
@@ -374,6 +480,78 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return commodity_id;
     }
 
+    /**
+     * getting commodity count
+     */
+    public int numberOfComodityRows(){
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_COMMODITY);
+        return numRows;
+
+    }
+
+    /**
+     * get all commodity to show on service parameter activity
+     */
+    public List<CommodityModel> getCommodityData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CommodityModel> array_list = new ArrayList<CommodityModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCommodityData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CommodityModel commodity = new CommodityModel();
+
+                commodity.setServerId(res.getInt(res.getColumnIndex(COMMODITY_SERVER_ID)));
+                commodity.setName(res.getString(res.getColumnIndex(COMMODITY_NAME)));
+
+                array_list.add(commodity);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
+    public String getCommodityDataByServerID(int serverId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT "+ COMMODITY_NAME +" FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ COMMODITY_SERVER_ID+" = "+ serverId +"; ";
+
+        System.out.println("getCommodityDataByServerID: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(COMMODITY_NAME));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
+    }
 
     // ------------------------ "CustomClearanceLocation" table methods ----------------//
 
@@ -409,6 +587,44 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
+    /**
+     * get all custom clearance location to show on service parameter activity
+     */
+    public List<CustomClearanceLocation> getCustomClearanceLocationData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CustomClearanceLocation> array_list = new ArrayList<CustomClearanceLocation>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CUSTOM_CLEARANCE_LOCATION + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCommodityData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CustomClearanceLocation CCL = new CustomClearanceLocation();
+
+                CCL.setServerId(res.getInt(res.getColumnIndex(CCL_SERVER_ID)));
+                CCL.setCcCategoryId(res.getInt(res.getColumnIndex(CC_CATEGORY_ID)));
+                CCL.setName(res.getString(res.getColumnIndex(CCL_NAME)));
+                CCL.setLocation(res.getString(res.getColumnIndex(CCL_LOCATION)));
+                CCL.setState(res.getString(res.getColumnIndex(CCL_STATE)));
+
+                array_list.add(CCL);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
     // ------------------------ "CustomClearanceCategory" table methods ----------------//
     public long insertCustomClearanceCategory(CustomClearanceCategoryModel customClearanceCategoryModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -439,16 +655,16 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
-    // ------------------------ "TermOfShipment" table methods ----------------//
-    public long insertShipmentTerm(ShipmentTermModel shipmentTermModel) {
+    // ------------------------ "TypeOfShipment" table methods ----------------//
+    public long insertShipmentType(ShipmentTypeModel shipmentTypeModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
         SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TOS_SERVER_ID, shipmentTermModel.getServerId());
-        contentValues.put(TOS_name, shipmentTermModel.getName());
-        contentValues.put(KEY_STATUS, shipmentTermModel.getStatus());
+        contentValues.put(TOS_SERVER_ID, shipmentTypeModel.getServerId());
+        contentValues.put(TOS_name, shipmentTypeModel.getName());
+        contentValues.put(KEY_STATUS, shipmentTypeModel.getStatus());
         contentValues.put(KEY_CREATED_AT, getDateTime());
 
         // insert row
@@ -456,17 +672,48 @@ public class DatabaseClass extends SQLiteOpenHelper {
         try {
 
             String whereClause = TOS_SERVER_ID+" = ?";
-            String[] whereArgs = new String[]{ String.valueOf( shipmentTermModel.getServerId() )} ;
+            String[] whereArgs = new String[]{ String.valueOf( shipmentTypeModel.getServerId() )} ;
 
-            int numRows = (int)DatabaseUtils.queryNumEntries(db,TABLE_TERM_OF_SHIPMENT,whereClause,whereArgs);
+            int numRows = (int)DatabaseUtils.queryNumEntries(db, TABLE_TYPE_OF_SHIPMENT,whereClause,whereArgs);
             if( numRows <= 0 ) {
-                id = db.insert(TABLE_TERM_OF_SHIPMENT, null, contentValues);
+                id = db.insert(TABLE_TYPE_OF_SHIPMENT, null, contentValues);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return id;
+    }
+
+    public int getShipmentTypeServerId(String serviceName) {
+        String name = null;
+        if( serviceName.equals("LCL") ) {
+            name = "Less than Container Load";
+        }
+        else {
+            name = "Full Container Load";
+        }
+
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_SHIPMENT + " WHERE "
+                + KEY_STATUS + " = 1 AND "+TOS_name+" = '"+name + "';";
+
+//        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        int anInt = 0;
+        if(res.moveToFirst()) {
+            do{
+                anInt = res.getInt(res.getColumnIndex(TOS_SERVER_ID));
+            }while (res.moveToNext());
+        }
+
+        sqLiteDatabase.closeDatabase();
+
+        return anInt;
     }
 
     // ------------------------ "TransportType" table methods ----------------//
@@ -500,6 +747,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
     // ------------------------ "TransportService" table methods ----------------//
+
     public long insertTransportService(TransportServiceModel transportServiceModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
@@ -528,4 +776,443 @@ public class DatabaseClass extends SQLiteOpenHelper {
         }
         return id;
     }
+
+    /**
+     * get transport service to show on service activity
+     */
+    public List<TransportServiceModel> getTransportServiceData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<TransportServiceModel> array_list = new ArrayList<TransportServiceModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                TransportServiceModel service = new TransportServiceModel();
+
+                service.setServerId(res.getInt(res.getColumnIndex(TRANSPORT_SERVICE_SERVER_ID)));
+                service.setName(res.getString(res.getColumnIndex(TRANSPORT_SERVICE_NAME)));
+
+                array_list.add(service);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
+    public int getTransportServiceServerId(String serviceName) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+TRANSPORT_SERVICE_NAME+" = '"+serviceName + "';";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        int anInt = 0;
+        if(res.moveToFirst()) {
+            do{
+                TransportServiceModel service = new TransportServiceModel();
+
+                anInt = res.getInt(res.getColumnIndex(TRANSPORT_SERVICE_SERVER_ID));
+
+            }while (res.moveToNext());
+        }
+
+        sqLiteDatabase.closeDatabase();
+
+        return anInt;
+    }
+
+    // ------------------------ "TypeOfPackage" table methods ----------------//
+
+    public long insertPackageType(PackageTypeModel packageTypeModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PACKAGE_TYPE_SERVER_ID, packageTypeModel.getServerId());
+        contentValues.put(PACKAGE_TYPE_NAME, packageTypeModel.getName());
+        contentValues.put(KEY_STATUS, packageTypeModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long id = 0;
+        try {
+
+            String whereClause = PACKAGE_TYPE_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( packageTypeModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_TYPE_OF_PACKAGE, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = db.insert(TABLE_TYPE_OF_PACKAGE, null, contentValues);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public List<PackageTypeModel> getPackagingTypeData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<PackageTypeModel> array_list = new ArrayList<PackageTypeModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getPackagingType: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                PackageTypeModel types = new PackageTypeModel();
+
+                types.setServerId(res.getInt(res.getColumnIndex(PACKAGE_TYPE_SERVER_ID)));
+                types.setName(res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME)));
+
+                array_list.add(types);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
+    public String getPackagingTypeDataByServerId(int packTypeServerId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT "+ PACKAGE_TYPE_NAME +" FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ PACKAGE_TYPE_SERVER_ID+" = "+ packTypeServerId +"; ";
+
+        System.out.println("getPackagingTypeDataByServerId: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
+    }
+
+    // ------------------------ "CfsAddress" table methods ----------------//
+
+    public long insertCFSAddress(CFSAddressModel cfsAddressModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CFS_ADDRESS_SERVER_ID, cfsAddressModel.getServerId());
+        contentValues.put(CFS_ADDRESS_NAME, cfsAddressModel.getName());
+        contentValues.put(KEY_STATUS, cfsAddressModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        long id = 0;
+        try {
+
+            String whereClause = CFS_ADDRESS_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( cfsAddressModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CFS_ADDRESS, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = db.insert(TABLE_CFS_ADDRESS, null, contentValues);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public List<CFSAddressModel> getCfsData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        List<CFSAddressModel> array_list = new ArrayList<CFSAddressModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CFS_ADDRESS + " WHERE "
+                + KEY_STATUS + " = 1; ";
+
+        Log.d("getCfsData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                CFSAddressModel types = new CFSAddressModel();
+
+                types.setServerId(res.getInt(res.getColumnIndex(CFS_ADDRESS_SERVER_ID)));
+                types.setName(res.getString(res.getColumnIndex(CFS_ADDRESS_NAME)));
+
+                array_list.add(types);
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return array_list;
+    }
+
+    // ------------------------ "InterDestiPorts" table methods ----------------//
+    public int insertInterDestiPorts(String name, String country) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(INTER_DESTI_PORT_COUNTRY, country);
+        contentValues.put(INTER_DESTI_PORT_NAME, name);
+        contentValues.put(KEY_STATUS, 1);
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = INTER_DESTI_PORT_COUNTRY+" = ? AND "+INTER_DESTI_PORT_NAME+" = ? ";
+            String[] whereArgs = new String[]{ country, name } ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_INTERNATIONAL_DESTINATION_PORT, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_INTERNATIONAL_DESTINATION_PORT, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public ArrayList getPortOfCountry(){
+        ArrayList<String> poc = new ArrayList<String>();
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT DISTINCT " +INTER_DESTI_PORT_COUNTRY+" FROM " +
+                TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 ORDER BY "+
+                INTER_DESTI_PORT_COUNTRY+";";
+
+        Log.d("getPortOfCountry: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                poc.add(res.getString(res.getColumnIndex(INTER_DESTI_PORT_COUNTRY)));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return poc;
+    }
+
+    public ArrayList getPortOfDestination(String countryName) {
+        ArrayList<String> pod = new ArrayList<String>();
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT " +INTER_DESTI_PORT_NAME+" FROM " +
+                TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 AND " +
+                INTER_DESTI_PORT_COUNTRY+" = '"+countryName+"' ORDER BY "+INTER_DESTI_PORT_NAME+" ;";
+
+        Log.d("getPortOfCountry: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                pod.add(res.getString(res.getColumnIndex(INTER_DESTI_PORT_NAME)));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return pod;
+    }
+    // ------------------------ "Transportation" table methods ----------------//
+
+    public int insertTransportation(TransportationModel transportationModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRANSPORTATION_SERVER_ID, transportationModel.getServerId());
+        contentValues.put(BOOKING_ID, transportationModel.getBookingId());
+        contentValues.put(PICKUP, transportationModel.getPickUp());
+        contentValues.put(DROP, transportationModel.getDrop());
+        contentValues.put(SHIPMENT_TYPE, transportationModel.getShipmentType());
+        contentValues.put(MEASUREMENT, transportationModel.getMeasurement());
+        contentValues.put(GROSS_WEIGHT, transportationModel.getGrossWeight());
+        contentValues.put(PACK_TYPE, transportationModel.getPackType());
+        contentValues.put(NO_OF_PACK, transportationModel.getNoOfPack());
+        contentValues.put(COMMODITY_SERVERID_IN_TRANSPORT, transportationModel.getCommodityServerId());
+        contentValues.put(DIMEN_LENGTH, transportationModel.getDimenLength());
+        contentValues.put(DIMEN_HEIGHT, transportationModel.getDimenHeight());
+        contentValues.put(DIMEN_WIDTH, transportationModel.getDimenWidth());
+        contentValues.put(AVAIL_OPTION, transportationModel.getAvailOption());
+        contentValues.put(LRCOPY, transportationModel.getLrCopy());
+        contentValues.put(KEY_STATUS, transportationModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, transportationModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = TRANSPORTATION_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( transportationModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_TRANSPORTATION, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_TRANSPORTATION, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    // ------------------------ "CustomClearance" table methods ----------------//
+    public int insertCustomClearance(CustomClearanceModel customClearanceModel) {
+
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CUSTOM_CLEARANCE_SERVER_ID, customClearanceModel.getServerId());
+        contentValues.put(BOOKING_ID, customClearanceModel.getBookingId());
+        contentValues.put(SHIPMENT_TYPE, customClearanceModel.getiShipmentType());
+        contentValues.put(STUFFING_TYPE, customClearanceModel.getStuffingType());
+        contentValues.put(STUFFING_ADDRESS, customClearanceModel.getStuffingAddress());
+        contentValues.put(AVAIL_OPTION, customClearanceModel.getAvailOption());
+        contentValues.put(KEY_STATUS, customClearanceModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, customClearanceModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = CUSTOM_CLEARANCE_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( customClearanceModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CUSTOM_CLEARANCE, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_CUSTOM_CLEARANCE, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+
+    }
+
+    /**
+     * avail option is selected by user
+     * get pick up address when user select transportation avail option
+     * and user already selected Custom clearance FCL shipment type and Factory stuffing
+     *
+     * @param bookingId
+     * @return
+     */
+    public String getPickUpAddress(Context context, String bookingId) {
+        String address = null;
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT " +STUFFING_ADDRESS+  " FROM " + TABLE_CUSTOM_CLEARANCE + " WHERE "
+                + KEY_STATUS + " = 1 AND "
+                + BOOKING_ID +" = '"+bookingId+" AND "
+                + SHIPMENT_TYPE +" = 1 AND "
+                + STUFFING_TYPE +" = "+context.getResources().getString(R.string.strFactoryStuff)
+                + "';";
+
+        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                address = res.getString(res.getColumnIndex(STUFFING_ADDRESS));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return address;
+    }
+
+    // ------------------------ "FreightForwarding" table methods ----------------//
+    public int insertFreightForwarding(FreightForwardingModel freightForwardingModel) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FREIGHT_FORWARDING_SERVER_ID, freightForwardingModel.getServerId());
+        contentValues.put(BOOKING_ID, freightForwardingModel.getBookingId());
+        contentValues.put(SHIPMENT_TYPE, freightForwardingModel.getShipmentType());
+        contentValues.put(PORT_OF_LOADING, freightForwardingModel.getPortOfLoading());
+        contentValues.put(PORT_OF_DESTINATION, freightForwardingModel.getPortOfDestination());
+        contentValues.put(AVAIL_OPTION, freightForwardingModel.getAvailOption());
+        contentValues.put(KEY_STATUS, freightForwardingModel.getStatus());
+        contentValues.put(KEY_CREATED_AT, freightForwardingModel.getCreatedAt());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = FREIGHT_FORWARDING_SERVER_ID+" = ?";
+            String[] whereArgs = new String[]{ String.valueOf( freightForwardingModel.getServerId() )} ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_FREIGHT_FORWARDING, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_FREIGHT_FORWARDING, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
 }

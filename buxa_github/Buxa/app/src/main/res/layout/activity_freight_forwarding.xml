@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/splash_background"
+    tools:context="com.alchemistdigital.buxa.activities.FreightForwardingActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/id_toolbar_freight_forwarding"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="@color/backgroundColor">
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_ff_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
+                    android:id="@+id/book_id_ff"
+                    android:hint="@string/hint_bookId"
+                    android:ems="10"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_POL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                    android:id="@+id/id_POL_addresses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_pol_address"
+                    app:Segoe="segoe_light"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_poc"
+                    android:textSize="12dp"
+                    android:paddingLeft="5dp"
+                    app:Segoe="segoe_regular" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/id_spinner_poc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_pod_address"
+                    android:textSize="12dp"
+                    android:paddingLeft="5dp"
+                    app:Segoe="segoe_regular" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/id_spinner_pod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_cfs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                    android:id="@+id/id_cfs_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_cfs_address"
+                    app:Segoe="segoe_light"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_incoterm"
+                    android:textSize="12dp"
+                    android:paddingLeft="5dp"
+                    app:Segoe="segoe_regular" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/id_spinner_incoterm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_destination_delivery_adr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                    android:id="@+id/id_destination_delivery_adr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_destination_delivery_adr"
+                    app:Segoe="segoe_light"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/id_commomTransportLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_shipmentType_ff"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_type_of_shipment"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        app:Segoe="segoe_regular" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radiogroupTypeOfShipment_ff"
+                        android:orientation="horizontal"
+                        android:checkedButton="@+id/rbLcl_ff" >
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbLcl_ff"
+                            android:text="@string/strLcl"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbFcl_ff"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/strFcl"/>
+
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radiogroup2040_ff"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet20_ff"
+                            android:text="@string/str20feet"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet40_ff"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/str40feet"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet40HQfeet_ff"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/str40HQfeet"/>
+
+                    </RadioGroup>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_cubic_meter_measurement_ff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:id="@+id/id_cubic_meter_measurement_ff"
+                            android:hint="@string/hint_cubic_meter_measurement"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_gross_weight_ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:id="@+id/id_gross_weight_ff"
+                        android:hint="@string/hint_gross_weight"
+                        android:ems="10"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pack_type_ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_type_of_package_ff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_type_of_package"
+                        app:Segoe="segoe_light"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_no_of_package_ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberSigned"
+                        android:id="@+id/id_no_of_package_ff"
+                        android:hint="@string/hint_no_of_package"
+                        android:ems="10"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_commodity_ff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_commodity_ff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_commodity"
+                        app:Segoe="segoe_light"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_dimension_ff"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_dimensions"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        android:layout_marginBottom="3dp"
+                        app:Segoe="segoe_regular" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dimensions_length_ff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_length_ff"
+                                android:hint="@string/hint_dimensions_length"
+                                android:ems="10"
+                                android:imeOptions="actionNext"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dimensions_height_ff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_height_ff"
+                                android:hint="@string/hint_dimensions_height"
+                                android:ems="10"
+                                android:imeOptions="actionNext"/>
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dimensions_width_ff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberSigned"
+                                android:id="@+id/id_dimensions_width_ff"
+                                android:hint="@string/hint_dimensions_width"
+                                android:ems="10"/>
+                        </android.support.design.widget.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity ="right"
+                android:layout_marginTop="50sp"
+                android:layout_marginBottom="20dp"
+                android:onClick="storeFreightForwardingEnquiry">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/id_tv_CC_Next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_regular"
+                    android:textSize="25dp"
+                    android:text="@string/next"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/id_tv_CC_Next"
+                    android:tint="@color/black_semi_transparent"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/ic_keyboard_arrow_right"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

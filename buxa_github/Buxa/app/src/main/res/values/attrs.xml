@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TypefacedTextView">
+        <attr name="Segoe"/>
+    </declare-styleable>
+
+    <attr name="Segoe" format="enum">
+        <enum name="segoe_light" value="0"/>
+        <enum name="segoe_regular" value="1"/>
+    </attr>
+</resources>

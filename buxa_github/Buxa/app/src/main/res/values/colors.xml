@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ecf0f1</color>
+
+    <!--futuresimple/android-floating-action-button-->
+    <color name="half_black">#808080</color>
+    <color name="black_semi_transparent">#B2000000</color>
+
+    <color name="colorPrimary">#018bba</color>
     <color name="colorPrimaryDark">#02445b</color>
     <color name="milkyWhite">#ecf0f1</color>
+    <color name="colorAccent">#018bba</color>
     <color name="backgroundColor">#018bba</color>
     <color name="colorBlack">#000</color>
     <color name="hintTextColor">#3e5e69</color>
     <color name="hintGray">#6c6f6f</color>
     <color name="error">#fa2828</color>
+    <color name="white_pressed">#f1f1f1</color>
 
 </resources>

@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/backgroundColor"
+    android:background="@drawable/splash_background"
     tools:context=".activities.SelectServiceActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/id_toolbar_selectService" >
+        android:layout_height="match_parent" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,57 +21,41 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:textColor="@color/milkyWhite"
+                android:layout_marginTop="80dp"
+                android:textColor="@color/backgroundColor"
                 android:text="@string/strSelectService"
                 android:textSize="45sp" />
 
-            <com.alchemistdigital.buxa.utilities.SegoeLightFontCustomTextview
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/strWantAvail"
-                android:textColor="@color/milkyWhite"
-                android:textSize="18dp" />
+                android:textColor="@color/backgroundColor"
+                android:textSize="18dp"
+                app:Segoe="segoe_light" />
 
-            <CheckBox
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layoutServiceCheckbox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/rb_id_trans"
                 android:layout_marginTop="70dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/strTransportation" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rb_id_CustomClr"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/strCustomClr" />
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/rb_id_freightForward"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:paddingLeft="20dp"
-                android:textSize="25dp"
-                android:textColor="@color/milkyWhite"
-                android:buttonTint="@color/milkyWhite"
-                android:text="@string/freightForward" />
+                <!--<CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_id_trans"
+                    android:paddingLeft="20dp"
+                    android:textSize="25dp"
+                    android:textColor="@color/backgroundColor"
+                    android:buttonTint="@color/backgroundColor"
+                    android:text="@string/strTransportation" />-->
+            </LinearLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="70dp"
@@ -81,8 +64,8 @@
                 android:scaleType="fitXY"
                 android:layout_marginTop="50dp"
                 android:layout_gravity="center_horizontal"
-                android:tint="@color/backgroundColor"
-                app:rippleColor="@color/backgroundColor"
+                android:tint="@color/milkyWhite"
+                app:rippleColor="@color/milkyWhite"
                 android:src="@drawable/ic_keyboard_arrow_right"
                 android:onClick="gotoSelectServiceParameter" />
 

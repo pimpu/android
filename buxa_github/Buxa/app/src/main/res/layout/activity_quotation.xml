@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:id="@+id/id_scrollview_Quote"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/splash_background"
+    tools:context="com.alchemistdigital.buxa.activities.QuotationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/launcher_buxa_logo"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/app_name"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Buxa Address"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Buxa email"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Buxa contact number"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strBookNo"
+                app:Segoe="segoe_regular"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/id_tv_bookId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="Booking Date"
+                android:textColor="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/strDate"
+                app:Segoe="segoe_regular"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/id_tv_date_quotation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="Quotation Date"
+                android:textColor="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/company_name"
+                app:Segoe="segoe_regular"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/id_tv_companyName_quotation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="@string/companyName"
+                android:textColor="@color/colorPrimaryDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="@string/str_thanking_toast"
+                android:textColor="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="Happy Shipping."
+                android:textColor="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="Regards,"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_regular"
+                android:text="Team Buxa"
+                android:textColor="@color/colorPrimaryDark"/>
+
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/borderbottom">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ref: "
+                    app:Segoe="segoe_regular" />
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/id_tv_quotation_subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:text="Subject"/>
+            </LinearLayout>
+        </LinearLayout>-->
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/client"
+                app:Segoe="segoe_regular"/>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/id_tv_clientName_quotation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:Segoe="segoe_light"
+                android:text="@string/loginName"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=","/>
+        </LinearLayout>-->
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_quote_content"
+                app:Segoe="segoe_light"/>
+
+        </LinearLayout>-->
+
+        <!--<LinearLayout
+            android:id="@+id/id_tables_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+        </LinearLayout>-->
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_quote_footer"
+                app:Segoe="segoe_light"/>
+
+        </LinearLayout>-->
+
+    </LinearLayout>
+</ScrollView>

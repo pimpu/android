@@ -1,6 +1,7 @@
 package com.alchemistdigital.buxa.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,15 +21,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.emailValidate;
@@ -138,6 +145,12 @@ public class Login extends Fragment implements View.OnClickListener {
                         return;
                     } else {
                         layout_noConnection.setVisibility(View.GONE);
+                        View view = getActivity().getCurrentFocus();
+                        if (view != null) {
+                            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+
                         LoginCompanyForBuxa();
                     }
                 }
@@ -165,47 +178,65 @@ public class Login extends Fragment implements View.OnClickListener {
         prgDialog.show();
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.COMPANY_LOGIN_SERVER_URL, params, new AsyncHttpResponseHandler() {
+        RestClient.post(CommonVariables.COMPANY_LOGIN_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
-            public void onSuccess(String response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 prgDialog.cancel();
                 try {
-                    JSONObject json = new JSONObject(response);
+//                    JSONObject json = new JSONObject(response);
 
-                    Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
+                    Boolean error = response.getBoolean(CommonVariables.TAG_ERROR);
                     if (error) {
                         layout_noConnection.setVisibility(View.VISIBLE);
-                        errorMessage.setText(json.getString(CommonVariables.TAG_MESSAGE));
+                        errorMessage.setText(response.getString(CommonVariables.TAG_MESSAGE));
                     } else {
                         layout_noConnection.setVisibility(View.GONE);
                         SetSharedPreference setSharedPreference = new SetSharedPreference(getActivity());
 
-                        // it store the Register true value of user for purpose of user is registered with this app.
-                        setSharedPreference.setBooleanLogin(getResources().getString(R.string.boolean_login_sharedPref), "true");
-                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), json.getInt("id"));
-                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), json.getString("api_key"));
-                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), json.getString("email"));
-                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), json.getString("loginName"));
-                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), json.getString("companyName"));
+                        setSharedPreference.setLoginId(getResources().getString(R.string.loginId), response.getInt("id"));
+                        setSharedPreference.setApiKey(getResources().getString(R.string.apikey), response.getString("api_key"));
+                        setSharedPreference.setLoginEmail(getResources().getString(R.string.loginEmail), response.getString("email"));
+                        setSharedPreference.setLoginName(getResources().getString(R.string.loginName), response.getString("loginName"));
+                        setSharedPreference.setCompanyName(getResources().getString(R.string.companyName), response.getString("companyName"));
 
-                        Intent intent = new Intent(getActivity(), SelectServiceActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        getActivity().finish();
-                        startActivity(intent);
+                        DatabaseClass dbHelper = new DatabaseClass(getActivity());
+                        if (dbHelper.numberOfComodityRows() <= 0 ) {
+                            getActivity().setContentView(R.layout.activity_splash_screen);
+
+                            new InsertInternationalDestinationPort(getActivity()).execute();
+
+                        }
+                        else {
+
+                            // sign in from app.
+                            setSharedPreference.setBooleanLogin(getString(R.string.boolean_login_sharedPref), "true");
+
+                            Intent intent = new Intent(getActivity(), WelcomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            getActivity().finish();
+                            startActivity(intent);
+                        }
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
-                // Hide Progress Dialog
-                prgDialog.hide();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                prgDialog.cancel();
+                System.out.println("status code: "+statusCode);
+                System.out.println("responseString: "+responseString);
+                Toast.makeText(getActivity(), "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -218,10 +249,40 @@ public class Login extends Fragment implements View.OnClickListener {
                 }
                 // When Http response code other than 404, 500
                 else {
-                    System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                    Toast.makeText(getActivity(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    try {
+                        if( errorResponse.getBoolean("error") ) {
+                            System.out.println(errorResponse.getString("message"));
+                            Toast.makeText(getActivity(), errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
+                            Toast.makeText(getActivity(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
+
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getActivity());
+
+            if(newMessage.equals("success")) {
+
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 }

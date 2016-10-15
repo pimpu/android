@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/splash_background"
     tools:context="com.alchemistdigital.buxa.activities.Login">
 
@@ -14,10 +15,11 @@
         android:gravity="center_horizontal"
         android:visibility="gone"
         android:background="@color/error">
-        <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
             android:id="@+id/login_error_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:Segoe="segoe_regular"
             android:layout_margin="3dp"
             android:textColor="@color/milkyWhite"/>
     </LinearLayout>
@@ -46,7 +48,7 @@
             android:id="@+id/input_layout_login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+            <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -59,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/input_layout_login_email">
-            <com.alchemistdigital.buxa.utilities.EdittextSegoeLightFont
+            <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -82,9 +84,10 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <com.alchemistdigital.buxa.utilities.SegoeRegularFontCustomTextview
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:Segoe="segoe_regular"
             android:layout_below="@+id/layout_btnLogin"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"

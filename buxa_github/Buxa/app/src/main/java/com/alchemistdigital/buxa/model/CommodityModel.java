@@ -19,6 +19,11 @@ public class CommodityModel {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
     public int getCommodityId() {
         return commodityId;
     }

@@ -1,44 +1,34 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
-import com.alchemistdigital.buxa.model.TransportTypeModel;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Created by Pimpu on 8/30/2016.
  */
 public class GetAllTransportService {
-    private static ProgressDialog prgDialog;
 
     public static void getTransportService(final Context context, String url) {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("Logging ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-        // Show Progress Dialog
-        prgDialog.show();
 
-        RestClient.get(url, null, new AsyncHttpResponseHandler() {
+        RestClient.get(url, null, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
-            public void onSuccess(String response) {
-                prgDialog.cancel();
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 try {
-                    JSONObject json = new JSONObject(response);
+//                    JSONObject json = new JSONObject(response);
 
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
                     if (error) {
@@ -55,11 +45,14 @@ public class GetAllTransportService {
                             int tsStatus = arrayTS.getJSONObject(i).getInt("status");
 
                             long l = databaseClass.insertTransportService(new TransportServiceModel(tsServerId, tsName, tsStatus));
-                            System.out.println("Transport Service id: "+l);
                         }
 
                         // close database in synchronized condition
                         databaseClass.closeDB();
+
+                        // get all container freight station address
+                        GetAllCFSAddress.getCfsAddress(context, CommonVariables.QUERY_CFS_ADDRESS_SERVER_URL);
+
                     }
 
                 } catch (JSONException e) {
@@ -68,9 +61,14 @@ public class GetAllTransportService {
             }
 
             @Override
-            public void onFailure(int statusCode, Throwable error, String content) {
-                // Hide Progress Dialog
-                prgDialog.hide();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("status code: "+statusCode);
+                System.out.println("responseString: "+responseString);
+                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -83,8 +81,18 @@ public class GetAllTransportService {
                 }
                 // When Http response code other than 404, 500
                 else {
-                    System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                    Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                    try {
+                        if( errorResponse.getBoolean("error") ) {
+                            System.out.println(errorResponse.getString("message"));
+                            Toast.makeText(context, errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
+                            Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

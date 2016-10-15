@@ -24,7 +24,7 @@
     <string name="strCompanyRegisterDetails">Company Registration Details</string>
     <string name="strIndia">India</string>
     <string name="str_spinner_state">State</string>
-    <string name="codeString">REF%1$s</string>
+    <string name="codeString">BUXA%1$s%2$d</string>
     <string name="strNoConnection">No internet connection!</string>
     <string name="strLcl">LCL</string>
     <string name="strFcl">FCL</string>
@@ -32,7 +32,45 @@
     <string name="strManualName">Manual</string>
     <string name="btn_signIn">Sign in</string>
     <string name="strSelectedImage">selectedImage</string>
-    <string name="strInTransportMode"><![CDATA[Do you avail with freight forwarding & custom clearance ?]]></string>
+    <!--<string name="strInTransportMode">Do you avail with %1$s</string>-->
+    <string name="str20feet">20\'</string>
+    <string name="str40feet">40\'</string>
+    <string name="str40HQfeet">40\' HQ</string>
+    <string name="strFactoryStuff">Factory stuffing</string>
+    <string name="strDockStuff">Dock stuffing</string>
+    <string name="strStartButtom">let\'s start</string>
+    <string name="next">Next</string>
+    <string name="company_name">Company\u0020:\u0020\u0020</string>
+    <string name="client">Dear Mr / Mrs.\u0020</string>
+    <string name="strDate">Date\u0020:\u0020\u0020</string>
+    <string name="strBookNo">Booking no\u0020:\u0020\u0020</string>
+    <string name="str_quote_content">
+        We are greatly privileged to be given this chance to quote for your company. According to
+        your requirement, we came up with a proposal that is appropriate for your needs.
+    </string>
+    <string name="str_quote_footer">For further question, please feel free to contact us.</string>
+    <string name="str_thanking_toast">Thank you for your interest in enquiry, Our Team will revert
+        within 03 hours with our best quote for your consideration and confirmation.</string>
+    <string name="empty_enquiry_message">No new enquiry found.</string>
+
+    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
+    <string name="dap">Delivered at Place (DAP)</string>
+    <string name="ddp">Delivered Duty Paid (DDP)</string>
+    <string-array name="incoterms">
+        <item>Ex. Works (EXW)</item>
+        <item>Free Carrier (FCA)</item>
+        <item>Carriage Paid To (CPT)</item>
+        <item>Carriage &amp; Insurance Paid To (CIP)</item>
+        <item>Delivered at Terminal (DAT)</item>
+        <item>@string/dap</item>
+        <item>@string/ddp</item>
+        <item>Free Alongside Ship (FAS)</item>
+        <item>Free On Board (FOB)</item>
+        <item>Cost &amp; Freight (CFR)</item>
+        <item>Cost, Insurance &amp; Freight (CIF)</item>
+    </string-array>
 
     <string-array name="state">
         <item>Karnataka</item>
@@ -77,11 +115,12 @@
     <string name="hint_commodity">Commodity</string>
     <string name="hint_type_of_package">Type of Package</string>
     <string name="hint_no_of_package">No of Packages</string>
-    <string name="hint_terms_of_shipment">Terms of Shipment</string>
-    <string name="hint_dimensions">Dimensions (mm)</string>
+    <string name="hint_type_of_shipment">Type of Shipment</string>
+    <string name="hint_dimensions">Cargo Dimensions (mm)</string>
     <string name="hint_pickUp_location">Pickup Location</string>
     <string name="hint_drop_location">Drop Location</string>
     <string name="hint_custom_clearance">Custom Clearance Location</string>
+    <string name="hint_first_time_custom_clearance">Are you first time into custom clearance ?</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_company_name">Comapny name</string>
@@ -100,7 +139,20 @@
     <string name="hint_contact_confirm_pwd">Confirm password</string>
     <string name="hint_dimensions_length">length</string>
     <string name="hint_dimensions_height">height</string>
-    <string name="hint_dimensions_weight">weight</string>
+    <string name="hint_dimensions_width">width</string>
     <string name="hint_IEC_number">IEC number</string>
     <string name="hint_AD_Code">AD code registration</string>
+    <string name="hint_cubic_meter_measurement">Cubic meter measurement</string>
+    <string name="hint_gross_weight">Gross weight</string>
+    <string name="hint_CC_address">Address</string>
+    <string name="hint_pol_address">Port Of Loading</string>
+    <string name="hint_pod_address">Port of Destination</string>
+    <string name="hint_bookId">Booking id</string>
+    <string name="hint_cfs_address">Container freight station</string>
+    <string name="hint_incoterm">INCOTERMS</string>
+    <string name="hint_hc_code">Harmonized System Code</string>
+    <string name="hint_local_address">Local location address</string>
+    <string name="hint_destination_delivery_adr">Destination delivery address</string>
+    <string name="hint_poc">Port  of country</string>
+
 </resources>

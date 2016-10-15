@@ -1,16 +1,20 @@
 package com.alchemistdigital.buxa.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Pimpu on 8/29/2016.
  */
-public class TransportationModel {
-    private int  transportationId ;
+public class TransportationModel implements Parcelable {
+    private int userId ;
+    private int transportationId ;
     private int serverId ;
     private int commodityServerId ;
     private int dimenLength ;
     private int dimenHeight ;
-    private int dimenWeight ;
-    private int shipmentTerm ;
+    private int dimenWidth;
+    private int shipmentType ;
     private int noOfPack ;
     private int packType ;
     private String  pickUp ;
@@ -19,20 +23,25 @@ public class TransportationModel {
     private int availOption ;
     private int status ;
     private String  createdAt ;
+    private String bookingId;
+    private String measurement;
+    private float grossWeight;
+    private String strShipmentType;
 
     public TransportationModel() {
     }
 
     public TransportationModel(int serverId, int commodityServerId, int dimenLength,
-                               int dimenHeight, int dimenWeight, int shipmentTerm, int noOfPack,
+                               int dimenHeight, int dimenWidth, int shipmentType, int noOfPack,
                                int packType, String pickUp, String drop, String lrCopy,
-                               int availOption, int status, String createdAt) {
+                               int availOption, int status, String createdAt, String bookingId,
+                               String measurement, float grossWeight) {
         this.serverId = serverId;
         this.commodityServerId = commodityServerId;
         this.dimenLength = dimenLength;
         this.dimenHeight = dimenHeight;
-        this.dimenWeight = dimenWeight;
-        this.shipmentTerm = shipmentTerm;
+        this.dimenWidth = dimenWidth;
+        this.shipmentType = shipmentType;
         this.noOfPack = noOfPack;
         this.packType = packType;
         this.pickUp = pickUp;
@@ -41,6 +50,78 @@ public class TransportationModel {
         this.availOption = availOption;
         this.status = status;
         this.createdAt = createdAt;
+        this.bookingId = bookingId;
+        this.measurement = measurement;
+        this.grossWeight = grossWeight;
+    }
+
+    public TransportationModel(
+            int commodityServerId,
+            int dimenLength,
+            int dimenHeight,
+            int dimenWidth,
+            int noOfPack,
+            int packType,
+            String pickUp,
+            String drop,
+            int availOption,
+            int status,
+            String createdAt,
+            String bookingId,
+            String measurement,
+            float grossWeight,
+            String strShipmentType,
+            int shipmentType,
+            int userId) {
+        this.commodityServerId = commodityServerId;
+        this.dimenLength = dimenLength;
+        this.dimenHeight = dimenHeight;
+        this.dimenWidth = dimenWidth;
+        this.noOfPack = noOfPack;
+        this.packType = packType;
+        this.pickUp = pickUp;
+        this.drop = drop;
+        this.availOption = availOption;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.bookingId = bookingId;
+        this.measurement = measurement;
+        this.grossWeight = grossWeight;
+        this.strShipmentType = strShipmentType;
+        this.shipmentType = shipmentType;
+        this.userId = userId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"commodityServerId\":\"" +commodityServerId + '\"' +
+                ",\"dimenLength\":\"" + dimenLength + '\"' +
+                ",\"dimenHeight\":\"" + dimenHeight + '\"' +
+                ",\"dimenWidth\":\"" + dimenWidth + '\"' +
+                ",\"noOfPack\":\"" + noOfPack + '\"' +
+                ",\"packType\":\"" + packType + '\"' +
+                ",\"pickUp\":\"" + pickUp + '\"' +
+                ",\"drop\":\"" + drop + '\"' +
+                ",\"availOption\":\"" + availOption + '\"' +
+                ",\"status\":\"" + status + '\"' +
+                ",\"createdAt\":\"" + createdAt + '\"' +
+                ",\"bookingId\":\"" + bookingId + '\"' +
+                ",\"measurement\":\"" + measurement + '\"' +
+                ",\"grossWeight\":\"" + grossWeight + '\"' +
+                ",\"strShipmentType\":\"" + strShipmentType + '\"' +
+                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                ",\"userId\":\"" + userId + '\"' +
+                '}';
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getTransportationId() {
@@ -83,20 +164,44 @@ public class TransportationModel {
         this.dimenHeight = dimenHeight;
     }
 
-    public int getDimenWeight() {
-        return dimenWeight;
+    public int getDimenWidth() {
+        return dimenWidth;
     }
 
-    public void setDimenWeight(int dimenWeight) {
-        this.dimenWeight = dimenWeight;
+    public void setDimenWidth(int dimenWidth) {
+        this.dimenWidth = dimenWidth;
     }
 
-    public int getShipmentTerm() {
-        return shipmentTerm;
+    public int getShipmentType() {
+        return shipmentType;
     }
 
-    public void setShipmentTerm(int shipmentTerm) {
-        this.shipmentTerm = shipmentTerm;
+    public void setShipmentType(int shipmentType) {
+        this.shipmentType = shipmentType;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(String bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getMeasurement() {
+        return measurement;
+    }
+
+    public void setMeasurement(String measurement) {
+        this.measurement = measurement;
+    }
+
+    public float getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(float grossWeight) {
+        this.grossWeight = grossWeight;
     }
 
     public int getNoOfPack() {
@@ -162,4 +267,76 @@ public class TransportationModel {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getStrShipmentType() {
+        return strShipmentType;
+    }
+
+    public void setStrShipmentType(String strShipmentType) {
+        this.strShipmentType = strShipmentType;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(userId);
+        dest.writeInt(serverId);
+        dest.writeInt(commodityServerId);
+        dest.writeInt(dimenLength);
+        dest.writeInt(dimenHeight);
+        dest.writeInt(dimenWidth);
+        dest.writeInt(shipmentType);
+        dest.writeInt(noOfPack);
+        dest.writeInt(packType);
+        dest.writeString(pickUp);
+        dest.writeString(drop);
+        dest.writeString(lrCopy);
+        dest.writeInt(availOption);
+        dest.writeInt(status);
+        dest.writeString(createdAt);
+        dest.writeString(bookingId);
+        dest.writeString(measurement);
+        dest.writeFloat(grossWeight);
+        dest.writeString(strShipmentType);
+    }
+
+    private TransportationModel(Parcel in) {
+        userId = in.readInt();
+        serverId = in.readInt();
+        commodityServerId = in.readInt();
+        dimenLength = in.readInt();
+        dimenHeight = in.readInt();
+        dimenWidth = in.readInt();
+        shipmentType = in.readInt();
+        noOfPack = in.readInt();
+        packType = in.readInt();
+        pickUp = in.readString();
+        drop = in.readString();
+        lrCopy = in.readString();
+        availOption = in.readInt();
+        status = in.readInt();
+        createdAt = in.readString();
+        bookingId = in.readString();
+        measurement = in.readString();
+        grossWeight = in.readFloat();
+        strShipmentType = in.readString();
+    }
+
+    public static final Parcelable.Creator<TransportationModel> CREATOR = new Parcelable.Creator<TransportationModel>() {
+
+        @Override
+        public TransportationModel createFromParcel(Parcel source) {
+            return new TransportationModel(source);
+        }
+
+        @Override
+        public TransportationModel[] newArray(int size) {
+            return new TransportationModel[size];
+        }
+    };
+
 }

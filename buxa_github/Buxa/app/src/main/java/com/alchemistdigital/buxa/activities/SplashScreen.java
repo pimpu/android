@@ -24,7 +24,7 @@ public class SplashScreen extends Fragment {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    startActivity(new Intent(getActivity(), SelectServiceActivity.class));
+                    startActivity(new Intent(getActivity(), WelcomeActivity.class));
                     getActivity().finish();
                 }
             }
