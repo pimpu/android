@@ -16,8 +16,8 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by user on 10/8/2016.
  */
-public class updateGCMID {
-    public updateGCMID(Context context, String regId, int uId) {
+public class UpdateGCMID {
+    public UpdateGCMID(Context context, String regId, int uId) {
         RequestParams params;
         params = new RequestParams();
 

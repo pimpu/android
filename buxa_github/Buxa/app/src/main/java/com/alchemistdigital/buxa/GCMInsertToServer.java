@@ -3,7 +3,7 @@ package com.alchemistdigital.buxa;
 import android.content.Context;
 import android.util.Log;
 
-import com.alchemistdigital.buxa.asynctask.updateGCMID;
+import com.alchemistdigital.buxa.asynctask.UpdateGCMID;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.google.android.gcm.GCMRegistrar;
 
@@ -17,7 +17,7 @@ public class GCMInsertToServer {
         GetSharedPreference getPreference = new GetSharedPreference(context);
         int uId = getPreference.getLoginId(context.getResources().getString(R.string.loginId));
 
-        new updateGCMID(context,regId,uId);
+        new UpdateGCMID(context,regId,uId);
 
     }
 

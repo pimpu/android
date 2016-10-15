@@ -43,7 +43,7 @@ public class GetAllCommodity {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-                        new insertCommodityAsyncTask(context, json.getJSONArray("commodities"),
+                        new InsertCommodityAsyncTask(context, json.getJSONArray("commodities"),
                                 start, limit, commodityRowsCount, url).execute();
                     }
 

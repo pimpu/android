@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
+import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -205,8 +205,8 @@ public class Login extends Fragment implements View.OnClickListener {
                         if (dbHelper.numberOfComodityRows() <= 0 ) {
                             getActivity().setContentView(R.layout.activity_splash_screen);
 
-                            // get All shipment type
-                            GetAllShipmentType.getShipmentType(getActivity(), CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
+                            new InsertInternationalDestinationPort(getActivity()).execute();
+
                         }
                         else {
 

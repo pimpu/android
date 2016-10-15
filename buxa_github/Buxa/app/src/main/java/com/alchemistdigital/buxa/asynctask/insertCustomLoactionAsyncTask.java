@@ -14,12 +14,12 @@ import java.util.ArrayList;
 /**
  * Created by user on 8/30/2016.
  */
-public class insertCustomLoactionAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
+public class InsertCustomLoactionAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
     Context context;
     JSONArray customLocation;
     DatabaseClass databaseClass;
 
-    public insertCustomLoactionAsyncTask(Context context, JSONArray customLocation) {
+    public InsertCustomLoactionAsyncTask(Context context, JSONArray customLocation) {
         this.context = context;
         this.customLocation = customLocation;
         databaseClass = new DatabaseClass(context);

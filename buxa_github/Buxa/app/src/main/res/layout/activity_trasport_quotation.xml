@@ -504,7 +504,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity ="right"
                 android:layout_marginTop="50sp"
-                android:paddingBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:onClick="storeTransportEnquiry">
 
                 <com.alchemistdigital.buxa.utilities.SegoeFontTextView

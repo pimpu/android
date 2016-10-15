@@ -18,12 +18,12 @@ import java.util.ArrayList;
 /**
  * Created by user on 9/10/2016.
  */
-public class insertPackagingTypeAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
+public class InsertPackagingTypeAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
     Context context;
     JSONArray packageType;
     DatabaseClass databaseClass;
 
-    public insertPackagingTypeAsyncTask(Context context, JSONArray packageType) {
+    public InsertPackagingTypeAsyncTask(Context context, JSONArray packageType) {
         this.context = context;
         this.packageType = packageType;
         databaseClass = new DatabaseClass(context);

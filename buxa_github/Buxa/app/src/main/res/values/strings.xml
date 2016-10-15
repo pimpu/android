@@ -53,14 +53,19 @@
         within 03 hours with our best quote for your consideration and confirmation.</string>
     <string name="empty_enquiry_message">No new enquiry found.</string>
 
+    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
+    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
+
+    <string name="dap">Delivered at Place (DAP)</string>
+    <string name="ddp">Delivered Duty Paid (DDP)</string>
     <string-array name="incoterms">
         <item>Ex. Works (EXW)</item>
         <item>Free Carrier (FCA)</item>
         <item>Carriage Paid To (CPT)</item>
         <item>Carriage &amp; Insurance Paid To (CIP)</item>
         <item>Delivered at Terminal (DAT)</item>
-        <item>Delivered at Place (DAP)</item>
-        <item>Delivered Duty Paid (DDP)</item>
+        <item>@string/dap</item>
+        <item>@string/ddp</item>
         <item>Free Alongside Ship (FAS)</item>
         <item>Free On Board (FOB)</item>
         <item>Cost &amp; Freight (CFR)</item>
@@ -144,12 +149,10 @@
     <string name="hint_pod_address">Port of Destination</string>
     <string name="hint_bookId">Booking id</string>
     <string name="hint_cfs_address">Container freight station</string>
-
-
-    <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
     <string name="hint_incoterm">INCOTERMS</string>
     <string name="hint_hc_code">Harmonized System Code</string>
     <string name="hint_local_address">Local location address</string>
+    <string name="hint_destination_delivery_adr">Destination delivery address</string>
+    <string name="hint_poc">Port  of country</string>
 
 </resources>

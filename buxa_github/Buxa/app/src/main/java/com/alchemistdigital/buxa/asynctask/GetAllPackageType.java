@@ -29,7 +29,7 @@ public class GetAllPackageType {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-                        new insertPackagingTypeAsyncTask(context, json.getJSONArray("packageType") ).execute();
+                        new InsertPackagingTypeAsyncTask(context, json.getJSONArray("packageType") ).execute();
                     }
 
                 } catch (JSONException e) {

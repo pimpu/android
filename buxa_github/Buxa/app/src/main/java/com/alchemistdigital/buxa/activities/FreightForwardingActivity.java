@@ -16,10 +16,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.adapter.CustomSpinnerAdapter;
 import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
@@ -34,30 +36,34 @@ import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class FreightForwardingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    LinearLayout layoutCommomTransFeild;
-    ArrayAdapter<CommodityModel> commodity_adapter;
-    ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtLocalAdr, txtPolAdr, txtPodAdr,
-                txtCfsAdr;
-    RadioGroup rgContainerSize, rgTypeOfShipment;
-    DatabaseClass dbClass ;
-    ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
-    String strShipmentType = "LCL", bookId, strSelectedContainerSize = null;
+    private LinearLayout layoutCommomTransFeild;
+    private ArrayAdapter<CommodityModel> commodity_adapter;
+    private ArrayAdapter<PackageTypeModel> packagingType_adapter;
+    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPolAdr,txtCfsAdr,
+            txtDestinationDeliveryAdr;
+    private RadioGroup rgContainerSize, rgTypeOfShipment;
+    private DatabaseClass dbClass ;
+    private ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
+    private String strShipmentType = "LCL", bookId, strSelectedContainerSize = null, selectedIncoterm;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack, txtDimenLen,
             txtDimenHeight, txtDimenWidth;
-    TextInputLayout inputLayout_local_adr, inputLayout_cubicMeter, inputLayout_grossWeight,
+    private TextInputLayout inputLayout_destinationDeliveryAdr, inputLayout_cubicMeter, inputLayout_grossWeight,
             inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
             inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width,
-            inputLayout_POLAddress, inputLayout_PODAddress, inputLayout_CfsAddress;
+            inputLayout_POLAddress, inputLayout_CfsAddress;
     private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
     private int loginId;
     private TransportationModel transportDataModel;
     private CustomClearanceModel customClearanceModel;
     private ArrayAdapter<CFSAddressModel> cfs_adapter;
+    private Spinner spinnerIncoterm, spinnerPOC, spinnerPOD;
+    private Boolean boolIsDDAVisible=false;
+    private CustomSpinnerAdapter adapterPortOfCountry, adapterPortOfDestination, adapterIncoterm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +145,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
         // initialised all Text Input Layout
         inputLayout_POLAddress = (TextInputLayout) findViewById(R.id.input_layout_POL);
-        inputLayout_PODAddress = (TextInputLayout) findViewById(R.id.input_layout_POD);
         inputLayout_CfsAddress = (TextInputLayout) findViewById(R.id.input_layout_cfs);
-        inputLayout_local_adr = (TextInputLayout) findViewById(R.id.input_layout_local_location);
+        inputLayout_destinationDeliveryAdr = (TextInputLayout) findViewById(R.id.input_layout_destination_delivery_adr);
         inputLayout_cubicMeter = (TextInputLayout) findViewById(R.id.input_layout_cubic_meter_measurement_ff);
         inputLayout_grossWeight = (TextInputLayout) findViewById(R.id.input_layout_gross_weight_ff);
         inputLayout_packType = (TextInputLayout) findViewById(R.id.input_layout_pack_type_ff);
@@ -163,14 +168,51 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity_ff);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package_ff);
-        txtLocalAdr = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_local_location);
         txtPolAdr = (AutoCompleteTextView) findViewById(R.id.id_POL_addresses);
-        txtPodAdr = (AutoCompleteTextView) findViewById(R.id.id_POD_addresses);
         txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
+        txtDestinationDeliveryAdr = (AutoCompleteTextView) findViewById(R.id.id_destination_delivery_adr);
+
+        // Incoterm Spinner
+        spinnerIncoterm = (Spinner) findViewById(R.id.id_spinner_incoterm);
+        spinnerPOC = (Spinner) findViewById(R.id.id_spinner_poc);
+        spinnerPOD = (Spinner) findViewById(R.id.id_spinner_pod);
 
         // initialised all Radio Group
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040_ff);
         rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_ff);
+
+        // populate incoterm adapter spinner
+
+        ArrayList<String> stringArrayIncoterm = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.incoterms)));
+        adapterIncoterm = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, stringArrayIncoterm);
+        adapterIncoterm.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerIncoterm.setAdapter(adapterIncoterm);
+
+        // click event on incoterm spinner
+        // if selected spinner item is DAP and DDP
+        // then show destination delivery address EditText field
+        spinnerIncoterm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedIncoterm = spinnerIncoterm.getSelectedItem().toString();
+                String strDap = getResources().getString(R.string.dap);
+                String strDdp = getResources().getString(R.string.ddp);
+
+                if( selectedIncoterm.equals(strDap) || selectedIncoterm.equals(strDdp) ){
+                    inputLayout_destinationDeliveryAdr.setVisibility(View.VISIBLE);
+                    boolIsDDAVisible = true;
+                }
+                else {
+                    inputLayout_destinationDeliveryAdr.setVisibility(View.GONE);
+                    boolIsDDAVisible = false;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if(bookId == null){
             GetSharedPreference getSharedPreference = new GetSharedPreference(this);
@@ -216,20 +258,28 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
-        // set adapter to local location
-        txtLocalAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtLocalAdr.setOnItemClickListener(this);
-        txtLocalAdr.setThreshold(1);
-
         // set adapter to drop location
         txtPolAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtPolAdr.setOnItemClickListener(this);
         txtPolAdr.setThreshold(1);
 
-        // set adapter to drop location
-        txtPodAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtPodAdr.setOnItemClickListener(this);
-        txtPodAdr.setThreshold(1);
+        // port of international country spinner
+        adapterPortOfCountry = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, dbClass.getPortOfCountry());
+        adapterPortOfCountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPOC.setAdapter(adapterPortOfCountry);
+
+        spinnerPOC.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // port of international country spinner
+                populatePODSpinner();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // click listener for shipment type radio group
         rgTypeOfShipment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -301,6 +351,18 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         }
     }
 
+    /**
+     * get international destination port with respect to international country
+     */
+    private void populatePODSpinner() {
+        // port of international destination spinner
+        adapterPortOfDestination = new CustomSpinnerAdapter(this,
+                android.R.layout.simple_spinner_item,
+                dbClass.getPortOfDestination( spinnerPOC.getSelectedItem().toString() ));
+        adapterPortOfDestination.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPOD.setAdapter(adapterPortOfDestination);
+    }
+
     private void toolbarSetup() {
         // initialise toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_freight_forwarding);
@@ -322,8 +384,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         FreightForwardingModel freightForwardingModel = null;
 
         Boolean boolPOL = isEmptyString(txtPolAdr.getText().toString());
-        Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
-        Boolean boolLocalAdr = isEmptyString(txtLocalAdr.getText().toString());
+//        Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
+        Boolean boolDDAdr = isEmptyString(txtDestinationDeliveryAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
         Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
@@ -341,18 +403,19 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_POLAddress.setError("Port of loading address field is empty.");
         }
 
-        if (boolPOD) {
+        /*if (boolPOD) {
             inputLayout_PODAddress.setErrorEnabled(false);
         } else {
             inputLayout_PODAddress.setErrorEnabled(true);
             inputLayout_PODAddress.setError("Port of destination address field is empty.");
-        }
+        }*/
 
-        if (boolLocalAdr) {
-            inputLayout_local_adr.setErrorEnabled(false);
+        if (boolDDAdr) {
+            inputLayout_destinationDeliveryAdr.setErrorEnabled(false);
         } else {
-            inputLayout_local_adr.setErrorEnabled(true);
-            inputLayout_local_adr.setError("Local location address field is empty.");
+            inputLayout_destinationDeliveryAdr.setErrorEnabled(true);
+            inputLayout_destinationDeliveryAdr.setError(getResources().getString(R.string.hint_destination_delivery_adr)+
+                                                " field is empty.");
         }
 
         if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
@@ -425,7 +488,12 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_dimen_width.setError("width.");
         }
 
-        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolPOD && boolCFS && boolLocalAdr) {
+        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolCFS ) {
+
+            if( boolIsDDAVisible && !boolDDAdr ) {
+                return;
+            }
+
             int iAvail = 0;
             if( availedServicesName != null ) {
                 iAvail = 1;
@@ -434,7 +502,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
                     txtPolAdr.getText().toString(),
-                    txtPodAdr.getText().toString(),
+                    strSelectedContainerSize,
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),
@@ -445,10 +513,13 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             intentActions(freightForwardingModel);
         }
-        else if ( boolLocalAdr && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
-                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolPOD && boolCFS) {
+        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
+                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolCFS) {
 
-            if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
+            if( boolIsDDAVisible && !boolDDAdr ) {
+                return;
+            }
+            else if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
                 return;
             }
             else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
@@ -471,7 +542,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
                     txtPolAdr.getText().toString(),
-                    txtPodAdr.getText().toString(),
+                    strSelectedContainerSize,
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),

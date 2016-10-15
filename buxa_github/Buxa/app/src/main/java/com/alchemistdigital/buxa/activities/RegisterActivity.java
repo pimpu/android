@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.GetAllShipmentType;
+import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
@@ -244,8 +244,8 @@ public class RegisterActivity extends AppCompatActivity {
                         if (dbHelper.numberOfComodityRows() <= 0 ) {
                             setContentView(R.layout.activity_splash_screen);
 
-                            // get All shipment type
-                            GetAllShipmentType.getShipmentType(RegisterActivity.this, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
+                            new InsertInternationalDestinationPort(RegisterActivity.this).execute();
+
                         }
                         /*else {
                             Intent intent = new Intent(RegisterActivity.this, WelcomeActivity.class);

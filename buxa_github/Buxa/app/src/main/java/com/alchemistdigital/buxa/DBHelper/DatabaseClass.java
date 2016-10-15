@@ -54,6 +54,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public static final String TABLE_TRANSPORT_SERVICE = "TransportService";
     public static final String TABLE_TYPE_OF_PACKAGE = "TypeOfPackage";
     public static final String TABLE_CFS_ADDRESS = "CfsAddress";
+    public static final String TABLE_INTERNATIONAL_DESTINATION_PORT = "InterDestiPorts";
 
     // Common column names
     private static final String KEY_ID = "id";
@@ -148,6 +149,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
     // TABLE_TRANSPORT_TYPE Table - column names
     private static final String TRANSPORT_TYPE_SERVER_ID = "trans_type_serverId";
     private static final String TRANSPORT_TYPE_NAME = "trans_type_name";
+
+    // TABLE_INTERNATIONAL_DESTIANTION_PORT Table - column names
+    private static final String INTER_DESTI_PORT_NAME = "inter_desti_ports_name";
+    private static final String INTER_DESTI_PORT_COUNTRY = "inter_desti_ports_country";
 
     // Company Table Create Statements
     private static final String CREATE_TABLE_COMPANY =
@@ -301,6 +306,15 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    // international destination port Table Create Statements
+    private static final String CREATE_TABLE_INTERNATIONAL_DESTINATION_PORT =
+            "CREATE TABLE IF NOT EXISTS "+ TABLE_INTERNATIONAL_DESTINATION_PORT +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    INTER_DESTI_PORT_COUNTRY +" VARCHAR(50)," +
+                    INTER_DESTI_PORT_NAME +" VARCHAR(50)," +
+                    KEY_STATUS +" TINYINT(4)," +
+                    KEY_CREATED_AT + " DATETIME" + ")";
+
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -321,6 +335,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SHIPMENT_CONFORMATION);
         db.execSQL(CREATE_TABLE_PACKAGE_TYPE);
         db.execSQL(CREATE_TABLE_CFS_ADDRESS);
+        db.execSQL(CREATE_TABLE_INTERNATIONAL_DESTINATION_PORT);
     }
 
     @Override
@@ -340,6 +355,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INTERNATIONAL_DESTINATION_PORT);
 
         // create new tables
         onCreate(db);
@@ -973,6 +989,87 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
+    // ------------------------ "InterDestiPorts" table methods ----------------//
+    public int insertInterDestiPorts(String name, String country) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(INTER_DESTI_PORT_COUNTRY, country);
+        contentValues.put(INTER_DESTI_PORT_NAME, name);
+        contentValues.put(KEY_STATUS, 1);
+        contentValues.put(KEY_CREATED_AT, getDateTime());
+
+        // insert row
+        int id = 0;
+        try {
+            String whereClause = INTER_DESTI_PORT_COUNTRY+" = ? AND "+INTER_DESTI_PORT_NAME+" = ? ";
+            String[] whereArgs = new String[]{ country, name } ;
+
+            int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_INTERNATIONAL_DESTINATION_PORT, whereClause, whereArgs);
+            if( numRows <= 0 ) {
+                id = (int) db.insert(TABLE_INTERNATIONAL_DESTINATION_PORT, null, contentValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
+    public ArrayList getPortOfCountry(){
+        ArrayList<String> poc = new ArrayList<String>();
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT DISTINCT " +INTER_DESTI_PORT_COUNTRY+" FROM " +
+                TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 ORDER BY "+
+                INTER_DESTI_PORT_COUNTRY+";";
+
+        Log.d("getPortOfCountry: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                poc.add(res.getString(res.getColumnIndex(INTER_DESTI_PORT_COUNTRY)));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return poc;
+    }
+
+    public ArrayList getPortOfDestination(String countryName) {
+        ArrayList<String> pod = new ArrayList<String>();
+
+        DatabaseClass sqliteDb = openDatabase();
+        SQLiteDatabase db = sqliteDb.getReadableDatabase();
+
+        String selectQuery = "SELECT " +INTER_DESTI_PORT_NAME+" FROM " +
+                TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 AND " +
+                INTER_DESTI_PORT_COUNTRY+" = '"+countryName+"' ORDER BY "+INTER_DESTI_PORT_NAME+" ;";
+
+        Log.d("getPortOfCountry: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                pod.add(res.getString(res.getColumnIndex(INTER_DESTI_PORT_NAME)));
+
+            }while (res.moveToNext());
+        }
+
+        sqliteDb.closeDatabase();
+
+        return pod;
+    }
     // ------------------------ "Transportation" table methods ----------------//
 
     public int insertTransportation(TransportationModel transportationModel) {

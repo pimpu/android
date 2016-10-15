@@ -15,14 +15,14 @@ import java.util.ArrayList;
 /**
  * Created by user on 8/30/2016.
  */
-public class insertCommodityAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
+public class InsertCommodityAsyncTask extends AsyncTask<String, String, ArrayList<String>> {
 
     Context context;
     JSONArray commodities;
     DatabaseClass databaseClass;
     int start, limit, commodityRowsCount;
     String url;
-    public insertCommodityAsyncTask(Context context, JSONArray commodities, int start, int limit, int commodityRowsCount, String url) {
+    public InsertCommodityAsyncTask(Context context, JSONArray commodities, int start, int limit, int commodityRowsCount, String url) {
         this.context = context;
         this.commodities = commodities;
         this.start = start;

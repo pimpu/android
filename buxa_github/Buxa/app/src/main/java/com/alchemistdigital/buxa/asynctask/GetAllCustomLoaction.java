@@ -30,7 +30,7 @@ public class GetAllCustomLoaction {
                     if (error) {
                         Toast.makeText(context,json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                     } else {
-                        new insertCustomLoactionAsyncTask(context, json.getJSONArray("customLocation") ).execute();
+                        new InsertCustomLoactionAsyncTask(context, json.getJSONArray("customLocation") ).execute();
                     }
 
                 } catch (JSONException e) {
