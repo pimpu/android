@@ -44,18 +44,15 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     private LinearLayout layoutCommomTransFeild;
     private ArrayAdapter<CommodityModel> commodity_adapter;
     private ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPolAdr,txtCfsAdr,
+    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPolAdr,
             txtDestinationDeliveryAdr;
     private RadioGroup rgContainerSize, rgTypeOfShipment;
     private DatabaseClass dbClass ;
     private ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     private String strShipmentType = "LCL", bookId, strSelectedContainerSize = null, selectedIncoterm;
-    private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack, txtDimenLen,
-            txtDimenHeight, txtDimenWidth;
+    private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack;
     private TextInputLayout inputLayout_destinationDeliveryAdr, inputLayout_cubicMeter, inputLayout_grossWeight,
-            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
-            inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width,
-            inputLayout_POLAddress, inputLayout_CfsAddress;
+            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity, inputLayout_POLAddress;
     private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
     private int loginId;
     private TransportationModel transportDataModel;
@@ -145,31 +142,31 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
         // initialised all Text Input Layout
         inputLayout_POLAddress = (TextInputLayout) findViewById(R.id.input_layout_POL);
-        inputLayout_CfsAddress = (TextInputLayout) findViewById(R.id.input_layout_cfs);
+//        inputLayout_CfsAddress = (TextInputLayout) findViewById(R.id.input_layout_cfs);
         inputLayout_destinationDeliveryAdr = (TextInputLayout) findViewById(R.id.input_layout_destination_delivery_adr);
         inputLayout_cubicMeter = (TextInputLayout) findViewById(R.id.input_layout_cubic_meter_measurement_ff);
         inputLayout_grossWeight = (TextInputLayout) findViewById(R.id.input_layout_gross_weight_ff);
         inputLayout_packType = (TextInputLayout) findViewById(R.id.input_layout_pack_type_ff);
         inputLayout_noOfPack = (TextInputLayout) findViewById(R.id.input_layout_no_of_package_ff);
         inputLayout_commodity = (TextInputLayout) findViewById(R.id.input_layout_commodity_ff);
-        inputLayout_dimen_len = (TextInputLayout) findViewById(R.id.input_layout_dimensions_length_ff);
+        /*inputLayout_dimen_len = (TextInputLayout) findViewById(R.id.input_layout_dimensions_length_ff);
         inputLayout_dimen_height = (TextInputLayout) findViewById(R.id.input_layout_dimensions_height_ff);
-        inputLayout_dimen_width = (TextInputLayout) findViewById(R.id.input_layout_dimensions_width_ff);
+        inputLayout_dimen_width = (TextInputLayout) findViewById(R.id.input_layout_dimensions_width_ff);*/
 
         // initialised all Edit Text
         txtBookId = (EditText) findViewById(R.id.book_id_ff);
         txtCBM = (EditText) findViewById(R.id.id_cubic_meter_measurement_ff);
         txtGrossWt = (EditText) findViewById(R.id.id_gross_weight_ff);
         txt_noOfPack = (EditText) findViewById(R.id.id_no_of_package_ff);
-        txtDimenLen = (EditText) findViewById(R.id.id_dimensions_length_ff);
+        /*txtDimenLen = (EditText) findViewById(R.id.id_dimensions_length_ff);
         txtDimenHeight = (EditText) findViewById(R.id.id_dimensions_height_ff);
-        txtDimenWidth = (EditText) findViewById(R.id.id_dimensions_width_ff);
+        txtDimenWidth = (EditText) findViewById(R.id.id_dimensions_width_ff);*/
 
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity_ff);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package_ff);
         txtPolAdr = (AutoCompleteTextView) findViewById(R.id.id_POL_addresses);
-        txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
+//        txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
         txtDestinationDeliveryAdr = (AutoCompleteTextView) findViewById(R.id.id_destination_delivery_adr);
 
         // Incoterm Spinner
@@ -248,7 +245,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         });
 
         // initialised cfs address autocomplete textfield from database
-        cfs_adapter = new ArrayAdapter<CFSAddressModel>(this, layoutItemId, dbClass.getCfsData() );
+        /*cfs_adapter = new ArrayAdapter<CFSAddressModel>(this, layoutItemId, dbClass.getCfsData() );
         txtCfsAdr.setAdapter(cfs_adapter);
         txtCfsAdr.setThreshold(1);
         txtCfsAdr.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -256,7 +253,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 iSelectedCfsAdr = cfs_adapter.getItem(position).getServerId();
             }
-        });
+        });*/
 
         // set adapter to drop location
         txtPolAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
@@ -337,6 +334,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
             else {
                 rgTypeOfShipment.check(R.id.rbFcl_ff);
+                inputLayout_destinationDeliveryAdr.setErrorEnabled(false);
             }
 
             ((RadioButton)findViewById(R.id.rbLcl_ff)).setEnabled(false);
@@ -391,10 +389,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
         Boolean boolCommodity = isEmptyString(txtComodity.getText().toString());
-        Boolean boolCFS = isEmptyString(txtCfsAdr.getText().toString());
+       /* Boolean boolCFS = isEmptyString(txtCfsAdr.getText().toString());
         Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());
         Boolean boolDimenHeight = isEmptyString(txtDimenHeight.getText().toString());
-        Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());
+        Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());*/
 
         if (boolPOL) {
             inputLayout_POLAddress.setErrorEnabled(false);
@@ -460,7 +458,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_commodity.setError("Commodity field is empty.");
         }
 
-        if (boolCFS) {
+        /*if (boolCFS) {
             inputLayout_CfsAddress.setErrorEnabled(false);
         } else {
             inputLayout_CfsAddress.setErrorEnabled(true);
@@ -486,9 +484,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         } else {
             inputLayout_dimen_width.setErrorEnabled(true);
             inputLayout_dimen_width.setError("width.");
-        }
+        }*/
 
-        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolCFS ) {
+//        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolCFS ) {
+        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
@@ -513,8 +512,9 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             intentActions(freightForwardingModel);
         }
-        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
-                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolCFS) {
+        /*else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
+                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolCFS) {*/
+        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity && boolPOL ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
