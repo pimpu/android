@@ -26,7 +26,7 @@ class DbConnect {
         $con = mysql_connect(DB_HOST, DB_USERNAME, DB_PASSWORD) or die("Unable to connect to MySQL");
         
         //select a database to work with
-        $selected = mysql_select_db(DB_NAME,$con) or die("Could not select e_carrier");
+        $selected = mysql_select_db(DB_NAME,$con) or die("Could not select buxa db");
         
         return $con;
     }
