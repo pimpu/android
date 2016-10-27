@@ -169,7 +169,7 @@
                         android:hint="@string/hint_contact_mobile" />
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <!--<android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_contact_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -181,12 +181,35 @@
                         android:inputType="textEmailAddress"
                         android:id="@+id/contact_email"
                         android:hint="@string/hint_contact_email"/>
-                </android.support.design.widget.TextInputLayout>
+                </android.support.design.widget.TextInputLayout>-->
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:text="@string/hint_contact_email"
+                    android:textColor="@color/hintTextColor"
+                    app:Segoe="segoe_light"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/contact_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:background="@drawable/borderbottom"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="8dp"
+                    android:text="Click on me for Email"
+                    android:textSize="18dp"
+                    android:onClick="getRegisteredEmail"
+                    app:Segoe="segoe_regular"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/input_layout_contact_pwd"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
 
                     <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
                         android:layout_width="match_parent"

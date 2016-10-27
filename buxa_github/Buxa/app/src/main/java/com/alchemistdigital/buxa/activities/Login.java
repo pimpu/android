@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -79,6 +81,13 @@ public class Login extends Fragment implements View.OnClickListener {
         btnLogin.setOnClickListener(this);
         btnGoToRegister  = (Button) rootView.findViewById(R.id.btn_Register);
         btnGoToRegister.setOnClickListener(this);
+
+        GetSharedPreference getSharedPreference = new GetSharedPreference(getActivity());
+
+        // take values for validation purpose.
+        // it validates entered email id and pwd when Login button pressed
+        String loginSharedPrefEmail = getSharedPreference.getLoginEmail(getResources().getString(R.string.loginEmail));
+        txtLogin.setText(loginSharedPrefEmail);
 
         Animation translateAnim = AnimationUtils.loadAnimation(getActivity(),
                 R.anim.anim_logo_login);

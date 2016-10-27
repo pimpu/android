@@ -56,6 +56,28 @@
                     android:focusableInTouchMode="false"/>
             </android.support.design.widget.TextInputLayout>
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radiogroupExpoImpo"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:checkedButton="@+id/rbImport" >
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rbImport"
+                    android:text="@string/strImport"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:id="@+id/rbExport"
+                    android:text="@string/strExport"/>
+
+            </RadioGroup>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_commodity_cc"
@@ -208,7 +230,8 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_regular"
                     android:textSize="25dp"
-                    android:text="@string/next"/>
+                    android:text="@string/next"
+                    android:onClick="storeCustomClearanceEnquiry" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -216,7 +239,8 @@
                     android:layout_alignRight="@+id/id_tv_CC_Next"
                     android:layout_marginTop="3dp"
                     android:tint="@color/black_semi_transparent"
-                    android:src="@drawable/ic_keyboard_arrow_right"/>
+                    android:src="@drawable/ic_keyboard_arrow_right"
+                    android:onClick="storeCustomClearanceEnquiry" />
             </LinearLayout>
 
         </LinearLayout>

@@ -89,9 +89,15 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(new Intent(this, SelectServiceActivity.class));
     }
 
+    public void btnFeedbackClick(View view) {
+        Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
+        // Todo : feedback form
+    }
+
     public void btnEnquiryClick(View view) {
 //        startActivity(new Intent(this, EnquiriesActivity.class));
         Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
+        // Todo : my enaquiry page form
     }
 
     public void btnLogout(View view) {

@@ -74,6 +74,8 @@ public class SelectServiceActivity extends AppCompatActivity {
             cb.setTextSize(getResources().getDimension(R.dimen.serviceCheckBoxTextSize));
             cb.setPadding(50, 0, 0, 0);
             cb.setTypeface(seogoLight);
+            cb.setScaleX(1);
+            cb.setScaleY(1);
             cb.setOnClickListener(getOnClickDoSomething(cb));
             layoutCheckbox.addView(cb);
         }

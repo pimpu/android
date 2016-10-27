@@ -52,6 +52,12 @@
     <string name="str_thanking_toast">Thank you for your interest in enquiry, Our Team will revert
         within 03 hours with our best quote for your consideration and confirmation.</string>
     <string name="empty_enquiry_message">No new enquiry found.</string>
+    <string name="strCompanyContactPerson">Contact Person User Details</string>
+    <string name="strExport">Export</string>
+    <string name="strImport">Import</string>
+    <string name="buxaAddress">Shop no 10/11, Shiv Surabhi bldg, Thakur village, Kandivali East, Mumbai-400101</string>
+    <string name="buxaEmail">amruta@buxa.tech</string>
+    <string name="buxaContact">+91 7738333539</string>
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
@@ -70,6 +76,11 @@
         <item>Free On Board (FOB)</item>
         <item>Cost &amp; Freight (CFR)</item>
         <item>Cost, Insurance &amp; Freight (CIF)</item>
+    </string-array>
+
+    <string-array name="loadingPort">
+        <item>Nhava Sheva, Navi Mumbai, Maharashtra 400702</item>
+        <item>Samundra Township, Mundra, Gujarat 370405</item>
     </string-array>
 
     <string-array name="state">
@@ -131,7 +142,6 @@
     <string name="hint_company_zipcode">Zipcode</string>
     <string name="hint_company_pan">PAN</string>
     <string name="hint_company_tin">TIN</string>
-    <string name="strCompanyContactPerson">Contact Person User Details</string>
     <string name="hint_contact_name">Contact name</string>
     <string name="hint_contact_mobile">Mobile</string>
     <string name="hint_contact_email">Email id</string>
@@ -154,5 +164,8 @@
     <string name="hint_local_address">Local location address</string>
     <string name="hint_destination_delivery_adr">Destination delivery address</string>
     <string name="hint_poc">Port  of country</string>
-
+    <string name="hint_landmark">Landmark</string>
+    <string name="hint_pincode">Pincode</string>
+    <string name="hint_pickup_landmark">Pickup landmark</string>
+    <string name="hint_drop_landmark">Drop landmark</string>
 </resources>

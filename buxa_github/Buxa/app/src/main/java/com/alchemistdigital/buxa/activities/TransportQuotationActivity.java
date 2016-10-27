@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -38,18 +39,23 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 public class TransportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     ArrayAdapter<CommodityModel> commodity_adapter;
     ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop;
+    AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtManualPickup, txtManualDrop;
     RadioGroup rgContainerSize, rgTypeOfShipment;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names, availedServicesId, availedServicesName;
     String strSelectedShipmentType = "LCL", bookId, strSelectedContainerSize = null;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack, txtDimenLen,
-                    txtDimenHeight, txtDimenWidth;
+                    txtDimenHeight, txtDimenWidth, txtPickupLandmark, txtPickupPincode,
+                    txtDropLandmark, txtDropPincode;
     TextInputLayout inputLayout_pickUp, inputLayout_drop, inputLayout_cubicMeter, inputLayout_grossWeight,
                     inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
-                    inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width;
-    private int iSelectedCommodityId, iSelectedPackageType;
+                    inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width,
+                    inputLayout_manual_pickUp, inputLayout_pick_landmark, inputLayout_pickUp_pincode,
+                    inputLayout_manual_drop, inputLayout_drop_landmark, inputLayout_drop_pincode;
+//    private int iSelectedCommodityId, iSelectedPackageType;
     private int loginId;
+    private LinearLayout layout_pickup, layout_manual_pickup, id_not_find_pick_google_text, id_backTo_pick_google_text;
+    private LinearLayout layout_drop, layout_manual_drop, id_not_find_drop_google_text, id_backTo_drop_google_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +156,16 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
     }
 
     private void init() {
+        // initialised all Linear Layout
+        layout_pickup = (LinearLayout) findViewById(R.id.layout_pickup);
+        layout_manual_pickup = (LinearLayout) findViewById(R.id.layout_manual_pickup);
+        id_not_find_pick_google_text = (LinearLayout) findViewById(R.id.id_not_find_pick_google_text);
+        id_backTo_pick_google_text = (LinearLayout) findViewById(R.id.id_backTo_pick_google_text);
+        layout_drop = (LinearLayout) findViewById(R.id.layout_drop);
+        layout_manual_drop = (LinearLayout) findViewById(R.id.layout_manual_drop);
+        id_not_find_drop_google_text = (LinearLayout) findViewById(R.id.id_not_find_drop_google_text);
+        id_backTo_drop_google_text = (LinearLayout) findViewById(R.id.id_backTo_drop_google_text);
+
         // initialised all Text Input Layout
         inputLayout_pickUp = (TextInputLayout) findViewById(R.id.input_layout_pick_up);
         inputLayout_drop = (TextInputLayout) findViewById(R.id.input_layout_drop);
@@ -161,6 +177,12 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         inputLayout_dimen_len = (TextInputLayout) findViewById(R.id.input_layout_dimensions_length);
         inputLayout_dimen_height = (TextInputLayout) findViewById(R.id.input_layout_dimensions_height);
         inputLayout_dimen_width = (TextInputLayout) findViewById(R.id.input_layout_dimensions_width);
+        inputLayout_manual_pickUp = (TextInputLayout) findViewById(R.id.input_layout_manual_pick);
+        inputLayout_pick_landmark = (TextInputLayout) findViewById(R.id.input_layout_pick_landmark);
+        inputLayout_pickUp_pincode = (TextInputLayout) findViewById(R.id.input_layout_pick_pincode);
+        inputLayout_manual_drop = (TextInputLayout) findViewById(R.id.input_layout_manual_drop);
+        inputLayout_drop_landmark = (TextInputLayout) findViewById(R.id.input_layout_drop_landmark);
+        inputLayout_drop_pincode = (TextInputLayout) findViewById(R.id.input_layout_drop_pincode);
 
         // initialised all Edit Text
         txtBookId = (EditText) findViewById(R.id.book_id_trans);
@@ -170,12 +192,18 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         txtDimenLen = (EditText) findViewById(R.id.id_dimensions_length);
         txtDimenHeight = (EditText) findViewById(R.id.id_dimensions_height);
         txtDimenWidth = (EditText) findViewById(R.id.id_dimensions_width);
+        txtPickupLandmark = (EditText) findViewById(R.id.id_pick_landmark);
+        txtPickupPincode = (EditText) findViewById(R.id.id_pick_pincode);
+        txtDropLandmark = (EditText) findViewById(R.id.id_drop_landmark);
+        txtDropPincode = (EditText) findViewById(R.id.id_drop_pincode);
 
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package);
         txtPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_pickup);
         txtDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_drop);
+        txtManualPickup = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_manual_pickup);
+        txtManualDrop = (AutoCompleteTextView) findViewById(R.id.id_autoComplete_manual_drop);
 
         // initialised all Radio Group
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040);
@@ -270,23 +298,23 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
         txtComodity.setAdapter(commodity_adapter);
         txtComodity.setThreshold(1);
-        txtComodity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*txtComodity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 iSelectedCommodityId = commodity_adapter.getItem(position).getServerId();
             }
-        });
+        });*/
 
         // initialised packaging type autocomplete textfield from database
         packagingType_adapter = new ArrayAdapter<PackageTypeModel>(this, layoutItemId, dbClass.getPackagingTypeData() );
         txtTypeOfPackaging.setAdapter(packagingType_adapter);
         txtTypeOfPackaging.setThreshold(1);
-        txtTypeOfPackaging.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*txtTypeOfPackaging.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 iSelectedPackageType = packagingType_adapter.getItem(position).getServerId();
             }
-        });
+        });*/
 
 
         // set adapter to pickup location
@@ -341,19 +369,73 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());
         Boolean boolDimenHeight = isEmptyString(txtDimenHeight.getText().toString());
         Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());
+        Boolean boolManualPickUp = isEmptyString(txtManualPickup.getText().toString());
+        Boolean boolPickupLandmark = isEmptyString(txtPickupLandmark.getText().toString());
+        Boolean boolPickupPincode = isEmptyString(txtPickupPincode.getText().toString());
+        Boolean boolManualDrop = isEmptyString(txtManualDrop.getText().toString());
+        Boolean boolDropLandmark = isEmptyString(txtDropLandmark.getText().toString());
+        Boolean boolDropPincode = isEmptyString(txtDropPincode.getText().toString());
 
-        if (boolPickUp) {
+        if (boolPickUp && (layout_pickup.getVisibility() == View.VISIBLE)) {
             inputLayout_pickUp.setErrorEnabled(false);
         } else {
             inputLayout_pickUp.setErrorEnabled(true);
             inputLayout_pickUp.setError("Pick up address field is empty.");
         }
 
-        if (boolDrop) {
+        if (boolDrop && (layout_drop.getVisibility() == View.VISIBLE)) {
             inputLayout_drop.setErrorEnabled(false);
         } else {
             inputLayout_drop.setErrorEnabled(true);
             inputLayout_drop.setError("Drop address field is empty.");
+        }
+
+        if( layout_manual_pickup.getVisibility() == View.VISIBLE) {
+
+            if( boolManualPickUp ) {
+                inputLayout_manual_pickUp.setErrorEnabled(false);
+            } else {
+                inputLayout_manual_pickUp.setErrorEnabled(true);
+                inputLayout_manual_pickUp.setError("Pick up address field is empty.");
+            }
+
+            if( boolPickupLandmark ) {
+                inputLayout_pick_landmark.setErrorEnabled(false);
+            } else {
+                inputLayout_pick_landmark.setErrorEnabled(true);
+                inputLayout_pick_landmark.setError("Pick up landmark field is empty.");
+            }
+
+            if( boolPickupPincode )  {
+                inputLayout_pickUp_pincode.setErrorEnabled(false);
+            } else {
+                inputLayout_pickUp_pincode.setErrorEnabled(true);
+                inputLayout_pickUp_pincode.setError("Pick up pincode field is empty.");
+            }
+        }
+
+        if( layout_manual_drop.getVisibility() == View.VISIBLE) {
+
+            if( boolManualDrop ) {
+                inputLayout_manual_drop.setErrorEnabled(false);
+            } else {
+                inputLayout_manual_drop.setErrorEnabled(true);
+                inputLayout_manual_drop.setError("Drop address field is empty.");
+            }
+
+            if( boolDropLandmark ) {
+                inputLayout_drop_landmark.setErrorEnabled(false);
+            } else {
+                inputLayout_drop_landmark.setErrorEnabled(true);
+                inputLayout_drop_landmark.setError("Drop landmark field is empty.");
+            }
+
+            if( boolDropPincode )  {
+                inputLayout_drop_pincode.setErrorEnabled(false);
+            } else {
+                inputLayout_drop_pincode.setErrorEnabled(true);
+                inputLayout_drop_pincode.setError("drop pincode field is empty.");
+            }
         }
 
         if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
@@ -419,8 +501,28 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             inputLayout_dimen_width.setError("width.");
         }
 
-        if (boolPickUp && boolDrop && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
+        if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
                 && boolDimenHeight && boolDimenWeight && boolCommodity) {
+
+            if ( !boolPickUp && (layout_pickup.getVisibility() == View.VISIBLE)) {
+                return;
+            }
+
+            if ( !boolDrop && (layout_drop.getVisibility() == View.VISIBLE)) {
+                return;
+            }
+
+            if ( layout_manual_pickup.getVisibility() == View.VISIBLE ) {
+                if( !boolManualPickUp && !boolPickupLandmark && !boolPickupPincode ) {
+                    return;
+                }
+            }
+
+            if ( layout_manual_drop.getVisibility() == View.VISIBLE ) {
+                if( !boolManualDrop && !boolDropLandmark && !boolDropPincode ) {
+                    return;
+                }
+            }
 
             if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
                 return;
@@ -443,12 +545,12 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
 
             TransportationModel transportationModel = new TransportationModel(
-                    iSelectedCommodityId,
+                    txtComodity.getText().toString(),
                     Integer.parseInt(txtDimenLen.getText().toString()),
                     Integer.parseInt(txtDimenHeight.getText().toString()),
                     Integer.parseInt(txtDimenWidth.getText().toString()),
                     Integer.parseInt(txt_noOfPack.getText().toString()),
-                    iSelectedPackageType,
+                    txtTypeOfPackaging.getText().toString(),
                     txtPickup.getText().toString(),
                     txtDrop.getText().toString(),
                     iAvail,
@@ -487,5 +589,33 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    }
+
+    public void togglePickUpAddressFiled(View view) {
+        layout_pickup.setVisibility(View.GONE);
+        id_not_find_pick_google_text.setVisibility(View.GONE);
+        layout_manual_pickup.setVisibility(View.VISIBLE);
+        id_backTo_pick_google_text.setVisibility(View.VISIBLE);
+    }
+
+    public void back_google_pick_address(View view) {
+        layout_pickup.setVisibility(View.VISIBLE);
+        id_not_find_pick_google_text.setVisibility(View.VISIBLE);
+        layout_manual_pickup.setVisibility(View.GONE);
+        id_backTo_pick_google_text.setVisibility(View.GONE);
+    }
+
+    public void toggleDropAddressFiled(View view) {
+        layout_drop.setVisibility(View.GONE);
+        id_not_find_drop_google_text.setVisibility(View.GONE);
+        layout_manual_drop.setVisibility(View.VISIBLE);
+        id_backTo_drop_google_text.setVisibility(View.VISIBLE);
+    }
+
+    public void back_google_drop_address(View view) {
+        layout_drop.setVisibility(View.VISIBLE);
+        id_not_find_drop_google_text.setVisibility(View.VISIBLE);
+        layout_manual_drop.setVisibility(View.GONE);
+        id_backTo_drop_google_text.setVisibility(View.GONE);
     }
 }

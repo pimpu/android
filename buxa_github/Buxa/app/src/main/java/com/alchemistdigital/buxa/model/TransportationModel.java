@@ -11,12 +11,14 @@ public class TransportationModel implements Parcelable {
     private int transportationId ;
     private int serverId ;
     private int commodityServerId ;
+    private String strCommodity;
     private int dimenLength ;
     private int dimenHeight ;
     private int dimenWidth;
     private int shipmentType ;
     private int noOfPack ;
     private int packType ;
+    private String strPackType ;
     private String  pickUp ;
     private String drop ;
     private String lrCopy ;
@@ -56,12 +58,12 @@ public class TransportationModel implements Parcelable {
     }
 
     public TransportationModel(
-            int commodityServerId,
+            String strCommodity,
             int dimenLength,
             int dimenHeight,
             int dimenWidth,
             int noOfPack,
-            int packType,
+            String strPackType,
             String pickUp,
             String drop,
             int availOption,
@@ -73,12 +75,12 @@ public class TransportationModel implements Parcelable {
             String strShipmentType,
             int shipmentType,
             int userId) {
-        this.commodityServerId = commodityServerId;
+        this.strCommodity = strCommodity;
         this.dimenLength = dimenLength;
         this.dimenHeight = dimenHeight;
         this.dimenWidth = dimenWidth;
         this.noOfPack = noOfPack;
-        this.packType = packType;
+        this.strPackType = strPackType;
         this.pickUp = pickUp;
         this.drop = drop;
         this.availOption = availOption;
@@ -276,6 +278,22 @@ public class TransportationModel implements Parcelable {
         this.strShipmentType = strShipmentType;
     }
 
+    public String getStrCommodity() {
+        return strCommodity;
+    }
+
+    public void setStrCommodity(String strCommodity) {
+        this.strCommodity = strCommodity;
+    }
+
+    public String getStrPackType() {
+        return strPackType;
+    }
+
+    public void setStrPackType(String strPackType) {
+        this.strPackType = strPackType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -285,13 +303,13 @@ public class TransportationModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(userId);
         dest.writeInt(serverId);
-        dest.writeInt(commodityServerId);
+        dest.writeString(strCommodity);
         dest.writeInt(dimenLength);
         dest.writeInt(dimenHeight);
         dest.writeInt(dimenWidth);
         dest.writeInt(shipmentType);
         dest.writeInt(noOfPack);
-        dest.writeInt(packType);
+        dest.writeString(strPackType);
         dest.writeString(pickUp);
         dest.writeString(drop);
         dest.writeString(lrCopy);
@@ -307,13 +325,13 @@ public class TransportationModel implements Parcelable {
     private TransportationModel(Parcel in) {
         userId = in.readInt();
         serverId = in.readInt();
-        commodityServerId = in.readInt();
+        strCommodity = in.readString();
         dimenLength = in.readInt();
         dimenHeight = in.readInt();
         dimenWidth = in.readInt();
         shipmentType = in.readInt();
         noOfPack = in.readInt();
-        packType = in.readInt();
+        strPackType = in.readString();
         pickUp = in.readString();
         drop = in.readString();
         lrCopy = in.readString();

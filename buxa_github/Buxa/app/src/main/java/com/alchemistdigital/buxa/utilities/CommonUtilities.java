@@ -1,12 +1,18 @@
 package com.alchemistdigital.buxa.utilities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.activities.StartupActivity;
+import com.alchemistdigital.buxa.model.Email_Account_Item;
+
+import java.util.ArrayList;
 
 /**
  * Created by user on 8/11/2016.
@@ -69,5 +75,45 @@ public class CommonUtilities {
         Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
         intent.putExtra(CommonVariables.EXTRA_MESSAGE, message);
         context.sendBroadcast(intent);
+    }
+
+    // get register email data from android device
+    public static ArrayList<Email_Account_Item> getEmailsData(Context context) {
+        ArrayList<Email_Account_Item> accountsList = new ArrayList<Email_Account_Item>();
+
+        //Getting all registered Google Accounts;
+        /*try {
+            Account[] accounts = AccountManager.get(activity).getAccountsByType("com.google");
+            for (Account account : accounts) {
+                Email_Account_Item item = new Email_Account_Item(account.type, account.name);
+                accountsList.add(item);
+            }
+        } catch (Exception e) {
+            Log.i("ExceptionGetEmails", "Exception:" + e);
+        }*/
+
+        //For all registered accounts;
+        try {
+            Account[] accounts = AccountManager.get(context).getAccounts();
+            for (Account account : accounts) {
+                if(account.name.contains("@")){
+                    Email_Account_Item item = new Email_Account_Item( account.type, account.name);
+                    accountsList.add(item);
+                }
+            }
+        } catch (Exception e) {
+            Log.i("ExceptionGetEmails", "Exception:" + e);
+        }
+        for( int i = 0 ; i < accountsList.size() ; i++ ){
+            String name = accountsList.get(i).getName();
+            for( int j=i+1 ; j < accountsList.size() ; j++ ){
+                if( name.equals( accountsList.get(j).getName() )){
+                    accountsList.remove(j);
+                }
+            }
+
+        }
+
+        return accountsList;
     }
 }

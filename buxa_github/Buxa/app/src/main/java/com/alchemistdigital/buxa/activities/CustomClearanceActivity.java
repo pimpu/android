@@ -46,7 +46,8 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             inputLayout_hsc;
     DatabaseClass dbClass;
     TransportationModel transportDataModel;
-    int iLoginId, iCommodityServerId;
+    int iLoginId;
+    String strCommodity;
     float fGrossWt;
     LinearLayout layout_cc_fcl_adddress;
     private ArrayAdapter<CommodityModel> commodity_adapter;
@@ -72,7 +73,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             strShipmentType = transportDataModel.getStrShipmentType();
             sPickupAddress = transportDataModel.getPickUp();
             sBookId = transportDataModel.getBookingId();
-            iCommodityServerId = transportDataModel.getCommodityServerId();
+            strCommodity = transportDataModel.getStrCommodity();
             fGrossWt = transportDataModel.getGrossWeight();
         }
 
@@ -158,12 +159,12 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
         txtCommodity.setAdapter(commodity_adapter);
         txtCommodity.setThreshold(1);
-        txtCommodity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*txtCommodity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 iCommodityServerId = commodity_adapter.getItem(position).getServerId();
             }
-        });
+        });*/
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
         if(sBookId == null){
@@ -262,7 +263,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             ((RadioButton)findViewById(R.id.rbLcl_cc)).setEnabled(false);
             ((RadioButton)findViewById(R.id.rbFcl_cc)).setEnabled(false);
 
-            txtCommodity.setText( dbClass.getCommodityDataByServerID(iCommodityServerId));
+            txtCommodity.setText( strCommodity );
             txtCommodity.setClickable(false);
             txtCommodity.setCursorVisible(false);
             txtCommodity.setFocusable(false);

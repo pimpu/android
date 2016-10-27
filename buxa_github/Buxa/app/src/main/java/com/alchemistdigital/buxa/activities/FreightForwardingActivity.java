@@ -44,23 +44,22 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     private LinearLayout layoutCommomTransFeild;
     private ArrayAdapter<CommodityModel> commodity_adapter;
     private ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPolAdr,
-            txtDestinationDeliveryAdr;
+    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtDestinationDeliveryAdr;
     private RadioGroup rgContainerSize, rgTypeOfShipment;
     private DatabaseClass dbClass ;
     private ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     private String strShipmentType = "LCL", bookId, strSelectedContainerSize = null, selectedIncoterm;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack;
     private TextInputLayout inputLayout_destinationDeliveryAdr, inputLayout_cubicMeter, inputLayout_grossWeight,
-            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity, inputLayout_POLAddress;
+            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity;
     private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
     private int loginId;
     private TransportationModel transportDataModel;
     private CustomClearanceModel customClearanceModel;
     private ArrayAdapter<CFSAddressModel> cfs_adapter;
-    private Spinner spinnerIncoterm, spinnerPOC, spinnerPOD;
+    private Spinner spinnerIncoterm, spinnerPOC, spinnerPOD, spinnerPOL;
     private Boolean boolIsDDAVisible=false;
-    private CustomSpinnerAdapter adapterPortOfCountry, adapterPortOfDestination, adapterIncoterm;
+    private CustomSpinnerAdapter adapterPortOfCountry, adapterPortOfDestination, adapterIncoterm, adapterPOL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +140,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         layoutCommomTransFeild = (LinearLayout) findViewById(R.id.id_commomTransportLayout);
 
         // initialised all Text Input Layout
-        inputLayout_POLAddress = (TextInputLayout) findViewById(R.id.input_layout_POL);
 //        inputLayout_CfsAddress = (TextInputLayout) findViewById(R.id.input_layout_cfs);
         inputLayout_destinationDeliveryAdr = (TextInputLayout) findViewById(R.id.input_layout_destination_delivery_adr);
         inputLayout_cubicMeter = (TextInputLayout) findViewById(R.id.input_layout_cubic_meter_measurement_ff);
@@ -165,7 +163,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity_ff);
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package_ff);
-        txtPolAdr = (AutoCompleteTextView) findViewById(R.id.id_POL_addresses);
 //        txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
         txtDestinationDeliveryAdr = (AutoCompleteTextView) findViewById(R.id.id_destination_delivery_adr);
 
@@ -173,13 +170,19 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         spinnerIncoterm = (Spinner) findViewById(R.id.id_spinner_incoterm);
         spinnerPOC = (Spinner) findViewById(R.id.id_spinner_poc);
         spinnerPOD = (Spinner) findViewById(R.id.id_spinner_pod);
+        spinnerPOL = (Spinner) findViewById(R.id.id_spinner_pol);
 
         // initialised all Radio Group
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040_ff);
         rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_ff);
 
-        // populate incoterm adapter spinner
+        // populate port of loading spinner
+        ArrayList<String> stringArrayPOL = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.loadingPort)));
+        adapterPOL = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, stringArrayPOL);
+        adapterPOL.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPOL.setAdapter(adapterPOL);
 
+        // populate incoterm adapter spinner
         ArrayList<String> stringArrayIncoterm = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.incoterms)));
         adapterIncoterm = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, stringArrayIncoterm);
         adapterIncoterm.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -254,11 +257,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                 iSelectedCfsAdr = cfs_adapter.getItem(position).getServerId();
             }
         });*/
-
-        // set adapter to drop location
-        txtPolAdr.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
-        txtPolAdr.setOnItemClickListener(this);
-        txtPolAdr.setThreshold(1);
 
         // port of international country spinner
         adapterPortOfCountry = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, dbClass.getPortOfCountry());
@@ -381,7 +379,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     public void storeFreightForwardingEnquiry(View view) {
         FreightForwardingModel freightForwardingModel = null;
 
-        Boolean boolPOL = isEmptyString(txtPolAdr.getText().toString());
 //        Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
         Boolean boolDDAdr = isEmptyString(txtDestinationDeliveryAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
@@ -389,24 +386,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
         Boolean boolCommodity = isEmptyString(txtComodity.getText().toString());
-       /* Boolean boolCFS = isEmptyString(txtCfsAdr.getText().toString());
-        Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());
-        Boolean boolDimenHeight = isEmptyString(txtDimenHeight.getText().toString());
-        Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());*/
-
-        if (boolPOL) {
-            inputLayout_POLAddress.setErrorEnabled(false);
-        } else {
-            inputLayout_POLAddress.setErrorEnabled(true);
-            inputLayout_POLAddress.setError("Port of loading address field is empty.");
-        }
-
-        /*if (boolPOD) {
-            inputLayout_PODAddress.setErrorEnabled(false);
-        } else {
-            inputLayout_PODAddress.setErrorEnabled(true);
-            inputLayout_PODAddress.setError("Port of destination address field is empty.");
-        }*/
 
         if (boolDDAdr) {
             inputLayout_destinationDeliveryAdr.setErrorEnabled(false);
@@ -487,7 +466,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         }*/
 
 //        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolCFS ) {
-        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL ) {
+        if (layoutCommomTransFeild.getVisibility() == View.GONE ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
@@ -500,7 +479,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
-                    txtPolAdr.getText().toString(),
+                    txtBookId.getText().toString(),
                     strSelectedContainerSize,
                     iAvail,
                     1,
@@ -514,7 +493,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         }
         /*else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
                 && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolCFS) {*/
-        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity && boolPOL ) {
+        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
@@ -541,7 +520,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
-                    txtPolAdr.getText().toString(),
+                    txtBookId.getText().toString(),
                     strSelectedContainerSize,
                     iAvail,
                     1,

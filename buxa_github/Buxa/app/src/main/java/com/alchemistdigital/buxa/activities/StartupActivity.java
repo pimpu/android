@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
@@ -87,5 +88,9 @@ public class StartupActivity extends AppCompatActivity {
             Log.e("UnRegisterReceiverError", "> " + e.getMessage());
         }
         super.onDestroy();
+    }
+
+    public void btnForgetPwd(View view) {
+        // Todo : forget password email coding
     }
 }

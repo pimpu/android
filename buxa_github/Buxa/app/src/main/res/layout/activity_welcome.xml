@@ -102,7 +102,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_action_email"
+                            android:src="@drawable/ic_contact_mail_black"
                             android:tint="@color/milkyWhite" />
 
                         <com.alchemistdigital.buxa.utilities.SegoeFontTextView
@@ -120,7 +120,6 @@
                         android:id="@+id/right_labels"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="70dp"
                         fab:fab_addButtonColorNormal="@color/milkyWhite"
                         fab:fab_addButtonColorPressed="@color/white_pressed"
                         fab:fab_addButtonPlusIconColor="@color/half_black"
@@ -148,6 +147,16 @@
                             fab:fab_colorPressed="@color/white_pressed"
                             android:onClick="btnEnquiryClick"/>
 
+                        <com.getbase.floatingactionbutton.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            fab:fab_icon="@drawable/ic_feedback_black"
+                            fab:fab_colorNormal="@color/milkyWhite"
+                            fab:fab_size="mini"
+                            fab:fab_title="Feedback"
+                            fab:fab_colorPressed="@color/white_pressed"
+                            android:onClick="btnFeedbackClick"/>
+
                     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
                     <LinearLayout
@@ -164,13 +173,15 @@
                             app:Segoe="segoe_regular"
                             android:textSize="25dp"
                             android:text="@string/strStartButtom"
-                            android:textColor="@color/milkyWhite" />
+                            android:textColor="@color/milkyWhite"
+                            android:onClick="goToServiceActivity"/>
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignRight="@+id/id_tv_letsStrat"
                             android:layout_marginTop="3dp"
+                            android:onClick="goToServiceActivity"
                             android:src="@drawable/ic_keyboard_arrow_right"/>
                     </LinearLayout>
 

@@ -94,9 +94,128 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_manual_pickup"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_manual_pick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_autoComplete_manual_pickup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/hint_pickUp_location"
+                        app:Segoe="segoe_light" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_pick_landmark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:id="@+id/id_pick_landmark"
+                            android:hint="@string/hint_pickup_landmark"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_pick_pincode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:id="@+id/id_pick_pincode"
+                            android:hint="@string/hint_pincode"
+                            android:maxLength="6"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_not_find_pick_google_text"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="can't find pick up location ?"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="15dp"
+                    app:Segoe="segoe_light"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Click here ! "
+                    android:textColor="@color/error"
+                    android:textSize="18dp"
+                    android:onClick="togglePickUpAddressFiled"
+                    app:Segoe="segoe_regular"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_backTo_pick_google_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="back_google_pick_address"
+                android:visibility="gone"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/error"
+                    android:onClick="back_google_pick_address"
+                    android:src="@drawable/ic_keyboard_arrow_left"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Back"
+                    android:textColor="@color/error"
+                    android:textSize="20dp"
+                    android:onClick="back_google_pick_address"
+                    app:Segoe="segoe_regular"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/layout_drop"
                 android:layout_width="fill_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
@@ -117,6 +236,124 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_manual_drop"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_manual_drop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_autoComplete_manual_drop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/hint_drop_location"
+                        app:Segoe="segoe_light" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_drop_landmark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:id="@+id/id_drop_landmark"
+                            android:hint="@string/hint_drop_landmark"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_drop_pincode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:id="@+id/id_drop_pincode"
+                            android:hint="@string/hint_pincode"
+                            android:maxLength="6"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_not_find_drop_google_text"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="can't find drop location ?"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="15dp"
+                    app:Segoe="segoe_light"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Click here ! "
+                    android:textColor="@color/error"
+                    android:textSize="18dp"
+                    android:onClick="toggleDropAddressFiled"
+                    app:Segoe="segoe_regular"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_backTo_drop_google_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:onClick="back_google_drop_address"
+                android:visibility="gone"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:tint="@color/error"
+                    android:onClick="back_google_drop_address"
+                    android:src="@drawable/ic_keyboard_arrow_left"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Back"
+                    android:textColor="@color/error"
+                    android:textSize="20dp"
+                    android:onClick="back_google_drop_address"
+                    app:Segoe="segoe_regular"/>
 
             </LinearLayout>
 
@@ -124,7 +361,7 @@
                 android:id="@+id/layout_shipmentType"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
@@ -513,14 +750,16 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_regular"
                     android:textSize="25dp"
-                    android:text="@string/next" />
+                    android:text="@string/next"
+                    android:onClick="storeTransportEnquiry" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:tint="@color/black_semi_transparent"
-                    android:src="@drawable/ic_keyboard_arrow_right"/>
+                    android:src="@drawable/ic_keyboard_arrow_right"
+                    android:onClick="storeTransportEnquiry" />
             </LinearLayout>
 
             <!--<android.support.design.widget.FloatingActionButton

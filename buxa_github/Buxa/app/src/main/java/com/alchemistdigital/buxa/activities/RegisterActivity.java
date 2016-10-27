@@ -1,5 +1,6 @@
 package com.alchemistdigital.buxa.activities;
 
+import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,17 +17,22 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.adapter.EmailListAdapter;
 import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
+import com.alchemistdigital.buxa.model.Email_Account_Item;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -33,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -42,15 +50,19 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 import static com.alchemistdigital.buxa.utilities.Validations.phoneValiate;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText txtCompanyName, txtContactName, txtMobile, txtEmailId, txtPwd, txtConformPwd;
+    EditText txtCompanyName, txtContactName, txtMobile, txtPwd, txtConformPwd;
     Button btnRegister;
-    TextInputLayout companyName_InputLayout, contactName_InputLayout, mobile_InputLayout, emailId_InputLayout,
+    TextInputLayout companyName_InputLayout, contactName_InputLayout, mobile_InputLayout,
             pwd_InputLayout, conformPwd_InputLayout;
     private final static SimpleDateFormat noFormatDateSdf = new SimpleDateFormat("ddMMyyhhmmss");
     // Progress Dialog Object
     ProgressDialog prgDialog;
     LinearLayout layout_noConnection;
-    TextView errorMessage;
+    TextView errorMessage, tvRegisterEmail;
+    private ArrayList<Email_Account_Item> list;
+    private ListView listView;
+    private EmailListAdapter listadaptor;
+    private static final int PICK_ACCOUNT_REQUEST = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,27 +93,32 @@ public class RegisterActivity extends AppCompatActivity {
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 
-        /*txtCode = (EditText) findViewById(R.id.company_code);
-        Date date = new Date();
-        txtCode.setText(getResources().getString(R.string.codeString, noFormatDateSdf.format(date)));*/
+        // get emails addresses which are registered on mobile device
+        list = CommonUtilities.getEmailsData(RegisterActivity.this);
 
         errorMessage = (TextView) findViewById(R.id.register_error_msg);
         txtCompanyName = (EditText) findViewById(R.id.company_name);
         txtContactName = (EditText) findViewById(R.id.contact_name);
         txtMobile = (EditText) findViewById(R.id.contact_mobile);
-        txtEmailId = (EditText) findViewById(R.id.contact_email);
+//        txtEmailId = (EditText) findViewById(R.id.contact_email);
         txtPwd = (EditText) findViewById(R.id.contact_pwd);
         txtConformPwd = (EditText) findViewById(R.id.contact_conform_pwd);
+
+        tvRegisterEmail = (TextView) findViewById(R.id.contact_email);
 
         companyName_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_company_name);
         contactName_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_name);
         mobile_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_mobile);
-        emailId_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_email);
+//        emailId_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_email);
         pwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_pwd);
         conformPwd_InputLayout = (TextInputLayout) findViewById(R.id.input_layout_contact_conform_pwd);
 
         registerReceiver(mHandleServerMessageReceiverInRegisterActivity, new IntentFilter(
                 CommonVariables.DISPLAY_MESSAGE_ACTION));
+
+        if( list.size() == 1 ){
+            tvRegisterEmail.setText( list.get(0).getName() );
+        }
 
         btnRegister = (Button) findViewById(R.id.id_btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Boolean boolCompanyName = isEmptyString(txtCompanyName.getText().toString());
                 Boolean boolContactName = isEmptyString(txtContactName.getText().toString());
                 Boolean boolMob = phoneValiate(txtMobile.getText().toString());
-                Boolean boolEmail = emailValidate(txtEmailId.getText().toString());
+//                Boolean boolEmail = emailValidate(txtEmailId.getText().toString());
                 Boolean boolPwd = isEmptyString(txtPwd.getText().toString());
                 Boolean boolConformPwd = isEmptyString(txtConformPwd.getText().toString());
 
@@ -136,12 +153,12 @@ public class RegisterActivity extends AppCompatActivity {
                     mobile_InputLayout.setError("Mobile field is wrong.");
                 }
 
-                if (boolEmail) {
+                /*if (boolEmail) {
                     emailId_InputLayout.setErrorEnabled(false);
                 } else {
                     emailId_InputLayout.setErrorEnabled(true);
                     emailId_InputLayout.setError("Email field is wrong.");
-                }
+                }*/
 
                 if (boolPwd) {
                     pwd_InputLayout.setErrorEnabled(false);
@@ -157,7 +174,12 @@ public class RegisterActivity extends AppCompatActivity {
                     conformPwd_InputLayout.setError("Confirm password field is empty.");
                 }
 
-                if (boolCompanyName && boolContactName && boolMob && boolEmail && boolPwd && boolConformPwd) {
+                if (boolCompanyName && boolContactName && boolMob && boolPwd && boolConformPwd) {
+
+                    if(tvRegisterEmail.getText().toString().equals("Click on me for Email")) {
+                        Toast.makeText(getApplicationContext(), "Please, select contact email id.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
                     if (txtPwd.getText().toString().equals(txtConformPwd.getText().toString()) &&
                             txtConformPwd.getText().toString().equals(txtPwd.getText().toString())) {
@@ -198,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
         params.put("company", txtCompanyName.getText().toString());
         params.put("uname", txtContactName.getText().toString());
         params.put("mobile", txtMobile.getText().toString());
-        params.put("email", txtEmailId.getText().toString());
+        params.put("email", tvRegisterEmail.getText().toString());
         params.put("password", txtPwd.getText().toString());
         params.put("create_time", ""+System.currentTimeMillis());
 
@@ -330,4 +352,34 @@ public class RegisterActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void getRegisteredEmail(View view) {
+        if (list.size() > 0) {
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
+            dialogBuilder.setCancelable(true);
+            View inflaterOfEmails = getLayoutInflater().inflate(R.layout.email_name_listview, null);
+            dialogBuilder.setView(inflaterOfEmails);
+            AlertDialog alertDialog = dialogBuilder.create();
+
+            listView = (ListView) inflaterOfEmails.findViewById(R.id.idEmailName);
+            listadaptor = new EmailListAdapter(RegisterActivity.this,
+                    R.layout.email_account_name_view,
+                    list,
+                    tvRegisterEmail,
+                    alertDialog);
+            listView.setAdapter(listadaptor);
+
+            alertDialog.show();
+        } else {
+            Intent googlePicker = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
+            startActivityForResult(googlePicker, PICK_ACCOUNT_REQUEST);
+        }
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == PICK_ACCOUNT_REQUEST && resultCode == RESULT_OK) {
+            tvRegisterEmail.setText(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
+        }
+    }
 }
