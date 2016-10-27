@@ -92,6 +92,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public void btnFeedbackClick(View view) {
         Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
         // Todo : feedback form
+//        startActivity(new Intent(WelcomeActivity.this, Feedback.class));
     }
 
     public void btnEnquiryClick(View view) {

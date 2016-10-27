@@ -58,6 +58,7 @@
     <string name="buxaAddress">Shop no 10/11, Shiv Surabhi bldg, Thakur village, Kandivali East, Mumbai-400101</string>
     <string name="buxaEmail">amruta@buxa.tech</string>
     <string name="buxaContact">+91 7738333539</string>
+    <string name="title_activity_feedback">Feedback</string>
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
@@ -168,4 +169,6 @@
     <string name="hint_pincode">Pincode</string>
     <string name="hint_pickup_landmark">Pickup landmark</string>
     <string name="hint_drop_landmark">Drop landmark</string>
+    <string name="hint_feedback">Give your reviews about app</string>
+
 </resources>
