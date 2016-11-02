@@ -167,6 +167,7 @@ public class Create_Enquiry extends AppCompatActivity implements AdapterView.OnI
         productQtyInputLayout = (TextInputLayout) findViewById(R.id.id_input_layout_product_quantity);
 
         final RippleView rippleView = (RippleView) findViewById(R.id.btn_id_submit_enquiry);
+        assert rippleView != null;
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
             @Override

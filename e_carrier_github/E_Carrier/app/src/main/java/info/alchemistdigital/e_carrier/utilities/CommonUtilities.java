@@ -23,7 +23,9 @@ import info.alchemistdigital.e_carrier.model.Email_Account_Item;
  */
 public class CommonUtilities {
     // give your server registration url here
-    static String serverLink = "http://7d86aa2e.ngrok.io/E_Carrier/";
+//    static String serverLink = "http://a4a7a492.ngrok.io/e_carrier_webservices/";
+    static String serverLink = "http://alchemistdigital.net/ecarrier-webservices/";
+
     public static final String USER_LOGIN_SERVER_URL                = serverLink + "create_userLogin.php";
     public static final String UPDATE_GCMID_SERVER_URL              = serverLink + "update_gcmid.php";
     public static final String LOGIN_SERVER_URL                     = serverLink + "loggedIn.php";

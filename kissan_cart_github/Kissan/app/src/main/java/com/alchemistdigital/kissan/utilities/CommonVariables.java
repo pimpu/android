@@ -22,7 +22,7 @@ public class CommonVariables {
     //    static String SERVER_URL = "http://kissancart.com/obp/AndroidWebservices/";
     //    public static String FILE_UPLOAD_URL = "http://kissancart.com/obp/admin/Enquiry/";
 
-    static String SERVER_URL = "http://221d99b7.ngrok.io/kissan_cart/";
+    static String SERVER_URL = "http://47e3d49e.ngrok.io/kissan_cart_webservices/";
     public static String FILE_UPLOAD_URL = SERVER_URL + "AndroidFileUpload/";
 
     public static final String SOCIETY_INSERT_SERVER_URL = SERVER_URL +"create_society_byAndroid.php";
