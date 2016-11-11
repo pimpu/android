@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CommodityModel;
+import com.alchemistdigital.buxa.model.CustomClearanceModel;
+import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
@@ -37,6 +39,7 @@ import java.util.ArrayList;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class TransportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    LinearLayout layuotCommonFreight;
     ArrayAdapter<CommodityModel> commodity_adapter;
     ArrayAdapter<PackageTypeModel> packagingType_adapter;
     AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtManualPickup, txtManualDrop;
@@ -56,6 +59,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
     private int loginId;
     private LinearLayout layout_pickup, layout_manual_pickup, id_not_find_pick_google_text, id_backTo_pick_google_text;
     private LinearLayout layout_drop, layout_manual_drop, id_not_find_drop_google_text, id_backTo_drop_google_text;
+    private FreightForwardingModel freightForwardingModel;
+    private CustomClearanceModel customClearanceModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,9 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         names = getIntent().getStringArrayListExtra("ServicesName");
         availedServicesId = getIntent().getStringArrayListExtra("availedServicesId");
         availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
+        freightForwardingModel = getIntent().getExtras().getParcelable("freightForwardingModel");
+        customClearanceModel = getIntent().getExtras().getParcelable("customClearanceData");
+
         if ( getIntent().getExtras().getString("shipmentType") != null ) {
             strSelectedShipmentType = getIntent().getExtras().getString("shipmentType");
         }
@@ -103,48 +111,13 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         }
     };
 
-    private void intentActions(TransportationModel transportationModel) {
-
-        Intent intentActivity;
-        if( availedServicesName != null ) {
-            if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
-                intentActivity = new Intent(TransportQuotationActivity.this, CustomClearanceActivity.class);
-            } else if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
-            }
-            else {
-                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
-            }
-        }
-        else {
-            if( names.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
-                intentActivity = new Intent(TransportQuotationActivity.this, CustomClearanceActivity.class);
-            } else if(names.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
-            }
-            else {
-                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
-            }
-        }
-
-//        TransportationModel transportationModel = intent.getExtras().getParcelable("transportData");
-
-        intentActivity.putStringArrayListExtra("ServicesId",  ids);
-        intentActivity.putStringArrayListExtra("ServicesName", names);
-        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-        intentActivity.putExtra("transportData",transportationModel);
-
-        startActivity(intentActivity);
-    }
-
     private void toolbarSetup() {
         // initialise toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_transportQuotation);
         setSupportActionBar(toolbar);
 
         // set back button on toolbar
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         // set click listener on back button of toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +129,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
     }
 
     private void init() {
+        layuotCommonFreight = (LinearLayout) findViewById(R.id.id_commomFreightLayout);
+
         // initialised all Linear Layout
         layout_pickup = (LinearLayout) findViewById(R.id.layout_pickup);
         layout_manual_pickup = (LinearLayout) findViewById(R.id.layout_manual_pickup);
@@ -277,16 +252,6 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             ((RadioButton)findViewById(R.id.rbLcl_transport)).setEnabled(false);
             ((RadioButton)findViewById(R.id.rbFcl_transport)).setEnabled(false);
 
-            if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
-                String pickUpAddress = dbClass.getPickUpAddress(TransportQuotationActivity.this, bookId);
-                if(pickUpAddress != null ){
-                    txtPickup.setText(pickUpAddress);
-                    txtPickup.setClickable(false);
-                    txtPickup.setCursorVisible(false);
-                    txtPickup.setFocusable(false);
-                    txtPickup.setFocusableInTouchMode(false);
-                }
-            }
         }
 
     }
@@ -316,7 +281,6 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
         });*/
 
-
         // set adapter to pickup location
         txtPickup.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.list_item));
         txtPickup.setOnItemClickListener(this);
@@ -327,6 +291,35 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         txtDrop.setOnItemClickListener(this);
         txtDrop.setThreshold(1);
 
+        if ( availedServicesName != null ) {
+            if( !availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())  ) {
+                layuotCommonFreight.setVisibility(View.GONE);
+            }
+
+            if( !availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
+                if( customClearanceModel.getStrShipmentType().equals("FCL") &&
+                        customClearanceModel.getStuffingType().equals(getResources().getString(R.string.strFactoryStuff))) {
+
+                    txtPickup.setText(customClearanceModel.getStuffingAddress());
+                    txtPickup.setClickable(false);
+                    txtPickup.setCursorVisible(false);
+                    txtPickup.setFocusable(false);
+                    txtPickup.setFocusableInTouchMode(false);
+                }
+                txtComodity.setText(customClearanceModel.getStrCommodity());
+                txtComodity.setClickable(false);
+                txtComodity.setCursorVisible(false);
+                txtComodity.setFocusable(false);
+                txtComodity.setFocusableInTouchMode(false);
+
+                txtGrossWt.setText(""+customClearanceModel.getGrossWeight());
+                txtGrossWt.setClickable(false);
+                txtGrossWt.setCursorVisible(false);
+                txtGrossWt.setFocusable(false);
+                txtGrossWt.setFocusableInTouchMode(false);
+            }
+
+        }
     }
 
     @Override
@@ -447,7 +440,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
         }
         else {
-            if(strSelectedContainerSize == null){
+            if(strSelectedContainerSize == null && (layuotCommonFreight.getVisibility() == View.VISIBLE)){
                 Toast.makeText(getApplicationContext(), "Container size of FCL should be checked.",Toast.LENGTH_LONG).show();
             }
         }
@@ -501,9 +494,9 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             inputLayout_dimen_width.setError("width.");
         }
 
-        if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
-                && boolDimenHeight && boolDimenWeight && boolCommodity) {
+        if ( boolDimenLen && boolDimenHeight && boolDimenWeight ) {
 
+            String measurment, strPickUp, strDrop;
             if ( !boolPickUp && (layout_pickup.getVisibility() == View.VISIBLE)) {
                 return;
             }
@@ -524,19 +517,20 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 }
             }
 
-            if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
-                return;
-            }
-            else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
-                return;
-            }
-
-            String measurment;
-            if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
-                measurment = txtCBM.getText().toString();
+            if ( boolPickUp && (layout_pickup.getVisibility() == View.VISIBLE)) {
+                strPickUp = txtPickup.getText().toString();
             }
             else {
-                measurment = strSelectedContainerSize;
+                strPickUp = txtManualPickup.getText().toString()+", "+txtPickupLandmark.getText().toString()+", Pincode-"+
+                        txtPickupPincode.getText().toString();
+            }
+
+            if ( boolDrop && (layout_drop.getVisibility() == View.VISIBLE)) {
+                strDrop = txtDrop.getText().toString();
+            }
+            else {
+                strDrop = txtManualDrop.getText().toString()+", "+txtDropLandmark.getText().toString()+", Pincode-"+
+                        txtDropPincode.getText().toString();
             }
 
             int iAvail = 0;
@@ -544,41 +538,118 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 iAvail = 1;
             }
 
-            TransportationModel transportationModel = new TransportationModel(
-                    txtComodity.getText().toString(),
-                    Integer.parseInt(txtDimenLen.getText().toString()),
-                    Integer.parseInt(txtDimenHeight.getText().toString()),
-                    Integer.parseInt(txtDimenWidth.getText().toString()),
-                    Integer.parseInt(txt_noOfPack.getText().toString()),
-                    txtTypeOfPackaging.getText().toString(),
-                    txtPickup.getText().toString(),
-                    txtDrop.getText().toString(),
-                    iAvail,
-                    1,
-                    ""+DateHelper.convertToMillis(),
-                    txtBookId.getText().toString(),
-                    measurment,
-                    Float.parseFloat(txtGrossWt.getText().toString()),
-                    strSelectedShipmentType,
-                    dbClass.getShipmentTypeServerId(strSelectedShipmentType),
-                    loginId
-            );
+            if (layuotCommonFreight.getVisibility() == View.VISIBLE
+                    && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity) {
 
-            intentActions(transportationModel);
+                if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
+                    return;
+                }
+                else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
+                    return;
+                }
 
-            /*// get quotation of transportation from server
+                if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
+                    measurment = txtCBM.getText().toString();
+                }
+                else {
+                    measurment = strSelectedContainerSize;
+                }
 
-            // Check if Internet present
-            if (!isConnectingToInternet(TransportQuotationActivity.this)) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
-                // stop executing code by return
-                return;
+                TransportationModel transportationModel = new TransportationModel(
+                        txtBookId.getText().toString(),
+                        strPickUp,
+                        strDrop,
+                        strSelectedShipmentType,
+                        measurment,
+                        Float.parseFloat(txtGrossWt.getText().toString()),
+                        txtTypeOfPackaging.getText().toString(),
+                        Integer.parseInt(txt_noOfPack.getText().toString()),
+                        txtComodity.getText().toString(),
+                        Integer.parseInt(txtDimenLen.getText().toString()),
+                        Integer.parseInt(txtDimenHeight.getText().toString()),
+                        Integer.parseInt(txtDimenWidth.getText().toString()),
+                        iAvail,
+                        1,
+                        ""+DateHelper.convertToMillis(),
+                        loginId
+                );
+
+                intentActions(transportationModel);
             } else {
-                InsertTransportationAsyncTask.postTransportationData(
-                        TransportQuotationActivity.this,
-                        transportationModel);
-            }*/
+
+                TransportationModel transportationModel = new TransportationModel(
+                        txtBookId.getText().toString(),
+                        strPickUp,
+                        strDrop,
+                        freightForwardingModel.getStrShipmentType(),
+                        freightForwardingModel.getMeasurement(),
+                        freightForwardingModel.getGrossWeight(),
+                        freightForwardingModel.getStrPackType(),
+                        freightForwardingModel.getNoOfPack(),
+                        freightForwardingModel.getStrCommodity(),
+                        Integer.parseInt(txtDimenLen.getText().toString()),
+                        Integer.parseInt(txtDimenHeight.getText().toString()),
+                        Integer.parseInt(txtDimenWidth.getText().toString()),
+                        iAvail,
+                        1,
+                        ""+DateHelper.convertToMillis(),
+                        loginId
+                );
+
+                intentActions(transportationModel);
+            }
+
+            /*System.out.println("Booked id: "+txtBookId.getText().toString());
+            System.out.println("Pick up: "+strPickUp);
+            System.out.println("Drop: "+strDrop);
+            System.out.println("Type of shipment: "+strSelectedShipmentType);
+            System.out.println("Measurement: "+measurment);
+            System.out.println("gross weight: "+txtGrossWt.getText().toString());
+            System.out.println("Type of pack: "+txtTypeOfPackaging.getText().toString());
+            System.out.println("No of pack: "+txt_noOfPack.getText().toString());
+            System.out.println("Commodity: "+txtComodity.getText().toString());
+            System.out.println("Length: "+txtDimenLen.getText().toString());
+            System.out.println("Height: "+txtDimenHeight.getText().toString());
+            System.out.println("Weight: "+txtDimenWidth.getText().toString());*/
+
         }
+    }
+
+    private void intentActions(TransportationModel transportationModel) {
+
+        Intent intentActivity;
+        if( availedServicesName != null ) {
+            if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
+                intentActivity = new Intent(TransportQuotationActivity.this, CustomClearanceActivity.class);
+            }
+            else if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+            }
+        }
+        else {
+            if( names.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
+                intentActivity = new Intent(TransportQuotationActivity.this, CustomClearanceActivity.class);
+            }
+            else if(names.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+            }
+        }
+
+//        TransportationModel transportationModel = intent.getExtras().getParcelable("transportData");
+
+        intentActivity.putStringArrayListExtra("ServicesId",  ids);
+        intentActivity.putStringArrayListExtra("ServicesName", names);
+        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+        intentActivity.putExtra("transportData",transportationModel);
+
+        startActivity(intentActivity);
     }
 
     @Override

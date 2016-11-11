@@ -217,6 +217,9 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentTransportActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentTransportActivity.putExtra("shipmentType", strShipmentType);
                                 intentTransportActivity.putExtra("bookId", bookId);
+                                intentTransportActivity.putExtra("freightForwardingModel", freightForwardingModel);
+                                intentTransportActivity.putExtra("customClearanceData", customClearanceModel);
+
                                 startActivity(intentTransportActivity);
 
                             } else if( arrayComparingNameArray.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {

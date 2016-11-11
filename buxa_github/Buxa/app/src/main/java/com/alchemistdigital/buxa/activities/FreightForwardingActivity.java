@@ -147,18 +147,12 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         inputLayout_packType = (TextInputLayout) findViewById(R.id.input_layout_pack_type_ff);
         inputLayout_noOfPack = (TextInputLayout) findViewById(R.id.input_layout_no_of_package_ff);
         inputLayout_commodity = (TextInputLayout) findViewById(R.id.input_layout_commodity_ff);
-        /*inputLayout_dimen_len = (TextInputLayout) findViewById(R.id.input_layout_dimensions_length_ff);
-        inputLayout_dimen_height = (TextInputLayout) findViewById(R.id.input_layout_dimensions_height_ff);
-        inputLayout_dimen_width = (TextInputLayout) findViewById(R.id.input_layout_dimensions_width_ff);*/
 
         // initialised all Edit Text
         txtBookId = (EditText) findViewById(R.id.book_id_ff);
         txtCBM = (EditText) findViewById(R.id.id_cubic_meter_measurement_ff);
         txtGrossWt = (EditText) findViewById(R.id.id_gross_weight_ff);
         txt_noOfPack = (EditText) findViewById(R.id.id_no_of_package_ff);
-        /*txtDimenLen = (EditText) findViewById(R.id.id_dimensions_length_ff);
-        txtDimenHeight = (EditText) findViewById(R.id.id_dimensions_height_ff);
-        txtDimenWidth = (EditText) findViewById(R.id.id_dimensions_width_ff);*/
 
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity_ff);
@@ -276,6 +270,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
+
         // click listener for shipment type radio group
         rgTypeOfShipment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -300,6 +295,20 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
+        if(arrayServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
+            System.out.println(customClearanceModel.getStrCommodity());
+            txtComodity.setText(customClearanceModel.getStrCommodity());
+            txtComodity.setClickable(false);
+            txtComodity.setCursorVisible(false);
+            txtComodity.setFocusable(false);
+            txtComodity.setFocusableInTouchMode(false);
+
+            txtGrossWt.setText(""+customClearanceModel.getGrossWeight());
+            txtGrossWt.setClickable(false);
+            txtGrossWt.setCursorVisible(false);
+            txtGrossWt.setFocusable(false);
+            txtGrossWt.setFocusableInTouchMode(false);
+        }
         // click listener for container size radio group
         rgContainerSize.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -365,7 +374,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         setSupportActionBar(toolbar);
 
         // set back button on toolbar
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         // set click listener on back button of toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -437,62 +446,45 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_commodity.setError("Commodity field is empty.");
         }
 
-        /*if (boolCFS) {
-            inputLayout_CfsAddress.setErrorEnabled(false);
-        } else {
-            inputLayout_CfsAddress.setErrorEnabled(true);
-            inputLayout_CfsAddress.setError(getResources().getString(R.string.hint_cfs_address)+" field is empty.");
+        int iAvail = 0;
+        if( availedServicesName != null ) {
+            iAvail = 1;
         }
 
-        if (boolDimenLen) {
-            inputLayout_dimen_len.setErrorEnabled(false);
-        } else {
-            inputLayout_dimen_len.setErrorEnabled(true);
-            inputLayout_dimen_len.setError("length.");
-        }
-
-        if (boolDimenHeight) {
-            inputLayout_dimen_height.setErrorEnabled(false);
-        } else {
-            inputLayout_dimen_height.setErrorEnabled(true);
-            inputLayout_dimen_height.setError("height.");
-        }
-
-        if (boolDimenWeight) {
-            inputLayout_dimen_width.setErrorEnabled(false);
-        } else {
-            inputLayout_dimen_width.setErrorEnabled(true);
-            inputLayout_dimen_width.setError("width.");
-        }*/
-
-//        if (layoutCommomTransFeild.getVisibility() == View.GONE && boolPOL && boolCFS ) {
         if (layoutCommomTransFeild.getVisibility() == View.GONE ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
             }
 
-            int iAvail = 0;
-            if( availedServicesName != null ) {
-                iAvail = 1;
-            }
+            /*System.out.println("booking id: "+txtBookId.getText().toString());
+            System.out.println("POL: "+spinnerPOL.getSelectedItem().toString());
+            System.out.println("POC: "+spinnerPOC.getSelectedItem().toString());
+            System.out.println("POD: "+spinnerPOD.getSelectedItem().toString());
+            System.out.println("Incoterm: "+spinnerIncoterm.getSelectedItem().toString());
+            System.out.println("DDA: "+txtDestinationDeliveryAdr.getText().toString());*/
 
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
-                    txtBookId.getText().toString(),
-                    strSelectedContainerSize,
+                    spinnerPOL.getSelectedItem().toString(),
+                    spinnerPOC.getSelectedItem().toString(),
+                    spinnerPOD.getSelectedItem().toString(),
+                    spinnerIncoterm.getSelectedItem().toString(),
+                    txtDestinationDeliveryAdr.getText().toString(),
+                    strShipmentType,
+                    transportDataModel.getMeasurement(),
+                    transportDataModel.getGrossWeight(),
+                    transportDataModel.getStrPackType(),
+                    transportDataModel.getNoOfPack(),
+                    transportDataModel.getStrCommodity(),
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),
-                    strShipmentType,
-                    loginId,
-                    dbClass.getShipmentTypeServerId(strShipmentType)
+                    loginId
             );
 
             intentActions(freightForwardingModel);
         }
-        /*else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolDimenLen
-                && boolDimenHeight && boolDimenWeight && boolCommodity && boolPOL && boolCFS) {*/
         else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
@@ -513,24 +505,24 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                 measurment = strSelectedContainerSize;
             }
 
-            int iAvail = 0;
-            if( availedServicesName != null ) {
-                iAvail = 1;
-            }
-
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
-                    txtBookId.getText().toString(),
-                    strSelectedContainerSize,
+                    spinnerPOL.getSelectedItem().toString(),
+                    spinnerPOC.getSelectedItem().toString(),
+                    spinnerPOD.getSelectedItem().toString(),
+                    spinnerIncoterm.getSelectedItem().toString(),
+                    txtDestinationDeliveryAdr.getText().toString(),
+                    strShipmentType,
+                    measurment,
+                    Float.parseFloat(txtGrossWt.getText().toString()),
+                    txtTypeOfPackaging.getText().toString(),
+                    Integer.parseInt(txt_noOfPack.getText().toString()),
+                    txtComodity.getText().toString(),
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),
-                    strShipmentType,
-                    loginId,
-                    dbClass.getShipmentTypeServerId(strShipmentType)
+                    loginId
             );
-
-            intentActions(freightForwardingModel);
 
             /*// Check if Internet present
             if (!isConnectingToInternet(FreightForwardingActivity.this)) {
@@ -543,8 +535,8 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                         freightForwardingModel);
             }*/
 
+            intentActions(freightForwardingModel);
         }
-
     }
 
     @Override

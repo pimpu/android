@@ -11,13 +11,23 @@ public class FreightForwardingModel implements Parcelable {
     private int freightForwardingId;
     private int serverId;
     private String bookingId;
-    private int shipmentType;
     private String portOfLoading;
+    private String portOfCountry;
     private String portOfDestination;
+    private String strIncoterm;
+    private String strDestinatioDeliveryAdr;
+    private int shipmentType;
+    private String strShipmentType;
+    private String measurement;
+    private float grossWeight;
+    private int packType ;
+    private String strPackType ;
+    private int noOfPack ;
+    private int commodityServerId ;
+    private String strCommodity;
     private int availOption ;
     private int status ;
     private String  createdAt ;
-    private String strShipmentType;
 
     public FreightForwardingModel() {
     }
@@ -41,25 +51,40 @@ public class FreightForwardingModel implements Parcelable {
         this.serverId = serverId;
     }
 
+    // this constructure is used for passing of object between activity
     public FreightForwardingModel(
             String bookingId,
             String portOfLoading,
+            String portOfCountry,
             String portOfDestination,
+            String strIncoterm,
+            String strDestinatioDeliveryAdr,
+            String strShipmentType,
+            String measurement,
+            float grossWeight,
+            String strPackType,
+            int noOfPack,
+            String strCommodity,
             int availOption,
             int status,
             String createdAt,
-            String strShipmentType,
-            int userId,
-            int shipmentType) {
+            int userId) {
         this.bookingId = bookingId;
         this.portOfLoading = portOfLoading;
+        this.portOfCountry = portOfCountry;
         this.portOfDestination = portOfDestination;
+        this.strIncoterm = strIncoterm;
+        this.strDestinatioDeliveryAdr = strDestinatioDeliveryAdr;
+        this.strShipmentType = strShipmentType;
+        this.measurement = measurement;
+        this.grossWeight = grossWeight;
+        this.strPackType = strPackType;
+        this.noOfPack = noOfPack;
+        this.strCommodity = strCommodity;
         this.availOption = availOption;
         this.status = status;
         this.createdAt = createdAt;
-        this.strShipmentType = strShipmentType;
         this.userId = userId;
-        this.shipmentType = shipmentType;
     }
 
     @Override
@@ -157,6 +182,94 @@ public class FreightForwardingModel implements Parcelable {
         this.strShipmentType = strShipmentType;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getPortOfCountry() {
+        return portOfCountry;
+    }
+
+    public void setPortOfCountry(String portOfCountry) {
+        this.portOfCountry = portOfCountry;
+    }
+
+    public String getStrIncoterm() {
+        return strIncoterm;
+    }
+
+    public void setStrIncoterm(String strIncoterm) {
+        this.strIncoterm = strIncoterm;
+    }
+
+    public String getMeasurement() {
+        return measurement;
+    }
+
+    public void setMeasurement(String measurement) {
+        this.measurement = measurement;
+    }
+
+    public float getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(float grossWeight) {
+        this.grossWeight = grossWeight;
+    }
+
+    public int getPackType() {
+        return packType;
+    }
+
+    public void setPackType(int packType) {
+        this.packType = packType;
+    }
+
+    public String getStrPackType() {
+        return strPackType;
+    }
+
+    public void setStrPackType(String strPackType) {
+        this.strPackType = strPackType;
+    }
+
+    public int getNoOfPack() {
+        return noOfPack;
+    }
+
+    public void setNoOfPack(int noOfPack) {
+        this.noOfPack = noOfPack;
+    }
+
+    public int getCommodityServerId() {
+        return commodityServerId;
+    }
+
+    public void setCommodityServerId(int commodityServerId) {
+        this.commodityServerId = commodityServerId;
+    }
+
+    public String getStrCommodity() {
+        return strCommodity;
+    }
+
+    public void setStrCommodity(String strCommodity) {
+        this.strCommodity = strCommodity;
+    }
+
+    public String getStrDestinatioDeliveryAdr() {
+        return strDestinatioDeliveryAdr;
+    }
+
+    public void setStrDestinatioDeliveryAdr(String strDestinatioDeliveryAdr) {
+        this.strDestinatioDeliveryAdr = strDestinatioDeliveryAdr;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -164,27 +277,47 @@ public class FreightForwardingModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(serverId);
         dest.writeString(bookingId);
-        dest.writeInt(shipmentType);
         dest.writeString(portOfLoading);
+        dest.writeString(portOfCountry);
         dest.writeString(portOfDestination);
+        dest.writeString(strIncoterm);
+        dest.writeString(strShipmentType);
+        dest.writeString(strDestinatioDeliveryAdr);
+        dest.writeString(measurement);
+        dest.writeFloat(grossWeight);
+        dest.writeString(strPackType);
+        dest.writeInt(packType);
+        dest.writeInt(noOfPack);
+        dest.writeString(strCommodity);
+        dest.writeInt(commodityServerId);
         dest.writeInt(availOption);
         dest.writeInt(status);
         dest.writeString(createdAt);
-        dest.writeString(strShipmentType);
+        dest.writeInt(userId);
+        dest.writeInt(serverId);
     }
 
     protected FreightForwardingModel(Parcel in) {
-        serverId = in.readInt();
         bookingId = in.readString();
-        shipmentType = in.readInt();
         portOfLoading = in.readString();
+        portOfCountry = in.readString();
         portOfDestination = in.readString();
+        strIncoterm = in.readString();
+        strDestinatioDeliveryAdr = in.readString();
+        strShipmentType = in.readString();
+        measurement = in.readString();
+        grossWeight = in.readFloat();
+        strPackType = in.readString();
+        packType = in.readInt();
+        noOfPack = in.readInt();
+        strCommodity = in.readString();
+        commodityServerId = in.readInt();
         availOption = in.readInt();
         status = in.readInt();
         createdAt = in.readString();
-        strShipmentType = in.readString();
+        userId = in.readInt();
+        serverId = in.readInt();
     }
 
     public static final Creator<FreightForwardingModel> CREATOR = new Creator<FreightForwardingModel>() {

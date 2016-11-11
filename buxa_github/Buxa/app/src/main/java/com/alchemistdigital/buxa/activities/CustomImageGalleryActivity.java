@@ -45,7 +45,7 @@ public class CustomImageGalleryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // set back button on toolbar
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         // set click listener on back button of toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

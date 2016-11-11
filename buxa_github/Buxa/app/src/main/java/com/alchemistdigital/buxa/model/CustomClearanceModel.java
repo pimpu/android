@@ -8,15 +8,21 @@ import android.os.Parcelable;
  */
 public class CustomClearanceModel implements Parcelable {
     private int userId ;
+    private int CCId;
     private int serverId;
     private String bookingId;
+    private String CCType;
+    private int commodityServerId ;
+    private String strCommodity;
+    private float grossWeight;
+    private int HSCode;
     private int iShipmentType;
+    private String strShipmentType;
     private String stuffingType;
     private String stuffingAddress;
     private int availOption ;
     private int status ;
     private String  createdAt ;
-    private String strShipmentType;
 
     public CustomClearanceModel() {
     }
@@ -40,16 +46,20 @@ public class CustomClearanceModel implements Parcelable {
         this.createdAt = createdAt;
     }
 
+    // this constructure is used for passing of object between activity
     public CustomClearanceModel(
             String bookingId,
+            String CCType,
+            String strCommodity,
+            float grossWeight,
+            int HSCode,
+            String strShipmentType,
             String stuffingType,
             String stuffingAddress,
             int availOption,
             int status,
             String createdAt,
-            String strShipmentType,
-            int userId,
-            int iShipmentType) {
+            int userId) {
         this.bookingId = bookingId;
         this.stuffingType = stuffingType;
         this.stuffingAddress = stuffingAddress;
@@ -58,7 +68,10 @@ public class CustomClearanceModel implements Parcelable {
         this.createdAt = createdAt;
         this.strShipmentType = strShipmentType;
         this.userId = userId;
-        this.iShipmentType = iShipmentType;
+        this.CCType = CCType;
+        this.strCommodity = strCommodity;
+        this.grossWeight = grossWeight;
+        this.HSCode = HSCode;
     }
 
     @Override
@@ -74,6 +87,14 @@ public class CustomClearanceModel implements Parcelable {
                 ",\"userId\":\"" + userId + '\"' +
                 ",\"iShipmentType\":\""+iShipmentType + '\"' +
                 '}';
+    }
+
+    public int getCCId() {
+        return CCId;
+    }
+
+    public void setCCId(int CCId) {
+        this.CCId = CCId;
     }
 
     public int getUserId() {
@@ -156,6 +177,46 @@ public class CustomClearanceModel implements Parcelable {
         this.strShipmentType = strShipmentType;
     }
 
+    public String getCCType() {
+        return CCType;
+    }
+
+    public void setCCType(String CCType) {
+        this.CCType = CCType;
+    }
+
+    public int getCommodityServerId() {
+        return commodityServerId;
+    }
+
+    public void setCommodityServerId(int commodityServerId) {
+        this.commodityServerId = commodityServerId;
+    }
+
+    public String getStrCommodity() {
+        return strCommodity;
+    }
+
+    public void setStrCommodity(String strCommodity) {
+        this.strCommodity = strCommodity;
+    }
+
+    public float getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(float grossWeight) {
+        this.grossWeight = grossWeight;
+    }
+
+    public int getHSCode() {
+        return HSCode;
+    }
+
+    public void setHSCode(int HSCode) {
+        this.HSCode = HSCode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -163,29 +224,39 @@ public class CustomClearanceModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(userId);
-        dest.writeInt(serverId);
         dest.writeString(bookingId);
-        dest.writeInt(iShipmentType);
+        dest.writeString(CCType);
+        dest.writeString(strCommodity);
+        dest.writeInt(commodityServerId);
+        dest.writeFloat(grossWeight);
+        dest.writeInt(HSCode);
+        dest.writeString(strShipmentType);
         dest.writeString(stuffingType);
         dest.writeString(stuffingAddress);
         dest.writeInt(availOption);
         dest.writeInt(status);
         dest.writeString(createdAt);
-        dest.writeString(strShipmentType);
+        dest.writeInt(userId);
+        dest.writeInt(serverId);
+        dest.writeInt(iShipmentType);
     }
 
     private CustomClearanceModel(Parcel in) {
-        userId = in.readInt();
-        serverId = in.readInt();
         bookingId = in.readString();
-        iShipmentType = in.readInt();
+        CCType = in.readString();
+        strCommodity = in.readString();
+        commodityServerId = in.readInt();
+        grossWeight = in.readFloat();
+        HSCode = in.readInt();
+        strShipmentType = in.readString();
         stuffingType = in.readString();
         stuffingAddress = in.readString();
         availOption = in.readInt();
         status = in.readInt();
         createdAt = in.readString();
-        strShipmentType = in.readString();
+        userId = in.readInt();
+        serverId = in.readInt();
+        iShipmentType = in.readInt();
     }
 
     public static final Parcelable.Creator<CustomClearanceModel> CREATOR = new Parcelable.Creator<CustomClearanceModel>() {

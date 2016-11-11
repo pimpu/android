@@ -3,6 +3,8 @@ package com.alchemistdigital.buxa.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.alchemistdigital.buxa.utilities.DateHelper;
+
 /**
  * Created by Pimpu on 8/29/2016.
  */
@@ -10,25 +12,25 @@ public class TransportationModel implements Parcelable {
     private int userId ;
     private int transportationId ;
     private int serverId ;
+    private String bookingId;
+    private String  pickUp ;
+    private String drop ;
+    private String strShipmentType;
+    private int shipmentType ;
+    private String measurement;
+    private float grossWeight;
+    private int packType ;
+    private String strPackType ;
+    private int noOfPack ;
     private int commodityServerId ;
     private String strCommodity;
     private int dimenLength ;
     private int dimenHeight ;
     private int dimenWidth;
-    private int shipmentType ;
-    private int noOfPack ;
-    private int packType ;
-    private String strPackType ;
-    private String  pickUp ;
-    private String drop ;
     private String lrCopy ;
     private int availOption ;
     private int status ;
     private String  createdAt ;
-    private String bookingId;
-    private String measurement;
-    private float grossWeight;
-    private String strShipmentType;
 
     public TransportationModel() {
     }
@@ -57,23 +59,23 @@ public class TransportationModel implements Parcelable {
         this.grossWeight = grossWeight;
     }
 
+    // this constructure is used for passing of object between activity
     public TransportationModel(
+            String bookingId,
+            String pickUp,
+            String drop,
+            String strShipmentType,
+            String measurement,
+            float grossWeight,
+            String strPackType,
+            int noOfPack,
             String strCommodity,
             int dimenLength,
             int dimenHeight,
             int dimenWidth,
-            int noOfPack,
-            String strPackType,
-            String pickUp,
-            String drop,
             int availOption,
             int status,
             String createdAt,
-            String bookingId,
-            String measurement,
-            float grossWeight,
-            String strShipmentType,
-            int shipmentType,
             int userId) {
         this.strCommodity = strCommodity;
         this.dimenLength = dimenLength;
@@ -90,7 +92,6 @@ public class TransportationModel implements Parcelable {
         this.measurement = measurement;
         this.grossWeight = grossWeight;
         this.strShipmentType = strShipmentType;
-        this.shipmentType = shipmentType;
         this.userId = userId;
     }
 
@@ -301,47 +302,51 @@ public class TransportationModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(userId);
-        dest.writeInt(serverId);
+        dest.writeString(bookingId);
+        dest.writeString(pickUp);
+        dest.writeString(drop);
+        dest.writeString(strShipmentType);
+        dest.writeString(measurement);
+        dest.writeFloat(grossWeight);
+        dest.writeString(strPackType);
+        dest.writeInt(packType);
+        dest.writeInt(noOfPack);
         dest.writeString(strCommodity);
+        dest.writeInt(commodityServerId);
         dest.writeInt(dimenLength);
         dest.writeInt(dimenHeight);
         dest.writeInt(dimenWidth);
-        dest.writeInt(shipmentType);
-        dest.writeInt(noOfPack);
-        dest.writeString(strPackType);
-        dest.writeString(pickUp);
-        dest.writeString(drop);
-        dest.writeString(lrCopy);
         dest.writeInt(availOption);
         dest.writeInt(status);
         dest.writeString(createdAt);
-        dest.writeString(bookingId);
-        dest.writeString(measurement);
-        dest.writeFloat(grossWeight);
-        dest.writeString(strShipmentType);
+        dest.writeInt(userId);
+        dest.writeInt(serverId);
+        dest.writeInt(shipmentType);
+        dest.writeString(lrCopy);
     }
 
     private TransportationModel(Parcel in) {
-        userId = in.readInt();
-        serverId = in.readInt();
+        bookingId = in.readString();
+        pickUp = in.readString();
+        drop = in.readString();
+        strShipmentType = in.readString();
+        measurement = in.readString();
+        grossWeight = in.readFloat();
+        strPackType = in.readString();
+        packType = in.readInt();
+        noOfPack = in.readInt();
         strCommodity = in.readString();
+        commodityServerId = in.readInt();
         dimenLength = in.readInt();
         dimenHeight = in.readInt();
         dimenWidth = in.readInt();
-        shipmentType = in.readInt();
-        noOfPack = in.readInt();
-        strPackType = in.readString();
-        pickUp = in.readString();
-        drop = in.readString();
-        lrCopy = in.readString();
         availOption = in.readInt();
         status = in.readInt();
         createdAt = in.readString();
-        bookingId = in.readString();
-        measurement = in.readString();
-        grossWeight = in.readFloat();
-        strShipmentType = in.readString();
+        userId = in.readInt();
+        serverId = in.readInt();
+        shipmentType = in.readInt();
+        lrCopy = in.readString();
     }
 
     public static final Parcelable.Creator<TransportationModel> CREATOR = new Parcelable.Creator<TransportationModel>() {

@@ -358,185 +358,192 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_shipmentType"
-                android:layout_width="fill_parent"
+                android:id="@+id/id_commomFreightLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                xmlns:android="http://schemas.android.com/apk/res/android">
+                android:orientation="vertical">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/layout_shipmentType"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_type_of_shipment"
-                    android:textSize="12dp"
-                    android:paddingLeft="5dp"
-                    app:Segoe="segoe_regular" />
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radiogroupTypeOfShipment_transport"
-                    android:orientation="horizontal"
-                    android:checkedButton="@+id/rbLcl_transport" >
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
+                    <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rbLcl_transport"
-                        android:text="@string/strLcl"/>
+                        android:text="@string/hint_type_of_shipment"
+                        android:textSize="12dp"
+                        android:paddingLeft="5dp"
+                        app:Segoe="segoe_regular" />
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rbFcl_transport"
-                        android:layout_marginLeft="50dp"
-                        android:text="@string/strFcl"/>
+                        android:id="@+id/radiogroupTypeOfShipment_transport"
+                        android:orientation="horizontal"
+                        android:checkedButton="@+id/rbLcl_transport" >
 
-                </RadioGroup>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbLcl_transport"
+                            android:text="@string/strLcl"/>
 
-                <RadioGroup
-                    android:layout_width="match_parent"
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbFcl_transport"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/strFcl"/>
+
+                    </RadioGroup>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radiogroup2040"
+                        android:visibility="gone"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal" >
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet20"
+                            android:text="@string/str20feet"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet40"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/str40feet"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/feet40HQfeet"
+                            android:layout_marginLeft="50dp"
+                            android:text="@string/str40HQfeet"/>
+
+                    </RadioGroup>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_cubic_meter_measurement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:id="@+id/id_cubic_meter_measurement"
+                            android:hint="@string/hint_cubic_meter_measurement"
+                            android:ems="10" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_GrossWeight"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radiogroup2040"
-                    android:visibility="gone"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal" >
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/feet20"
-                        android:text="@string/str20feet"/>
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_gross_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:id="@+id/id_gross_weight"
+                            android:hint="@string/hint_gross_weight"
+                            android:ems="10"/>
+                    </android.support.design.widget.TextInputLayout>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/feet40"
-                        android:layout_marginLeft="50dp"
-                        android:text="@string/str40feet"/>
+                </LinearLayout>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/feet40HQfeet"
-                        android:layout_marginLeft="50dp"
-                        android:text="@string/str40HQfeet"/>
-
-                </RadioGroup>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_cubic_meter_measurement"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/layout_PackageType"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
 
-                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_pack_type"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberSigned"
-                        android:id="@+id/id_cubic_meter_measurement"
-                        android:hint="@string/hint_cubic_meter_measurement"
-                        android:ems="10" />
+                        android:layout_height="wrap_content">
 
-                </android.support.design.widget.TextInputLayout>
+                        <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                            android:id="@+id/id_type_of_package"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_type_of_package"
+                            app:Segoe="segoe_light"/>
 
-            </LinearLayout>
+                    </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_GrossWeight"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                xmlns:android="http://schemas.android.com/apk/res/android">
+                </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_gross_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                <LinearLayout
+                    android:id="@+id/layout_NoOfPackage"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_no_of_package"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:id="@+id/id_gross_weight"
-                        android:hint="@string/hint_gross_weight"
-                        android:ems="10"/>
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_height="wrap_content">
+                        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:id="@+id/id_no_of_package"
+                            android:hint="@string/hint_no_of_package"
+                            android:ems="10"/>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_commodity"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
 
-            <LinearLayout
-                android:id="@+id/layout_PackageType"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                xmlns:android="http://schemas.android.com/apk/res/android">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_pack_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                        android:id="@+id/id_type_of_package"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_commodity"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hint_type_of_package"
-                        app:Segoe="segoe_light"/>
+                        android:layout_height="wrap_content">
 
-                </android.support.design.widget.TextInputLayout>
+                        <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                            android:id="@+id/id_commodity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_commodity"
+                            app:Segoe="segoe_light"/>
+                    </android.support.design.widget.TextInputLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_NoOfPackage"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                xmlns:android="http://schemas.android.com/apk/res/android">
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_no_of_package"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberSigned"
-                        android:id="@+id/id_no_of_package"
-                        android:hint="@string/hint_no_of_package"
-                        android:ems="10"/>
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_commodity"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                xmlns:android="http://schemas.android.com/apk/res/android">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_commodity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
-                        android:id="@+id/id_commodity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/hint_commodity"
-                        app:Segoe="segoe_light"/>
-                </android.support.design.widget.TextInputLayout>
-
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

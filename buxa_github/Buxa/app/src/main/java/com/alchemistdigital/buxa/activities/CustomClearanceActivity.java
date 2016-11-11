@@ -38,10 +38,11 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 public class CustomClearanceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     AutoCompleteTextView txtCCAddress, txtCommodity;
     EditText txtBookId, txtGrossWt, txtHSC;
-    RadioGroup rgShipmentType, rgFCLStuffing;
+    RadioGroup rgShipmentType, rgFCLStuffing, rgImpoExpo;
     TextView hintAddress;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
-    String strShipmentType = "LCL", sPickupAddress, sBookId, strSelectedStuffing;
+    String strShipmentType = "LCL", sPickupAddress, sBookId, strSelectedStuffing,
+            strSelectedImpoExpo;
     TextInputLayout inputLayout_cc_address, inputLayout_commodity, inputLayout_gross_wt,
             inputLayout_hsc;
     DatabaseClass dbClass;
@@ -106,38 +107,11 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         }
     };
 
-    private void intentActions(CustomClearanceModel customClearanceModel) {
-        Intent intentActivity = null;
-        if( availedServicesName != null ) {
-            if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                intentActivity = new Intent(this, FreightForwardingActivity.class);
-            }
-            else {
-                intentActivity = new Intent(this, QuotationActivity.class);
-            }
-        }
-        else {
-            if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
-                intentActivity = new Intent(this, FreightForwardingActivity.class);
-            }
-            else {
-                intentActivity = new Intent(this, QuotationActivity.class);
-            }
-        }
 
-//        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
-
-        intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-        intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-        intentActivity.putExtra("customClearanceData", customClearanceModel);
-        intentActivity.putExtra("transportData", transportDataModel);
-        startActivity(intentActivity);
-    }
 
     private void init() {
         dbClass = new DatabaseClass(this);
+        strSelectedImpoExpo = getResources().getString(R.string.strImport);
 
         layout_cc_fcl_adddress = (LinearLayout) findViewById(R.id.id_cc_fcl_addresses);
 
@@ -248,6 +222,21 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             }
         });
 
+        rgImpoExpo = (RadioGroup) findViewById(R.id.radiogroupExpoImpo);
+        rgImpoExpo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                switch (checkedId){
+                    case R.id.rbImport:
+                        strSelectedImpoExpo = getResources().getString(R.string.strImport);
+                        break;
+                    case R.id.rbExport:
+                        strSelectedImpoExpo = getResources().getString(R.string.strExport);
+                        break;
+                }
+            }
+        });
+
         // auto selection of field is did when user comes from Transportation page.
         if( availedServicesName != null || (arrayServicesName.contains(enumServices.TRANSPORTATION.toString()) && arrayServicesId.size() > 0) ) {
             if(strShipmentType.equals("LCL")) {
@@ -283,7 +272,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
         setSupportActionBar(toolbar);
 
         // set back button on toolbar
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         // set click listener on back button of toolbar
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,17 +339,31 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                 iAvail = 1;
             }
 
+            /*System.out.println("Booking id: "+txtBookId.getText().toString());
+            System.out.println("CC Type: "+strSelectedImpoExpo);
+            System.out.println("Commodity: "+txtCommodity.getText().toString());
+            System.out.println("Grosss wt: "+txtGrossWt.getText().toString());
+            System.out.println("HS code: "+txtHSC.getText().toString());
+            System.out.println("Type of shipemnt: "+strShipmentType);
+            System.out.println("Type of stuffing: "+strSelectedStuffing);
+            System.out.println("Stuffing address: "+txtCCAddress.getText().toString());*/
+
             CustomClearanceModel customClearanceModel = new CustomClearanceModel(
                     txtBookId.getText().toString(),
+                    strSelectedImpoExpo,
+                    txtCommodity.getText().toString(),
+                    Float.parseFloat(txtGrossWt.getText().toString()),
+                    Integer.parseInt(txtHSC.getText().toString()),
+                    strShipmentType,
                     strSelectedStuffing,
                     txtCCAddress.getText().toString(),
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),
-                    strShipmentType,
-                    iLoginId,
-                    dbClass.getShipmentTypeServerId(strShipmentType)
+                    iLoginId
             );
+
+            intentActions(customClearanceModel);
 
             /*// get quotation of transportation from server
 
@@ -375,9 +378,38 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                         customClearanceModel);
             }*/
 
-            intentActions(customClearanceModel);
         }
 
+    }
+
+    private void intentActions(CustomClearanceModel customClearanceModel) {
+        Intent intentActivity;
+        if( availedServicesName != null ) {
+            if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(this, QuotationActivity.class);
+            }
+        }
+        else {
+            if(arrayServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                intentActivity = new Intent(this, FreightForwardingActivity.class);
+            }
+            else {
+                intentActivity = new Intent(this, QuotationActivity.class);
+            }
+        }
+
+//        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
+
+        intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+        intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+        intentActivity.putExtra("customClearanceData", customClearanceModel);
+        intentActivity.putExtra("transportData", transportDataModel);
+        startActivity(intentActivity);
     }
 
     @Override
