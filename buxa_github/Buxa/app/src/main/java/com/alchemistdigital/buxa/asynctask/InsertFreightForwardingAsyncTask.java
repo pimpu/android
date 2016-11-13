@@ -25,8 +25,11 @@ import cz.msebera.android.httpclient.Header;
 public class InsertFreightForwardingAsyncTask {
     private static ProgressDialog prgDialog;
     private static GetSharedPreference getSharedPreference;
+    private static DatabaseClass dbHelper ;
 
     public static void postFreightForwardingData(Context context, FreightForwardingModel freightForwardingModel) {
+        dbHelper = new DatabaseClass(context);
+
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
@@ -36,11 +39,20 @@ public class InsertFreightForwardingAsyncTask {
 
         getSharedPreference = new GetSharedPreference(context);
 
+        int shipmentTypeServerId = dbHelper.getShipmentTypeServerId(freightForwardingModel.getStrShipmentType());
+        freightForwardingModel.setShipmentType(shipmentTypeServerId);
+
+        int packagingTypeServerId = dbHelper.getPackagingTypeServerId(freightForwardingModel.getStrPackType());
+        freightForwardingModel.setPackType(packagingTypeServerId);
+
+        int commodityServerID = dbHelper.getCommodityServerID(freightForwardingModel.getStrCommodity());
+        freightForwardingModel.setCommodityServerId(commodityServerID);
+
         RequestParams params;
         params = new RequestParams();
-
         params.put("freightForwardingdata", freightForwardingModel.toString());
 
+        System.out.println("After: "+freightForwardingModel.toString());
         invokeWS(context, params, freightForwardingModel);
     }
 
@@ -58,30 +70,21 @@ public class InsertFreightForwardingAsyncTask {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
                 try{
+                    System.out.println(json);
+
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
 
                     if (error) {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
-                        DatabaseClass dbHelper = new DatabaseClass(context);
 
-                        FreightForwardingModel dbInsertFFData = new FreightForwardingModel(
-                                freightForwardingModel.getBookingId(),
-                                freightForwardingModel.getShipmentType(),
-                                freightForwardingModel.getPortOfLoading(),
-                                freightForwardingModel.getPortOfDestination(),
-                                freightForwardingModel.getAvailOption(),
-                                freightForwardingModel.getStatus(),
-                                freightForwardingModel.getCreatedAt(),
-                                json.getInt("id")
-                        );
-
-                        int i = dbHelper.insertFreightForwarding(dbInsertFFData);
+                        freightForwardingModel.setServerId(json.getInt("id"));
+                        int i = dbHelper.insertFreightForwarding(freightForwardingModel);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity_FF");
+                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromFF");
                             intent.putExtra("FFData",freightForwardingModel);
                             context.sendBroadcast(intent);
                         }

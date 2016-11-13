@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.activities.QuotationActivity;
 import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
@@ -25,9 +26,10 @@ import cz.msebera.android.httpclient.Header;
 public class InsertTransportationAsyncTask {
     private static ProgressDialog prgDialog;
     private static GetSharedPreference getSharedPreference;
-
+    private static DatabaseClass dbHelper;
     public static void postTransportationData(Context context, TransportationModel transportationModel) {
-
+        dbHelper = new DatabaseClass(context);
+        
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
@@ -37,13 +39,20 @@ public class InsertTransportationAsyncTask {
 
         getSharedPreference = new GetSharedPreference(context);
 
+        int shipmentTypeServerId = dbHelper.getShipmentTypeServerId(transportationModel.getStrShipmentType());
+        transportationModel.setShipmentType(shipmentTypeServerId);
+
+        int packagingTypeServerId = dbHelper.getPackagingTypeServerId(transportationModel.getStrPackType());
+        transportationModel.setPackType(packagingTypeServerId);
+
+        int commodityServerID = dbHelper.getCommodityServerID(transportationModel.getStrCommodity());
+        transportationModel.setCommodityServerId(commodityServerID);
+
         RequestParams params;
         params = new RequestParams();
-
-//        System.out.println(transportationModel.toString());
-
         params.put("transportdata", transportationModel.toString());
 
+        System.out.println("After: "+transportationModel.toString());
         invokeWS(context, params, transportationModel);
 
     }
@@ -62,39 +71,19 @@ public class InsertTransportationAsyncTask {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
                 try{
+                    System.out.println(json);
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
-
                     if (error) {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
-                        DatabaseClass dbHelper = new DatabaseClass(context);
 
-                        TransportationModel dbInsertTransportData = new TransportationModel(
-                                json.getInt("id"),
-                                transportationModel.getCommodityServerId(),
-                                transportationModel.getDimenLength(),
-                                transportationModel.getDimenHeight(),
-                                transportationModel.getDimenWidth(),
-                                transportationModel.getShipmentType(),
-                                transportationModel.getNoOfPack(),
-                                transportationModel.getPackType(),
-                                transportationModel.getPickUp(),
-                                transportationModel.getDrop(),
-                                "",
-                                transportationModel.getAvailOption(),
-                                transportationModel.getStatus(),
-                                transportationModel.getCreatedAt(),
-                                transportationModel.getBookingId(),
-                                transportationModel.getMeasurement(),
-                                transportationModel.getGrossWeight()
-                        );
-
-                        int i = dbHelper.insertTransportation(dbInsertTransportData);
+                        transportationModel.setServerId(json.getInt("id"));
+                        int i = dbHelper.insertTransportation(transportationModel);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity");
+                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromTrans");
                             intent.putExtra("transportData",transportationModel);
                             context.sendBroadcast(intent);
                         }

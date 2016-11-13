@@ -35,30 +35,6 @@ public class TransportationModel implements Parcelable {
     public TransportationModel() {
     }
 
-    public TransportationModel(int serverId, int commodityServerId, int dimenLength,
-                               int dimenHeight, int dimenWidth, int shipmentType, int noOfPack,
-                               int packType, String pickUp, String drop, String lrCopy,
-                               int availOption, int status, String createdAt, String bookingId,
-                               String measurement, float grossWeight) {
-        this.serverId = serverId;
-        this.commodityServerId = commodityServerId;
-        this.dimenLength = dimenLength;
-        this.dimenHeight = dimenHeight;
-        this.dimenWidth = dimenWidth;
-        this.shipmentType = shipmentType;
-        this.noOfPack = noOfPack;
-        this.packType = packType;
-        this.pickUp = pickUp;
-        this.drop = drop;
-        this.lrCopy = lrCopy;
-        this.availOption = availOption;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.bookingId = bookingId;
-        this.measurement = measurement;
-        this.grossWeight = grossWeight;
-    }
-
     // this constructure is used for passing of object between activity
     public TransportationModel(
             String bookingId,
@@ -95,26 +71,24 @@ public class TransportationModel implements Parcelable {
         this.userId = userId;
     }
 
-
     @Override
     public String toString() {
         return "{" +
-                "\"commodityServerId\":\"" +commodityServerId + '\"' +
+                "\"bookingId\":\"" + bookingId + '\"' +
+                ",\"pickUp\":\"" + pickUp + '\"' +
+                ",\"drop\":\"" + drop + '\"' +
+                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                ",\"measurement\":\"" + measurement + '\"' +
+                ",\"grossWeight\":\"" + grossWeight + '\"' +
+                ",\"packType\":\"" + packType + '\"' +
+                ",\"noOfPack\":\"" + noOfPack + '\"' +
+                ",\"commodityServerId\":\"" +commodityServerId + '\"' +
                 ",\"dimenLength\":\"" + dimenLength + '\"' +
                 ",\"dimenHeight\":\"" + dimenHeight + '\"' +
                 ",\"dimenWidth\":\"" + dimenWidth + '\"' +
-                ",\"noOfPack\":\"" + noOfPack + '\"' +
-                ",\"packType\":\"" + packType + '\"' +
-                ",\"pickUp\":\"" + pickUp + '\"' +
-                ",\"drop\":\"" + drop + '\"' +
                 ",\"availOption\":\"" + availOption + '\"' +
                 ",\"status\":\"" + status + '\"' +
                 ",\"createdAt\":\"" + createdAt + '\"' +
-                ",\"bookingId\":\"" + bookingId + '\"' +
-                ",\"measurement\":\"" + measurement + '\"' +
-                ",\"grossWeight\":\"" + grossWeight + '\"' +
-                ",\"strShipmentType\":\"" + strShipmentType + '\"' +
-                ",\"shipmentType\":\"" + shipmentType + '\"' +
                 ",\"userId\":\"" + userId + '\"' +
                 '}';
     }

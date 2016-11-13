@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.FreightForwardingModel;
@@ -36,6 +37,7 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
 
+import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class TransportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -102,8 +104,16 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             if (newMessage.equals("finishingActivity")) {
                 finish();
             }
-            else if(newMessage.equals("gotoNextActivity")) {
-//                intentActions(intent);
+            else if(newMessage.equals("gotoQuotationActivityFromTrans")) {
+
+                Intent intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+                intentActivity.putStringArrayListExtra("ServicesId",  ids);
+                intentActivity.putStringArrayListExtra("ServicesName", names);
+                intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                intentActivity.putExtra("transportData",intent.getExtras().getParcelable("transportData"));
+
+                startActivity(intentActivity);
             }
 
             // Releasing wake lock
@@ -184,9 +194,9 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040);
         rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_transport);
 
+        GetSharedPreference getSharedPreference = new GetSharedPreference(this);
+        loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
         if(bookId == null){
-            GetSharedPreference getSharedPreference = new GetSharedPreference(this);
-            loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
             txtBookId.setText( getResources().getString(R.string.codeString, DateHelper.getBookId(),loginId));
         }
         else {
@@ -352,13 +362,16 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
     public void storeTransportEnquiry(View view) {
 
+        String strPackType = txtTypeOfPackaging.getText().toString();
+        String strCommodity = txtComodity.getText().toString();
+
         Boolean boolPickUp = isEmptyString(txtPickup.getText().toString());
         Boolean boolDrop = isEmptyString(txtDrop.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
-        Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
+        Boolean boolTypeOfPack = isEmptyString(strPackType) && (dbClass.getPackagingTypeServerId(strPackType) > 0);
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
-        Boolean boolCommodity = isEmptyString(txtComodity.getText().toString());
+        Boolean boolCommodity = isEmptyString(strCommodity) && (dbClass.getCommodityServerID(strCommodity) > 0);
         Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());
         Boolean boolDimenHeight = isEmptyString(txtDimenHeight.getText().toString());
         Boolean boolDimenWeight = isEmptyString(txtDimenWidth.getText().toString());
@@ -456,7 +469,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             inputLayout_packType.setErrorEnabled(false);
         } else {
             inputLayout_packType.setErrorEnabled(true);
-            inputLayout_packType.setError("Package type field is empty.");
+            inputLayout_packType.setError("Package type field is empty or not in dropdown menu.");
         }
 
         if (boolNoOfPack) {
@@ -470,7 +483,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             inputLayout_commodity.setErrorEnabled(false);
         } else {
             inputLayout_commodity.setErrorEnabled(true);
-            inputLayout_commodity.setError("Commodity field is empty.");
+            inputLayout_commodity.setError("Commodity field is empty or not in dropdown menu.");
         }
 
         if (boolDimenLen) {
@@ -538,43 +551,46 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 iAvail = 1;
             }
 
-            if (layuotCommonFreight.getVisibility() == View.VISIBLE
-                    && boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity) {
+            if (layuotCommonFreight.getVisibility() == View.VISIBLE) {
 
-                if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
-                    return;
-                }
-                else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
-                    return;
+                if( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity) {
+
+                    if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
+                        return;
+                    }
+                    else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
+                        return;
+                    }
+
+                    if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
+                        measurment = txtCBM.getText().toString();
+                    }
+                    else {
+                        measurment = strSelectedContainerSize;
+                    }
+
+                    TransportationModel transportationModel = new TransportationModel(
+                            txtBookId.getText().toString(),
+                            strPickUp,
+                            strDrop,
+                            strSelectedShipmentType,
+                            measurment,
+                            Float.parseFloat(txtGrossWt.getText().toString()),
+                            strPackType,
+                            Integer.parseInt(txt_noOfPack.getText().toString()),
+                            strCommodity,
+                            Integer.parseInt(txtDimenLen.getText().toString()),
+                            Integer.parseInt(txtDimenHeight.getText().toString()),
+                            Integer.parseInt(txtDimenWidth.getText().toString()),
+                            iAvail,
+                            1,
+                            ""+DateHelper.convertToMillis(),
+                            loginId
+                    );
+
+                    intentActions(transportationModel);
                 }
 
-                if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
-                    measurment = txtCBM.getText().toString();
-                }
-                else {
-                    measurment = strSelectedContainerSize;
-                }
-
-                TransportationModel transportationModel = new TransportationModel(
-                        txtBookId.getText().toString(),
-                        strPickUp,
-                        strDrop,
-                        strSelectedShipmentType,
-                        measurment,
-                        Float.parseFloat(txtGrossWt.getText().toString()),
-                        txtTypeOfPackaging.getText().toString(),
-                        Integer.parseInt(txt_noOfPack.getText().toString()),
-                        txtComodity.getText().toString(),
-                        Integer.parseInt(txtDimenLen.getText().toString()),
-                        Integer.parseInt(txtDimenHeight.getText().toString()),
-                        Integer.parseInt(txtDimenWidth.getText().toString()),
-                        iAvail,
-                        1,
-                        ""+DateHelper.convertToMillis(),
-                        loginId
-                );
-
-                intentActions(transportationModel);
             } else {
 
                 TransportationModel transportationModel = new TransportationModel(
@@ -617,7 +633,9 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
     private void intentActions(TransportationModel transportationModel) {
 
-        Intent intentActivity;
+        Intent intentActivity = null;
+        Boolean isIntentQuote=false;
+
         if( availedServicesName != null ) {
             if( availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
                 intentActivity = new Intent(TransportQuotationActivity.this, CustomClearanceActivity.class);
@@ -626,7 +644,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
             }
             else {
-                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+//                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+                isIntentQuote=true;
             }
         }
         else {
@@ -637,19 +656,33 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 intentActivity = new Intent(TransportQuotationActivity.this, FreightForwardingActivity.class);
             }
             else {
-                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+//                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
+                isIntentQuote=true;
             }
         }
 
-//        TransportationModel transportationModel = intent.getExtras().getParcelable("transportData");
+        if(isIntentQuote) {
+            // Check if Internet present
+            if (!isConnectingToInternet(TransportQuotationActivity.this)) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
+                // stop executing code by return
+                return;
+            } else {
+                InsertTransportationAsyncTask.postTransportationData(
+                        TransportQuotationActivity.this,
+                        transportationModel);
+            }
+        }
+        else {
+            intentActivity.putStringArrayListExtra("ServicesId",  ids);
+            intentActivity.putStringArrayListExtra("ServicesName", names);
+            intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+            intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+            intentActivity.putExtra("transportData",transportationModel);
 
-        intentActivity.putStringArrayListExtra("ServicesId",  ids);
-        intentActivity.putStringArrayListExtra("ServicesName", names);
-        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-        intentActivity.putExtra("transportData",transportationModel);
+            startActivity(intentActivity);
+        }
 
-        startActivity(intentActivity);
     }
 
     @Override

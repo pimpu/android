@@ -32,25 +32,6 @@ public class FreightForwardingModel implements Parcelable {
     public FreightForwardingModel() {
     }
 
-    public FreightForwardingModel(
-            String bookingId,
-            int shipmentType,
-            String portOfLoading,
-            String portOfDestination,
-            int availOption,
-            int status,
-            String createdAt,
-            int serverId) {
-        this.bookingId = bookingId;
-        this.shipmentType = shipmentType;
-        this.portOfLoading = portOfLoading;
-        this.portOfDestination = portOfDestination;
-        this.availOption = availOption;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.serverId = serverId;
-    }
-
     // this constructure is used for passing of object between activity
     public FreightForwardingModel(
             String bookingId,
@@ -90,15 +71,22 @@ public class FreightForwardingModel implements Parcelable {
     @Override
     public String toString() {
         return "{" +
-                "\"userId\":\""+ userId + '\"' +
-                ",\"bookingId\":\"" + bookingId + '\"' +
-                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                "\"bookingId\":\"" + bookingId + '\"' +
                 ",\"portOfLoading\":\"" + portOfLoading + '\"' +
+                ",\"portOfCountry\":\"" + portOfCountry + '\"' +
                 ",\"portOfDestination\":\"" + portOfDestination + '\"' +
+                ",\"strIncoterm\":\"" + strIncoterm + '\"' +
+                ",\"strDestinatioDeliveryAdr\":\"" + strDestinatioDeliveryAdr + '\"' +
+                ",\"shipmentType\":\"" + shipmentType + '\"' +
+                ",\"measurement\":\"" + measurement + '\"' +
+                ",\"grossWeight\":\"" + grossWeight + '\"' +
+                ",\"packType\":\"" + packType + '\"' +
+                ",\"noOfPack\":\"" + noOfPack + '\"' +
+                ",\"commodityServerId\":\"" + commodityServerId + '\"' +
                 ",\"availOption\":\"" + availOption + '\"' +
                 ",\"status\":\"" + status + '\"' +
                 ",\"createdAt\":\"" + createdAt + '\"' +
-                ",\"strShipmentType\":\"" + strShipmentType + '\"' +
+                ",\"userId\":\""+ userId + '\"' +
                 '}';
     }
 

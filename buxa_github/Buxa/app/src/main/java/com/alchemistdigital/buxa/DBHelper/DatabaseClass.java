@@ -102,36 +102,46 @@ public class DatabaseClass extends SQLiteOpenHelper {
     // TABLE_TRANSPORTATION Table - column names
     private static final String  TRANSPORTATION_SERVER_ID = "trans_serverId";
     private static final String  BOOKING_ID = "booking_id";
+    private static final String  PICKUP = "pickup";
+    private static final String  DROP = "dropLocation";
+    private static final String  SHIPMENT_TYPE = "shipment_type";
+    private static final String  MEASUREMENT = "measurement";
+    private static final String  GROSS_WEIGHT = "gross_weight";
+    private static final String  PACK_TYPE = "pack_type";
+    private static final String  NO_OF_PACK = "no_of_pack";
     private static final String  COMMODITY_SERVERID_IN_TRANSPORT = "commodity_serverId";
     private static final String  DIMEN_LENGTH = "dimen_length";
     private static final String  DIMEN_HEIGHT = "dimen_height";
     private static final String  DIMEN_WIDTH = "dimen_width";
-    private static final String  SHIPMENT_TYPE = "shipment_type";
-    private static final String  MEASUREMENT = "measurement";
-    private static final String  GROSS_WEIGHT = "gross_weight";
-    private static final String  NO_OF_PACK = "no_of_pack";
-    private static final String  PACK_TYPE = "pack_type";
-    private static final String  PICKUP = "pickup";
-    private static final String  DROP = "dropLocation";
-    private static final String  LRCOPY = "lr_copy";
     private static final String  AVAIL_OPTION = "avail_option";
 
     // TABLE_CUSTOM_CLEARANCE Table - column names
     private static final String CUSTOM_CLEARANCE_SERVER_ID = "CC_ServerId";
     // booking id
+    private static final String CUSTOM_CLEARANCE_TYPE = "CC_type";
+    private static final String CUSTOM_CLEARANCE_COMMODITY = "CC_commodity";
+    private static final String CUSTOM_CLEARANCE_GROSS_WEIGHT = "CC_grossWeight";
+    private static final String HARMONIZED_SYSTEM_CODE = "harmonized_system_code";
     // shipment type
     // avail option
     private static final String STUFFING_TYPE = "stuffing_type";
     private static final String STUFFING_ADDRESS = "stuffing_address";
 
-
     // TABLE_FREIGHT_FORWARDING_SERVICE Table - column names
     private static final String FREIGHT_FORWARDING_SERVER_ID = "FF_ServerId";
     // booking id
-    // shipment type
     // avail option
     private static final String PORT_OF_LOADING = "port_of_loading";
+    private static final String PORT_OF_COUNTRY = "port_of_country";
     private static final String PORT_OF_DESTINATION = "port_of_destination";
+    private static final String INCOTERM = "incoterm";
+    private static final String DESTIANTION_DELIVERY_ADDRESS = "destination_delivery_address";
+    private static final String FREIGHT_FORWARDING_SHIPMENT = "shipment_type";
+    private static final String FREIGHT_FORWARDING_MEASURMETN = "measurment";
+    private static final String FREIGHT_FORWARDING_GROSS_WEIGHT = "gross_weight";
+    private static final String FREIGHT_FORWARDING_PACK_TYPE = "type_of_pack";
+    private static final String FREIGHT_FORWARDING_NO_OF_PACK = "no_of_pack";
+    private static final String FREIGHT_FORWARDING_COMMODITY = "commodity";
 
 
     // TABLE_CFS_ADDRESS Table - column names
@@ -229,7 +239,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     DIMEN_HEIGHT +" INTEGER," +
                     DIMEN_WIDTH +" INTEGER," +
                     AVAIL_OPTION +" TINYINT(4)," +
-                    LRCOPY +" VARCHAR(200)," +
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -239,6 +248,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     CUSTOM_CLEARANCE_SERVER_ID +" INTEGER," +
                     BOOKING_ID +" VARCHAR(50)," +
+                    CUSTOM_CLEARANCE_TYPE + " VARCHAR(10),"+
+                    CUSTOM_CLEARANCE_COMMODITY + " INTEGER,"+
+                    CUSTOM_CLEARANCE_GROSS_WEIGHT + " REAL,"+
+                    HARMONIZED_SYSTEM_CODE + " INTEGER,"+
                     SHIPMENT_TYPE +" INTEGER," +
                     STUFFING_TYPE + "  VARCHAR(50),"+
                     STUFFING_ADDRESS + "  VARCHAR(50),"+
@@ -246,15 +259,24 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+
     // Freight forwarding Table Create Statement
     private static final String CREATE_TABLE_FREIGHT_FORWARDING =
             "CREATE TABLE IF NOT EXISTS "+ TABLE_FREIGHT_FORWARDING+
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     FREIGHT_FORWARDING_SERVER_ID +" INTEGER," +
                     BOOKING_ID +" VARCHAR(50)," +
-                    SHIPMENT_TYPE +" INTEGER," +
                     PORT_OF_LOADING + " VARCHAR(100),"+
+                    PORT_OF_COUNTRY + " VARCHAR(100),"+
                     PORT_OF_DESTINATION + " VARCHAR(100),"+
+                    INCOTERM + " VARCHAR(50),"+
+                    DESTIANTION_DELIVERY_ADDRESS + " VARCHAR(100),"+
+                    FREIGHT_FORWARDING_SHIPMENT +" INTEGER," +
+                    FREIGHT_FORWARDING_MEASURMETN + " VARCHAR(10),"+
+                    FREIGHT_FORWARDING_GROSS_WEIGHT + " REAL,"+
+                    FREIGHT_FORWARDING_PACK_TYPE +" INTEGER," +
+                    FREIGHT_FORWARDING_NO_OF_PACK +" INTEGER," +
+                    FREIGHT_FORWARDING_COMMODITY +" INTEGER," +
                     AVAIL_OPTION +" TINYINT(4)," +
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
@@ -528,29 +550,29 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public String getCommodityDataByServerID(int serverId) {
+    public int getCommodityServerID(String name) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
         SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
 
-        String selectQuery = "SELECT "+ COMMODITY_NAME +" FROM " + TABLE_COMMODITY + " WHERE "
-                + KEY_STATUS + " = 1 AND "+ COMMODITY_SERVER_ID+" = "+ serverId +"; ";
+        String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ COMMODITY_NAME+" = '"+ name +"'; ";
 
         System.out.println("getCommodityDataByServerID: "+selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
-        String name = null;
+        int serverId = 0;
         if(res.moveToFirst()) {
             do{
-                name = res.getString(res.getColumnIndex(COMMODITY_NAME));
+                serverId = res.getInt(res.getColumnIndex(COMMODITY_SERVER_ID));
             }while (res.moveToNext());
         }
 
         // closing database
         sqLiteDatabase.closeDatabase();
 
-        return name;
+        return serverId;
     }
 
     // ------------------------ "CustomClearanceLocation" table methods ----------------//
@@ -901,22 +923,22 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public String getPackagingTypeDataByServerId(int packTypeServerId) {
+    public int getPackagingTypeServerId(String strPackName) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
         SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
 
-        String selectQuery = "SELECT "+ PACKAGE_TYPE_NAME +" FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
-                + KEY_STATUS + " = 1 AND "+ PACKAGE_TYPE_SERVER_ID+" = "+ packTypeServerId +"; ";
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+PACKAGE_TYPE_NAME+" = '"+ strPackName +"'; ";
 
         System.out.println("getPackagingTypeDataByServerId: "+selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
-        String name = null;
+        int name = 0;
         if(res.moveToFirst()) {
             do{
-                name = res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME));
+                name = res.getInt(res.getColumnIndex(PACKAGE_TYPE_SERVER_ID));
             }while (res.moveToNext());
         }
 
@@ -1092,7 +1114,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
         contentValues.put(DIMEN_HEIGHT, transportationModel.getDimenHeight());
         contentValues.put(DIMEN_WIDTH, transportationModel.getDimenWidth());
         contentValues.put(AVAIL_OPTION, transportationModel.getAvailOption());
-        contentValues.put(LRCOPY, transportationModel.getLrCopy());
         contentValues.put(KEY_STATUS, transportationModel.getStatus());
         contentValues.put(KEY_CREATED_AT, transportationModel.getCreatedAt());
 
@@ -1122,6 +1143,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CUSTOM_CLEARANCE_SERVER_ID, customClearanceModel.getServerId());
         contentValues.put(BOOKING_ID, customClearanceModel.getBookingId());
+        contentValues.put(CUSTOM_CLEARANCE_TYPE, customClearanceModel.getCCType());
+        contentValues.put(CUSTOM_CLEARANCE_COMMODITY, customClearanceModel.getCommodityServerId());
+        contentValues.put(CUSTOM_CLEARANCE_GROSS_WEIGHT, customClearanceModel.getGrossWeight());
+        contentValues.put(HARMONIZED_SYSTEM_CODE, customClearanceModel.getHSCode());
         contentValues.put(SHIPMENT_TYPE, customClearanceModel.getiShipmentType());
         contentValues.put(STUFFING_TYPE, customClearanceModel.getStuffingType());
         contentValues.put(STUFFING_ADDRESS, customClearanceModel.getStuffingAddress());
@@ -1146,43 +1171,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     }
 
-    /**
-     * avail option is selected by user
-     * get pick up address when user select transportation avail option
-     * and user already selected Custom clearance FCL shipment type and Factory stuffing
-     *
-     * @param bookingId
-     * @return
-     */
-    public String getPickUpAddress(Context context, String bookingId) {
-        String address = null;
-
-        DatabaseClass sqliteDb = openDatabase();
-        SQLiteDatabase db = sqliteDb.getReadableDatabase();
-
-        String selectQuery = "SELECT " +STUFFING_ADDRESS+  " FROM " + TABLE_CUSTOM_CLEARANCE + " WHERE "
-                + KEY_STATUS + " = 1 AND "
-                + BOOKING_ID +" = '"+bookingId+" AND "
-                + SHIPMENT_TYPE +" = 1 AND "
-                + STUFFING_TYPE +" = "+context.getResources().getString(R.string.strFactoryStuff)
-                + "';";
-
-        Log.d("getTransportService: ", selectQuery);
-
-        Cursor res =  db.rawQuery(selectQuery, null);
-
-        if(res.moveToFirst()) {
-            do{
-                address = res.getString(res.getColumnIndex(STUFFING_ADDRESS));
-
-            }while (res.moveToNext());
-        }
-
-        sqliteDb.closeDatabase();
-
-        return address;
-    }
-
     // ------------------------ "FreightForwarding" table methods ----------------//
     public int insertFreightForwarding(FreightForwardingModel freightForwardingModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -1192,9 +1180,17 @@ public class DatabaseClass extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FREIGHT_FORWARDING_SERVER_ID, freightForwardingModel.getServerId());
         contentValues.put(BOOKING_ID, freightForwardingModel.getBookingId());
-        contentValues.put(SHIPMENT_TYPE, freightForwardingModel.getShipmentType());
         contentValues.put(PORT_OF_LOADING, freightForwardingModel.getPortOfLoading());
+        contentValues.put(PORT_OF_COUNTRY, freightForwardingModel.getPortOfCountry());
         contentValues.put(PORT_OF_DESTINATION, freightForwardingModel.getPortOfDestination());
+        contentValues.put(INCOTERM, freightForwardingModel.getStrIncoterm());
+        contentValues.put(DESTIANTION_DELIVERY_ADDRESS, freightForwardingModel.getStrDestinatioDeliveryAdr());
+        contentValues.put(FREIGHT_FORWARDING_SHIPMENT, freightForwardingModel.getShipmentType());
+        contentValues.put(FREIGHT_FORWARDING_MEASURMETN, freightForwardingModel.getMeasurement());
+        contentValues.put(FREIGHT_FORWARDING_GROSS_WEIGHT, freightForwardingModel.getGrossWeight());
+        contentValues.put(FREIGHT_FORWARDING_PACK_TYPE, freightForwardingModel.getPackType());
+        contentValues.put(FREIGHT_FORWARDING_NO_OF_PACK, freightForwardingModel.getNoOfPack());
+        contentValues.put(FREIGHT_FORWARDING_COMMODITY, freightForwardingModel.getCommodityServerId());
         contentValues.put(AVAIL_OPTION, freightForwardingModel.getAvailOption());
         contentValues.put(KEY_STATUS, freightForwardingModel.getStatus());
         contentValues.put(KEY_CREATED_AT, freightForwardingModel.getCreatedAt());

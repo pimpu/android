@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.adapter.CustomSpinnerAdapter;
+import com.alchemistdigital.buxa.asynctask.InsertFreightForwardingAsyncTask;
 import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
@@ -38,6 +39,7 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class FreightForwardingActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -111,8 +113,18 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             if (newMessage.equals("finishingActivity")) {
                 finish();
             }
-            else if(newMessage.equals("gotoNextActivity_FF")) {
-//                intentActions(intent);
+            else if(newMessage.equals("gotoQuotationActivityFromFF")) {
+                Intent intentActivity = new Intent(FreightForwardingActivity.this, QuotationActivity.class);
+
+                intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
+                intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
+                intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
+                intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
+                intentActivity.putExtra("freightForwardingModel", intent.getExtras().getParcelable("FFData"));
+                intentActivity.putExtra("customClearanceData", customClearanceModel);
+                intentActivity.putExtra("transportData", transportDataModel);
+                startActivity(intentActivity);
+
             }
 
             // Releasing wake lock
@@ -121,18 +133,17 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     };
 
     private void intentActions(FreightForwardingModel freightForwardingModel) {
-        Intent intentActivity = new Intent(this, QuotationActivity.class);
 
-//        FreightForwardingModel freightForwardingModel = intent.getExtras().getParcelable("FFData");
-
-        intentActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
-        intentActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
-        intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
-        intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
-        intentActivity.putExtra("freightForwardingModel", freightForwardingModel);
-        intentActivity.putExtra("customClearanceData", customClearanceModel);
-        intentActivity.putExtra("transportData", transportDataModel);
-        startActivity(intentActivity);
+        // Check if Internet present
+        if (!isConnectingToInternet(FreightForwardingActivity.this)) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
+            // stop executing code by return
+            return;
+        } else {
+            InsertFreightForwardingAsyncTask.postFreightForwardingData(
+                    FreightForwardingActivity.this,
+                    freightForwardingModel);
+        }
 
     }
 
@@ -208,9 +219,9 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
 
+        GetSharedPreference getSharedPreference = new GetSharedPreference(this);
+        loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
         if(bookId == null){
-            GetSharedPreference getSharedPreference = new GetSharedPreference(this);
-            loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
             txtBookId.setText( getResources().getString(R.string.codeString, DateHelper.getBookId(),loginId));
         }
         else {
@@ -387,14 +398,16 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
     public void storeFreightForwardingEnquiry(View view) {
         FreightForwardingModel freightForwardingModel = null;
+        String strCommodity = txtComodity.getText().toString();
+        String strTypeOfPack = txtTypeOfPackaging.getText().toString();
 
 //        Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
         Boolean boolDDAdr = isEmptyString(txtDestinationDeliveryAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
-        Boolean boolTypeOfPack = isEmptyString(txtTypeOfPackaging.getText().toString());
+        Boolean boolTypeOfPack = isEmptyString(strTypeOfPack) && (dbClass.getPackagingTypeServerId(strTypeOfPack) > 0);
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
-        Boolean boolCommodity = isEmptyString(txtComodity.getText().toString());
+        Boolean boolCommodity = isEmptyString(strCommodity) && (dbClass.getCommodityServerID(strCommodity) > 0);
 
         if (boolDDAdr) {
             inputLayout_destinationDeliveryAdr.setErrorEnabled(false);
@@ -429,7 +442,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_packType.setErrorEnabled(false);
         } else {
             inputLayout_packType.setErrorEnabled(true);
-            inputLayout_packType.setError("Package type field is empty.");
+            inputLayout_packType.setError("Package type field is empty or not in dropdown menu.");
         }
 
         if (boolNoOfPack) {
@@ -443,7 +456,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_commodity.setErrorEnabled(false);
         } else {
             inputLayout_commodity.setErrorEnabled(true);
-            inputLayout_commodity.setError("Commodity field is empty.");
+            inputLayout_commodity.setError("Commodity field is empty or not in dropdown menu.");
         }
 
         int iAvail = 0;
@@ -515,25 +528,14 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                     strShipmentType,
                     measurment,
                     Float.parseFloat(txtGrossWt.getText().toString()),
-                    txtTypeOfPackaging.getText().toString(),
+                    strTypeOfPack,
                     Integer.parseInt(txt_noOfPack.getText().toString()),
-                    txtComodity.getText().toString(),
+                    strCommodity,
                     iAvail,
                     1,
                     ""+DateHelper.convertToMillis(),
                     loginId
             );
-
-            /*// Check if Internet present
-            if (!isConnectingToInternet(FreightForwardingActivity.this)) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
-                // stop executing code by return
-                return;
-            } else {
-                InsertFreightForwardingAsyncTask.postFreightForwardingData(
-                        FreightForwardingActivity.this,
-                        freightForwardingModel);
-            }*/
 
             intentActions(freightForwardingModel);
         }

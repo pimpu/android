@@ -25,8 +25,11 @@ import cz.msebera.android.httpclient.Header;
 public class InsertCustomClearanceAsyncTask {
     private static ProgressDialog prgDialog;
     private static GetSharedPreference getSharedPreference;
+    private static DatabaseClass dbHelper ;
 
     public static void postCustomClearanceData(Context context, CustomClearanceModel customClearanceModel) {
+
+        dbHelper = new DatabaseClass(context);
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
@@ -37,11 +40,15 @@ public class InsertCustomClearanceAsyncTask {
 
         getSharedPreference = new GetSharedPreference(context);
 
-        RequestParams params;
-        params = new RequestParams();
+        int shipmentTypeServerId = dbHelper.getShipmentTypeServerId(customClearanceModel.getStrShipmentType());
+        customClearanceModel.setiShipmentType(shipmentTypeServerId);
 
+        int commodityServerID = dbHelper.getCommodityServerID(customClearanceModel.getStrCommodity());
+        customClearanceModel.setCommodityServerId(commodityServerID);
         System.out.println(customClearanceModel.toString());
 
+        RequestParams params;
+        params = new RequestParams();
         params.put("customClearancedata", customClearanceModel.toString());
 
         invokeWS(context, params, customClearanceModel);
@@ -62,33 +69,24 @@ public class InsertCustomClearanceAsyncTask {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
                 try{
+                    System.out.println(json);
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
 
                     if (error) {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
-                        DatabaseClass dbHelper = new DatabaseClass(context);
 
-                        CustomClearanceModel dbInsertCCData = new CustomClearanceModel(
-                                json.getInt("id"),
-                                customClearanceModel.getBookingId(),
-                                customClearanceModel.getiShipmentType(),
-                                customClearanceModel.getStuffingType(),
-                                customClearanceModel.getStuffingAddress(),
-                                customClearanceModel.getAvailOption(),
-                                customClearanceModel.getStatus(),
-                                customClearanceModel.getCreatedAt()
-                        );
-
-                        int i = dbHelper.insertCustomClearance(dbInsertCCData);
+                        customClearanceModel.setServerId(json.getInt("id"));
+                        int i = dbHelper.insertCustomClearance(customClearanceModel);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoNextActivity_CC");
+                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromCC");
                             intent.putExtra("CCData",customClearanceModel);
                             context.sendBroadcast(intent);
                         }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

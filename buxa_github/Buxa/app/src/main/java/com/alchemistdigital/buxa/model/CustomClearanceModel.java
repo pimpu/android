@@ -27,25 +27,6 @@ public class CustomClearanceModel implements Parcelable {
     public CustomClearanceModel() {
     }
 
-    public CustomClearanceModel(
-            int serverId,
-            String bookingId,
-            int iShipmentType,
-            String stuffingType,
-            String stuffingAddress,
-            int availOption,
-            int status,
-            String createdAt) {
-        this.serverId = serverId;
-        this.bookingId = bookingId;
-        this.iShipmentType = iShipmentType;
-        this.stuffingType = stuffingType;
-        this.stuffingAddress = stuffingAddress;
-        this.availOption = availOption;
-        this.status = status;
-        this.createdAt = createdAt;
-    }
-
     // this constructure is used for passing of object between activity
     public CustomClearanceModel(
             String bookingId,
@@ -78,14 +59,17 @@ public class CustomClearanceModel implements Parcelable {
     public String toString() {
         return "{" +
                 "\"bookingId\":\""+bookingId + '\"' +
+                ",\"CCType\":\""+CCType + '\"' +
+                ",\"commodityServerId\":\""+commodityServerId + '\"' +
+                ",\"grossWeight\":\""+grossWeight + '\"' +
+                ",\"HSCode\":\""+HSCode + '\"' +
+                ",\"iShipmentType\":\""+iShipmentType + '\"' +
                 ",\"stuffingType\":\""+stuffingType + '\"' +
                 ",\"stuffingAddress\":\""+stuffingAddress + '\"' +
                 ",\"availOption\":\""+availOption + '\"' +
                 ",\"status\":\""+status + '\"' +
                 ",\"createdAt\":\""+createdAt + '\"' +
-                ",\"strShipmentType\":\""+strShipmentType + '\"' +
                 ",\"userId\":\"" + userId + '\"' +
-                ",\"iShipmentType\":\""+iShipmentType + '\"' +
                 '}';
     }
 
