@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.freightForwardingModel;
+
 /**
  * Created by user on 9/22/2016.
  */
@@ -45,12 +47,12 @@ public class InsertCustomClearanceAsyncTask {
 
         int commodityServerID = dbHelper.getCommodityServerID(customClearanceModel.getStrCommodity());
         customClearanceModel.setCommodityServerId(commodityServerID);
-        System.out.println(customClearanceModel.toString());
 
         RequestParams params;
         params = new RequestParams();
         params.put("customClearancedata", customClearanceModel.toString());
 
+        System.out.println("Custom clearance json: "+customClearanceModel.toString());
         invokeWS(context, params, customClearanceModel);
 
     }
@@ -68,6 +70,7 @@ public class InsertCustomClearanceAsyncTask {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
+
                 try{
                     System.out.println(json);
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
@@ -79,12 +82,26 @@ public class InsertCustomClearanceAsyncTask {
 
                         customClearanceModel.setServerId(json.getInt("id"));
                         int i = dbHelper.insertCustomClearance(customClearanceModel);
+                        System.out.println("CC id: "+i);
 
                         if(i != 0) {
-                            Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromCC");
-                            intent.putExtra("CCData",customClearanceModel);
-                            context.sendBroadcast(intent);
+
+                            if( context.getClass().getSimpleName().equals("FreightForwardingActivity") ) {
+                                System.out.println("After CC data save, From FF activity: next inserting FF");
+
+                                InsertFreightForwardingAsyncTask.postFreightForwardingData(
+                                        context,
+                                        freightForwardingModel);
+                            }
+                            else {
+
+                                System.out.println("After Trans data save, goto quotation activity");
+
+                                Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
+                                intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromCC");
+                                intent.putExtra("CCData",customClearanceModel);
+                                context.sendBroadcast(intent);
+                            }
                         }
 
                     }

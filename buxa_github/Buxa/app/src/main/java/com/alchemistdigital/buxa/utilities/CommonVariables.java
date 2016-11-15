@@ -20,7 +20,7 @@ public class CommonVariables {
     public static final String SENDER_ID = "931228915270";
 
 
-    static String SERVER_URL = "http://13815afa.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://ee126c6a.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";

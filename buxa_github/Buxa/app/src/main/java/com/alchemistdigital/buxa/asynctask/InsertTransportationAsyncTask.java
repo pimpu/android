@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.activities.QuotationActivity;
 import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
@@ -19,6 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+
+import static com.alchemistdigital.buxa.activities.CustomClearanceActivity.customClearanceModel;
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.customClearanceModel_ff;
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.freightForwardingModel;
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.isCCService;
 
 /**
  * Created by user on 9/19/2016.
@@ -52,7 +56,7 @@ public class InsertTransportationAsyncTask {
         params = new RequestParams();
         params.put("transportdata", transportationModel.toString());
 
-        System.out.println("After: "+transportationModel.toString());
+        System.out.println("Transport json: "+transportationModel.toString());
         invokeWS(context, params, transportationModel);
 
     }
@@ -70,6 +74,7 @@ public class InsertTransportationAsyncTask {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
+
                 try{
                     System.out.println(json);
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
@@ -81,11 +86,41 @@ public class InsertTransportationAsyncTask {
                         transportationModel.setServerId(json.getInt("id"));
                         int i = dbHelper.insertTransportation(transportationModel);
 
+                        System.out.println("trans id: "+i);
+
                         if(i != 0) {
-                            Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromTrans");
-                            intent.putExtra("transportData",transportationModel);
-                            context.sendBroadcast(intent);
+                            System.out.println("======= "+context.getClass().getSimpleName());
+                            if( context.getClass().getSimpleName().equals("CustomClearanceActivity") ) {
+                                System.out.println("After Trans data save, From CC activity: next inserting CC");
+
+                                InsertCustomClearanceAsyncTask.postCustomClearanceData(
+                                        context,
+                                        customClearanceModel);
+                            }
+                            else if( context.getClass().getSimpleName().equals("FreightForwardingActivity") ) {
+                                if(isCCService) {
+                                    System.out.println("After Trans data save, From FF activity: next inserting CC");
+                                    InsertCustomClearanceAsyncTask.postCustomClearanceData(
+                                            context,
+                                            customClearanceModel_ff);
+                                }
+                                else {
+                                    System.out.println("After Trans data save, From FF activity: next inserting FF");
+                                    InsertFreightForwardingAsyncTask.postFreightForwardingData(
+                                            context,
+                                            freightForwardingModel);
+                                }
+                            }
+                            else {
+
+                                System.out.println("After Trans data save, goto quotation activity");
+
+                                Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
+                                intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromTrans");
+                                intent.putExtra("transportData",transportationModel);
+                                context.sendBroadcast(intent);
+                            }
+
                         }
                     }
                 } catch (JSONException e) {

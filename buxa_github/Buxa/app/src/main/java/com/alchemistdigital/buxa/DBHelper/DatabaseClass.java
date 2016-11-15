@@ -94,10 +94,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String TOS_name = "tos_name";
 
     // TABLE_SHIPMENT_CONFORMATION Table - column names
-    private static final String SHIPMENT_CONFORMATION_SERVER_ID = "shipment_conformation_serverId";
     private static final String SHIPMENT_CONFORMATION_BOOKING_ID = "booking_id";
+    private static final String SHIPMENT_CONFORMATION_ENQUIRT_STATUS = "enquiry_status";
     private static final String RATES = "rates";
-    private static final String SERVICE_ID = "service_id";
+    private static final String SHIPMENT_CONFORMATION_IS_TRANS_SERVICE = "is_trans";
+    private static final String SHIPMENT_CONFORMATION_IS_CC_SERVICE = "is_customclr";
+    private static final String SHIPMENT_CONFORMATION_IS_FF_SERVICE = "is_freightfrd";
 
     // TABLE_TRANSPORTATION Table - column names
     private static final String  TRANSPORTATION_SERVER_ID = "trans_serverId";
@@ -285,11 +287,13 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SHIPMENT_CONFORMATION =
             "CREATE TABLE IF NOT EXISTS "+ TABLE_SHIPMENT_CONFORMATION+
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    SHIPMENT_CONFORMATION_SERVER_ID +" INTEGER," +
                     SHIPMENT_CONFORMATION_BOOKING_ID+" VARCHAR(200)," +
+                    SHIPMENT_CONFORMATION_ENQUIRT_STATUS+" TINYINT(4) DEFAULT 1," +
                     RATES+" INTEGER," +
-                    SERVICE_ID+" INTEGER," +
-                    KEY_STATUS +" TINYINT(4)," +
+                    SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+" TINYINT(4) DEFAULT 0," +
+                    SHIPMENT_CONFORMATION_IS_CC_SERVICE+" TINYINT(4) DEFAULT 0," +
+                    SHIPMENT_CONFORMATION_IS_FF_SERVICE+" TINYINT(4) DEFAULT 0," +
+                    KEY_STATUS +" TINYINT(4) DEFAULT 1," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
     // Transport type Table Create Statements
@@ -1126,6 +1130,33 @@ public class DatabaseClass extends SQLiteOpenHelper {
             int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_TRANSPORTATION, whereClause, whereArgs);
             if( numRows <= 0 ) {
                 id = (int) db.insert(TABLE_TRANSPORTATION, null, contentValues);
+
+                int checkEntry = (int) DatabaseUtils.queryNumEntries(db, TABLE_SHIPMENT_CONFORMATION, SHIPMENT_CONFORMATION_BOOKING_ID+"=?", new String[]{ String.valueOf( transportationModel.getBookingId() )} );
+
+                if(checkEntry <= 0) {
+
+                    String createshipmentConform = "INSERT INTO "+TABLE_SHIPMENT_CONFORMATION+" ("+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+", "+
+                            RATES+", "+
+                            SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+", "+
+                            KEY_CREATED_AT+
+                            ") VALUES ( '"+
+                            transportationModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+
+                    System.out.println("createshipmentConform(Trans): "+createshipmentConform);
+
+                    db.execSQL(createshipmentConform);
+                }
+                else {
+                    String updateshipmentConform = "UPDATE "+TABLE_SHIPMENT_CONFORMATION+" SET "+
+                            SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+" = 1 WHERE "+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+" = '"+transportationModel.getBookingId()+"';";
+
+                    System.out.println("createshipmentConform(Trans): "+updateshipmentConform);
+
+                    db.execSQL(updateshipmentConform);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1163,6 +1194,33 @@ public class DatabaseClass extends SQLiteOpenHelper {
             int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CUSTOM_CLEARANCE, whereClause, whereArgs);
             if( numRows <= 0 ) {
                 id = (int) db.insert(TABLE_CUSTOM_CLEARANCE, null, contentValues);
+
+                int checkEntry = (int) DatabaseUtils.queryNumEntries(db, TABLE_SHIPMENT_CONFORMATION, SHIPMENT_CONFORMATION_BOOKING_ID+"=?", new String[]{ String.valueOf( customClearanceModel.getBookingId() )} );
+
+                if(checkEntry <= 0) {
+
+                    String createshipmentConform = "INSERT INTO "+TABLE_SHIPMENT_CONFORMATION+" ("+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+", "+
+                            RATES+", "+
+                            SHIPMENT_CONFORMATION_IS_CC_SERVICE+", "+
+                            KEY_CREATED_AT+
+                            ") VALUES ( '"+
+                            customClearanceModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+
+                    System.out.println("createshipmentConform(CC): "+createshipmentConform);
+
+                    db.execSQL(createshipmentConform);
+                }
+                else {
+                    String updateshipmentConform = "UPDATE "+TABLE_SHIPMENT_CONFORMATION+" SET "+
+                            SHIPMENT_CONFORMATION_IS_CC_SERVICE+" = 1 WHERE "+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+" = '"+customClearanceModel.getBookingId()+"';";
+
+                    System.out.println("createshipmentConform(CC): "+updateshipmentConform);
+
+                    db.execSQL(updateshipmentConform);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1204,6 +1262,33 @@ public class DatabaseClass extends SQLiteOpenHelper {
             int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_FREIGHT_FORWARDING, whereClause, whereArgs);
             if( numRows <= 0 ) {
                 id = (int) db.insert(TABLE_FREIGHT_FORWARDING, null, contentValues);
+
+                int checkEntry = (int) DatabaseUtils.queryNumEntries(db, TABLE_SHIPMENT_CONFORMATION, SHIPMENT_CONFORMATION_BOOKING_ID+"=?", new String[]{ String.valueOf( freightForwardingModel.getBookingId() )} );
+
+                if(checkEntry <= 0) {
+
+                    String createshipmentConform = "INSERT INTO "+TABLE_SHIPMENT_CONFORMATION+" ("+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+", "+
+                            RATES+", "+
+                            SHIPMENT_CONFORMATION_IS_FF_SERVICE+", "+
+                            KEY_CREATED_AT+
+                            ") VALUES ( '"+
+                            freightForwardingModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+
+                    System.out.println("createshipmentConform(CC): "+createshipmentConform);
+
+                    db.execSQL(createshipmentConform);
+                }
+                else {
+                    String updateshipmentConform = "UPDATE "+TABLE_SHIPMENT_CONFORMATION+" SET "+
+                            SHIPMENT_CONFORMATION_IS_FF_SERVICE+" = 1 WHERE "+
+                            SHIPMENT_CONFORMATION_BOOKING_ID+" = '"+freightForwardingModel.getBookingId()+"';";
+
+                    System.out.println("createshipmentConform(CC): "+updateshipmentConform);
+
+                    db.execSQL(updateshipmentConform);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

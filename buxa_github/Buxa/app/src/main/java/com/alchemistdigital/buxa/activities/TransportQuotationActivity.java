@@ -679,6 +679,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
             intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
             intentActivity.putExtra("transportData",transportationModel);
+            intentActivity.putExtra("customClearanceData",customClearanceModel);
 
             startActivity(intentActivity);
         }

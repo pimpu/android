@@ -52,7 +52,7 @@ public class InsertFreightForwardingAsyncTask {
         params = new RequestParams();
         params.put("freightForwardingdata", freightForwardingModel.toString());
 
-        System.out.println("After: "+freightForwardingModel.toString());
+        System.out.println("freight forward json: "+freightForwardingModel.toString());
         invokeWS(context, params, freightForwardingModel);
     }
 
@@ -81,6 +81,7 @@ public class InsertFreightForwardingAsyncTask {
 
                         freightForwardingModel.setServerId(json.getInt("id"));
                         int i = dbHelper.insertFreightForwarding(freightForwardingModel);
+                        System.out.println("FF id: "+i);
 
                         if(i != 0) {
                             Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);

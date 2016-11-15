@@ -21,6 +21,8 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.isCCService;
+
 public class QuotationActivity extends AppCompatActivity {
     TextView tvCompanyName, tvQuotationDate, tvBookingNo;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
@@ -253,12 +255,27 @@ public class QuotationActivity extends AppCompatActivity {
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
+                            // below keyword is define static
+                            // user select CC and FF service and save, program flow is ok
+                            // but after that user select transport and FF service, error come
+                            // because isCCService is remains true value which are set in previous enquiry.
+                            // so it become false here
+                            isCCService = false;
+
                             finish();
                         }
                     })
                     .show();
         }
         else {
+            // below keyword is define static
+            // user select CC and FF service and save, program flow is ok
+            // but after that user select transport and FF service, error come
+            // because isCCService is remains true value which are set in previous enquiry.
+            // so it become false here
+            isCCService = false;
+
             super.onBackPressed();
         }
     }

@@ -22,7 +22,9 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.adapter.CustomSpinnerAdapter;
+import com.alchemistdigital.buxa.asynctask.InsertCustomClearanceAsyncTask;
 import com.alchemistdigital.buxa.asynctask.InsertFreightForwardingAsyncTask;
+import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
@@ -57,11 +59,14 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
     private int loginId;
     private TransportationModel transportDataModel;
-    private CustomClearanceModel customClearanceModel;
+    public static CustomClearanceModel customClearanceModel_ff;
     private ArrayAdapter<CFSAddressModel> cfs_adapter;
     private Spinner spinnerIncoterm, spinnerPOC, spinnerPOD, spinnerPOL;
     private Boolean boolIsDDAVisible=false;
     private CustomSpinnerAdapter adapterPortOfCountry, adapterPortOfDestination, adapterIncoterm, adapterPOL;
+
+    public static Boolean isCCService = false;
+    public static FreightForwardingModel freightForwardingModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,15 +85,15 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         bookId = getIntent().getExtras().getString("bookId");
 
         transportDataModel = getIntent().getExtras().getParcelable("transportData");
-        customClearanceModel = getIntent().getExtras().getParcelable("customClearanceData");
+        customClearanceModel_ff = getIntent().getExtras().getParcelable("customClearanceData");
 
         if ( transportDataModel  != null ) {
             strShipmentType = transportDataModel.getStrShipmentType();
             bookId = transportDataModel.getBookingId();
         }
-        else if( customClearanceModel != null) {
-            strShipmentType = customClearanceModel.getStrShipmentType();
-            bookId = customClearanceModel.getBookingId();
+        else if( customClearanceModel_ff != null) {
+            strShipmentType = customClearanceModel_ff.getStrShipmentType();
+            bookId = customClearanceModel_ff.getBookingId();
         }
 
         dbClass = new DatabaseClass(this);
@@ -121,7 +126,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                 intentActivity.putStringArrayListExtra("availedServicesId", availedServicesId);
                 intentActivity.putStringArrayListExtra("availedServicesName", availedServicesName);
                 intentActivity.putExtra("freightForwardingModel", intent.getExtras().getParcelable("FFData"));
-                intentActivity.putExtra("customClearanceData", customClearanceModel);
+                intentActivity.putExtra("customClearanceData", customClearanceModel_ff);
                 intentActivity.putExtra("transportData", transportDataModel);
                 startActivity(intentActivity);
 
@@ -131,21 +136,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             WakeLocker.release();
         }
     };
-
-    private void intentActions(FreightForwardingModel freightForwardingModel) {
-
-        // Check if Internet present
-        if (!isConnectingToInternet(FreightForwardingActivity.this)) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
-            // stop executing code by return
-            return;
-        } else {
-            InsertFreightForwardingAsyncTask.postFreightForwardingData(
-                    FreightForwardingActivity.this,
-                    freightForwardingModel);
-        }
-
-    }
 
     private void init() {
         layoutCommomTransFeild = (LinearLayout) findViewById(R.id.id_commomTransportLayout);
@@ -307,14 +297,14 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         });
 
         if(arrayServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
-            System.out.println(customClearanceModel.getStrCommodity());
-            txtComodity.setText(customClearanceModel.getStrCommodity());
+            System.out.println(customClearanceModel_ff.getStrCommodity());
+            txtComodity.setText(customClearanceModel_ff.getStrCommodity());
             txtComodity.setClickable(false);
             txtComodity.setCursorVisible(false);
             txtComodity.setFocusable(false);
             txtComodity.setFocusableInTouchMode(false);
 
-            txtGrossWt.setText(""+customClearanceModel.getGrossWeight());
+            txtGrossWt.setText(""+customClearanceModel_ff.getGrossWeight());
             txtGrossWt.setClickable(false);
             txtGrossWt.setCursorVisible(false);
             txtGrossWt.setFocusable(false);
@@ -397,7 +387,6 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     }
 
     public void storeFreightForwardingEnquiry(View view) {
-        FreightForwardingModel freightForwardingModel = null;
         String strCommodity = txtComodity.getText().toString();
         String strTypeOfPack = txtTypeOfPackaging.getText().toString();
 
@@ -496,7 +485,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                     loginId
             );
 
-            intentActions(freightForwardingModel);
+            intentActions();
         }
         else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity ) {
 
@@ -537,8 +526,55 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                     loginId
             );
 
-            intentActions(freightForwardingModel);
+            intentActions();
         }
+    }
+
+    private void intentActions() {
+        Boolean isTransService = false;
+
+        if( availedServicesName != null ) {
+            if(availedServicesName.contains(enumServices.TRANSPORTATION.toString())) {
+                isTransService=true;
+            }
+
+            if(availedServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
+                isCCService = true;
+            }
+        }
+        else {
+            if(arrayServicesName.contains(enumServices.TRANSPORTATION.toString())) {
+                isTransService=true;
+            }
+
+            if(arrayServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
+                isCCService = true;
+            }
+        }
+
+        // Check if Internet present
+        if (!isConnectingToInternet(FreightForwardingActivity.this)) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
+            // stop executing code by return
+            return;
+        } else {
+            if(isTransService) {
+                InsertTransportationAsyncTask.postTransportationData(
+                        FreightForwardingActivity.this,
+                        transportDataModel);
+            }
+            else if(isCCService) {
+                InsertCustomClearanceAsyncTask.postCustomClearanceData(
+                        FreightForwardingActivity.this,
+                        customClearanceModel_ff);
+            }
+            else {
+                InsertFreightForwardingAsyncTask.postFreightForwardingData(
+                        FreightForwardingActivity.this,
+                        freightForwardingModel);
+            }
+        }
+
     }
 
     @Override

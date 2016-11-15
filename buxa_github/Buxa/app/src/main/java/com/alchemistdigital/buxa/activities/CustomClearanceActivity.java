@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.asynctask.InsertCustomClearanceAsyncTask;
+import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
@@ -54,6 +55,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     float fGrossWt;
     LinearLayout layout_cc_fcl_adddress;
     private ArrayAdapter<CommodityModel> commodity_adapter;
+    public static CustomClearanceModel customClearanceModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,7 +361,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             System.out.println("Type of stuffing: "+strSelectedStuffing);
             System.out.println("Stuffing address: "+txtCCAddress.getText().toString());*/
 
-            CustomClearanceModel customClearanceModel = new CustomClearanceModel(
+            customClearanceModel = new CustomClearanceModel(
                     txtBookId.getText().toString(),
                     strSelectedImpoExpo,
                     strCommodity,
@@ -374,23 +376,30 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                     iLoginId
             );
 
-            intentActions(customClearanceModel);
+            intentActions();
 
         }
 
     }
 
-    private void intentActions(CustomClearanceModel customClearanceModel) {
+    private void intentActions() {
         Intent intentActivity = null;
         Boolean isIntentQuote =false;
+        Boolean isTransService = false;
 
         if( availedServicesName != null ) {
             if(availedServicesName.contains(enumServices.FREIGHT_FORWARDING.toString())) {
                 intentActivity = new Intent(this, FreightForwardingActivity.class);
             }
             else {
-//                intentActivity = new Intent(this, QuotationActivity.class);
                 isIntentQuote = true;
+            }
+
+            // if users come in this activity from transport activity
+            // isTransService = true
+            // Then, beforing saving data of CC activity, Save transport data, then next CC activity.
+            if(availedServicesName.contains(enumServices.TRANSPORTATION.toString())) {
+                isTransService=true;
             }
         }
         else {
@@ -399,23 +408,34 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
             }
             else {
                 isIntentQuote = true;
-//                intentActivity = new Intent(this, QuotationActivity.class);
+            }
+
+            // if users come in this activity from transport activity
+            // isTransService = true
+            // Then, beforing saving data of CC activity, Save transport data, then next CC activity.
+            if(arrayServicesName.contains(enumServices.TRANSPORTATION.toString())) {
+                isTransService=true;
             }
         }
 
-//        CustomClearanceModel customClearanceModel = intent.getExtras().getParcelable("CCData");
         if(isIntentQuote){
             // get quotation of transportation from server
-
             // Check if Internet present
             if (!isConnectingToInternet(CustomClearanceActivity.this)) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoConnection),Toast.LENGTH_LONG).show();
                 // stop executing code by return
                 return;
             } else {
-                InsertCustomClearanceAsyncTask.postCustomClearanceData(
-                        CustomClearanceActivity.this,
-                        customClearanceModel);
+                if(isTransService) {
+                    InsertTransportationAsyncTask.postTransportationData(
+                            CustomClearanceActivity.this,
+                            transportDataModel);
+                }
+                else {
+                    InsertCustomClearanceAsyncTask.postCustomClearanceData(
+                            CustomClearanceActivity.this,
+                            customClearanceModel);
+                }
             }
         }
         else {
