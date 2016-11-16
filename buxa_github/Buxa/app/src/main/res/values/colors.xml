@@ -15,5 +15,10 @@
     <color name="hintGray">#6c6f6f</color>
     <color name="error">#fa2828</color>
     <color name="white_pressed">#f1f1f1</color>
+    <color name="enquiry_date_color">#ff3f51b5</color>
+    <color name="sky_tag">#ff00bcd4</color>
+    <color name="orange_tag">#ffff5722</color>
+    <color name="green_tag">#ff0f9d58</color>
+    <color name="horizontalline">#b9b9b9</color>
 
 </resources>

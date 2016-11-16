@@ -287,7 +287,6 @@ class DbHandler {
                 pack_type,
                 source,
                 destination,
-                lrcopy,
                 avail_option,
                 create_time ) 
                 VALUES( 
@@ -304,13 +303,26 @@ class DbHandler {
                 ".$decodedData["packType"].",
                 '".$decodedData["pickUp"]."',
                 '".$decodedData["drop"]."',
-                '',
                 ".$decodedData["availOption"].",
                 '".$decodedData["createdAt"]."');") or die(mysql_error());
 
 
             // Check for successful insertion
             if ($result) {
+
+                mysql_query("INSERT INTO bx_shipment_confirmation(
+                        bookid,
+                        quotation,
+                        finalrate,
+                        serviceid )
+                        VALUES(
+                        '".$decodedData["bookingId"]."',
+                        '',
+                        '',
+                        '1' )
+                        ON DUPLICATE KEY UPDATE
+                        serviceid = concat(serviceid ,',','1');") or die(mysql_error());
+
                 $response["message"] = USER_CREATED_SUCCESSFULLY;
                 $response["id"] = mysql_insert_id();
 
@@ -348,6 +360,10 @@ class DbHandler {
             $result = mysql_query("INSERT INTO bx_custom_clearance(
                 bookid,
                 customer_code,
+                cc_type,
+                commodity_id,
+                gross_weight,
+                hscode,
                 type_of_shipment,
                 stuffing,
                 address,
@@ -356,6 +372,10 @@ class DbHandler {
                 VALUES( 
                 '".$decodedData["bookingId"]."',
                 ".$decodedData["userId"].",
+                '".$decodedData["CCType"]."',
+                ".$decodedData["commodityServerId"].",
+                ".$decodedData["grossWeight"].",
+                ".$decodedData["HSCode"].",
                 ".$decodedData["iShipmentType"].",
                 '".$decodedData["stuffingType"]."',
                 '".$decodedData["stuffingAddress"]."',
@@ -364,6 +384,20 @@ class DbHandler {
 
             // Check for successful insertion
             if ($result) {
+
+                mysql_query("INSERT INTO bx_shipment_confirmation(
+                        bookid,
+                        quotation,
+                        finalrate,
+                        serviceid )
+                        VALUES(
+                        '".$decodedData["bookingId"]."',
+                        '',
+                        '',
+                        '2' )
+                        ON DUPLICATE KEY UPDATE
+                        serviceid = concat(serviceid,',','2');") or die(mysql_error());
+
                 $response["message"] = USER_CREATED_SUCCESSFULLY;
                 $response["id"] = mysql_insert_id();
 
@@ -404,6 +438,14 @@ class DbHandler {
                 type_of_shipment,
                 pol,
                 pod,
+                poc,
+                incoterm,
+                destideliveryadr,
+                measurement,
+                grossweight,
+                packtype,
+                noofpack,
+                commodity,
                 avail_option,
                 create_time ) 
                 VALUES( 
@@ -412,11 +454,33 @@ class DbHandler {
                 ".$decodedData["shipmentType"].",
                 '".$decodedData["portOfLoading"]."',
                 '".$decodedData["portOfDestination"]."',
+                '".$decodedData["portOfCountry"]."',
+                '".$decodedData["strIncoterm"]."',
+                '".$decodedData["strDestinatioDeliveryAdr"]."',
+                '".$decodedData["measurement"]."',
+                ".$decodedData["grossWeight"].",
+                ".$decodedData["packType"].",
+                ".$decodedData["noOfPack"].",
+                ".$decodedData["commodityServerId"].",
                 ".$decodedData["availOption"].",
                 '".$decodedData["createdAt"]."');") or die(mysql_error());
 
             // Check for successful insertion
             if ($result) {
+
+                mysql_query("INSERT INTO bx_shipment_confirmation(
+                        bookid,
+                        quotation,
+                        finalrate,
+                        serviceid )
+                        VALUES(
+                        '".$decodedData["bookingId"]."',
+                        '',
+                        '',
+                        '3' )
+                        ON DUPLICATE KEY UPDATE
+                        serviceid = concat(serviceid,',','3');") or die(mysql_error());
+
                 $response["message"] = USER_CREATED_SUCCESSFULLY;
                 $response["id"] = mysql_insert_id();
 
@@ -442,7 +506,29 @@ class DbHandler {
         return mysql_num_rows($checkMatchTransportQuery) > 0 ;
     }
 
-    
+    /**
+     * Updating enquiry status
+     * @param String $bookingId Booking id
+     * @param String $status status (accept-4, cancel-5)
+     */
+    public function updateShipmentConformation($bookingId, $status) {
+        $response = array();
+
+        $result = mysql_query("UPDATE bx_shipment_confirmation SET enquiry_status = ".$status." WHERE bookid = '".$bookingId."';");
+
+        // Check for successful insertion
+        if ($result) {
+            $response["message"] = USER_CREATED_SUCCESSFULLY;
+
+        } else {
+            // Failed to create user
+            $response["message"] =  USER_CREATE_FAILED;
+        }
+
+        return $response;
+    }
+
+
     /**
      * Deleting a task
      * @param String $task_id id of the task to delete

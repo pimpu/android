@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CFSAddressModel;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceCategoryModel;
@@ -18,6 +17,7 @@ import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
+import com.alchemistdigital.buxa.model.ShipmentConformationModel;
 import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
@@ -95,7 +95,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     // TABLE_SHIPMENT_CONFORMATION Table - column names
     private static final String SHIPMENT_CONFORMATION_BOOKING_ID = "booking_id";
-    private static final String SHIPMENT_CONFORMATION_ENQUIRT_STATUS = "enquiry_status";
+    private static final String SHIPMENT_CONFORMATION_ENQUIRY_STATUS = "enquiry_status";
+    private static final String SHIPMENT_CONFORMATION_QUOTATION = "enquiry_quotation";
     private static final String RATES = "rates";
     private static final String SHIPMENT_CONFORMATION_IS_TRANS_SERVICE = "is_trans";
     private static final String SHIPMENT_CONFORMATION_IS_CC_SERVICE = "is_customclr";
@@ -288,7 +289,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS "+ TABLE_SHIPMENT_CONFORMATION+
                     "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     SHIPMENT_CONFORMATION_BOOKING_ID+" VARCHAR(200)," +
-                    SHIPMENT_CONFORMATION_ENQUIRT_STATUS+" TINYINT(4) DEFAULT 1," +
+                    SHIPMENT_CONFORMATION_ENQUIRY_STATUS +" TINYINT(4) DEFAULT 1," +
+                    SHIPMENT_CONFORMATION_QUOTATION+" VARCHAR(100)," +
                     RATES+" INTEGER," +
                     SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+" TINYINT(4) DEFAULT 0," +
                     SHIPMENT_CONFORMATION_IS_CC_SERVICE+" TINYINT(4) DEFAULT 0," +
@@ -562,7 +564,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
                 + KEY_STATUS + " = 1 AND "+ COMMODITY_NAME+" = '"+ name +"'; ";
 
-        System.out.println("getCommodityDataByServerID: "+selectQuery);
+        System.out.println("getCommodityServerID: "+selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -577,6 +579,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
         sqLiteDatabase.closeDatabase();
 
         return serverId;
+    }
+
+    public String getCommodityName(int serverId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
+                + KEY_STATUS + " = 1 AND "+ COMMODITY_SERVER_ID+" = '"+ serverId +"'; ";
+
+        System.out.println("getCommodityName: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(COMMODITY_NAME));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
     }
 
     // ------------------------ "CustomClearanceLocation" table methods ----------------//
@@ -711,7 +738,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
-    public int getShipmentTypeServerId(String serviceName) {
+    public int getServerIdByName(String serviceName) {
         String name = null;
         if( serviceName.equals("LCL") ) {
             name = "Less than Container Load";
@@ -740,6 +767,37 @@ public class DatabaseClass extends SQLiteOpenHelper {
         sqLiteDatabase.closeDatabase();
 
         return anInt;
+    }
+
+    public String getShipmentNameByServerId(int serverId) {
+        String name = null;
+
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_SHIPMENT + " WHERE "
+                + KEY_STATUS + " = 1 AND "+TOS_SERVER_ID+" = "+serverId + ";";
+
+//        Log.d("getTransportService: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(TOS_name));
+            }while (res.moveToNext());
+        }
+
+        if( name.equals("Less than Container Load")  ) {
+            name ="LCL";
+        }
+        else {
+            name = "FCL";
+        }
+
+        sqLiteDatabase.closeDatabase();
+
+        return name;
     }
 
     // ------------------------ "TransportType" table methods ----------------//
@@ -927,7 +985,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public int getPackagingTypeServerId(String strPackName) {
+    public int getServerIdByPackagingType(String strPackName) {
         DatabaseClass sqLiteDatabase = openDatabase();
 
         SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
@@ -935,7 +993,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
                 + KEY_STATUS + " = 1 AND "+PACKAGE_TYPE_NAME+" = '"+ strPackName +"'; ";
 
-        System.out.println("getPackagingTypeDataByServerId: "+selectQuery);
+        System.out.println("getServerIdByPackagingType: "+selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -943,6 +1001,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
         if(res.moveToFirst()) {
             do{
                 name = res.getInt(res.getColumnIndex(PACKAGE_TYPE_SERVER_ID));
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return name;
+    }
+
+    public String getPackagingTypeByServerId(int serverId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+PACKAGE_TYPE_SERVER_ID+" = "+ serverId +"; ";
+
+        System.out.println("getPackagingTypeDataByServerId: "+selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        String name = null;
+        if(res.moveToFirst()) {
+            do{
+                name = res.getString(res.getColumnIndex(PACKAGE_TYPE_NAME));
             }while (res.moveToNext());
         }
 
@@ -1141,7 +1224,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            transportationModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+                            transportationModel.getBookingId()+"', 0, 1, '"+transportationModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(Trans): "+createshipmentConform);
 
@@ -1161,7 +1244,48 @@ public class DatabaseClass extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        sqLiteDatabase.closeDatabase();
         return id;
+    }
+
+    public TransportationModel getTransportstionData(String bookingId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        TransportationModel transportationModel = new TransportationModel();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_TRANSPORTATION + " WHERE "
+                + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
+
+        Log.d("getTransportstionData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+                transportationModel.setServerId(res.getInt(res.getColumnIndex(TRANSPORTATION_SERVER_ID)));
+                transportationModel.setBookingId(res.getString(res.getColumnIndex(BOOKING_ID)));
+                transportationModel.setPickUp(res.getString(res.getColumnIndex(PICKUP)));
+                transportationModel.setDrop(res.getString(res.getColumnIndex(DROP)));
+                transportationModel.setShipmentType(res.getInt(res.getColumnIndex(SHIPMENT_TYPE)));
+                transportationModel.setMeasurement(res.getString(res.getColumnIndex(MEASUREMENT)));
+                transportationModel.setGrossWeight(res.getFloat(res.getColumnIndex(GROSS_WEIGHT)));
+                transportationModel.setPackType(res.getInt(res.getColumnIndex(PACK_TYPE)));
+                transportationModel.setNoOfPack(res.getInt(res.getColumnIndex(NO_OF_PACK)));
+                transportationModel.setCommodityServerId(res.getInt(res.getColumnIndex(COMMODITY_SERVERID_IN_TRANSPORT)));
+                transportationModel.setDimenLength(res.getInt(res.getColumnIndex(DIMEN_LENGTH)));
+                transportationModel.setDimenHeight(res.getInt(res.getColumnIndex(DIMEN_HEIGHT)));
+                transportationModel.setDimenWidth(res.getInt(res.getColumnIndex(DIMEN_WIDTH)));
+                transportationModel.setCreatedAt(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return transportationModel;
+
     }
 
     // ------------------------ "CustomClearance" table methods ----------------//
@@ -1205,7 +1329,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_IS_CC_SERVICE+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            customClearanceModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+                            customClearanceModel.getBookingId()+"', 0, 1, '"+customClearanceModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(CC): "+createshipmentConform);
 
@@ -1225,10 +1349,47 @@ public class DatabaseClass extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        sqLiteDatabase.closeDatabase();
         return id;
 
     }
 
+    public CustomClearanceModel getCustomClrData(String bookingId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        CustomClearanceModel customClearanceModel = new CustomClearanceModel();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_CUSTOM_CLEARANCE + " WHERE "
+                + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
+
+        Log.d("getCustomClrData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+
+                customClearanceModel.setServerId(res.getInt(res.getColumnIndex(CUSTOM_CLEARANCE_SERVER_ID)));
+                customClearanceModel.setBookingId(res.getString(res.getColumnIndex(BOOKING_ID)));
+                customClearanceModel.setCCType(res.getString(res.getColumnIndex(CUSTOM_CLEARANCE_TYPE)));
+                customClearanceModel.setCommodityServerId(res.getInt(res.getColumnIndex(CUSTOM_CLEARANCE_COMMODITY)));
+                customClearanceModel.setGrossWeight(res.getFloat(res.getColumnIndex(CUSTOM_CLEARANCE_GROSS_WEIGHT)));
+                customClearanceModel.setHSCode(res.getInt(res.getColumnIndex(HARMONIZED_SYSTEM_CODE)));
+                customClearanceModel.setiShipmentType(res.getInt(res.getColumnIndex(SHIPMENT_TYPE)));
+                customClearanceModel.setStuffingType(res.getString(res.getColumnIndex(STUFFING_TYPE)));
+                customClearanceModel.setStuffingAddress(res.getString(res.getColumnIndex(STUFFING_ADDRESS)));
+                customClearanceModel.setAvailOption(res.getInt(res.getColumnIndex(AVAIL_OPTION)));
+                customClearanceModel.setCreatedAt(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return customClearanceModel;
+    }
     // ------------------------ "FreightForwarding" table methods ----------------//
     public int insertFreightForwarding(FreightForwardingModel freightForwardingModel) {
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -1273,7 +1434,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_IS_FF_SERVICE+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            freightForwardingModel.getBookingId()+"', 0, 1, '"+getDateTime()+"' );";
+                            freightForwardingModel.getBookingId()+"', 0, 1, '"+freightForwardingModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(CC): "+createshipmentConform);
 
@@ -1293,7 +1454,135 @@ public class DatabaseClass extends SQLiteOpenHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        sqLiteDatabase.closeDatabase();
+
         return id;
     }
 
+    public FreightForwardingModel getFreightFwdData(String bookingId) {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        FreightForwardingModel freightForwardingModel = new FreightForwardingModel();
+        SQLiteDatabase db = sqLiteDatabase.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_FREIGHT_FORWARDING + " WHERE "
+                + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
+
+        Log.d("getFreightFwdData: ", selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()) {
+            do{
+
+                freightForwardingModel.setServerId(res.getInt(res.getColumnIndex(FREIGHT_FORWARDING_SERVER_ID)));
+                freightForwardingModel.setBookingId(res.getString(res.getColumnIndex(BOOKING_ID)));
+                freightForwardingModel.setPortOfLoading(res.getString(res.getColumnIndex(PORT_OF_LOADING)));
+                freightForwardingModel.setPortOfCountry(res.getString(res.getColumnIndex(PORT_OF_COUNTRY)));
+                freightForwardingModel.setPortOfDestination(res.getString(res.getColumnIndex(PORT_OF_DESTINATION)));
+                freightForwardingModel.setStrIncoterm(res.getString(res.getColumnIndex(INCOTERM)));
+                freightForwardingModel.setStrDestinatioDeliveryAdr(res.getString(res.getColumnIndex(DESTIANTION_DELIVERY_ADDRESS)));
+                freightForwardingModel.setShipmentType(res.getInt(res.getColumnIndex(FREIGHT_FORWARDING_SHIPMENT)));
+                freightForwardingModel.setMeasurement(res.getString(res.getColumnIndex(FREIGHT_FORWARDING_MEASURMETN)));
+                freightForwardingModel.setGrossWeight(res.getFloat(res.getColumnIndex(FREIGHT_FORWARDING_GROSS_WEIGHT)));
+                freightForwardingModel.setPackType(res.getInt(res.getColumnIndex(FREIGHT_FORWARDING_PACK_TYPE)));
+                freightForwardingModel.setNoOfPack(res.getInt(res.getColumnIndex(FREIGHT_FORWARDING_NO_OF_PACK)));
+                freightForwardingModel.setCommodityServerId(res.getInt(res.getColumnIndex(FREIGHT_FORWARDING_COMMODITY)));
+                freightForwardingModel.setAvailOption(res.getInt(res.getColumnIndex(AVAIL_OPTION)));
+                freightForwardingModel.setCreatedAt(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+
+            }while (res.moveToNext());
+        }
+
+        // closing database
+        sqLiteDatabase.closeDatabase();
+
+        return freightForwardingModel;
+    }
+
+    // ------------------------ "ShipmentConformation" table methods ----------------//
+    public int numberOfEnquiryRowsByStatus() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = KEY_STATUS + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf("1")};
+
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_SHIPMENT_CONFORMATION, whereClause, whereArgs);
+        sqLiteDatabase.closeDatabase();
+        return numRows;
+    }
+
+    public List<ShipmentConformationModel> getShipmentConformationData() {
+        DatabaseClass sqLiteDatabase = openDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<ShipmentConformationModel> array_list = new ArrayList<ShipmentConformationModel>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_SHIPMENT_CONFORMATION + " WHERE "
+                + KEY_STATUS+" = 1 ORDER BY "+KEY_CREATED_AT+" DESC;";
+
+        System.out.println("getShipmentConformationData: "+ selectQuery);
+
+        Cursor res =  db.rawQuery(selectQuery, null);
+
+        if(res.moveToFirst()){
+            do{
+                ShipmentConformationModel shipmentConformationModel = new ShipmentConformationModel();
+
+                shipmentConformationModel.setKeyId(res.getInt(res.getColumnIndex(KEY_ID)));
+                shipmentConformationModel.setBookingId(res.getString(res.getColumnIndex(SHIPMENT_CONFORMATION_BOOKING_ID)));
+                shipmentConformationModel.setEnquiryStatus(res.getInt(res.getColumnIndex(SHIPMENT_CONFORMATION_ENQUIRY_STATUS)));
+                shipmentConformationModel.setQuotaion(res.getString(res.getColumnIndex(SHIPMENT_CONFORMATION_QUOTATION)));
+                shipmentConformationModel.setRates(res.getInt(res.getColumnIndex(RATES)));
+                shipmentConformationModel.setIsTrans(res.getInt(res.getColumnIndex(SHIPMENT_CONFORMATION_IS_TRANS_SERVICE)));
+                shipmentConformationModel.setIsCC(res.getInt(res.getColumnIndex(SHIPMENT_CONFORMATION_IS_CC_SERVICE)));
+                shipmentConformationModel.setIsFF(res.getInt(res.getColumnIndex(SHIPMENT_CONFORMATION_IS_FF_SERVICE)));
+                shipmentConformationModel.setStatus(res.getInt(res.getColumnIndex(KEY_STATUS)));
+                shipmentConformationModel.setCreatedAt(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+
+                array_list.add(shipmentConformationModel);
+
+            }while (res.moveToNext());
+        }
+
+        sqLiteDatabase.closeDatabase();
+        return array_list;
+    }
+
+    public boolean updateEnquiryStatus(int status, int bookingId, String quotation, int rates) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SHIPMENT_CONFORMATION_ENQUIRY_STATUS, status);
+        contentValues.put(SHIPMENT_CONFORMATION_QUOTATION, quotation);
+        contentValues.put(RATES, rates);
+
+        String whereClause;
+        String[] whereArgs;
+
+        whereClause = SHIPMENT_CONFORMATION_BOOKING_ID + " = ? ";
+        whereArgs = new String[]{String.valueOf(bookingId)};
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_SHIPMENT_CONFORMATION, contentValues, whereClause, whereArgs);
+        return true;
+    }
+
+    public boolean updateShipmentConformTable(String bookingId, int status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SHIPMENT_CONFORMATION_ENQUIRY_STATUS, status);
+
+        String whereClause;
+        String[] whereArgs;
+
+        whereClause = SHIPMENT_CONFORMATION_BOOKING_ID + " = ? ";
+        whereArgs = new String[]{String.valueOf(bookingId)};
+
+//      db.update(String table_name,String where_clause,String[] where_args);
+        db.update(TABLE_SHIPMENT_CONFORMATION, contentValues, whereClause, whereArgs);
+        return true;
+    }
 }

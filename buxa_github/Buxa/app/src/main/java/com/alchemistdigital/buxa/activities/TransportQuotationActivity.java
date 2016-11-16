@@ -369,7 +369,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         Boolean boolDrop = isEmptyString(txtDrop.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
-        Boolean boolTypeOfPack = isEmptyString(strPackType) && (dbClass.getPackagingTypeServerId(strPackType) > 0);
+        Boolean boolTypeOfPack = isEmptyString(strPackType) && (dbClass.getServerIdByPackagingType(strPackType) > 0);
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
         Boolean boolCommodity = isEmptyString(strCommodity) && (dbClass.getCommodityServerID(strCommodity) > 0);
         Boolean boolDimenLen = isEmptyString(txtDimenLen.getText().toString());

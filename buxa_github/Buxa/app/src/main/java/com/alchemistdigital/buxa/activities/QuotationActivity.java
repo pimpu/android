@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertFreightForwardingAsyncTask;
+import com.alchemistdigital.buxa.asynctask.SendMailFlagAsyncTask;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
@@ -201,8 +203,8 @@ public class QuotationActivity extends AppCompatActivity {
         // if not, then availedServicesName is null
         // and yes then availedServicesName is filled with unselected service option
         // ***************************
-        // when user comes here first time, arrayComparingNameArray was full.
-        // when user selected avail option and he comes here, availedServicesName was full.
+        // when user comes here first time, arrayComparingNameArray is full.
+        // when user selected avail option and he comes here, availedServicesName is full.
         if ( availedServicesName == null && arrayComparingNameArray.size() > 0) {
 
             new AlertDialog.Builder(QuotationActivity.this)
@@ -263,6 +265,13 @@ public class QuotationActivity extends AppCompatActivity {
                             // so it become false here
                             isCCService = false;
 
+                            // mail send to Amruta madam from backend
+                            SendMailFlagAsyncTask.postSendMail(
+                                    QuotationActivity.this,
+                                    arrayComparingNameArray,
+                                    arrayServicesName,
+                                    bookId);
+
                             finish();
                         }
                     })
@@ -275,6 +284,13 @@ public class QuotationActivity extends AppCompatActivity {
             // because isCCService is remains true value which are set in previous enquiry.
             // so it become false here
             isCCService = false;
+
+            // mail send to Amruta madam from backend
+            SendMailFlagAsyncTask.postSendMail(
+                    QuotationActivity.this,
+                    arrayComparingNameArray,
+                    arrayServicesName,
+                    bookId);
 
             super.onBackPressed();
         }

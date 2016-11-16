@@ -445,6 +445,89 @@ $app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
 
 });
 
+$app -> post('/sendmail', 'authenticate', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('availedService','service','bookingId'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    /*// reading post params
+    $sendMail = $app->request->post('freightForwardingdata');
+
+    $res = $db->createFreightForwardingData($freightForwardingdata);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "Freight forwarding enquiry created successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while creating";
+    } else if ($res["message"] == USER_ALREADY_EXISTED) {
+        $response["error"] = true;
+        $response["message"] = "This booking already existed.";
+    }*/
+
+    echoRespnse(200, $response);
+
+});
+
+$app -> post('/acceptenquiry', 'authenticate', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('bookingId', 'status'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $bookingId = $app->request->post('bookingId');
+    $status = $app->request->post('status');
+
+    $res = $db->updateShipmentConformation($bookingId, $status);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "shipment accept conformation update successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while upating shipment accept conformation";
+    }
+
+    echoRespnse(200, $response);
+
+});
+
+$app -> post('/cancelenquiry', 'authenticate', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('bookingId', 'status'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $bookingId = $app->request->post('bookingId');
+    $status = $app->request->post('status');
+
+    $res = $db->updateShipmentConformation($bookingId, $status);
+
+    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+        $response["error"] = false;
+        $response["message"] = "shipment cancel conformation update successfully";
+        $response["id"] = $res["id"];
+    } else if ($res["message"] == USER_CREATE_FAILED) {
+        $response["error"] = true;
+        $response["message"] = "Oops! An error occurred while upating shipment cancel conformation";
+    }
+
+    echoRespnse(200, $response);
+
+});
+
 /**
  * Deleting task. Users can delete only their tasks
  * method DELETE

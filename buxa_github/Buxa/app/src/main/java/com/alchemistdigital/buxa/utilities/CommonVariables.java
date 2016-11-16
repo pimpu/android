@@ -20,7 +20,7 @@ public class CommonVariables {
     public static final String SENDER_ID = "931228915270";
 
 
-    static String SERVER_URL = "http://ee126c6a.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://b67ac61b.ngrok.io/buxa/v1/";
 //    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
@@ -37,6 +37,9 @@ public class CommonVariables {
     public static final String INSERT_FREIGHT_FORWARDING_SERVER_URL = SERVER_URL + "insertfreightforwarding";
     public static final String UPDATE_GCM_REGISTERED_ID_SERVER_URL = SERVER_URL + "updategcmid";
     public static final String QUERY_CFS_ADDRESS_SERVER_URL = SERVER_URL + "getcfsadresses";
+    public static final String SEND_EMAIL_FLAG_SERVER_URL = SERVER_URL + "sendmail";
+    public static final String ACCPET_ENQUIRY_SERVER_URL = SERVER_URL + "acceptenquiry";
+    public static final String CANCEL_ENQUIRY_SERVER_URL = SERVER_URL + "cancelenquiry";
 
 
 }

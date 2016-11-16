@@ -43,10 +43,10 @@ public class InsertTransportationAsyncTask {
 
         getSharedPreference = new GetSharedPreference(context);
 
-        int shipmentTypeServerId = dbHelper.getShipmentTypeServerId(transportationModel.getStrShipmentType());
+        int shipmentTypeServerId = dbHelper.getServerIdByName(transportationModel.getStrShipmentType());
         transportationModel.setShipmentType(shipmentTypeServerId);
 
-        int packagingTypeServerId = dbHelper.getPackagingTypeServerId(transportationModel.getStrPackType());
+        int packagingTypeServerId = dbHelper.getServerIdByPackagingType(transportationModel.getStrPackType());
         transportationModel.setPackType(packagingTypeServerId);
 
         int commodityServerID = dbHelper.getCommodityServerID(transportationModel.getStrCommodity());

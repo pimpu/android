@@ -1,13 +1,11 @@
 package com.alchemistdigital.buxa.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.model.FreightForwardingModel;
+import com.alchemistdigital.buxa.activities.QuotationActivity;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -17,58 +15,34 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by user on 9/22/2016.
+ * Created by Pimpu on 11/16/2016.
  */
-public class InsertFreightForwardingAsyncTask {
-    private static ProgressDialog prgDialog;
-    private static GetSharedPreference getSharedPreference;
-    private static DatabaseClass dbHelper ;
-
-    public static void postFreightForwardingData(Context context, FreightForwardingModel freightForwardingModel) {
-        dbHelper = new DatabaseClass(context);
-
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("inserting data ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-
-        getSharedPreference = new GetSharedPreference(context);
-
-        int shipmentTypeServerId = dbHelper.getServerIdByName(freightForwardingModel.getStrShipmentType());
-        freightForwardingModel.setShipmentType(shipmentTypeServerId);
-
-        int packagingTypeServerId = dbHelper.getServerIdByPackagingType(freightForwardingModel.getStrPackType());
-        freightForwardingModel.setPackType(packagingTypeServerId);
-
-        int commodityServerID = dbHelper.getCommodityServerID(freightForwardingModel.getStrCommodity());
-        freightForwardingModel.setCommodityServerId(commodityServerID);
-
+public class SendMailFlagAsyncTask {
+    public static void postSendMail(Context context, ArrayList<String> availedService, ArrayList<String> service, String bookId) {
         RequestParams params;
         params = new RequestParams();
-        params.put("freightForwardingdata", freightForwardingModel.toString());
+        params.put("availedService", availedService);
+        params.put("service", service);
+        params.put("bookingId", bookId);
 
-        System.out.println("freight forward json: "+freightForwardingModel.toString());
-        invokeWS(context, params, freightForwardingModel);
+        invokeWS(context, params);
     }
 
-    private static void invokeWS(final Context context, RequestParams params, final FreightForwardingModel freightForwardingModel) {
-        // Show Progress Dialog
-        prgDialog.show();
-
+    private static void invokeWS(final Context context, RequestParams params) {
+        GetSharedPreference getSharedPreference = null;
         String apiKeyHeader = getSharedPreference.getApiKey(context.getResources().getString(R.string.apikey));
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.postWithHeader(CommonVariables.INSERT_FREIGHT_FORWARDING_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
+        RestClient.postWithHeader(CommonVariables.SEND_EMAIL_FLAG_SERVER_URL, apiKeyHeader, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialog.cancel();
                 try{
                     System.out.println(json);
 
@@ -78,17 +52,7 @@ public class InsertFreightForwardingAsyncTask {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
-
-                        freightForwardingModel.setServerId(json.getInt("id"));
-                        int i = dbHelper.insertFreightForwarding(freightForwardingModel);
-                        System.out.println("FF id: "+i);
-
-                        if(i != 0) {
-                            Intent intent = new Intent(CommonVariables.DISPLAY_MESSAGE_ACTION);
-                            intent.putExtra(CommonVariables.EXTRA_MESSAGE, "gotoQuotationActivityFromFF");
-                            intent.putExtra("FFData",freightForwardingModel);
-                            context.sendBroadcast(intent);
-                        }
+                        System.out.println("Mail sending");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -97,7 +61,6 @@ public class InsertFreightForwardingAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
@@ -105,7 +68,6 @@ public class InsertFreightForwardingAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -133,5 +95,6 @@ public class InsertFreightForwardingAsyncTask {
                 }
             }
         });
+
     }
 }

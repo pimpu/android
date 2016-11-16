@@ -17,15 +17,19 @@ import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gcm.GCMRegistrar;
 
 public class WelcomeActivity extends AppCompatActivity {
     TextView tv_welcome, tv_CompanyName, tv_UserName, tv_UserEmail;
+    FloatingActionsMenu actionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        actionButton = (FloatingActionsMenu) findViewById(R.id.right_labels);
 
         tv_welcome = (TextView) findViewById(R.id.id_welcomeText_welcomeScreen);
         Typeface face1= Typeface.createFromAsset(getAssets(), "fonts/HELVETICA_CONDENSED_LIGHT_7.OTF");
@@ -87,21 +91,30 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void goToServiceActivity(View view) {
         startActivity(new Intent(this, SelectServiceActivity.class));
+        // closed floating action menu which are open
+        actionButton.collapse();
     }
 
     public void btnFeedbackClick(View view) {
+        // closed floating action menu which are open
+        actionButton.collapse();
+
         Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
         // Todo : feedback form
 //        startActivity(new Intent(WelcomeActivity.this, Feedback.class));
     }
 
     public void btnEnquiryClick(View view) {
-//        startActivity(new Intent(this, EnquiriesActivity.class));
-        Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
-        // Todo : my enaquiry page form
+        // closed floating action menu which are open
+        startActivity(new Intent(this, EnquiriesActivity.class));
+        actionButton.collapse();
+//        Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
     }
 
     public void btnLogout(View view) {
+        // closed floating action menu which are open
+        actionButton.collapse();
+
         SetSharedPreference setSharedPreference = new SetSharedPreference(this);
         // signout from app.
         setSharedPreference.setBooleanLogin(getString(R.string.boolean_login_sharedPref), "false");

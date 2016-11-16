@@ -10,6 +10,7 @@ import java.util.Date;
 public class DateHelper {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
     private final static SimpleDateFormat MONTH = new SimpleDateFormat("MM");
+    private final static SimpleDateFormat STRING_MONTH = new SimpleDateFormat("MMM");
     private final static SimpleDateFormat DAY = new SimpleDateFormat("dd");
     private final static SimpleDateFormat YEAR = new SimpleDateFormat("yyyy");
     private final static SimpleDateFormat HOURS = new SimpleDateFormat("hh");
@@ -17,6 +18,7 @@ public class DateHelper {
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
     private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd-MM-yyyy");
     private final static SimpleDateFormat sdfBookId = new SimpleDateFormat("ddMMyyhhmmss");
+    private final static SimpleDateFormat ENQUIRY_TODAY_TIME = new SimpleDateFormat("hh:mm a");
 
 
     public static long convertToMillis () {
@@ -29,10 +31,14 @@ public class DateHelper {
      * @param millis
      * @return date in string formatted as
      */
-    public static String convertToString(long millis)
-    {
+    public static String convertToString(long millis) {
         Date currentDate = new Date(millis);
         return sdf.format(currentDate);
+    }
+
+    public static String convertToTodayEnquiryString(long millis) {
+        Date currentDate = new Date(millis);
+        return ENQUIRY_TODAY_TIME.format(currentDate);
     }
 
     public static String convertToString_Quotation(long millis) {
@@ -44,9 +50,15 @@ public class DateHelper {
         Date dates = new Date();
         return sdfBookId.format(dates);
     }
+
     public static String getMonth(long millis) {
         Date currentDate = new Date(millis);
         return MONTH.format(currentDate);
+    }
+
+    public static String getMonthString(long millis) {
+        Date currentDate = new Date(millis);
+        return STRING_MONTH.format(currentDate);
     }
 
     public static String getDay(long millis) {

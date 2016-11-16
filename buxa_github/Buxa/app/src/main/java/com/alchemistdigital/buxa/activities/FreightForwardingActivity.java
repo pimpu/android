@@ -34,7 +34,6 @@ import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
-import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
@@ -394,7 +393,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         Boolean boolDDAdr = isEmptyString(txtDestinationDeliveryAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
-        Boolean boolTypeOfPack = isEmptyString(strTypeOfPack) && (dbClass.getPackagingTypeServerId(strTypeOfPack) > 0);
+        Boolean boolTypeOfPack = isEmptyString(strTypeOfPack) && (dbClass.getServerIdByPackagingType(strTypeOfPack) > 0);
         Boolean boolNoOfPack = isEmptyString(txt_noOfPack.getText().toString());
         Boolean boolCommodity = isEmptyString(strCommodity) && (dbClass.getCommodityServerID(strCommodity) > 0);
 

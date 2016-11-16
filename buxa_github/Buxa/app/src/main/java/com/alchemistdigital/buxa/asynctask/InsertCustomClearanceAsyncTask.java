@@ -42,7 +42,7 @@ public class InsertCustomClearanceAsyncTask {
 
         getSharedPreference = new GetSharedPreference(context);
 
-        int shipmentTypeServerId = dbHelper.getShipmentTypeServerId(customClearanceModel.getStrShipmentType());
+        int shipmentTypeServerId = dbHelper.getServerIdByName(customClearanceModel.getStrShipmentType());
         customClearanceModel.setiShipmentType(shipmentTypeServerId);
 
         int commodityServerID = dbHelper.getCommodityServerID(customClearanceModel.getStrCommodity());
