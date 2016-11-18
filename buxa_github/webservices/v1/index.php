@@ -1,12 +1,15 @@
 <?php
 
 require_once '../include/DbHandler.php';
+require_once '../include/firebase.php';
+require_once '../include/push.php';
 require_once '../include/PassHash.php';
 require '.././libs/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();
 
 $app = new \Slim\Slim();
+
 
 /**
  * Adding Middle Layer to authenticate every request
@@ -344,7 +347,7 @@ $app->put('/updategcmid', function() use ($app) {
 
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
-        $response["message"] = "successfully update GCM id";
+        $response["message"] = "successfully update FCM id";
     } else if ($res["message"] == USER_CREATE_FAILED) {
         $response["error"] = true;
         $response["message"] = "Oops! An error occurred while updating";
@@ -453,12 +456,13 @@ $app -> post('/sendmail', 'authenticate', function() use ($app) {
     $db = new DbHandler();
     $response = array();
 
-    /*// reading post params
-    $sendMail = $app->request->post('freightForwardingdata');
+    // reading post params
+    $availedService = $app->request->post('availedService');
+    $service = $app->request->post('service');
+    $bookingId = $app->request->post('bookingId');
 
-    $res = $db->createFreightForwardingData($freightForwardingdata);
 
-    if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
+    /*if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
         $response["message"] = "Freight forwarding enquiry created successfully";
         $response["id"] = $res["id"];
@@ -470,6 +474,8 @@ $app -> post('/sendmail', 'authenticate', function() use ($app) {
         $response["message"] = "This booking already existed.";
     }*/
 
+    $response["error"] = false;
+    $response["message"] = "sent mail successfully";
     echoRespnse(200, $response);
 
 });
@@ -491,11 +497,29 @@ $app -> post('/acceptenquiry', 'authenticate', function() use ($app) {
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
         $response["message"] = "shipment accept conformation update successfully";
-        $response["id"] = $res["id"];
     } else if ($res["message"] == USER_CREATE_FAILED) {
         $response["error"] = true;
         $response["message"] = "Oops! An error occurred while upating shipment accept conformation";
     }
+
+    $firebase = new Firebase();
+    $push = new Push();
+
+    // optional payload
+    $payload = array();
+    $payload['team'] = 'India';
+    $payload['score'] = '5.6';
+
+    $push->setTitle($title);
+    $push->setMessage($message);
+    $push->setImage('');
+    $push->setIsBackground(TRUE);
+    $push->setPayload($payload);
+    $json = $push->getPush();
+
+    $regId = 'fAi__86WM8k:APA91bGyNnKyZJC5mQfRzJdOp0tPi9yRPQFGgDWMJxPl72TTcBtUUYKV8oyrMmSqSonu5Gzc2tVua973UOXVDKkl7GsvPV4XnT2eTCXWrwgWqZbkYEXlyjaKC-H94d5trTFnEq2-3oLd';
+
+    $firebase->send($regId, $json);
 
     echoRespnse(200, $response);
 
@@ -518,7 +542,6 @@ $app -> post('/cancelenquiry', 'authenticate', function() use ($app) {
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
         $response["message"] = "shipment cancel conformation update successfully";
-        $response["id"] = $res["id"];
     } else if ($res["message"] == USER_CREATE_FAILED) {
         $response["error"] = true;
         $response["message"] = "Oops! An error occurred while upating shipment cancel conformation";

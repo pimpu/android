@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "931228915270",
+    "firebase_url": "https://buxa-141605.firebaseio.com",
+    "project_id": "buxa-141605",
+    "storage_bucket": "buxa-141605.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931228915270:android:fb1065e19bd065c3",
+        "android_client_info": {
+          "package_name": "com.alchemistdigital.buxa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931228915270-30hmek64gq5kl6iar20qji0lucl24nhj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alchemistdigital.buxa",
+            "certificate_hash": "A2C518DC64B04F272F2C2BF34030BFE2C7DD30F5"
+          }
+        },
+        {
+          "client_id": "931228915270-n1fdp2osirabq4in0fbkplboqrnnv973.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtrPNbzwi_A3zCYOqBL1t1Td-UDpx6lqs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "931228915270-n1fdp2osirabq4in0fbkplboqrnnv973.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

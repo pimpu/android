@@ -1,13 +1,17 @@
 package com.alchemistdigital.buxa.activities;
 
+import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +37,7 @@ import com.alchemistdigital.buxa.utilities.RestClient;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -64,6 +69,10 @@ public class RegisterActivity extends AppCompatActivity {
     private EmailListAdapter listadaptor;
     private static final int PICK_ACCOUNT_REQUEST = 0;
 
+    private static final String TAG = "PERMISSION: ";
+    private static final int REQUEST_GET_ACCOUNT = 1;
+    String[] PERMISSIONS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +102,6 @@ public class RegisterActivity extends AppCompatActivity {
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 
-        // get emails addresses which are registered on mobile device
-        list = CommonUtilities.getEmailsData(RegisterActivity.this);
 
         errorMessage = (TextView) findViewById(R.id.register_error_msg);
         txtCompanyName = (EditText) findViewById(R.id.company_name);
@@ -116,9 +123,25 @@ public class RegisterActivity extends AppCompatActivity {
         registerReceiver(mHandleServerMessageReceiverInRegisterActivity, new IntentFilter(
                 CommonVariables.DISPLAY_MESSAGE_ACTION));
 
-        if( list.size() == 1 ){
-            tvRegisterEmail.setText( list.get(0).getName() );
+
+        PERMISSIONS = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.GET_ACCOUNTS,
+                Manifest.permission.VIBRATE};
+
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_GET_ACCOUNT);
         }
+        else {
+            // get emails addresses which are registered on mobile device
+            list = CommonUtilities.getEmailsData(RegisterActivity.this);
+            if( list.size() == 1 ){
+                tvRegisterEmail.setText( list.get(0).getName() );
+            }
+        }
+
+
 
         btnRegister = (Button) findViewById(R.id.id_btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -329,8 +352,13 @@ public class RegisterActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from GetAllPackageType when all default value from server get finished.
+            // this message is come from UpdateGCMID when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
+
+                // gcm successfully registered
+                // now subscribe to `global` topic to receive app wide notifications
+                FirebaseMessaging.getInstance().subscribeToTopic(CommonVariables.TOPIC_GLOBAL);
+
                 Intent intentServicesActivity = new Intent(RegisterActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 ((RegisterActivity)context).finish();
@@ -353,6 +381,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void getRegisteredEmail(View view) {
+        if(list == null){
+            Toast.makeText(getApplicationContext(), "Please, Enable contact permission for registering with Buxa.",Toast.LENGTH_LONG).show();
+            return;
+        }
         if (list.size() > 0) {
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
@@ -382,4 +414,42 @@ public class RegisterActivity extends AppCompatActivity {
             tvRegisterEmail.setText(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    private boolean hasPermissions(Context context, String[] permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_GET_ACCOUNT:
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Permission has been denied by user");
+                    Toast.makeText(getApplicationContext(), "Permission require for registering with Buxa.",Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i(TAG, "Permission has been granted by user");
+
+                    // get emails addresses which are registered on mobile device
+                    list = CommonUtilities.getEmailsData(RegisterActivity.this);
+                    if( list.size() == 1 ){
+                        tvRegisterEmail.setText( list.get(0).getName() );
+                    }
+                }
+                break;
+        }
+    }
+
 }

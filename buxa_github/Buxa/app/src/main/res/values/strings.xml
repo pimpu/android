@@ -7,6 +7,7 @@
     <string name="loginEmail">loginEmail</string>
     <string name="companyName">companyName</string>
     <string name="apikey">apikey</string>
+    <string name="FCM_RegId">FCM_RegId</string>
     <string name="str_loading">Loading</string>
     <string name="str_welcome">Welcome to</string>
     <string name="str_yes">Yes</string>

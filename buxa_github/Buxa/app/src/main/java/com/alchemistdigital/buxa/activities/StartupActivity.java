@@ -1,19 +1,28 @@
 package com.alchemistdigital.buxa.activities;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -54,6 +63,8 @@ public class StartupActivity extends AppCompatActivity {
             fragmentTransaction.replace(android.R.id.content, loginFragment);
         }
         fragmentTransaction.commit();
+
+
     }
 
     /**
@@ -67,8 +78,13 @@ public class StartupActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from GetAllPackageType when all default value from server get finished.
+            // this message is come from UpdateGCMID when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
+
+                // gcm successfully registered
+                // now subscribe to `global` topic to receive app wide notifications
+                FirebaseMessaging.getInstance().subscribeToTopic(CommonVariables.TOPIC_GLOBAL);
+
                 Intent intentServicesActivity = new Intent(StartupActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 ((StartupActivity)context).finish();
@@ -92,5 +108,10 @@ public class StartupActivity extends AppCompatActivity {
 
     public void btnForgetPwd(View view) {
         // Todo : forget password email coding
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

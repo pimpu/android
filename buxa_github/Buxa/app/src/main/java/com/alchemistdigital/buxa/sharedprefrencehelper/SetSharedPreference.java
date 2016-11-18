@@ -57,4 +57,9 @@ public class SetSharedPreference {
         editor.putStringSet(string, array_list);
         editor.commit();
     }
+
+    public void setFCMRegId(String string, String regId) {
+        editor.putString(string, regId);
+        editor.commit();
+    }
 }

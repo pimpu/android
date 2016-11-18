@@ -1,5 +1,7 @@
 package com.alchemistdigital.buxa.asynctask;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
@@ -19,22 +21,37 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.isCCService;
+
 /**
  * Created by Pimpu on 11/16/2016.
  */
 public class SendMailFlagAsyncTask {
+    private static ProgressDialog prgDialog;
+
     public static void postSendMail(Context context, ArrayList<String> availedService, ArrayList<String> service, String bookId) {
+
+        // Instantiate Progress Dialog object
+        prgDialog = new ProgressDialog(context);
+        // Set Progress Dialog Text
+        prgDialog.setMessage("wait ...");
+        // Set Cancelable as False
+        prgDialog.setCancelable(false);
+
         RequestParams params;
         params = new RequestParams();
-        params.put("availedService", availedService);
-        params.put("service", service);
+        params.put("availedService", availedService.toString());
+        params.put("service", service.toString());
         params.put("bookingId", bookId);
 
         invokeWS(context, params);
     }
 
     private static void invokeWS(final Context context, RequestParams params) {
-        GetSharedPreference getSharedPreference = null;
+        // Show Progress Dialog
+        prgDialog.show();
+
+        GetSharedPreference getSharedPreference = new GetSharedPreference(context);
         String apiKeyHeader = getSharedPreference.getApiKey(context.getResources().getString(R.string.apikey));
 
         // Make RESTful webservice call using AsyncHttpClient object
@@ -43,6 +60,8 @@ public class SendMailFlagAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                prgDialog.cancel();
+
                 try{
                     System.out.println(json);
 
@@ -53,6 +72,14 @@ public class SendMailFlagAsyncTask {
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
                         System.out.println("Mail sending");
+                        ((Activity)context).finish();
+
+                        // below keyword is define static
+                        // user select CC and FF service and save, program flow is ok
+                        // but after that user select transport and FF service, error come
+                        // because isCCService is remains true value which are set in previous enquiry.
+                        // so it become false here
+                        isCCService = false;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -61,6 +88,7 @@ public class SendMailFlagAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
@@ -68,6 +96,7 @@ public class SendMailFlagAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");

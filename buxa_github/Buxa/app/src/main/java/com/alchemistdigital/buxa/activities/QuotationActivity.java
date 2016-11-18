@@ -258,41 +258,23 @@ public class QuotationActivity extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            // below keyword is define static
-                            // user select CC and FF service and save, program flow is ok
-                            // but after that user select transport and FF service, error come
-                            // because isCCService is remains true value which are set in previous enquiry.
-                            // so it become false here
-                            isCCService = false;
-
                             // mail send to Amruta madam from backend
                             SendMailFlagAsyncTask.postSendMail(
                                     QuotationActivity.this,
                                     arrayComparingNameArray,
                                     arrayServicesName,
                                     bookId);
-
-                            finish();
                         }
                     })
                     .show();
         }
         else {
-            // below keyword is define static
-            // user select CC and FF service and save, program flow is ok
-            // but after that user select transport and FF service, error come
-            // because isCCService is remains true value which are set in previous enquiry.
-            // so it become false here
-            isCCService = false;
-
             // mail send to Amruta madam from backend
             SendMailFlagAsyncTask.postSendMail(
                     QuotationActivity.this,
                     arrayComparingNameArray,
                     arrayServicesName,
                     bookId);
-
-            super.onBackPressed();
         }
     }
 }

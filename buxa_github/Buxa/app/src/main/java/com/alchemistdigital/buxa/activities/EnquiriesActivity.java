@@ -37,12 +37,11 @@ import java.util.List;
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 
 public class EnquiriesActivity extends AppCompatActivity implements ItemClickListener {
-    private static final String TAG = "PERMISSION: ";
     private RecyclerView enquiry_RecyclerView;
     public RecyclerView.Adapter enquiry_Adapter;
     private static List<ShipmentConformationModel> data;
     View emptyView;
-    private static final int REQUEST_WRITE_STORAGE = 112;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,57 +54,6 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
         enquiry_RecyclerView = (RecyclerView)findViewById(R.id.enquiry_details_recycler);
         initEnquiryRecycler();
 
-        int permission = ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission to record denied");
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Permission to access the SD-CARD is required for this app to Download PDF.")
-                        .setTitle("Permission required");
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        Log.i(TAG, "Clicked");
-                        makeRequest();
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-            } else {
-                makeRequest();
-            }
-        }
-    }
-
-    protected void makeRequest() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                REQUEST_WRITE_STORAGE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_WRITE_STORAGE: {
-
-                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-
-                    Log.i(TAG, "Permission has been denied by user");
-
-                } else {
-
-                    Log.i(TAG, "Permission has been granted by user");
-
-                }
-                return;
-            }
-        }
     }
 
     private void toolbarSetup() {
@@ -156,7 +104,6 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
 
     @Override
     public void onTransportClick(int position) {
-//        new DownloadQuotationAsyncTask().execute("http://maven.apache.org/maven-1.x/maven.pdf", "maven.pdf");
 
         Intent gotoTransDetailsIntent = new Intent(EnquiriesActivity.this, TransportationDetailsActivity.class);
         gotoTransDetailsIntent.putExtra("bookingId", data.get(position).getBookingId());
@@ -165,6 +112,8 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
 
     @Override
     public void onCCClick(int position) {
+        new DownloadQuotationAsyncTask().execute("http://maven.apache.org/maven-1.x/maven.pdf", "maven.pdf");
+
         Intent gotoIntent = new Intent(EnquiriesActivity.this, CustomClrDetailsActivity.class);
         gotoIntent.putExtra("bookingId", data.get(position).getBookingId());
         startActivity(gotoIntent);

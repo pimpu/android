@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,9 +17,11 @@ import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
+import com.alchemistdigital.buxa.utilities.NotificationUtils;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class WelcomeActivity extends AppCompatActivity {
     TextView tv_welcome, tv_CompanyName, tv_UserName, tv_UserEmail;
@@ -48,24 +51,6 @@ public class WelcomeActivity extends AppCompatActivity {
         tv_UserName.setText(loginName);
         tv_UserEmail.setText(loginEmail);
 
-        // register this user with Buxa app on gcm
-        // gcm generate registration id
-        // registration id store in user table of Buxa database
-        // Make sure the device has the proper dependencies.
-        GCMRegistrar.checkDevice(this);
-
-        // Make sure the manifest was properly set - comment out this line
-        // while developing the app, then uncomment it when it's ready.
-        GCMRegistrar.checkManifest(this);
-
-        String regId = GCMRegistrar.getRegistrationId(this);
-        registerReceiver(mHandleMessageReceiver, new IntentFilter(
-                CommonVariables.DISPLAY_MESSAGE_ACTION));
-
-        if (regId.equals("")) {
-            // Registration is not present, Register now with GCM
-            GCMRegistrar.register(getApplicationContext(), CommonVariables.SENDER_ID);
-        }
     }
 
     /**
@@ -74,17 +59,20 @@ public class WelcomeActivity extends AppCompatActivity {
     private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+//            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
 
-            // Waking up mobile if it is sleeping
-            WakeLocker.acquire(getApplicationContext());
+            // checking for type intent filter
+            if (intent.getAction().equals(CommonVariables.REGISTRATION_COMPLETE)) {
 
-            if(newMessage.equals("success")) {
+                // gcm successfully registered
+                // now subscribe to `global` topic to receive app wide notifications
+                FirebaseMessaging.getInstance().subscribeToTopic(CommonVariables.TOPIC_GLOBAL);
 
+            } else if (intent.getAction().equals(CommonVariables.PUSH_NOTIFICATION)) {
+                // new push notification is received
+                String message = intent.getStringExtra("message");
+                Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
             }
-
-            // Releasing wake lock
-            WakeLocker.release();
         }
     };
 
@@ -129,13 +117,31 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mHandleMessageReceiver,
+                new IntentFilter(CommonVariables.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mHandleMessageReceiver,
+                new IntentFilter(CommonVariables.PUSH_NOTIFICATION));
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(getApplicationContext());
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mHandleMessageReceiver);
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
-        try {
-            unregisterReceiver(mHandleMessageReceiver);
-            GCMRegistrar.onDestroy(getApplicationContext());
-        } catch (Exception e) {
-            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
-        }
         super.onDestroy();
     }
+
 }

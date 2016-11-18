@@ -7,6 +7,7 @@ import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.model.CustomClearanceLocation;
 import com.alchemistdigital.buxa.model.PackageTypeModel;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 
@@ -55,11 +56,11 @@ public class InsertPackagingTypeAsyncTask extends AsyncTask<String, String, Arra
         // close database in synchronized condition
         databaseClass.closeDB();
 
-        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
-        // it store the Register true value of user for purpose of user is registered with this app.
-        setSharedPreference.setBooleanLogin(context.getString(R.string.boolean_login_sharedPref), "true");
+        GetSharedPreference getPreference = new GetSharedPreference(context);
+        int uId = getPreference.getLoginId(context.getResources().getString(R.string.loginId));
+        String token = getPreference.getFCMRegId(context.getResources().getString(R.string.FCM_RegId));
 
-        // sent notification to activities that server calling finished
-        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
+        new UpdateGCMID(context, token, uId);
+
     }
 }

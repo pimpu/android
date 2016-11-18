@@ -1,8 +1,13 @@
 package com.alchemistdigital.buxa.asynctask;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,6 +46,17 @@ public class UpdateGCMID {
                     if (error) {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
+                    }
+                    else {
+                        System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
+
+                        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+                        // it store the Register true value of user for purpose of user is registered with this app.
+                        setSharedPreference.setBooleanLogin(context.getString(R.string.boolean_login_sharedPref), "true");
+
+                        // sent notification to activities that server calling finished
+                        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
+
                     }
 
                 } catch (JSONException e) {

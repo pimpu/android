@@ -16,12 +16,22 @@ public class CommonVariables {
     public static final String OUT_JSON = "/json";
 
     public static final String API_KEY = "AIzaSyCyjSSwYtYv4r84kESFyVz2m-edkKc0N54";
-    // Google project number
-    public static final String SENDER_ID = "931228915270";
 
+    //   -----------------------  Firebase cloud messaging  ----------------------
 
-    static String SERVER_URL = "http://b67ac61b.ngrok.io/buxa/v1/";
-//    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
+    // global topic to receive app wide push notifications
+    public static final String TOPIC_GLOBAL = "global";
+
+    // broadcast receiver intent filters
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+
+    // id to handle the notification in the notification tray
+    public static final int NOTIFICATION_ID = 100;
+    public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
+
+    static String SERVER_URL = "http://54df6ffa.ngrok.io/buxa/v1/";
+//    static String SERVER_URL = "http://alchemistdigital.net/android_webservices/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
     public static final String COMPANY_LOGIN_SERVER_URL = SERVER_URL + "login";

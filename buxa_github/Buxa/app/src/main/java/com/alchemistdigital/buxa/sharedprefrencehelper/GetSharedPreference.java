@@ -44,4 +44,8 @@ public class GetSharedPreference {
         return sharedPreference.getInt(text,0);
     }
 
+    public String getFCMRegId(String text) {
+        return sharedPreference.getString(text, "");
+    }
+
 }

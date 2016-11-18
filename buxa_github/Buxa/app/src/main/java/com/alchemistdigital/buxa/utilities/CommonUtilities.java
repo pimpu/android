@@ -2,6 +2,8 @@ package com.alchemistdigital.buxa.utilities;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -9,6 +11,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.activities.SplashScreen;
 import com.alchemistdigital.buxa.activities.StartupActivity;
 import com.alchemistdigital.buxa.model.Email_Account_Item;
 
@@ -81,17 +84,6 @@ public class CommonUtilities {
     public static ArrayList<Email_Account_Item> getEmailsData(Context context) {
         ArrayList<Email_Account_Item> accountsList = new ArrayList<Email_Account_Item>();
 
-        //Getting all registered Google Accounts;
-        /*try {
-            Account[] accounts = AccountManager.get(activity).getAccountsByType("com.google");
-            for (Account account : accounts) {
-                Email_Account_Item item = new Email_Account_Item(account.type, account.name);
-                accountsList.add(item);
-            }
-        } catch (Exception e) {
-            Log.i("ExceptionGetEmails", "Exception:" + e);
-        }*/
-
         //For all registered accounts;
         try {
             Account[] accounts = AccountManager.get(context).getAccounts();
@@ -115,5 +107,26 @@ public class CommonUtilities {
         }
 
         return accountsList;
+    }
+
+    public static void generateNotification(Context context, String message) {
+        String title = context.getString(R.string.app_name);
+
+        Intent mainIntent=new Intent(context, SplashScreen.class);
+
+        mainIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        mainIntent.setAction(Intent.ACTION_MAIN);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        Notification notification = new Notification.Builder(context)
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentTitle(title)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentText(message)
+                .setWhen(System.currentTimeMillis())
+                .getNotification();
+        android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notification);
     }
 }

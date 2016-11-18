@@ -98,7 +98,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
         }
         else if(current.getEnquiryStatus() == 4 ) {
             status += "accept";
-            holder.conform_btn_layout.setVisibility(View.GONE);
+//            holder.conform_btn_layout.setVisibility(View.GONE);
         }
         else if(current.getEnquiryStatus() == 5 ) {
             status += "cancel";
