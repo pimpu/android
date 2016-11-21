@@ -113,14 +113,14 @@
             app:Segoe="segoe_regular"
             android:textColor="@color/enquiry_date_color"/>
 
-        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+        <!--<com.alchemistdigital.buxa.utilities.SegoeFontTextView
             android:id="@+id/enquiry_row_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/strBookingRates"
             android:textSize="@dimen/enquiries_status_textSize"
             app:Segoe="segoe_regular"
-            android:textColor="@color/enquiry_date_color"/>
+            android:textColor="@color/enquiry_date_color"/>-->
 
         <com.alchemistdigital.buxa.utilities.SegoeFontTextView
             android:id="@+id/enquiry_row_quotation"

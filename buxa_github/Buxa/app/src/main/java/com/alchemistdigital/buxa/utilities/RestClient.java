@@ -19,7 +19,7 @@ public class RestClient {
     }
 
     public static void postWithHeader(String url, String apiKeyHeader, RequestParams params, JsonHttpResponseHandler responseHandler) {
-        client.addHeader("Authorization", apiKeyHeader);
+        client.addHeader("X-Authorization", apiKeyHeader);
         client.post(url, params, responseHandler);
     }
 

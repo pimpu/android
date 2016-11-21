@@ -14,6 +14,8 @@ import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.activities.SplashScreen;
 import com.alchemistdigital.buxa.activities.StartupActivity;
 import com.alchemistdigital.buxa.model.Email_Account_Item;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 
 import java.util.ArrayList;
 
@@ -109,24 +111,19 @@ public class CommonUtilities {
         return accountsList;
     }
 
-    public static void generateNotification(Context context, String message) {
-        String title = context.getString(R.string.app_name);
+    /***
+     * Checks that application runs first time and write flag at SharedPreferences
+     * @return true if 1st time
+     */
+    public static boolean isFirstTime(Context context) {
+        GetSharedPreference getSharedPreference = new GetSharedPreference(context);
+        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
 
-        Intent mainIntent=new Intent(context, SplashScreen.class);
-
-        mainIntent.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        mainIntent.setAction(Intent.ACTION_MAIN);
-        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        Notification notification = new Notification.Builder(context)
-                .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT))
-                .setContentTitle(title)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText(message)
-                .setWhen(System.currentTimeMillis())
-                .getNotification();
-        android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+        boolean ranBefore = getSharedPreference.getIsFirstTime(context.getResources().getString(R.string.runBefore));
+        if (!ranBefore) {
+            // first time
+            setSharedPreference.setIsFirstTime(context.getResources().getString(R.string.runBefore), true);
+        }
+        return !ranBefore;
     }
 }

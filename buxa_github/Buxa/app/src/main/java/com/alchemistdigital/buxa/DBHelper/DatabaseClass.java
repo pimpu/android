@@ -1550,13 +1550,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public boolean updateEnquiryStatus(int status, int bookingId, String quotation, int rates) {
+    public boolean updateEnquiryStatus(int status, String bookingId, String quotation) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(SHIPMENT_CONFORMATION_ENQUIRY_STATUS, status);
         contentValues.put(SHIPMENT_CONFORMATION_QUOTATION, quotation);
-        contentValues.put(RATES, rates);
 
         String whereClause;
         String[] whereArgs;
@@ -1569,6 +1568,9 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return true;
     }
 
+    // when client accept or cancel quotation, db will update accordingly
+    // if client accept quotation then status will be 4
+    // if client cancel quotation then status will be 5
     public boolean updateShipmentConformTable(String bookingId, int status) {
         SQLiteDatabase db = this.getWritableDatabase();
 

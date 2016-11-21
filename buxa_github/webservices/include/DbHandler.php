@@ -72,14 +72,14 @@ class DbHandler {
     }
 
     /**
-     * Updating gcm registration id
+     * Updating fcm registration id
      * @param String $regId Registration id
      * @param String $uId User login id
      */
-    public function updateGcmID($regId, $uId) {
+    public function updateFcmID($regId, $uId) {
         $response = array();
 
-        $result = mysql_query("UPDATE bx_user SET gcm_id = '".$regId."' WHERE uid = ".$uId);
+        $result = mysql_query("UPDATE bx_user SET fcm_id = '".$regId."' WHERE uid = ".$uId);
 
         // Check for successful insertion
         if ($result) {

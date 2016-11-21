@@ -62,4 +62,10 @@ public class SetSharedPreference {
         editor.putString(string, regId);
         editor.commit();
     }
+
+    public void setIsFirstTime(String string, Boolean value) {
+        editor.putBoolean(string, value);
+        editor.commit();
+    }
+
 }

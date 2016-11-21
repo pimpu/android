@@ -26,6 +26,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -54,7 +58,7 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'
 
     // send gcm notification
-    compile files('libs/gcm.jar')
+//    compile files('libs/gcm.jar')
 
     compile 'com.google.android.gms:play-services:9.8.0'
 

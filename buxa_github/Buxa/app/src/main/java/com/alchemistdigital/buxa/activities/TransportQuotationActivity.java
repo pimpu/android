@@ -338,7 +338,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.db_view_menu, menu);
@@ -358,7 +358,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     public void storeTransportEnquiry(View view) {
 

@@ -151,6 +151,9 @@ public class InsertTransportationAsyncTask {
                 }
                 // When Http response code other than 404, 500
                 else {
+                    if(errorResponse == null) {
+                        return;
+                    }
                     try {
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));

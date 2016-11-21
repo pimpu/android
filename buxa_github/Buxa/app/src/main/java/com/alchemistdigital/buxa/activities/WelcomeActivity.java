@@ -2,11 +2,14 @@ package com.alchemistdigital.buxa.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.NotificationUtils;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
@@ -51,6 +55,22 @@ public class WelcomeActivity extends AppCompatActivity {
         tv_UserName.setText(loginName);
         tv_UserEmail.setText(loginEmail);
 
+        if(Build.MANUFACTURER.equals("Xiaomi") && CommonUtilities.isFirstTime(this)) {
+            new AlertDialog.Builder(this)
+                .setTitle("Notice")
+                .setCancelable(false)
+                .setIcon(R.mipmap.ic_launcher)
+                .setMessage("Please, enable AutoStart option for Buxa app in Xiaomi phone Security.\nSecurity / Setting" +
+                        " > Permission > Autostart > enable to buxa app.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getApplicationContext(), "Thanking you", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .show();
+
+        }
     }
 
     /**

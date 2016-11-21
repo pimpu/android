@@ -89,16 +89,18 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
         String status ="Status: ";
         if(current.getEnquiryStatus() == 1 ) {
             status += "enquiry submit";
+            holder.conform_btn_layout.setVisibility(View.GONE);
         }
         else if(current.getEnquiryStatus() == 2 ) {
             status += "view by admin";
         }
         else if(current.getEnquiryStatus() == 3 ) {
             status += "email sent to you";
+            holder.conform_btn_layout.setVisibility(View.VISIBLE);
         }
         else if(current.getEnquiryStatus() == 4 ) {
             status += "accept";
-//            holder.conform_btn_layout.setVisibility(View.GONE);
+            holder.conform_btn_layout.setVisibility(View.GONE);
         }
         else if(current.getEnquiryStatus() == 5 ) {
             status += "cancel";
@@ -114,7 +116,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
             holder.tv_quotation.setText("Quotation: "+ quotaion);
         }
 
-        holder.tv_rates.setText("Rates: "+current.getRates()+" "+context.getResources().getString(R.string.Rs));
+//        holder.tv_rates.setText("Rates: "+current.getRates()+" "+context.getResources().getString(R.string.Rs));
     }
 
     @Override
@@ -138,7 +140,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
             tv_cc = (TextView) itemView.findViewById(R.id.enquiry_row_cc);
             tv_ff = (TextView) itemView.findViewById(R.id.enquiry_row_ff);
             tv_quotation = (TextView) itemView.findViewById(R.id.enquiry_row_quotation);
-            tv_rates = (TextView) itemView.findViewById(R.id.enquiry_row_rate);
+//            tv_rates = (TextView) itemView.findViewById(R.id.enquiry_row_rate);
             tv_status = (TextView) itemView.findViewById(R.id.enquiry_row_status);
             tv_accept = (TextView) itemView.findViewById(R.id.enquiry_row_accept);
             tv_cancel = (TextView) itemView.findViewById(R.id.enquiry_row_cancel);

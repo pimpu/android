@@ -112,8 +112,6 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
 
     @Override
     public void onCCClick(int position) {
-        new DownloadQuotationAsyncTask().execute("http://maven.apache.org/maven-1.x/maven.pdf", "maven.pdf");
-
         Intent gotoIntent = new Intent(EnquiriesActivity.this, CustomClrDetailsActivity.class);
         gotoIntent.putExtra("bookingId", data.get(position).getBookingId());
         startActivity(gotoIntent);
@@ -128,7 +126,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
 
     @Override
     public void onPdfViewClick(int position) {
-        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Buxa/" + "maven.pdf");  // -> filename = maven.pdf
+        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/Buxa/" + data.get(position).getQuotaion());  // -> filename = maven.pdf
         Uri path = Uri.fromFile(pdfFile);
         Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
         pdfIntent.setDataAndType(path, "application/pdf");

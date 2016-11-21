@@ -48,4 +48,8 @@ public class GetSharedPreference {
         return sharedPreference.getString(text, "");
     }
 
+    public boolean getIsFirstTime(String text) {
+        return sharedPreference.getBoolean(text, false);
+    }
+
 }

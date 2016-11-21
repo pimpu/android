@@ -63,6 +63,14 @@
     <string name="str_trans">Transportation</string>
     <string name="str_cc">Custom Clr</string>
     <string name="str_ff">Freight Fwd</string>
+    <string name="strCCType">Custom Clr Type</string>
+    <string name="strBookStatus">Status</string>
+    <string name="strBookingQuotation">Quotation</string>
+    <string name="strBookingRates">Rates</string>
+    <string name="Rs">\u20B9</string>
+    <string name="strAccept">Accept</string>
+    <string name="strCancel">Cancel</string>
+    <string name="runBefore">RunBefore</string>
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
@@ -174,15 +182,7 @@
     <string name="hint_pickup_landmark">Pickup landmark</string>
     <string name="hint_drop_landmark">Drop landmark</string>
     <string name="hint_feedback">Give your reviews about app</string>
-    <string name="strCCType">Custom Clr Type</string>
     <string name="hint_stuffing_address">Stuffing address</string>
     <string name="hint_stuffing_type">Stuffing type</string>
-    <string name="strBookStatus">Status</string>
-    <string name="strBookingQuotation">Quotation</string>
-    <string name="strBookingRates">Rates</string>
-    <string name="Rs">\u20B9</string>
-    <string name="strAccept">Accept</string>
-    <string name="strCancel">Cancel</string>
-
 
 </resources>

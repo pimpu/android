@@ -7,8 +7,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.activities.StartupActivity;
 import com.alchemistdigital.buxa.activities.WelcomeActivity;
+import com.alchemistdigital.buxa.asynctask.DownloadQuotationAsyncTask;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.NotificationUtils;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -68,8 +70,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
+//        Log.e(TAG, "push json: " + json.toString());
 
+        DatabaseClass dbDatabaseClass = new DatabaseClass(getApplicationContext());
         try {
             JSONObject data = json.getJSONObject("data");
 
@@ -79,6 +82,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String imageUrl = data.getString("image");
             String timestamp = data.getString("timestamp");
             JSONObject payload = data.getJSONObject("payload");
+
+            if(title.equals("Enquiry Quotation")) {
+                dbDatabaseClass.updateEnquiryStatus( payload.getInt("enquirystatus"), payload.getString("bookingno"), payload.getString("filename") );
+                new DownloadQuotationAsyncTask().execute(CommonVariables.DOWNLOAD_FILE_URL+payload.getString("filename"), payload.getString("filename") );
+            }
 
             Log.e(TAG, "title: " + title);
             Log.e(TAG, "message: " + message);

@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 4.0.10.14
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Nov 16, 2016 at 08:47 PM
--- Server version: 5.5.8
--- PHP Version: 5.3.5
+-- Host: localhost:3306
+-- Generation Time: Nov 21, 2016 at 11:32 PM
+-- Server version: 10.0.28-MariaDB
+-- PHP Version: 5.6.20
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,7 +17,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `buxa_db`
+-- Database: `buxa_17_10`
 --
 
 -- --------------------------------------------------------
@@ -70,6 +71,37 @@ INSERT INTO `bx_cfs_addresses` (`cfs_id`, `cfs_address`, `status`) VALUES
 (31, 'M/s. JWR Logistics Pvt. Ltd., 13-45, National Highway 4B, Panvel-JNPT Highway, Village Padeghar, Post Kundevahal, Panvel - 410206. Maharashtra', 1),
 (32, 'EFC Logistics India Pvt Ltd., Village-Veshvi, Post-Dighore, Taluka-Uran, Dist-Raigad-410207', 1),
 (33, 'TAKE CARE LOGISTICSPARK (INDIA) PVT LTD, SURVEY NO.96/1,87/3,4,5 & 6, MUMBAI GOA HIGHWAY, PALASPE VILLAGE, PANVEL, Dist-Raigad-410206', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bx_charges`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_charges` (
+  `cid` int(11) NOT NULL AUTO_INCREMENT,
+  `bookid` varchar(50) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `units` int(11) NOT NULL,
+  `perunit` int(11) NOT NULL,
+  `fxrate` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `bx_charges`
+--
+
+INSERT INTO `bx_charges` (`cid`, `bookid`, `description`, `type`, `units`, `perunit`, `fxrate`, `total`, `status`) VALUES
+(1, 'BUXA2011160255585', 'Transportation', 'Flat Rate', 1, 25000, 0, 25000, 1),
+(2, 'BUXA2011160255585', 'Custom Clearance', 'Flat Rate', 1, 5000, 0, 5000, 1),
+(3, 'BUXA2011160255585', 'Ocean ', 'Flat Rate', 1, 1000, 70, 70000, 1),
+(4, 'BUXA2111160855385', 'Transportation', 'Flat Rate', 1, 25000, 0, 25000, 1),
+(5, 'BUXA2111160855385', 'Custom Clearance', 'Flat Rate', 1, 5000, 0, 5000, 1),
+(6, 'BUXA2111161103015', 'ok', 'hello', 14, 12, 25000, 26000, 1);
 
 -- --------------------------------------------------------
 
@@ -589,11 +621,6 @@ CREATE TABLE IF NOT EXISTS `bx_cusdetail` (
   PRIMARY KEY (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `bx_cusdetail`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -615,14 +642,16 @@ CREATE TABLE IF NOT EXISTS `bx_custom_clearance` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `create_time` varchar(50) NOT NULL,
   PRIMARY KEY (`clearanceid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `bx_custom_clearance`
 --
 
 INSERT INTO `bx_custom_clearance` (`clearanceid`, `bookid`, `customer_code`, `cc_type`, `commodity_id`, `gross_weight`, `hscode`, `type_of_shipment`, `stuffing`, `address`, `avail_option`, `status`, `create_time`) VALUES
-(1, 'BUXA1611160338585', 5, 'Import', 66, 58, 58, 1, 'Factory stuffing', 'Sion, Mumbai, Maharashtra, India', 0, 1, '1479290970615');
+(6, 'BUXA2111160840175', 5, 'Import', 3, 58, 58878768, 1, 'Factory stuffing', 'Sion East, Mumbai, Maharashtra, India', 0, 1, '1479741063059'),
+(7, 'BUXA2111160855385', 5, 'Import', 69, 8794, 9898988, 2, 'null', '', 0, 1, '1479741945880'),
+(8, 'BUXA2111161103015', 5, 'Import', 76, 580, 54849494, 2, 'null', '', 0, 1, '1479749593756');
 
 -- --------------------------------------------------------
 
@@ -649,14 +678,14 @@ CREATE TABLE IF NOT EXISTS `bx_freight_forwarding` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `create_time` varchar(50) NOT NULL,
   PRIMARY KEY (`freightid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `bx_freight_forwarding`
 --
 
 INSERT INTO `bx_freight_forwarding` (`freightid`, `bookid`, `customer_code`, `type_of_shipment`, `pol`, `pod`, `poc`, `incoterm`, `destideliveryadr`, `measurement`, `grossweight`, `packtype`, `noofpack`, `commodity`, `avail_option`, `status`, `create_time`) VALUES
-(1, 'BUXA1611160338585', 5, 1, 'Nhava Sheva, Navi Mumbai, Maharashtra 400702', 'ALGER', 'ALGERIA', 'Delivered at Place (DAP)', 'Sion', '40', 58, 11, 54, 66, 0, 1, '1479290980189');
+(4, 'BUXA2111160840175', 5, 1, 'Nhava Sheva, Navi Mumbai, Maharashtra 400702', 'NATAL', 'BRAZIL', 'Delivered Duty Paid (DDP)', 'Hedvi', '40', 58, 12, 55, 3, 0, 1, '1479741087666');
 
 -- --------------------------------------------------------
 
@@ -753,6 +782,33 @@ INSERT INTO `bx_icdcategory` (`icdid`, `icdname`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bx_otherinfo`
+--
+
+CREATE TABLE IF NOT EXISTS `bx_otherinfo` (
+  `oid` int(11) NOT NULL AUTO_INCREMENT,
+  `bid` varchar(50) NOT NULL,
+  `kindatt` varchar(100) NOT NULL,
+  `dvalue` varchar(20) NOT NULL,
+  `place` varchar(500) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`oid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `bx_otherinfo`
+--
+
+INSERT INTO `bx_otherinfo` (`oid`, `bid`, `kindatt`, `dvalue`, `place`, `status`) VALUES
+(1, 'BUXA1411160429345', 'abc', '2016-11-25', 'test', 1),
+(2, 'BUXA2011160255585', 'test', '2016-11-25', 'abc', 1),
+(3, 'BUXA2111160840175', 'tset', '2016-11-25', 'abc', 1),
+(4, 'BUXA2111160855385', 'abc', '2016-11-25', 'abc', 1),
+(5, 'BUXA2111161103015', 'test', '21/11/2016', 'hello', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bx_packagetype`
 --
 
@@ -826,14 +882,15 @@ CREATE TABLE IF NOT EXISTS `bx_shipment_confirmation` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`cnfrmid`),
   UNIQUE KEY `bookid` (`bookid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `bx_shipment_confirmation`
 --
 
 INSERT INTO `bx_shipment_confirmation` (`cnfrmid`, `bookid`, `enquiry_status`, `quotation`, `finalrate`, `serviceid`, `status`) VALUES
-(1, 'BUXA1611160338585', 1, '', 0, '1,2,3', 1);
+(1, 'BUXA2111160855385', 3, 'pdf/BUXA2111160855385.pdf', 0, '2', 1),
+(2, 'BUXA2111161103015', 3, 'pdf/BUXA2111161103015.pdf', 0, '2', 1);
 
 -- --------------------------------------------------------
 
@@ -881,14 +938,14 @@ CREATE TABLE IF NOT EXISTS `bx_transport` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `create_time` varchar(50) NOT NULL,
   PRIMARY KEY (`trnsid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `bx_transport`
 --
 
 INSERT INTO `bx_transport` (`trnsid`, `customer_code`, `bookid`, `commodity_id`, `demlength`, `demwidth`, `demheight`, `shipment_type`, `mesurement`, `gross_weight`, `no_of_pack`, `pack_type`, `source`, `destination`, `avail_option`, `status`, `create_time`) VALUES
-(1, 5, 'BUXA1611160338585', 66, 8, 3, 1, 1, '40', 58, 54, 11, 'Sion, Mumbai, Maharashtra, India', 'Faizabad, Uttar Pradesh, India', 0, 1, '1479290962852');
+(5, 5, 'BUXA2111160840175', 3, 58, 57, 51, 1, '40', 58, 55, 12, 'Sion East, Mumbai, Maharashtra, India', 'Hedvi, Varchwadi, Asgoli, Maharashtra, India', 0, 1, '1479741053828');
 
 -- --------------------------------------------------------
 
@@ -899,7 +956,7 @@ INSERT INTO `bx_transport` (`trnsid`, `customer_code`, `bookid`, `commodity_id`,
 CREATE TABLE IF NOT EXISTS `bx_user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `api_key` varchar(100) NOT NULL,
-  `gcm_id` longtext,
+  `fcm_id` longtext,
   `company` varchar(100) NOT NULL,
   `uname` varchar(100) NOT NULL,
   `mobile` varchar(20) NOT NULL,
@@ -914,8 +971,8 @@ CREATE TABLE IF NOT EXISTS `bx_user` (
 -- Dumping data for table `bx_user`
 --
 
-INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
-(5, '6c13b559a3224bcba3a9e1a52b43c0d4', 'APA91bHrYO38j9lgfhjOyBpe--B1lqKlF-ih9GiD_hvM-B-WCSvVyqPXKxQrjbRaRTVUsapzgVGj06XYOS8kP_gS1J1wiwSMo7PhuzWnpYNGVdsUZ9oo7m4ILFl0wS_a33ohEZamjCiF', 'ADM', 'Yogesh Pimpalkar', '8466525807', 'yogesh@adm.com', 'test', '1473837432596', 1);
+INSERT INTO `bx_user` (`uid`, `api_key`, `fcm_id`, `company`, `uname`, `mobile`, `email`, `password`, `create_time`, `status`) VALUES
+(5, '6c13b559a3224bcba3a9e1a52b43c0d4', 'e2-MyNJEI40:APA91bF-5teicNUtQwH0CbSjxUgTAsex-EylQf6eqk6Oz7UvefVppVYWtOCrQfv_h3G4G9CtnM6KwH1HN7NIqJ4QKlnUbl_MKglxVi4iAWm1fmC6Iq_s1iRfKSj-qQXeP8fcCcOy4Ken', 'ADM', 'Yogesh Pimpalkar', '8466525807', 'yogesh.blueoort@gmail.com', 'test', '1473837432596', 1);
 
 -- --------------------------------------------------------
 
@@ -926,6 +983,7 @@ INSERT INTO `bx_user` (`uid`, `api_key`, `gcm_id`, `company`, `uname`, `mobile`,
 CREATE TABLE IF NOT EXISTS `db_transport_service` (
   `service_id` int(11) NOT NULL AUTO_INCREMENT,
   `servicename` varchar(50) NOT NULL,
+  `tblnm` varchar(50) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`service_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
@@ -934,10 +992,10 @@ CREATE TABLE IF NOT EXISTS `db_transport_service` (
 -- Dumping data for table `db_transport_service`
 --
 
-INSERT INTO `db_transport_service` (`service_id`, `servicename`, `status`) VALUES
-(1, 'Transportation', 1),
-(2, 'Custom Clearance', 1),
-(3, 'Freight Forwarding', 1);
+INSERT INTO `db_transport_service` (`service_id`, `servicename`, `tblnm`, `status`) VALUES
+(1, 'Transportation', 'bx_transport', 1),
+(2, 'Custom Clearance', 'bx_custom_clearance', 1),
+(3, 'Freight Forwarding', 'bx_freight_forwarding', 1);
 
 -- --------------------------------------------------------
 
@@ -962,3 +1020,7 @@ INSERT INTO `db_transport_type` (`trid`, `tname`, `active_status`) VALUES
 (3, 'Air', 0),
 (4, 'Rail', 0),
 (5, 'Courier', 0);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

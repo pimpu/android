@@ -22,7 +22,7 @@ function authenticate(\Slim\Route $route) {
     $app = \Slim\Slim::getInstance();
  
     // get the api key
-    $api_key = $app->request->headers("Authorization");
+    $api_key = $app->request->headers("X-Authorization");
 
 
     // Verifying Authorization Header
@@ -77,7 +77,7 @@ $app->post('/register', function() use ($app) {
 
             $db = new DbHandler();
             $res = $db->createUser($company, $uname, $mobile,
-            						$email, $password, $create_time );
+                                    $email, $password, $create_time );
 
             if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
                 $response["error"] = false;
@@ -331,7 +331,7 @@ $app -> get('/getcfsadresses', function(){
 
 });
 
-$app->put('/updategcmid', function() use ($app) {
+$app->put('/updatefcmid', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('registerId', 'userId'));
@@ -343,7 +343,7 @@ $app->put('/updategcmid', function() use ($app) {
     $registerId = $app->request->put('registerId');
     $userId = $app->request->put('userId');
 
-    $res = $db->updateGcmID($registerId, $userId);
+    $res = $db->updateFcmID($registerId, $userId);
 
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
@@ -361,7 +361,7 @@ $app->put('/updategcmid', function() use ($app) {
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
  */
 
-$app -> post('/inserttransport', 'authenticate', function() use ($app) {
+$app -> post('/inserttransport', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('transportdata'));
@@ -390,7 +390,7 @@ $app -> post('/inserttransport', 'authenticate', function() use ($app) {
 
 });
 
-$app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
+$app -> post('/insertcustomclearance', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('customClearancedata'));
@@ -419,7 +419,7 @@ $app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
 
 });
 
-$app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
+$app -> post('/insertfreightforwarding', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('freightForwardingdata'));
@@ -448,17 +448,15 @@ $app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
 
 });
 
-$app -> post('/sendmail', 'authenticate', function() use ($app) {
+$app -> post('/sendmail', function() use ($app) {
 
     // check for required params
-    verifyRequiredParams(array('availedService','service','bookingId'));
+    verifyRequiredParams(array('bookingId'));
 
     $db = new DbHandler();
     $response = array();
 
     // reading post params
-    $availedService = $app->request->post('availedService');
-    $service = $app->request->post('service');
     $bookingId = $app->request->post('bookingId');
 
 
@@ -473,6 +471,18 @@ $app -> post('/sendmail', 'authenticate', function() use ($app) {
         $response["error"] = true;
         $response["message"] = "This booking already existed.";
     }*/
+    
+    $to      = 'amruta.zaveri2012@gmail.com';
+    $subject = 'New Booking'.$bookingId;
+    $message = 'Hello,\n \n';
+    $message .= 'You get the new enquiry of buxa no '.$bookingId.' . Please check in admin.\n';
+    $message .= 'Thank you,\n';
+    $message .= 'Buxa Logistic\n';
+    $headers .= 'From: info@buxa.tech' . "\r\n" .
+        'Reply-To: info@buxa.tech' . "\r\n" .
+        'X-Mailer: PHP/' . phpversion();
+
+    mail($to, $subject, $message, $headers);
 
     $response["error"] = false;
     $response["message"] = "sent mail successfully";
@@ -480,7 +490,7 @@ $app -> post('/sendmail', 'authenticate', function() use ($app) {
 
 });
 
-$app -> post('/acceptenquiry', 'authenticate', function() use ($app) {
+$app -> post('/acceptenquiry', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('bookingId', 'status'));
@@ -502,30 +512,11 @@ $app -> post('/acceptenquiry', 'authenticate', function() use ($app) {
         $response["message"] = "Oops! An error occurred while upating shipment accept conformation";
     }
 
-    $firebase = new Firebase();
-    $push = new Push();
-
-    // optional payload
-    $payload = array();
-    $payload['team'] = 'India';
-    $payload['score'] = '5.6';
-
-    $push->setTitle($title);
-    $push->setMessage($message);
-    $push->setImage('');
-    $push->setIsBackground(TRUE);
-    $push->setPayload($payload);
-    $json = $push->getPush();
-
-    $regId = 'fAi__86WM8k:APA91bGyNnKyZJC5mQfRzJdOp0tPi9yRPQFGgDWMJxPl72TTcBtUUYKV8oyrMmSqSonu5Gzc2tVua973UOXVDKkl7GsvPV4XnT2eTCXWrwgWqZbkYEXlyjaKC-H94d5trTFnEq2-3oLd';
-
-    $firebase->send($regId, $json);
-
     echoRespnse(200, $response);
 
 });
 
-$app -> post('/cancelenquiry', 'authenticate', function() use ($app) {
+$app -> post('/cancelenquiry', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('bookingId', 'status'));

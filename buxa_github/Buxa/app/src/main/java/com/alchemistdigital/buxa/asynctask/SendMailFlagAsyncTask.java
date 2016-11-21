@@ -71,7 +71,7 @@ public class SendMailFlagAsyncTask {
                         Toast.makeText(context, json.getString(CommonVariables.TAG_MESSAGE), Toast.LENGTH_LONG).show();
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
                     } else {
-                        System.out.println("Mail sending");
+                        System.out.println("Mail sent");
                         ((Activity)context).finish();
 
                         // below keyword is define static

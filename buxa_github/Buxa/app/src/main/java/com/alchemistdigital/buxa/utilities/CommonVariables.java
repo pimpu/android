@@ -30,8 +30,10 @@ public class CommonVariables {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
-    static String SERVER_URL = "http://54df6ffa.ngrok.io/buxa/v1/";
-//    static String SERVER_URL = "http://alchemistdigital.net/android_webservices/v1/";
+//    static String SERVER_URL = "http://cf014033.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
+    public static String DOWNLOAD_FILE_URL = "http://www.buxa.tech/admin/pdf/";
+//    static String SERVER_URL = "http://alchemistdigital.net/buxa/v1/";
 
     public static final String COMPANY_REGISTER_SERVER_URL = SERVER_URL + "register";
     public static final String COMPANY_LOGIN_SERVER_URL = SERVER_URL + "login";
@@ -45,7 +47,7 @@ public class CommonVariables {
     public static final String INSERT_TRANSPOERTATION_SERVER_URL = SERVER_URL + "inserttransport";
     public static final String INSERT_CUSTOM_CLEARANCE_SERVER_URL = SERVER_URL + "insertcustomclearance";
     public static final String INSERT_FREIGHT_FORWARDING_SERVER_URL = SERVER_URL + "insertfreightforwarding";
-    public static final String UPDATE_GCM_REGISTERED_ID_SERVER_URL = SERVER_URL + "updategcmid";
+    public static final String UPDATE_GCM_REGISTERED_ID_SERVER_URL = SERVER_URL + "updatefcmid";
     public static final String QUERY_CFS_ADDRESS_SERVER_URL = SERVER_URL + "getcfsadresses";
     public static final String SEND_EMAIL_FLAG_SERVER_URL = SERVER_URL + "sendmail";
     public static final String ACCPET_ENQUIRY_SERVER_URL = SERVER_URL + "acceptenquiry";
