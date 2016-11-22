@@ -1,33 +1,22 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.adapter.Enquiry_Adapter;
-import com.alchemistdigital.buxa.asynctask.DownloadQuotationAsyncTask;
 import com.alchemistdigital.buxa.asynctask.EnquiryAcceptAsyncTask;
 import com.alchemistdigital.buxa.asynctask.EnquiryCancelAsyncTask;
-import com.alchemistdigital.buxa.asynctask.InsertCustomClearanceAsyncTask;
-import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.ShipmentConformationModel;
 import com.alchemistdigital.buxa.utilities.ItemClickListener;
 

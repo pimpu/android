@@ -15,14 +15,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.ForgotPwdAsynTask;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -78,7 +82,7 @@ public class StartupActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from UpdateGCMID when all default value from server get finished.
+            // this message is come from GetAllPackageType when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
 
                 // gcm successfully registered
@@ -101,17 +105,33 @@ public class StartupActivity extends AppCompatActivity {
         try {
             unregisterReceiver(mHandleServerMessageReceiverInStartUpActivity);
         } catch (Exception e) {
-            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
+            System.err.println("UnRegisterReceiverError > " + e.getMessage());
         }
         super.onDestroy();
-    }
-
-    public void btnForgetPwd(View view) {
-        // Todo : forget password email coding
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(StartupActivity.this)
+                .setCancelable(false)
+                .setMessage("Do you want to Exit?")
+                .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StartupActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .show();
     }
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
+import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.InternationalDestinationPorts;
 
@@ -44,8 +46,11 @@ public class InsertInternationalDestinationPort extends AsyncTask<String, String
         // close database in synchronized condition
         dbHelper.closeDB();
 
+        GetSharedPreference getPreference = new GetSharedPreference(context);
+        int uId = getPreference.getLoginId(context.getResources().getString(R.string.loginId));
+        String token = getPreference.getFCMRegId(context.getResources().getString(R.string.FCM_RegId));
 
-        // get All shipment type
-        GetAllShipmentType.getShipmentType(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
+        new UpdateGCMID(context, token, uId);
+
     }
 }

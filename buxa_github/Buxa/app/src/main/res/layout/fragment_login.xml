@@ -85,6 +85,7 @@
         </LinearLayout>
 
         <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/id_btn_forgot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:Segoe="segoe_regular"
@@ -93,8 +94,7 @@
             android:layout_centerHorizontal="true"
             android:textColor="@color/mdtp_ampm_text_color"
             android:textSize="15dp"
-            android:text="@string/forgetPwd"
-            android:onClick="btnForgetPwd"/>
+            android:text="@string/forgetPwd"/>
 
         <Button
             android:id="@+id/btn_Register"

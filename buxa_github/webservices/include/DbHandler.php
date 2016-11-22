@@ -529,6 +529,65 @@ class DbHandler {
         return $response;
     }
 
+    /**
+    * Forgot password
+    * password is sent to registered email id
+    */
+    public function forgotPwd($emailId) {
+        $response = array();
+        $getResult = mysql_query("SELECT * FROM bx_user WHERE email='".$emailId."' AND status=1;");
+        if (mysql_num_rows($getResult) > 0) {
+            $resultArray = mysql_fetch_array($getResult);
+
+            $to      = $resultArray["email"];
+            $subject = 'Buxa Password';
+            $message = "Hello, ".$resultArray["uname"]."\r\n \r\n";
+            $message .= "Your registered password is \"".$resultArray["password"]."\".\r\n\r\n";
+            $message .= "Thank you,\r\n\r\n";
+            $message .= "Buxa Logistic\r\n";
+            $headers .= 'From: info@buxa.tech' . "\r\n" .
+                'Reply-To: info@buxa.tech' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            mail($to, $subject, $message, $headers);
+
+            $response["message"] = "mail sent on your registered email id successfully";
+        }
+        else {
+            $response["message"] = "user not found";
+        }
+        return $response;
+    }
+
+    /**
+    * Forgot password
+    * password is sent to registered email id
+    */
+    public function submitFeedback($loginId, $feedback) {
+        $response = array();
+        $getResult = mysql_query("SELECT * FROM bx_user WHERE uid=".$loginId." AND status=1;");
+        if (mysql_num_rows($getResult) > 0) {
+            $resultArray = mysql_fetch_array($getResult);
+
+            $to      = 'amruta.zaveri2012@gmail.com';
+            $subject = 'Feedback of Buxa';
+            $message = "Hello,\r\n";
+            $message .= "I am ".$resultArray["uname"].". My company name is ".$resultArray["company"]." and email id is ".$resultArray["email"].".\r\n\r\n";
+            $message .= "Feedback ->\r\n".$feedback."\r\n\r\n";
+            $message .= "Thank you,\r\n";
+            $headers .= 'From: '.$resultArray["email"]."\r\n" .
+                'Reply-To: '.$resultArray["email"]."\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+            mail($to, $subject, $message, $headers);
+
+            $response["message"] = "feedback sent successfully";
+        }
+        else {
+            $response["message"] = "user not found";
+        }
+        return $response;
+    }
 
     /**
      * Deleting a task

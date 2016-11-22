@@ -352,7 +352,7 @@ public class RegisterActivity extends AppCompatActivity {
             // Waking up mobile if it is sleeping
             WakeLocker.acquire(getApplicationContext());
 
-            // this message is come from UpdateGCMID when all default value from server get finished.
+            // this message is come from GetAllPackageType when all default value from server get finished.
             if(newMessage.equals("allDefaultDataFetched")) {
 
                 // gcm successfully registered
@@ -375,7 +375,7 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             unregisterReceiver(mHandleServerMessageReceiverInRegisterActivity);
         } catch (Exception e) {
-            Log.e("UnRegisterReceiverError", "> " + e.getMessage());
+            System.err.println("UnRegisterReceiverError > " + e.getMessage());
         }
         super.onDestroy();
     }
@@ -437,10 +437,10 @@ public class RegisterActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_GET_ACCOUNT:
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "Permission has been denied by user");
+                    System.out.println("Permission has been denied by user");
                     Toast.makeText(getApplicationContext(), "Permission require for registering with Buxa.",Toast.LENGTH_LONG).show();
                 } else {
-                    Log.i(TAG, "Permission has been granted by user");
+                    System.out.println("Permission has been granted by user");
 
                     // get emails addresses which are registered on mobile device
                     list = CommonUtilities.getEmailsData(RegisterActivity.this);

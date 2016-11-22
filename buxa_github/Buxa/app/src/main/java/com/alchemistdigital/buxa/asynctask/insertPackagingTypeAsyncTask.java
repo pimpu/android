@@ -1,7 +1,9 @@
 package com.alchemistdigital.buxa.asynctask;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
@@ -56,11 +58,17 @@ public class InsertPackagingTypeAsyncTask extends AsyncTask<String, String, Arra
         // close database in synchronized condition
         databaseClass.closeDB();
 
-        GetSharedPreference getPreference = new GetSharedPreference(context);
-        int uId = getPreference.getLoginId(context.getResources().getString(R.string.loginId));
-        String token = getPreference.getFCMRegId(context.getResources().getString(R.string.FCM_RegId));
+        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+        // it store the Register true value of user for purpose of user is registered with this app.
+        setSharedPreference.setBooleanLogin(context.getString(R.string.boolean_login_sharedPref), "true");
 
-        new UpdateGCMID(context, token, uId);
+        if(context.getClass().getSimpleName().equals("WelcomeActivity")){
+            ((Activity)context).setContentView(R.layout.activity_welcome);
+        }
+        else {
+            // sent notification to activities that server calling finished
+            CommonUtilities.displayMessage(context, "allDefaultDataFetched");
+        }
 
     }
 }

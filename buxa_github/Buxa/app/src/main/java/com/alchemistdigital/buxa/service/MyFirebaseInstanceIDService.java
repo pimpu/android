@@ -49,7 +49,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void storeRegIdInPref(String token) {
-        Log.e(TAG, "storeRegIdInPref: " + token);
+        System.err.println("storeRegIdInPref: " + token);
 
         SetSharedPreference setSharedPreference = new SetSharedPreference(getApplicationContext());
         setSharedPreference.setFCMRegId(getResources().getString(R.string.FCM_RegId), token);

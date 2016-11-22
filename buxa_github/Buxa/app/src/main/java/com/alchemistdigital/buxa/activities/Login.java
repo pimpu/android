@@ -3,11 +3,14 @@ package com.alchemistdigital.buxa.activities;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +27,13 @@ import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.ForgotPwdAsynTask;
 import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.Validations;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -38,6 +43,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
+import static android.R.id.input;
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.emailValidate;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
@@ -50,7 +56,7 @@ public class Login extends Fragment implements View.OnClickListener {
     TextInputLayout loginEmail_InputLayout, loginPwd_InputLayout;
     ProgressDialog prgDialog;
     Button btnLogin, btnGoToRegister;
-    TextView errorMessage;
+    TextView errorMessage, tv_forgot;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +78,7 @@ public class Login extends Fragment implements View.OnClickListener {
 
         layout_noConnection = (LinearLayout) rootView.findViewById(R.id.id_noInternet_login);
         errorMessage = (TextView) rootView.findViewById(R.id.login_error_msg);
+        tv_forgot = (TextView) rootView.findViewById(R.id.id_btn_forgot);
         relativeLayout_loginPanel = (RelativeLayout) rootView.findViewById(R.id.layout_loginPanel);
         txtLogin = (EditText) rootView.findViewById(R.id.login_email);
         txtPassword = (EditText) rootView.findViewById(R.id.login_password);
@@ -110,7 +117,62 @@ public class Login extends Fragment implements View.OnClickListener {
             }
         });
 
+        tv_forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check if Internet present
+                if (!isConnectingToInternet(getActivity())) {
+                    layout_noConnection.setVisibility(View.VISIBLE);
+                    errorMessage.setText(getResources().getString(R.string.strNoConnection));
+                    // stop executing code by return
+                    return;
+                } else {
+                    layout_noConnection.setVisibility(View.GONE);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    View inflate = getActivity().getLayoutInflater().inflate(R.layout.forgotpwd_layout, null);
+                    builder.setView(inflate);
 
+                    final TextInputLayout emailLayout = (TextInputLayout) inflate.findViewById(R.id.input_layout_forgotpassword_email);
+                    final EditText txtEmail = (EditText) inflate.findViewById(R.id.forgotpassword_email);
+
+                    builder.setMessage("Enter Your Registered Email-Id");
+                    final TextView btnCancel = (TextView) inflate.findViewById(R.id.forgotdialog_btnCancel);
+                    final TextView btnRequest = (TextView) inflate.findViewById(R.id.forgotdialog_btnRequest);
+
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    btnRequest.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String emailId = txtEmail.getText().toString();
+                            Boolean boolEmail = Validations.emailValidate(emailId);
+
+                            if(boolEmail) {
+                                emailLayout.setErrorEnabled(false);
+                                dialog.cancel();
+                                GetSharedPreference getSharedPreference = new GetSharedPreference(getActivity());
+                                String apiKeyHeader = getSharedPreference.getApiKey(getResources().getString(R.string.apikey));
+
+                                new ForgotPwdAsynTask(getActivity(), apiKeyHeader, emailId).sendForgotPwdRequest();
+                            }
+                            else {
+                                emailLayout.setErrorEnabled(true);
+                                emailLayout.setError("Email field is wrong.");
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override

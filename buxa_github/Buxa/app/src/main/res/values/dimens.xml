@@ -10,4 +10,5 @@
     <dimen name="enquiries_date_textSize">14dp</dimen>
     <dimen name="enquirydetail_hint_textSize">15dp</dimen>
     <dimen name="enquirydetail_text_textSize">18dp</dimen>
+
 </resources>

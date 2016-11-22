@@ -461,14 +461,14 @@ public class DatabaseClass extends SQLiteOpenHelper {
             }
             return alc;
         } catch(SQLException sqlEx){
-            Log.d("printing exception", sqlEx.getMessage());
+            System.err.println("printing exception"+ sqlEx.getMessage());
             //if any exceptions are triggered save the error message to cursor an return the arraylist
             Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
             alc.set(1,Cursor2);
             return alc;
         } catch(Exception ex){
 
-            Log.d("printing exception", ex.getMessage());
+            System.err.println("printing exception"+ ex.getMessage());
 
             //if any exceptions are triggered save the error message to cursor an return the arraylist
             Cursor2.addRow(new Object[] { ""+ex.getMessage() });
@@ -534,7 +534,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_COMMODITY + " WHERE "
                 + KEY_STATUS + " = 1; ";
 
-        Log.d("getCommodityData: ", selectQuery);
+        System.out.println("getCommodityData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -653,7 +653,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_CUSTOM_CLEARANCE_LOCATION + " WHERE "
                 + KEY_STATUS + " = 1; ";
 
-        Log.d("getCommodityData: ", selectQuery);
+        System.out.println("getCommodityData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -874,7 +874,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
                 + KEY_STATUS + " = 1; ";
 
-        Log.d("getTransportService: ", selectQuery);
+        System.out.println("getTransportService: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -903,7 +903,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_TRANSPORT_SERVICE + " WHERE "
                 + KEY_STATUS + " = 1 AND "+TRANSPORT_SERVICE_NAME+" = '"+serviceName + "';";
 
-        Log.d("getTransportService: ", selectQuery);
+        System.out.println("getTransportService: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -963,7 +963,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_TYPE_OF_PACKAGE + " WHERE "
                 + KEY_STATUS + " = 1; ";
 
-        Log.d("getPackagingType: ", selectQuery);
+        System.out.println("getPackagingType: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1076,7 +1076,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_CFS_ADDRESS + " WHERE "
                 + KEY_STATUS + " = 1; ";
 
-        Log.d("getCfsData: ", selectQuery);
+        System.out.println("getCfsData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1138,7 +1138,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 ORDER BY "+
                 INTER_DESTI_PORT_COUNTRY+";";
 
-        Log.d("getPortOfCountry: ", selectQuery);
+        System.out.println("getPortOfCountry: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1164,7 +1164,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 TABLE_INTERNATIONAL_DESTINATION_PORT + " WHERE "+ KEY_STATUS + " = 1 AND " +
                 INTER_DESTI_PORT_COUNTRY+" = '"+countryName+"' ORDER BY "+INTER_DESTI_PORT_NAME+" ;";
 
-        Log.d("getPortOfCountry: ", selectQuery);
+        System.out.println("getPortOfCountry: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1257,7 +1257,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_TRANSPORTATION + " WHERE "
                 + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
 
-        Log.d("getTransportstionData: ", selectQuery);
+        System.out.println("getTransportstionData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1363,7 +1363,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_CUSTOM_CLEARANCE + " WHERE "
                 + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
 
-        Log.d("getCustomClrData: ", selectQuery);
+        System.out.println("getCustomClrData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 
@@ -1468,7 +1468,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TABLE_FREIGHT_FORWARDING + " WHERE "
                 + KEY_STATUS + " = 1 AND "+BOOKING_ID+" = '"+bookingId+"'; ";
 
-        Log.d("getFreightFwdData: ", selectQuery);
+        System.out.println("getFreightFwdData: "+ selectQuery);
 
         Cursor res =  db.rawQuery(selectQuery, null);
 

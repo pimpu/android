@@ -96,7 +96,7 @@ public class CommonUtilities {
                 }
             }
         } catch (Exception e) {
-            Log.i("ExceptionGetEmails", "Exception:" + e);
+            System.err.println("ExceptionGetEmails: " + e);
         }
         for( int i = 0 ; i < accountsList.size() ; i++ ){
             String name = accountsList.get(i).getName();

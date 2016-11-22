@@ -30,26 +30,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.e(TAG, "From: " + remoteMessage.getFrom());
+        System.err.println(TAG+" From: " + remoteMessage.getFrom());
 
         if (remoteMessage == null)
             return;
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
+            System.err.println(TAG+" Notification Body: " + remoteMessage.getNotification().getBody());
             handleNotification(remoteMessage.getNotification().getBody());
         }
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
+            System.err.println(TAG+" Data Payload: " + remoteMessage.getData().toString());
 
             try {
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
                 handleDataMessage(json);
             } catch (Exception e) {
-                Log.e(TAG, "Exception: " + e.getMessage());
+                System.err.println(TAG+" Exception: " + e.getMessage());
             }
         }
     }
@@ -88,12 +88,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 new DownloadQuotationAsyncTask().execute(CommonVariables.DOWNLOAD_FILE_URL+payload.getString("filename"), payload.getString("filename") );
             }
 
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "isBackground: " + isBackground);
-            Log.e(TAG, "payload: " + payload.toString());
-            Log.e(TAG, "imageUrl: " + imageUrl);
-            Log.e(TAG, "timestamp: " + timestamp);
+            System.err.println(TAG+" title: " + title);
+            System.err.println(TAG+" message: " + message);
+            System.err.println(TAG+" isBackground: " + isBackground);
+            System.err.println(TAG+" payload: " + payload.toString());
+            System.err.println(TAG+" imageUrl: " + imageUrl);
+            System.err.println(TAG+" timestamp: " + timestamp);
 
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
@@ -119,9 +119,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Json Exception: " + e.getMessage());
+            System.err.println(TAG+" Json Exception: " + e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+            System.err.println(TAG+" Exception: " + e.getMessage());
         }
     }
 

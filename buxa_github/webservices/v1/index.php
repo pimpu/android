@@ -459,19 +459,6 @@ $app -> post('/sendmail', function() use ($app) {
     // reading post params
     $bookingId = $app->request->post('bookingId');
 
-
-    /*if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
-        $response["error"] = false;
-        $response["message"] = "Freight forwarding enquiry created successfully";
-        $response["id"] = $res["id"];
-    } else if ($res["message"] == USER_CREATE_FAILED) {
-        $response["error"] = true;
-        $response["message"] = "Oops! An error occurred while creating";
-    } else if ($res["message"] == USER_ALREADY_EXISTED) {
-        $response["error"] = true;
-        $response["message"] = "This booking already existed.";
-    }*/
-    
     $to      = 'amruta.zaveri2012@gmail.com';
     $subject = 'New Booking'.$bookingId;
     $message = 'Hello,\n \n';
@@ -537,6 +524,47 @@ $app -> post('/cancelenquiry', function() use ($app) {
         $response["error"] = true;
         $response["message"] = "Oops! An error occurred while upating shipment cancel conformation";
     }
+
+    echoRespnse(200, $response);
+
+});
+
+$app -> post('/forgotpassword', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('emailId'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $emailId = $app->request->post('emailId');
+
+    $res = $db->forgotPwd($emailId);
+
+    $response["error"] = false;
+    $response["message"] = $res["message"];
+
+    echoRespnse(200, $response);
+
+});
+
+$app -> post('/submitfeedback', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('loginId', 'feedback'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $loginId = $app->request->post('loginId');
+    $feedback = $app->request->post('feedback');
+
+    $res = $db->submitFeedback($loginId, $feedback);
+
+    $response["error"] = false;
+    $response["message"] = $res["message"];
 
     echoRespnse(200, $response);
 

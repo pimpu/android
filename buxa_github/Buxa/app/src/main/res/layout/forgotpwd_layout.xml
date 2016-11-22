@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_forgotpassword_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+        <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:id="@+id/forgotpassword_email"
+            android:hint="@string/hint_email"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:layout_margin="20dp">
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/forgotdialog_btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:Segoe="segoe_regular"
+            android:textSize="@dimen/enquirydetail_hint_textSize"
+            android:text="CANCEL"
+            android:textColor="@color/colorAccent"/>
+
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/forgotdialog_btnRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:Segoe="segoe_regular"
+            android:layout_marginLeft="20dp"
+            android:textSize="@dimen/enquirydetail_hint_textSize"
+            android:text="REQUEST"
+            android:textColor="@color/colorAccent"/>
+    </LinearLayout>
+
+</LinearLayout>

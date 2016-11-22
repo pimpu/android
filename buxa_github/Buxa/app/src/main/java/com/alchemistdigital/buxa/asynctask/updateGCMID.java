@@ -50,13 +50,8 @@ public class UpdateGCMID {
                     else {
                         System.out.println(json.getString(CommonVariables.TAG_MESSAGE));
 
-                        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
-                        // it store the Register true value of user for purpose of user is registered with this app.
-                        setSharedPreference.setBooleanLogin(context.getString(R.string.boolean_login_sharedPref), "true");
-
-                        // sent notification to activities that server calling finished
-                        CommonUtilities.displayMessage(context, "allDefaultDataFetched");
-
+                        // get All shipment type
+                        GetAllShipmentType.getShipmentType(context, CommonVariables.QUERY_SHIPMENT_TYPE_SERVER_URL);
                     }
 
                 } catch (JSONException e) {

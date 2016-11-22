@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
+import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
@@ -26,6 +29,8 @@ import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gcm.GCMRegistrar;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 
 public class WelcomeActivity extends AppCompatActivity {
     TextView tv_welcome, tv_CompanyName, tv_UserName, tv_UserEmail;
@@ -69,8 +74,23 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-
         }
+
+        // if database verrsion is upgrade then start fetching default value from sever
+        DatabaseClass dbClass = new DatabaseClass(this);
+        if (dbClass.numberOfComodityRows() <= 0 ) {
+            // Check if Internet present
+            if (!isConnectingToInternet(this)) {
+                String string = getResources().getString(R.string.strNoConnection)+"\nSwitch on internet and restart app.";
+                Toast.makeText(getApplicationContext(), string,Toast.LENGTH_LONG).show();
+                // stop executing code by return
+                return;
+            } else {
+                setContentView(R.layout.activity_splash_screen);
+                new InsertInternationalDestinationPort(this).execute();
+            }
+        }
+
     }
 
     /**
@@ -107,9 +127,7 @@ public class WelcomeActivity extends AppCompatActivity {
         // closed floating action menu which are open
         actionButton.collapse();
 
-        Toast.makeText(getApplicationContext(), "Work in progress...", Toast.LENGTH_LONG).show();
-        // Todo : feedback form
-//        startActivity(new Intent(WelcomeActivity.this, Feedback.class));
+        startActivity(new Intent(WelcomeActivity.this, Feedback.class));
     }
 
     public void btnEnquiryClick(View view) {
@@ -164,4 +182,23 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(WelcomeActivity.this)
+                .setCancelable(false)
+                .setMessage("Do you want to Exit?")
+                .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        WelcomeActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+        .show();
+    }
 }
