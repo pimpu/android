@@ -141,8 +141,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
 
-
-
         btnRegister = (Button) findViewById(R.id.id_btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -361,6 +359,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 Intent intentServicesActivity = new Intent(RegisterActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intentServicesActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentServicesActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ((RegisterActivity)context).finish();
                 startActivity(intentServicesActivity);
             }

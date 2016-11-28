@@ -71,6 +71,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getApplicationContext(), "Thanking you", Toast.LENGTH_SHORT).show();
+                        SetSharedPreference setSharedPreference = new SetSharedPreference(WelcomeActivity.this);
+                        setSharedPreference.setIsFirstTime(getResources().getString(R.string.runBefore), true);
                     }
                 })
                 .show();

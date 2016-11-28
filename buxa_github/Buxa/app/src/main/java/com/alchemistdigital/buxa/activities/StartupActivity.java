@@ -91,6 +91,8 @@ public class StartupActivity extends AppCompatActivity {
 
                 Intent intentServicesActivity = new Intent(StartupActivity.this, WelcomeActivity.class);
                 intentServicesActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intentServicesActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intentServicesActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ((StartupActivity)context).finish();
                 startActivity(intentServicesActivity);
             }

@@ -117,13 +117,6 @@ public class CommonUtilities {
      */
     public static boolean isFirstTime(Context context) {
         GetSharedPreference getSharedPreference = new GetSharedPreference(context);
-        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
-
-        boolean ranBefore = getSharedPreference.getIsFirstTime(context.getResources().getString(R.string.runBefore));
-        if (!ranBefore) {
-            // first time
-            setSharedPreference.setIsFirstTime(context.getResources().getString(R.string.runBefore), true);
-        }
-        return !ranBefore;
+        return !getSharedPreference.getIsFirstTime(context.getResources().getString(R.string.runBefore));
     }
 }

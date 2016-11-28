@@ -147,7 +147,7 @@
     <string name="hint_first_time_custom_clearance">Are you first time into custom clearance ?</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="hint_company_name">Comapny name</string>
+    <string name="hint_company_name">Company name</string>
     <string name="hint_company_code">Code</string>
     <string name="hint_company_address">Address</string>
     <string name="hint_company_landmark">Landmark</string>
