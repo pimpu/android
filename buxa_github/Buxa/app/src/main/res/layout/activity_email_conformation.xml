@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/splash_background"
+    android:id="@+id/activity_email_conformation"
+    tools:context="com.alchemistdigital.buxa.activities.EmailConformationActivity">
+
+    <LinearLayout
+        android:id="@+id/id_noInternet_cnfrm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:background="@color/error">
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/cnfrm_error_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:Segoe="segoe_regular"
+            android:layout_margin="3dp"
+            android:textColor="@color/milkyWhite"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/id_buxaLogo_splashscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/buxa_logo"/>
+
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/id_otptext_splashscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_buxaLogo_splashscreen"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:text="@string/strOTPTest"
+            android:textColor="@color/hintTextColor"
+            android:textSize="@dimen/enquiries_bookingid_textSize"
+            app:Segoe="segoe_light"/>
+
+        <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+            android:id="@+id/id_email_cnfm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_otptext_splashscreen"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/hintTextColor"
+            android:textSize="@dimen/enquiries_bookingid_textSize"
+            app:Segoe="segoe_light"/>
+
+        <LinearLayout
+            android:id="@+id/otp_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/id_email_cnfm">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    android:id="@+id/firstOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/OTPtextsize"
+                    app:Segoe="segoe_light"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:nextFocusForward="@+id/secondOTP" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    android:id="@+id/secondOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:textSize="@dimen/OTPtextsize"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:nextFocusForward="@+id/thirdOTP"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    android:id="@+id/thirdOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:textSize="@dimen/OTPtextsize"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"
+                    android:nextFocusForward="@+id/fourthOTP"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontEdittext
+                    android:id="@+id/fourthOTP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:Segoe="segoe_light"
+                    android:textSize="@dimen/OTPtextsize"
+                    android:maxLength="1"
+                    android:inputType="numberSigned"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/otp_layout"
+            android:text="@string/strconform"
+            android:textColor="@color/milkyWhite"
+            android:background="@color/backgroundColor"
+            android:onClick="btnConformOTP"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

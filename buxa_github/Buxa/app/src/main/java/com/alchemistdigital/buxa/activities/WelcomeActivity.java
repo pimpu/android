@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +18,12 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.asynctask.InsertInternationalDestinationPort;
-import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.sharedprefrencehelper.SetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.NotificationUtils;
-import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gcm.GCMRegistrar;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
@@ -60,24 +56,6 @@ public class WelcomeActivity extends AppCompatActivity {
         tv_UserName.setText(loginName);
         tv_UserEmail.setText(loginEmail);
 
-        if(Build.MANUFACTURER.equals("Xiaomi") && CommonUtilities.isFirstTime(this)) {
-            new AlertDialog.Builder(this)
-                .setTitle("Notice")
-                .setCancelable(false)
-                .setIcon(R.mipmap.ic_launcher)
-                .setMessage("Please, enable AutoStart option for Buxa app in Xiaomi phone Security.\nSecurity / Setting" +
-                        " > Permission > Autostart > enable to buxa app.")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(getApplicationContext(), "Thanking you", Toast.LENGTH_SHORT).show();
-                        SetSharedPreference setSharedPreference = new SetSharedPreference(WelcomeActivity.this);
-                        setSharedPreference.setIsFirstTime(getResources().getString(R.string.runBefore), true);
-                    }
-                })
-                .show();
-        }
-
         // if database verrsion is upgrade then start fetching default value from sever
         DatabaseClass dbClass = new DatabaseClass(this);
         if (dbClass.numberOfComodityRows() <= 0 ) {
@@ -91,6 +69,24 @@ public class WelcomeActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_splash_screen);
                 new InsertInternationalDestinationPort(this).execute();
             }
+        }
+
+        if(Build.MANUFACTURER.equals("Xiaomi") && CommonUtilities.isFirstTime(this)) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Notice")
+                    .setCancelable(false)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setMessage("Please, enable AutoStart option for Buxa app in Xiaomi phone Security.\nSecurity / Setting" +
+                            " > Permission > Autostart > enable to buxa app.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(getApplicationContext(), "Thanking you", Toast.LENGTH_SHORT).show();
+                            SetSharedPreference setSharedPreference = new SetSharedPreference(WelcomeActivity.this);
+                            setSharedPreference.setIsFirstTime(getResources().getString(R.string.runBefore), true);
+                        }
+                    })
+                    .show();
         }
 
     }
@@ -192,7 +188,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        WelcomeActivity.super.onBackPressed();
+                        finish();
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {

@@ -57,6 +57,7 @@ public class Login extends Fragment implements View.OnClickListener {
     ProgressDialog prgDialog;
     Button btnLogin, btnGoToRegister;
     TextView errorMessage, tv_forgot;
+    GetSharedPreference getSharedPreference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,7 +90,7 @@ public class Login extends Fragment implements View.OnClickListener {
         btnGoToRegister  = (Button) rootView.findViewById(R.id.btn_Register);
         btnGoToRegister.setOnClickListener(this);
 
-        GetSharedPreference getSharedPreference = new GetSharedPreference(getActivity());
+        getSharedPreference = new GetSharedPreference(getActivity());
 
         // take values for validation purpose.
         // it validates entered email id and pwd when Login button pressed
@@ -159,7 +160,7 @@ public class Login extends Fragment implements View.OnClickListener {
                             if(boolEmail) {
                                 emailLayout.setErrorEnabled(false);
                                 dialog.cancel();
-                                GetSharedPreference getSharedPreference = new GetSharedPreference(getActivity());
+
                                 String apiKeyHeader = getSharedPreference.getApiKey(getResources().getString(R.string.apikey));
 
                                 new ForgotPwdAsynTask(getActivity(), apiKeyHeader, emailId).sendForgotPwdRequest();
@@ -235,11 +236,14 @@ public class Login extends Fragment implements View.OnClickListener {
     }
 
     private void LoginCompanyForBuxa() {
+        String fcmId = getSharedPreference.getFCMRegId(getResources().getString(R.string.FCM_RegId));
+//        System.out.println(fcmId);
         RequestParams params;
         params = new RequestParams();
 
         params.put("email", txtLogin.getText().toString());
         params.put("password", txtPassword.getText().toString());
+        params.put("fcmId",fcmId);
 
         invokeWS(params);
     }

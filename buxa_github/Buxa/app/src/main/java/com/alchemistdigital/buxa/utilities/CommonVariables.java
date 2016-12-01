@@ -30,7 +30,7 @@ public class CommonVariables {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
-//    static String SERVER_URL = "http://e668dff5.ngrok.io/buxa/v1/";
+//    static String SERVER_URL = "http://40a6c4ba.ngrok.io/buxa/v1/";
     static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
     public static String DOWNLOAD_FILE_URL = "http://www.buxa.tech/admin/pdf/";
 
@@ -53,6 +53,6 @@ public class CommonVariables {
     public static final String CANCEL_ENQUIRY_SERVER_URL = SERVER_URL + "cancelenquiry";
     public static final String FORGOT_PASSWORD_SERVER_URL = SERVER_URL + "forgotpassword";
     public static final String SUBMIT_FEEDBACK_SERVER_URL = SERVER_URL + "submitfeedback";
-
+    public static final String VERIFY_EMAIL_SERVER_URL = SERVER_URL + "verifyemail";
 
 }

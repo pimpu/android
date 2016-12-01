@@ -16,9 +16,8 @@ android {
         applicationId "com.alchemistdigital.buxa"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled = true
+        versionCode 2
+        versionName "1.2"
     }
     buildTypes {
         release {
@@ -28,7 +27,7 @@ android {
     }
     dexOptions {
         incremental true
-        javaMaxHeapSize "4g"
+//        javaMaxHeapSize "4g"
     }
 }
 
@@ -57,12 +56,7 @@ dependencies {
     // futuresimple/android-floating-action-button
     compile 'com.getbase:floatingactionbutton:1.10.1'
 
-    // send gcm notification
-//    compile files('libs/gcm.jar')
-
-    compile 'com.google.android.gms:play-services:9.8.0'
-
-    compile 'com.google.firebase:firebase-messaging:9.8.0'
+    compile 'com.google.firebase:firebase-messaging:9.6.0'
 
 }
 

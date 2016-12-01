@@ -5,10 +5,11 @@
     <dimen name="serviceCheckBoxTextSize">10dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="enquiries_bookingid_textSize">20dp</dimen>
-    <dimen name="enquiries_status_textSize">14dp</dimen>
-    <dimen name="enquiries_date_textSize">14dp</dimen>
-    <dimen name="enquirydetail_hint_textSize">15dp</dimen>
-    <dimen name="enquirydetail_text_textSize">18dp</dimen>
+    <dimen name="enquiries_bookingid_textSize">20sp</dimen>
+    <dimen name="enquiries_status_textSize">14sp</dimen>
+    <dimen name="enquiries_date_textSize">14sp</dimen>
+    <dimen name="enquirydetail_hint_textSize">15sp</dimen>
+    <dimen name="enquirydetail_text_textSize">18sp</dimen>
+    <dimen name="OTPtextsize">25sp</dimen>
 
 </resources>

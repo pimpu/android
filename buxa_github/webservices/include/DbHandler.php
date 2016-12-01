@@ -4,7 +4,6 @@
  * Class to handle all db operations
  * This class will have CRUD methods for database tables
  *
- * @author Ravi Tamada
  * @link URL Tutorial link
  */
 class DbHandler {
@@ -125,7 +124,7 @@ class DbHandler {
      * @param String $email email to check in db
      * @return boolean
      */
-    private function isUserExists($email) {
+    public function isUserExists($email) {
         $checkMatchEmailQuery = mysql_query("SELECT uid FROM bx_user WHERE email='".$email."';");
         return mysql_num_rows($checkMatchEmailQuery) > 0 ;
     }
@@ -540,10 +539,10 @@ class DbHandler {
             $resultArray = mysql_fetch_array($getResult);
 
             $to      = $resultArray["email"];
-            $subject = 'Buxa Password';
+            $subject = 'Reset your password for Buxa';
             $message = "Hello, ".$resultArray["uname"]."\r\n \r\n";
             $message .= "Your registered password is \"".$resultArray["password"]."\".\r\n\r\n";
-            $message .= "Thank you,\r\n\r\n";
+            $message .= "Thank you,\r\n";
             $message .= "Buxa Logistic\r\n";
             $headers .= 'From: info@buxa.tech' . "\r\n" .
                 'Reply-To: info@buxa.tech' . "\r\n" .
@@ -569,7 +568,7 @@ class DbHandler {
         if (mysql_num_rows($getResult) > 0) {
             $resultArray = mysql_fetch_array($getResult);
 
-            $to      = 'amruta.zaveri2012@gmail.com';
+            $to      = 'amruta@buxa.tech';
             $subject = 'Feedback of Buxa';
             $message = "Hello,\r\n";
             $message .= "I am ".$resultArray["uname"].". My company name is ".$resultArray["company"]." and email id is ".$resultArray["email"].".\r\n\r\n";

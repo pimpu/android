@@ -55,6 +55,46 @@ function authenticate(\Slim\Route $route) {
 /**
  * ----------- METHODS WITHOUT AUTHENTICATION ---------------------------------
  */
+ 
+ $app -> post('/verifyemail', function() use ($app) {
+
+    // check for required params
+    verifyRequiredParams(array('otp', 'email', 'name'));
+
+    $db = new DbHandler();
+    $response = array();
+
+    // reading post params
+    $otp = $app->request->post('otp');
+    $email = $app->request->post('email');
+    $name = $app->request->post('name');
+
+    $isExist = $db->isUserExists($email);
+    if(!$isExist) {
+
+        $to      = $email;
+        $subject = 'One-time password for BUXA registering';
+        $message = "Hello, ".$name."\r\n \r\n";
+        $message .= "This is your one-time password \"".$otp."\".\r\n\r\n";
+        $message .= "Thank you,\r\n";
+        $message .= "Buxa Logistic\r\n";
+        $headers .= 'From: info@buxa.tech' . "\r\n" .
+            'Reply-To: info@buxa.tech' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+
+        mail($to, $subject, $message, $headers);
+        $response["error"] = false;
+        $response["message"] = "sent mail successfully";
+    }
+    else {
+        $response["error"] = true;
+        $response["message"] = "This email id already existed.Please, login with this email.";
+    }
+
+    echoRespnse(200, $response);
+
+});
+
 /**
  * User Registration
  * url - /register
@@ -111,6 +151,8 @@ $app->post('/login', function() use ($app) {
             // reading post params
             $email = $app->request()->post('email');
             $password = $app->request()->post('password');
+            $fcmId = $app->request()->post('fcmId');
+
             $response = array();
 
             $db = new DbHandler();
@@ -128,6 +170,9 @@ $app->post('/login', function() use ($app) {
                     $response['api_key'] = $user['api_key'];
                     $response['id'] = $user['id'];
                     $response['companyName'] = $user['companyName'];
+
+                    $db->updateFcmID($fcmId, $user['id']);
+                    
                 } else {
                     // unknown error occurred
                     $response['error'] = true;
@@ -361,7 +406,7 @@ $app->put('/updatefcmid', function() use ($app) {
  * ------------------------ METHODS WITH AUTHENTICATION ------------------------
  */
 
-$app -> post('/inserttransport', function() use ($app) {
+$app -> post('/inserttransport', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('transportdata'));
@@ -390,7 +435,7 @@ $app -> post('/inserttransport', function() use ($app) {
 
 });
 
-$app -> post('/insertcustomclearance', function() use ($app) {
+$app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('customClearancedata'));
@@ -419,7 +464,7 @@ $app -> post('/insertcustomclearance', function() use ($app) {
 
 });
 
-$app -> post('/insertfreightforwarding', function() use ($app) {
+$app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('freightForwardingdata'));
@@ -448,7 +493,7 @@ $app -> post('/insertfreightforwarding', function() use ($app) {
 
 });
 
-$app -> post('/sendmail', function() use ($app) {
+$app -> post('/sendmail', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('bookingId'));
@@ -459,15 +504,16 @@ $app -> post('/sendmail', function() use ($app) {
     // reading post params
     $bookingId = $app->request->post('bookingId');
 
-    $to      = 'amruta.zaveri2012@gmail.com';
-    $subject = 'New Booking'.$bookingId;
-    $message = 'Hello,\n \n';
-    $message .= 'You get the new enquiry of buxa no '.$bookingId.' . Please check in admin.\n';
-    $message .= 'Thank you,\n';
-    $message .= 'Buxa Logistic\n';
-    $headers .= 'From: info@buxa.tech' . "\r\n" .
-        'Reply-To: info@buxa.tech' . "\r\n" .
-        'X-Mailer: PHP/' . phpversion();
+    // $to      = 'amruta@buxa.tech';
+    $to      = 'yogesh.blueoort@gmail.com';
+    $subject = 'New Booking - '.$bookingId;
+    $message = "Hello,\r\n \r\n";
+    $message .= "You get the new enquiry of buxa no ".$bookingId.". Please check in admin.\r\n\r\n";
+    $message .= "Thank you,\r\n";
+    $message .= "Buxa Logistic\r\n";
+    $headers .= "From: info@buxa.tech" . "\r\n" .
+        "Reply-To: info@buxa.tech" . "\r\n" .
+        "X-Mailer: PHP/" . phpversion();
 
     mail($to, $subject, $message, $headers);
 
@@ -477,7 +523,7 @@ $app -> post('/sendmail', function() use ($app) {
 
 });
 
-$app -> post('/acceptenquiry', function() use ($app) {
+$app -> post('/acceptenquiry', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('bookingId', 'status'));
@@ -503,7 +549,7 @@ $app -> post('/acceptenquiry', function() use ($app) {
 
 });
 
-$app -> post('/cancelenquiry', function() use ($app) {
+$app -> post('/cancelenquiry', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('bookingId', 'status'));
@@ -529,7 +575,7 @@ $app -> post('/cancelenquiry', function() use ($app) {
 
 });
 
-$app -> post('/forgotpassword', function() use ($app) {
+$app -> post('/forgotpassword', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('emailId'));
@@ -549,7 +595,7 @@ $app -> post('/forgotpassword', function() use ($app) {
 
 });
 
-$app -> post('/submitfeedback', function() use ($app) {
+$app -> post('/submitfeedback', 'authenticate', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('loginId', 'feedback'));

@@ -2,10 +2,12 @@ package com.alchemistdigital.buxa.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.activities.EnquiriesActivity;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -22,12 +24,16 @@ import cz.msebera.android.httpclient.Header;
  */
 public class EnquiryCancelAsyncTask {
 
-    private static ProgressDialog prgDialog;
-    private static GetSharedPreference getSharedPreference;
-    private static DatabaseClass dbHelper ;
+    private ProgressDialog prgDialog;
+    private GetSharedPreference getSharedPreference;
+    private DatabaseClass dbHelper ;
+    Context context;
+    String bookingId;
 
-    public static void cancelAsyncTask(Context context, String bookingId) {
+    public EnquiryCancelAsyncTask(Context context, String bookingId) {
         dbHelper = new DatabaseClass(context);
+        this.context = context;
+        this.bookingId = bookingId;
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
@@ -37,7 +43,10 @@ public class EnquiryCancelAsyncTask {
         prgDialog.setCancelable(false);
 
         getSharedPreference = new GetSharedPreference(context);
+    }
 
+
+    public void cancelAsyncTask() {
         RequestParams params;
         params = new RequestParams();
         params.put("bookingId", bookingId);
@@ -46,7 +55,7 @@ public class EnquiryCancelAsyncTask {
         invokeWS(context, params, bookingId);
     }
 
-    private static void invokeWS(final Context context, RequestParams params, final String bookingId) {
+    private void invokeWS(final Context context, RequestParams params, final String bookingId) {
         // Show Progress Dialog
         prgDialog.show();
 
@@ -71,6 +80,10 @@ public class EnquiryCancelAsyncTask {
 
                         boolean i = dbHelper.updateShipmentConformTable(bookingId, 5);
                         System.out.println("updateShipmentConformTable( Cancel ): " + i);
+
+                        Intent intent = new Intent("AcceptCancelIntent");
+                        intent.putExtra(CommonVariables.EXTRA_MESSAGE, "Cancel");
+                        context.sendBroadcast(intent);
 
                     }
                 } catch (JSONException e) {

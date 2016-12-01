@@ -119,7 +119,7 @@ public class StartupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(StartupActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartupActivity.this)
                 .setCancelable(false)
                 .setMessage("Do you want to Exit?")
                 .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
@@ -133,7 +133,11 @@ public class StartupActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
-                })
-                .show();
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
     }
 }

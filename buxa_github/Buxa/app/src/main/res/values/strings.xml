@@ -71,6 +71,7 @@
     <string name="strAccept">Accept</string>
     <string name="strCancel">Cancel</string>
     <string name="runBefore">RunBefore</string>
+    <string name="strOTPTest">OTP is sent on</string>
 
     <!-- ++++++++++++++++++++++++++ GCM ++++++++++++++++++++++ -->
     <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
@@ -158,6 +159,7 @@
     <string name="hint_contact_name">Contact name</string>
     <string name="hint_contact_mobile">Mobile</string>
     <string name="hint_contact_email">Email id</string>
+    <string name="hint_company_contact_email">Company Email id</string>
     <string name="hint_contact_pwd">Password</string>
     <string name="hint_contact_confirm_pwd">Confirm password</string>
     <string name="hint_dimensions_length">length</string>
@@ -184,5 +186,7 @@
     <string name="hint_feedback">Give your reviews about app</string>
     <string name="hint_stuffing_address">Stuffing address</string>
     <string name="hint_stuffing_type">Stuffing type</string>
+    <string name="hint_otp">Enter OTP</string>
+    <string name="strconform">Conform</string>
 
 </resources>

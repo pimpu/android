@@ -2,8 +2,10 @@ package com.alchemistdigital.buxa.activities;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -24,7 +26,9 @@ import com.alchemistdigital.buxa.asynctask.EnquiryAcceptAsyncTask;
 import com.alchemistdigital.buxa.asynctask.EnquiryCancelAsyncTask;
 import com.alchemistdigital.buxa.model.ShipmentConformationModel;
 import com.alchemistdigital.buxa.utilities.CommonUtilities;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.ItemClickListener;
+import com.alchemistdigital.buxa.utilities.WakeLocker;
 
 import java.io.File;
 import java.util.List;
@@ -36,6 +40,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
     public RecyclerView.Adapter enquiry_Adapter;
     private static List<ShipmentConformationModel> data;
     View emptyView;
+
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
     String[] PERMISSIONS;
 
@@ -58,56 +63,8 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
         if(!hasPermissions(this, PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_READ_EXTERNAL_STORAGE);
         }
-        else {
-            initEnquiryRecycler();
-        }
 
-    }
-
-    private void toolbarSetup() {
-        // initialise toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_enquiry);
-        setSupportActionBar(toolbar);
-
-        // set back button on toolbar
-        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-        // set click listener on back button of toolbar
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        getSupportActionBar().setTitle("My Enquiries");
-    }
-
-    private void initEnquiryRecycler() {
-        DatabaseClass dbhelper = new DatabaseClass(this);
-
-        int len = dbhelper.numberOfEnquiryRowsByStatus();
-        if(len <= 0){
-            emptyView.setVisibility(View.VISIBLE);
-            enquiry_RecyclerView.setVisibility(View.GONE);
-        }
-        else {
-            emptyView.setVisibility(View.GONE);
-            enquiry_RecyclerView.setVisibility(View.VISIBLE);
-            data = dbhelper.getShipmentConformationData();
-            enquiryRecycler();
-        }
-    }
-
-    private void enquiryRecycler() {
-        // Inflating view layout
-        enquiry_Adapter = new Enquiry_Adapter(this, data );
-        enquiry_RecyclerView.setAdapter(enquiry_Adapter);
-        enquiry_RecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+        registerReceiver(AccpetCancelHandler, new IntentFilter("AcceptCancelIntent"));
     }
 
     private boolean hasPermissions(Context context, String[] permissions) {
@@ -130,11 +87,55 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
                     Toast.makeText(getApplicationContext(), "Permission require for registering with Buxa.",Toast.LENGTH_LONG).show();
                 } else {
                     System.out.println("Permission has been granted by user");
-
-                    initEnquiryRecycler();
                 }
                 break;
         }
+    }
+
+    private void toolbarSetup() {
+        // initialise toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.id_toolbar_enquiry);
+        setSupportActionBar(toolbar);
+
+        // set back button on toolbar
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
+        // set click listener on back button of toolbar
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle("My Enquiries");
+    }
+
+    public void initEnquiryRecycler() {
+        DatabaseClass dbhelper = new DatabaseClass(this);
+
+        int len = dbhelper.numberOfEnquiryRowsByStatus();
+        if(len <= 0){
+            emptyView.setVisibility(View.VISIBLE);
+            enquiry_RecyclerView.setVisibility(View.GONE);
+        }
+        else {
+            emptyView.setVisibility(View.GONE);
+            enquiry_RecyclerView.setVisibility(View.VISIBLE);
+            data = dbhelper.getShipmentConformationData();
+            enquiryRecycler(data);
+        }
+    }
+
+    private void enquiryRecycler(List<ShipmentConformationModel> shipmentData) {
+        // Inflating view layout
+        enquiry_Adapter = new Enquiry_Adapter(this, shipmentData);
+        enquiry_RecyclerView.setAdapter(enquiry_Adapter);
+        enquiry_RecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override
@@ -183,9 +184,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
             // stop executing code by return
             return;
         } else {
-            EnquiryAcceptAsyncTask.acceptAsyncTask(
-                    EnquiriesActivity.this,
-                    data.get(position).getBookingId());
+            new EnquiryAcceptAsyncTask(EnquiriesActivity.this, data.get(position).getBookingId() ).acceptAsyncTask();
         }
     }
 
@@ -198,10 +197,31 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
             // stop executing code by return
             return;
         } else {
-            EnquiryCancelAsyncTask.cancelAsyncTask(
-                    EnquiriesActivity.this,
-                    data.get(position).getBookingId());
+            new EnquiryCancelAsyncTask(EnquiriesActivity.this,data.get(position).getBookingId()).cancelAsyncTask();
         }
+    }
+
+    BroadcastReceiver AccpetCancelHandler = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString(CommonVariables.EXTRA_MESSAGE);
+
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            if (newMessage.equals("Accept") || newMessage.equals("Cancel")) {
+                initEnquiryRecycler();
+            }
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(AccpetCancelHandler);
+        super.onDestroy();
     }
 }
 

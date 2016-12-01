@@ -20,41 +20,6 @@ public class SplashScreen extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_splash_screen, container, false);
 
-        /*Thread timerThread = new Thread(){
-            public void run(){
-                try{
-                    sleep(2000);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }finally{
-                    startActivity(new Intent(getActivity(), WelcomeActivity.class));
-                    getActivity().finish();
-                }
-            }
-        };
-        timerThread.start();*/
-
-        new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                try {
-                    startActivity(new Intent(getActivity(), WelcomeActivity.class));
-                    getActivity().finish();
-                }
-                catch (Exception e){
-                    System.err.println("SplashScreen(OnCreateView): "+e.getMessage());
-                }
-            }
-        }, SPLASH_TIME_OUT);
-
         return rootView;
     }
 
@@ -71,17 +36,6 @@ public class SplashScreen extends Fragment {
 
     @Override
     public void onPause() {
-        /*Thread timerThread = new Thread(){
-            public void run(){
-                try{
-                    sleep(2000);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        };
-        timerThread.start();*/
-
         super.onPause();
     }
 
@@ -100,6 +54,7 @@ public class SplashScreen extends Fragment {
                 // Start your app main activity
                 try {
                     startActivity(new Intent(getActivity(), WelcomeActivity.class));
+                    System.out.println("SplashScreen(OnResume)");
                     getActivity().finish();
                 }
                 catch (Exception e){

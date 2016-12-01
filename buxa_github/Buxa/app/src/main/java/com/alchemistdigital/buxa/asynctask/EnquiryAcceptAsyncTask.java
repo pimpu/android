@@ -1,12 +1,16 @@
 package com.alchemistdigital.buxa.asynctask;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.activities.EnquiriesActivity;
+import com.alchemistdigital.buxa.adapter.Enquiry_Adapter;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
@@ -22,12 +26,16 @@ import cz.msebera.android.httpclient.Header;
  * Created by Pimpu on 11/17/2016.
  */
 public class EnquiryAcceptAsyncTask {
-    private static ProgressDialog prgDialog;
-    private static GetSharedPreference getSharedPreference;
-    private static DatabaseClass dbHelper ;
+    private ProgressDialog prgDialog;
+    private GetSharedPreference getSharedPreference;
+    private DatabaseClass dbHelper ;
+    Context context;
+    String bookingId;
 
-    public static void acceptAsyncTask(Context context, String bookingId) {
+    public EnquiryAcceptAsyncTask(Context context, String bookingId) {
         dbHelper = new DatabaseClass(context);
+        this.context = context;
+        this.bookingId = bookingId;
 
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
@@ -37,7 +45,9 @@ public class EnquiryAcceptAsyncTask {
         prgDialog.setCancelable(false);
 
         getSharedPreference = new GetSharedPreference(context);
+    }
 
+    public void acceptAsyncTask() {
         RequestParams params;
         params = new RequestParams();
         params.put("bookingId", bookingId);
@@ -46,7 +56,7 @@ public class EnquiryAcceptAsyncTask {
         invokeWS(context, params, bookingId);
     }
 
-    private static void invokeWS(final Context context, RequestParams params, final String bookingId) {
+    private void invokeWS(final Context context, RequestParams params, final String bookingId) {
         // Show Progress Dialog
         prgDialog.show();
 
@@ -72,6 +82,9 @@ public class EnquiryAcceptAsyncTask {
                         boolean i = dbHelper.updateShipmentConformTable(bookingId, 4);
                         System.out.println("updateShipmentConformTable( accept ): " + i);
 
+                        Intent intent = new Intent("AcceptCancelIntent");
+                        intent.putExtra(CommonVariables.EXTRA_MESSAGE, "Accept");
+                        context.sendBroadcast(intent);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
