@@ -187,6 +187,6 @@
     <string name="hint_stuffing_address">Stuffing address</string>
     <string name="hint_stuffing_type">Stuffing type</string>
     <string name="hint_otp">Enter OTP</string>
-    <string name="strconform">Conform</string>
+    <string name="strconform">Confirm</string>
 
 </resources>
