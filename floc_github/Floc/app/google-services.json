@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "147977065220",
+    "project_id": "firebase-floc"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147977065220:android:23af813c9ba18068",
+        "android_client_info": {
+          "package_name": "com.cleanslatetech.floc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147977065220-p4oqeocj820dp9ehd01utekdu7cgd67c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cleanslatetech.floc",
+            "certificate_hash": "36E180253F90198E26A817389251725EB2112DCD"
+          }
+        },
+        {
+          "client_id": "147977065220-gnoo2d9mn14pp2dupo5o3dsjno0troll.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMCWcXQfnJG8DKZxqLEZY5aiI5U-kE8HI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
