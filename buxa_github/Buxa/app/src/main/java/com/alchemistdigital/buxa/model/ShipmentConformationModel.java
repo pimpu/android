@@ -19,6 +19,7 @@ public class ShipmentConformationModel implements Parcelable{
     private int status;
     private String createdAt;
     private String quotaion;
+    private String shipArea;
 
     public ShipmentConformationModel() {
     }
@@ -103,6 +104,14 @@ public class ShipmentConformationModel implements Parcelable{
         this.createdAt = createdAt;
     }
 
+    public String getShipArea() {
+        return shipArea;
+    }
+
+    public void setShipArea(String shipArea) {
+        this.shipArea = shipArea;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,6 +128,7 @@ public class ShipmentConformationModel implements Parcelable{
         dest.writeInt(isFF);
         dest.writeInt(status);
         dest.writeString(createdAt);
+        dest.writeString(shipArea);
     }
 
     private ShipmentConformationModel(Parcel in) {
@@ -131,6 +141,7 @@ public class ShipmentConformationModel implements Parcelable{
         isFF = in.readInt();
         status = in.readInt();
         createdAt = in.readString();
+        shipArea = in.readString();
     }
 
     public static final Parcelable.Creator<ShipmentConformationModel> CREATOR = new Parcelable.Creator<ShipmentConformationModel>() {

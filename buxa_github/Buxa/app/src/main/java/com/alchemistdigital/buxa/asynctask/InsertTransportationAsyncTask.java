@@ -11,6 +11,7 @@ import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -55,6 +56,7 @@ public class InsertTransportationAsyncTask {
         RequestParams params;
         params = new RequestParams();
         params.put("transportdata", transportationModel.toString());
+        params.put("shiparea", ShipAreaVariableSingleton.getInstance().shipAreaName);
 
         System.out.println("Transport json: "+transportationModel.toString());
         invokeWS(context, params, transportationModel);

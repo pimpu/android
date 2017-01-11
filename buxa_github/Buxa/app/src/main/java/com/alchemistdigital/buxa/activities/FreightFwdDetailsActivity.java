@@ -43,6 +43,7 @@ public class FreightFwdDetailsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setTitle("Freight Fwd Details");
+        getSupportActionBar().setSubtitle(getIntent().getExtras().getString("shipmentArea"));
     }
 
     private void init() {

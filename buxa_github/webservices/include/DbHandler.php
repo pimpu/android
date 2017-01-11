@@ -267,7 +267,7 @@ class DbHandler {
 
     /* ------------- `bx_transport` table method ------------------ */
 
-    public function createTransportData($transportData) {
+    public function createTransportData($transportData, $shiparea) {
         $response = array();
         $decodedData = json_decode($transportData, true);
 
@@ -314,12 +314,16 @@ class DbHandler {
                         bookid,
                         quotation,
                         finalrate,
-                        serviceid )
+                        serviceid,
+                        booking_date,
+                        ship_area )
                         VALUES(
                         '".$decodedData["bookingId"]."',
                         '',
                         '',
-                        '1' )
+                        '1',
+                        '".$decodedData["createdAt"]."',
+                        '".$shiparea."' )
                         ON DUPLICATE KEY UPDATE
                         serviceid = concat(serviceid ,',','1');") or die(mysql_error());
 
@@ -351,7 +355,7 @@ class DbHandler {
 
     /* ------------- `bx_custom_clearance` table method ------------------ */
 
-    public function createCustomClearanceData($customClearancedata) {
+    public function createCustomClearanceData($customClearancedata, $shiparea) {
         $response = array();
         $decodedData = json_decode($customClearancedata, true);
 
@@ -389,12 +393,16 @@ class DbHandler {
                         bookid,
                         quotation,
                         finalrate,
-                        serviceid )
+                        serviceid,
+                        booking_date,
+                        ship_area )
                         VALUES(
                         '".$decodedData["bookingId"]."',
                         '',
                         '',
-                        '2' )
+                        '2',
+                        '".$decodedData["createdAt"]."',
+                        '".$shiparea."' )
                         ON DUPLICATE KEY UPDATE
                         serviceid = concat(serviceid,',','2');") or die(mysql_error());
 
@@ -426,7 +434,7 @@ class DbHandler {
 
     /* ------------- `bx_freight_forwarding` table method ------------------ */
 
-    public function createFreightForwardingData($freightForwardingdata) {
+    public function createFreightForwardingData($freightForwardingdata, $shiparea) {
         $response = array();
         $decodedData = json_decode($freightForwardingdata, true);
 
@@ -472,12 +480,16 @@ class DbHandler {
                         bookid,
                         quotation,
                         finalrate,
-                        serviceid )
+                        serviceid,
+                        booking_date,
+                        ship_area )
                         VALUES(
                         '".$decodedData["bookingId"]."',
                         '',
                         '',
-                        '3' )
+                        '3',
+                        '".$decodedData["createdAt"]."',
+                        '".$shiparea."' )
                         ON DUPLICATE KEY UPDATE
                         serviceid = concat(serviceid,',','3');") or die(mysql_error());
 
@@ -534,12 +546,12 @@ class DbHandler {
     */
     public function forgotPwd($emailId) {
         $response = array();
-        $getResult = mysql_query("SELECT * FROM bx_user WHERE email='".$emailId."' AND status=1;");
+        $getResult = mysql_query("SELECT * FROM bx_user WHERE email='".$emailId."' AND status=1 ;");
         if (mysql_num_rows($getResult) > 0) {
             $resultArray = mysql_fetch_array($getResult);
 
             $to      = $resultArray["email"];
-            $subject = 'Reset your password for Buxa';
+            $subject = 'Your password for Buxa';
             $message = "Hello, ".$resultArray["uname"]."\r\n \r\n";
             $message .= "Your registered password is \"".$resultArray["password"]."\".\r\n\r\n";
             $message .= "Thank you,\r\n";
@@ -553,7 +565,7 @@ class DbHandler {
             $response["message"] = "mail sent on your registered email id successfully";
         }
         else {
-            $response["message"] = "user not found";
+            $response["message"] = "user not found or user is not authenticated user";
         }
         return $response;
     }

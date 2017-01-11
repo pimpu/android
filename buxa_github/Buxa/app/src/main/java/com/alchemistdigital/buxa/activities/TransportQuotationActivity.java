@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,6 +37,7 @@ import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
 import com.alchemistdigital.buxa.utilities.GooglePlacesAutocompleteAdapter;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
@@ -141,6 +143,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
         });
         getSupportActionBar().setTitle("Transportation");
+        getSupportActionBar().setSubtitle(ShipAreaVariableSingleton.getInstance().shipAreaName);
     }
 
     private void init() {
@@ -664,6 +667,13 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 //                intentActivity = new Intent(TransportQuotationActivity.this, QuotationActivity.class);
                 isIntentQuote=true;
             }
+        }
+
+        // hide soft keyboard
+        View viewFocus = getCurrentFocus();
+        if (viewFocus != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(viewFocus.getWindowToken(), 0);
         }
 
         if(isIntentQuote) {

@@ -116,7 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     public void goToServiceActivity(View view) {
-        startActivity(new Intent(this, SelectServiceActivity.class));
+        startActivity(new Intent(this, ShipmentAreaActivity.class));
         // closed floating action menu which are open
         actionButton.collapse();
     }

@@ -28,7 +28,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
     private Context context;
     View views;
     Calendar c;
-    String day;
+    String day, year;
     DateHelper dateHelper;
     ItemClickListener itemClickListener;
 
@@ -40,6 +40,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
 
         c=Calendar.getInstance();
         day = dateHelper.getDay(c.getTimeInMillis());
+        year = dateHelper.getYear(c.getTimeInMillis());
     }
 
     public void delete(int position) {
@@ -63,13 +64,23 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
         String date;
         int trans, cc, ff;
 
-        if( day.equals(dateHelper.getDay(Long.parseLong(current.getCreatedAt())))) {
+        if( !year.equals(dateHelper.getYear(Long.parseLong(current.getCreatedAt()))) ) {
+            date = dateHelper.convertToFullDateString(Long.parseLong(current.getCreatedAt()));
+        }
+        else if( day.equals(dateHelper.getDay(Long.parseLong(current.getCreatedAt())))) {
             date = dateHelper.convertToTodayEnquiryString(Long.parseLong(current.getCreatedAt()));
         }
         else {
             date = dateHelper.getDay(Long.parseLong(current.getCreatedAt()))+" "+dateHelper.getMonthString(Long.parseLong(current.getCreatedAt()));
         }
         holder.tv_date.setText(date);
+        if(current.getShipArea().equals("")) {
+            holder.tv_shipArea.setText("Service: none");
+        }
+        else {
+            holder.tv_shipArea.setText("Service: "+current.getShipArea());
+        }
+
         trans = current.getIsTrans();
         cc = current.getIsCC();
         ff = current.getIsFF();
@@ -126,7 +137,7 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
 
     class EnquiryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_bookingid, tv_date, tv_trans, tv_cc, tv_ff, tv_status, tv_quotation, tv_rates,
-                tv_accept, tv_cancel;
+                tv_accept, tv_cancel, tv_shipArea;
         LinearLayout trans_layout, cc_layout, ff_layout;
         RelativeLayout conform_btn_layout;
 
@@ -144,6 +155,8 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
             tv_status = (TextView) itemView.findViewById(R.id.enquiry_row_status);
             tv_accept = (TextView) itemView.findViewById(R.id.enquiry_row_accept);
             tv_cancel = (TextView) itemView.findViewById(R.id.enquiry_row_cancel);
+            tv_shipArea = (TextView) itemView.findViewById(R.id.enquiry_row_shiparea);
+
 
             trans_layout = (LinearLayout) itemView.findViewById(R.id.trans_layout);
             cc_layout = (LinearLayout) itemView.findViewById(R.id.cc_layout);

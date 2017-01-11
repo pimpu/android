@@ -40,6 +40,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp">
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/enquiry_row_shiparea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ShipArea"
+                android:textSize="@dimen/activity_horizontal_margin"
+                app:Segoe="segoe_regular"
+                android:textColor="@color/colorPrimaryDark"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="3dp">
 
             <LinearLayout

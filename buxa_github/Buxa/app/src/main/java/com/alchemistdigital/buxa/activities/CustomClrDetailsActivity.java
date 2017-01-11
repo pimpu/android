@@ -42,6 +42,7 @@ public class CustomClrDetailsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setTitle("Custom Clr Details");
+        getSupportActionBar().setSubtitle(getIntent().getExtras().getString("shipmentArea"));
     }
 
     private void init() {

@@ -42,6 +42,7 @@ public class TransportationDetailsActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setTitle("Transportation Details");
+        getSupportActionBar().setSubtitle(getIntent().getExtras().getString("shipmentArea"));
     }
 
     private void init() {

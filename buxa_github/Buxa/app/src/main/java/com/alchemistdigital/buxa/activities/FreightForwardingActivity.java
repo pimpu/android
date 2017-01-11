@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -34,6 +35,7 @@ import com.alchemistdigital.buxa.model.TransportationModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.DateHelper;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
@@ -383,6 +385,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             }
         });
         getSupportActionBar().setTitle("Freight Forwarding");
+        getSupportActionBar().setSubtitle(ShipAreaVariableSingleton.getInstance().shipAreaName);
     }
 
     public void storeFreightForwardingEnquiry(View view) {
@@ -549,6 +552,13 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             if(arrayServicesName.contains(enumServices.CUSTOM_CLEARANCE.toString())) {
                 isCCService = true;
             }
+        }
+
+        // hide soft keyboard
+        View viewFocus = getCurrentFocus();
+        if (viewFocus != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(viewFocus.getWindowToken(), 0);
         }
 
         // Check if Internet present

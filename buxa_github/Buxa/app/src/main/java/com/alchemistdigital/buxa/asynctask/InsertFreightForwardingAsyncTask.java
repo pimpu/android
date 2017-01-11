@@ -11,6 +11,7 @@ import com.alchemistdigital.buxa.model.FreightForwardingModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -51,6 +52,7 @@ public class InsertFreightForwardingAsyncTask {
         RequestParams params;
         params = new RequestParams();
         params.put("freightForwardingdata", freightForwardingModel.toString());
+        params.put("shiparea", ShipAreaVariableSingleton.getInstance().shipAreaName);
 
         System.out.println("freight forward json: "+freightForwardingModel.toString());
         invokeWS(context, params, freightForwardingModel);

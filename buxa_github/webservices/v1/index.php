@@ -409,15 +409,16 @@ $app->put('/updatefcmid', function() use ($app) {
 $app -> post('/inserttransport', 'authenticate', function() use ($app) {
 
     // check for required params
-    verifyRequiredParams(array('transportdata'));
+    verifyRequiredParams(array('transportdata', 'shiparea'));
 
     $db = new DbHandler();
     $response = array();
 
     // reading post params
     $transportdata = $app->request->post('transportdata');
+    $shiparea = $app->request->post('shiparea');
 
-    $res = $db->createTransportData($transportdata);
+    $res = $db->createTransportData($transportdata, $shiparea);
 
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
@@ -438,15 +439,16 @@ $app -> post('/inserttransport', 'authenticate', function() use ($app) {
 $app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
 
     // check for required params
-    verifyRequiredParams(array('customClearancedata'));
+    verifyRequiredParams(array('customClearancedata', 'shiparea'));
 
     $db = new DbHandler();
     $response = array();
 
     // reading post params
     $customClearancedata = $app->request->post('customClearancedata');
+    $shiparea = $app->request->post('shiparea');
 
-    $res = $db->createCustomClearanceData($customClearancedata);
+    $res = $db->createCustomClearanceData($customClearancedata, $shiparea);
 
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
@@ -467,15 +469,16 @@ $app -> post('/insertcustomclearance', 'authenticate', function() use ($app) {
 $app -> post('/insertfreightforwarding', 'authenticate', function() use ($app) {
 
     // check for required params
-    verifyRequiredParams(array('freightForwardingdata'));
+    verifyRequiredParams(array('freightForwardingdata', 'shiparea'));
 
     $db = new DbHandler();
     $response = array();
 
     // reading post params
     $freightForwardingdata = $app->request->post('freightForwardingdata');
+    $shiparea = $app->request->post('shiparea');
 
-    $res = $db->createFreightForwardingData($freightForwardingdata);
+    $res = $db->createFreightForwardingData($freightForwardingdata, $shiparea);
 
     if ($res["message"] == USER_CREATED_SUCCESSFULLY) {
         $response["error"] = false;
@@ -504,8 +507,8 @@ $app -> post('/sendmail', 'authenticate', function() use ($app) {
     // reading post params
     $bookingId = $app->request->post('bookingId');
 
-    // $to      = 'amruta@buxa.tech';
-    $to      = 'yogesh.blueoort@gmail.com';
+    $to      = 'amruta@buxa.tech';
+    // $to      = 'yogesh.blueoort@gmail.com';
     $subject = 'New Booking - '.$bookingId;
     $message = "Hello,\r\n \r\n";
     $message .= "You get the new enquiry of buxa no ".$bookingId.". Please check in admin.\r\n\r\n";
@@ -575,7 +578,7 @@ $app -> post('/cancelenquiry', 'authenticate', function() use ($app) {
 
 });
 
-$app -> post('/forgotpassword', 'authenticate', function() use ($app) {
+$app -> post('/forgotpassword', function() use ($app) {
 
     // check for required params
     verifyRequiredParams(array('emailId'));

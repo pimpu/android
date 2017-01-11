@@ -22,6 +22,7 @@ import com.alchemistdigital.buxa.model.ShipmentTypeModel;
 import com.alchemistdigital.buxa.model.TransportServiceModel;
 import com.alchemistdigital.buxa.model.TransportTypeModel;
 import com.alchemistdigital.buxa.model.TransportationModel;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +38,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private Context context;
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     // Database Name
     private static final String DATABASE_NAME = "Buxa.db";
     // Table Names
@@ -101,6 +102,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String SHIPMENT_CONFORMATION_IS_TRANS_SERVICE = "is_trans";
     private static final String SHIPMENT_CONFORMATION_IS_CC_SERVICE = "is_customclr";
     private static final String SHIPMENT_CONFORMATION_IS_FF_SERVICE = "is_freightfrd";
+    private static final String SHIPMENT_AREA= "shipment_area";
 
     // TABLE_TRANSPORTATION Table - column names
     private static final String  TRANSPORTATION_SERVER_ID = "trans_serverId";
@@ -295,6 +297,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+" TINYINT(4) DEFAULT 0," +
                     SHIPMENT_CONFORMATION_IS_CC_SERVICE+" TINYINT(4) DEFAULT 0," +
                     SHIPMENT_CONFORMATION_IS_FF_SERVICE+" TINYINT(4) DEFAULT 0," +
+                    SHIPMENT_AREA+" VARCHAR(30)," +
                     KEY_STATUS +" TINYINT(4) DEFAULT 1," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
@@ -343,6 +346,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     KEY_STATUS +" TINYINT(4)," +
                     KEY_CREATED_AT + " DATETIME" + ")";
 
+    private static final String UPDATE_TABLE_SHIPMENT_CONFORMATION =
+            "ALTER TABLE "+ TABLE_SHIPMENT_CONFORMATION +
+                    " ADD " + SHIPMENT_AREA + " VARCHAR(30);";
+
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -368,25 +375,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        /*if (oldVersion > newVersion) {
+            // on upgrade drop older tables
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_SHIPMENT);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_INTERNATIONAL_DESTINATION_PORT);
 
-        // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_SHIPMENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INTERNATIONAL_DESTINATION_PORT);
+            // create new tables
+            onCreate(db);
 
-        // create new tables
-        onCreate(db);
+        }
+        else {
+        }*/
+
+        db.execSQL(UPDATE_TABLE_SHIPMENT_CONFORMATION);
     }
 
     public synchronized DatabaseClass openDatabase() {
@@ -1222,9 +1235,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_BOOKING_ID+", "+
                             RATES+", "+
                             SHIPMENT_CONFORMATION_IS_TRANS_SERVICE+", "+
+                            SHIPMENT_AREA+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            transportationModel.getBookingId()+"', 0, 1, '"+transportationModel.getCreatedAt()+"' );";
+                            transportationModel.getBookingId()+"', 0, 1, " +
+                            " '"+ ShipAreaVariableSingleton.getInstance().shipAreaName+"', " +
+                            "'"+transportationModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(Trans): "+createshipmentConform);
 
@@ -1327,9 +1343,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_BOOKING_ID+", "+
                             RATES+", "+
                             SHIPMENT_CONFORMATION_IS_CC_SERVICE+", "+
+                            SHIPMENT_AREA+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            customClearanceModel.getBookingId()+"', 0, 1, '"+customClearanceModel.getCreatedAt()+"' );";
+                            customClearanceModel.getBookingId()+"', 0, 1, " +
+                            " '"+ShipAreaVariableSingleton.getInstance().shipAreaName+"', " +
+                            " '"+customClearanceModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(CC): "+createshipmentConform);
 
@@ -1432,9 +1451,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
                             SHIPMENT_CONFORMATION_BOOKING_ID+", "+
                             RATES+", "+
                             SHIPMENT_CONFORMATION_IS_FF_SERVICE+", "+
+                            SHIPMENT_AREA+", "+
                             KEY_CREATED_AT+
                             ") VALUES ( '"+
-                            freightForwardingModel.getBookingId()+"', 0, 1, '"+freightForwardingModel.getCreatedAt()+"' );";
+                            freightForwardingModel.getBookingId()+"', 0, 1, " +
+                            " '"+ShipAreaVariableSingleton.getInstance().shipAreaName+"'," +
+                            " '"+freightForwardingModel.getCreatedAt()+"' );";
 
                     System.out.println("createshipmentConform(CC): "+createshipmentConform);
 
@@ -1540,6 +1562,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 shipmentConformationModel.setIsFF(res.getInt(res.getColumnIndex(SHIPMENT_CONFORMATION_IS_FF_SERVICE)));
                 shipmentConformationModel.setStatus(res.getInt(res.getColumnIndex(KEY_STATUS)));
                 shipmentConformationModel.setCreatedAt(res.getString(res.getColumnIndex(KEY_CREATED_AT)));
+                shipmentConformationModel.setShipArea(res.getString(res.getColumnIndex(SHIPMENT_AREA)));
 
                 array_list.add(shipmentConformationModel);
 

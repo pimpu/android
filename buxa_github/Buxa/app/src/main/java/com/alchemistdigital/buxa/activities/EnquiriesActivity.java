@@ -143,6 +143,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
 
         Intent gotoTransDetailsIntent = new Intent(EnquiriesActivity.this, TransportationDetailsActivity.class);
         gotoTransDetailsIntent.putExtra("bookingId", data.get(position).getBookingId());
+        gotoTransDetailsIntent.putExtra("shipmentArea", data.get(position).getShipArea());
         startActivity(gotoTransDetailsIntent);
     }
 
@@ -150,6 +151,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
     public void onCCClick(int position) {
         Intent gotoIntent = new Intent(EnquiriesActivity.this, CustomClrDetailsActivity.class);
         gotoIntent.putExtra("bookingId", data.get(position).getBookingId());
+        gotoIntent.putExtra("shipmentArea", data.get(position).getShipArea());
         startActivity(gotoIntent);
     }
 
@@ -157,6 +159,7 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
     public void onFFClick(int position) {
         Intent gotoIntent = new Intent(EnquiriesActivity.this, FreightFwdDetailsActivity.class);
         gotoIntent.putExtra("bookingId", data.get(position).getBookingId());
+        gotoIntent.putExtra("shipmentArea", data.get(position).getShipArea());
         startActivity(gotoIntent);
     }
 

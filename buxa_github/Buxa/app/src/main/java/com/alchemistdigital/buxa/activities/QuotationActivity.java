@@ -1,16 +1,13 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
-import com.alchemistdigital.buxa.asynctask.InsertFreightForwardingAsyncTask;
 import com.alchemistdigital.buxa.asynctask.SendMailFlagAsyncTask;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.model.FreightForwardingModel;
@@ -23,12 +20,10 @@ import com.alchemistdigital.buxa.utilities.enumServices;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.alchemistdigital.buxa.activities.FreightForwardingActivity.isCCService;
-
 public class QuotationActivity extends AppCompatActivity {
     TextView tvCompanyName, tvQuotationDate, tvBookingNo;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
-    ArrayList<String> arrayComparingNameArray = new ArrayList<String>();
+    ArrayList<String> arrayAvailRemainsNameArray = new ArrayList<String>();
     ArrayList<String> arrayComparingIdArray = new ArrayList<String>();
     String strAvailServiceOption = "Do you avail with ";
     private String bookId, strShipmentType;
@@ -142,27 +137,27 @@ public class QuotationActivity extends AppCompatActivity {
         tvCompanyName.setText(companyName);
 //        tvClientName.setText(loginName);
         tvBookingNo.setText(bookId);
-        tvQuotationDate.setText(DateHelper.convertToString_Quotation( new Date().getTime() ) );
+        tvQuotationDate.setText(DateHelper.convertToFullDateString( new Date().getTime() ) );
 
         // this array is use for comparing with arrayServicesName
         // and remove duplicate entry from this array
-        arrayComparingNameArray.add(enumServices.TRANSPORTATION.toString());
-        arrayComparingNameArray.add(enumServices.CUSTOM_CLEARANCE.toString());
-        arrayComparingNameArray.add(enumServices.FREIGHT_FORWARDING.toString());
+        arrayAvailRemainsNameArray.add(enumServices.TRANSPORTATION.toString());
+        arrayAvailRemainsNameArray.add(enumServices.CUSTOM_CLEARANCE.toString());
+        arrayAvailRemainsNameArray.add(enumServices.FREIGHT_FORWARDING.toString());
 
         // remove duplicate contain from arrayComparingArray
-        arrayComparingNameArray.removeAll(arrayServicesName);
+        arrayAvailRemainsNameArray.removeAll(arrayServicesName);
 
         DatabaseClass databaseClass = new DatabaseClass(this);
-        for (int y = 0 ; y < arrayComparingNameArray.size() ; y++ ) {
+        for (int y = 0; y < arrayAvailRemainsNameArray.size() ; y++ ) {
 
-            arrayComparingIdArray.add( ""+databaseClass.getTransportServiceServerId(arrayComparingNameArray.get(y)) );
+            arrayComparingIdArray.add( ""+databaseClass.getTransportServiceServerId(arrayAvailRemainsNameArray.get(y)) );
 
-            if ( (arrayComparingNameArray.size() - 1) == y ) {
-                strAvailServiceOption = strAvailServiceOption + arrayComparingNameArray.get(y) + ". ";
+            if ( (arrayAvailRemainsNameArray.size() - 1) == y ) {
+                strAvailServiceOption = strAvailServiceOption + arrayAvailRemainsNameArray.get(y) + ". ";
             }
             else {
-                strAvailServiceOption = strAvailServiceOption + arrayComparingNameArray.get(y) + " & ";
+                strAvailServiceOption = strAvailServiceOption + arrayAvailRemainsNameArray.get(y) + " & ";
             }
         }
 
@@ -199,24 +194,24 @@ public class QuotationActivity extends AppCompatActivity {
         intent.putExtra(CommonVariables.EXTRA_MESSAGE, "finishingActivity");
         sendBroadcast(intent);
 
-        // check whether transport service option is left to select by user.
+        /*// check whether transport service option is left to select by user.
         // if not, then availedServicesName is null
         // and yes then availedServicesName is filled with unselected service option
         // ***************************
-        // when user comes here first time, arrayComparingNameArray is full.
-        // when user selected avail option and he comes here, availedServicesName is full.
-        if ( availedServicesName == null && arrayComparingNameArray.size() > 0) {
+        // when user comes here first time, arrayAvailRemainsNameArray is full and availedServicesName is null .
+        // when user selected avail option and he comes here, availedServicesName is full and arrayAvailRemainsNameArray is null.
+        if ( availedServicesName == null && arrayAvailRemainsNameArray.size() > 0) {
 
             new AlertDialog.Builder(QuotationActivity.this)
                     .setMessage(strAvailServiceOption)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
 
-                            if( arrayComparingNameArray.contains(enumServices.TRANSPORTATION.toString()) ) {
+                            if( arrayAvailRemainsNameArray.contains(enumServices.TRANSPORTATION.toString()) ) {
 
                                 Intent intentTransportActivity = new Intent(QuotationActivity.this, TransportQuotationActivity.class);
                                 intentTransportActivity.putStringArrayListExtra("availedServicesId", arrayComparingIdArray);
-                                intentTransportActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
+                                intentTransportActivity.putStringArrayListExtra("availedServicesName", arrayAvailRemainsNameArray);
                                 intentTransportActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentTransportActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentTransportActivity.putExtra("shipmentType", strShipmentType);
@@ -226,11 +221,11 @@ public class QuotationActivity extends AppCompatActivity {
 
                                 startActivity(intentTransportActivity);
 
-                            } else if( arrayComparingNameArray.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
+                            } else if( arrayAvailRemainsNameArray.contains(enumServices.CUSTOM_CLEARANCE.toString()) ) {
 
                                 Intent intentCCActivity = new Intent(QuotationActivity.this, CustomClearanceActivity.class);
                                 intentCCActivity.putStringArrayListExtra("availedServicesId", arrayComparingIdArray);
-                                intentCCActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
+                                intentCCActivity.putStringArrayListExtra("availedServicesName", arrayAvailRemainsNameArray);
                                 intentCCActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentCCActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentCCActivity.putExtra("shipmentType", strShipmentType);
@@ -238,11 +233,11 @@ public class QuotationActivity extends AppCompatActivity {
                                 intentCCActivity.putExtra("transportData",transportDataModel);
                                 startActivity(intentCCActivity);
 
-                            } else if(arrayComparingNameArray.contains(enumServices.FREIGHT_FORWARDING.toString())) {
+                            } else if(arrayAvailRemainsNameArray.contains(enumServices.FREIGHT_FORWARDING.toString())) {
 
                                 Intent intentFFActivity = new Intent(QuotationActivity.this, FreightForwardingActivity.class);
                                 intentFFActivity.putStringArrayListExtra("availedServicesId", arrayComparingIdArray);
-                                intentFFActivity.putStringArrayListExtra("availedServicesName", arrayComparingNameArray);
+                                intentFFActivity.putStringArrayListExtra("availedServicesName", arrayAvailRemainsNameArray);
                                 intentFFActivity.putStringArrayListExtra("ServicesId",  arrayServicesId);
                                 intentFFActivity.putStringArrayListExtra("ServicesName", arrayServicesName);
                                 intentFFActivity.putExtra("shipmentType", strShipmentType);
@@ -261,7 +256,7 @@ public class QuotationActivity extends AppCompatActivity {
                             // mail send to Amruta madam from backend
                             SendMailFlagAsyncTask.postSendMail(
                                     QuotationActivity.this,
-                                    arrayComparingNameArray,
+                                    arrayAvailRemainsNameArray,
                                     arrayServicesName,
                                     bookId);
                         }
@@ -272,9 +267,17 @@ public class QuotationActivity extends AppCompatActivity {
             // mail send to Amruta madam from backend
             SendMailFlagAsyncTask.postSendMail(
                     QuotationActivity.this,
-                    arrayComparingNameArray,
+                    arrayAvailRemainsNameArray,
                     arrayServicesName,
                     bookId);
-        }
+        }*/
+
+        // mail send to Amruta madam from backend
+        SendMailFlagAsyncTask.postSendMail(
+                QuotationActivity.this,
+                arrayAvailRemainsNameArray,
+                arrayServicesName,
+                bookId);
+
     }
 }

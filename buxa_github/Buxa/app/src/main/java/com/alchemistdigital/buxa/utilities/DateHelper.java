@@ -16,7 +16,7 @@ public class DateHelper {
     private final static SimpleDateFormat HOURS = new SimpleDateFormat("hh");
     private final static SimpleDateFormat MINUTE= new SimpleDateFormat("mm");
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
-    private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd-MM-yyyy");
+    private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd/MM/yyyy");
     private final static SimpleDateFormat sdfBookId = new SimpleDateFormat("ddMMyyhhmmss");
     private final static SimpleDateFormat ENQUIRY_TODAY_TIME = new SimpleDateFormat("hh:mm a");
 
@@ -41,7 +41,7 @@ public class DateHelper {
         return ENQUIRY_TODAY_TIME.format(currentDate);
     }
 
-    public static String convertToString_Quotation(long millis) {
+    public static String convertToFullDateString(long millis) {
         Date dates = new Date(millis);
         return sdfQuotationDate.format(dates);
     }

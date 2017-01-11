@@ -11,6 +11,7 @@ import com.alchemistdigital.buxa.model.CustomClearanceModel;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
 import com.alchemistdigital.buxa.utilities.CommonVariables;
 import com.alchemistdigital.buxa.utilities.RestClient;
+import com.alchemistdigital.buxa.utilities.ShipAreaVariableSingleton;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -51,6 +52,7 @@ public class InsertCustomClearanceAsyncTask {
         RequestParams params;
         params = new RequestParams();
         params.put("customClearancedata", customClearanceModel.toString());
+        params.put("shiparea", ShipAreaVariableSingleton.getInstance().shipAreaName);
 
         System.out.println("Custom clearance json: "+customClearanceModel.toString());
         invokeWS(context, params, customClearanceModel);
