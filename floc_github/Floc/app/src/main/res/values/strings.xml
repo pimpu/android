@@ -17,5 +17,24 @@
     <string name="facebook_app_id">241076362984762</string>
     <string name="fb_login_protocol_scheme">fb241076362984762</string>
     <string name="strThanking">Thank you !</string>
-
+    <string name="hintConfirmPassword">Confirm password</string>
+    <string name="strNoInternet">No internet connection !</string>
+    <string name="user_field_is_empty">User name field is empty.</string>
+    <string name="email_field_is_not_validate">Email field is not validate.</string>
+    <string name="password_field_is_empty">Password field is empty.</string>
+    <string name="confirm_password_field_is_empty">Confirm password field is empty.</string>
+    <string name="confirm_password_missmatch">confirm password does not match with password.</string>
+    <string name="sharedPrefrence">com.cleanslatetech.floc</string>
+    <string name="isAppSignIn">isAppSignIn</string>
+    <string name="shrdLoginType">loginType</string>
+    <string name="shrdUserName">userName</string>
+    <string name="shrdUserEmail">userEmail</string>
+    <string name="shrdLoginId">loginId</string>
+    <string name="facebookLogin">facebookLogin</string>
+    <string name="googleLogin">googleLogin</string>
+    <string name="appLogin">appLogin</string>
+    <string name="strconform">Confirm</string>
+    <string name="strOTPTest">OTP is sent on</string>
+    <string name="password_length_error_message">The Password must be at least 6 characters long.</string>
+    <string name="password_hasUpperCase_error_message">Passwords must have at least one uppercase (\'A\'-\'Z\').</string>
 </resources>

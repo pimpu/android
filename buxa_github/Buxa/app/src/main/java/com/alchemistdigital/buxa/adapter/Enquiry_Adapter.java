@@ -74,7 +74,8 @@ public class Enquiry_Adapter extends RecyclerView.Adapter<Enquiry_Adapter.Enquir
             date = dateHelper.getDay(Long.parseLong(current.getCreatedAt()))+" "+dateHelper.getMonthString(Long.parseLong(current.getCreatedAt()));
         }
         holder.tv_date.setText(date);
-        if(current.getShipArea().equals("")) {
+
+        if(current.getShipArea() == null || current.getShipArea().equals("")) {
             holder.tv_shipArea.setText("Service: none");
         }
         else {

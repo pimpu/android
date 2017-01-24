@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#F36E23</color>
     <color name="colorPrimaryDark">#020202</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="white">#dedede</color>
+    <color name="colorAccent">#cc4a01</color>
+    <color name="white">#ffffff</color>
     <color name="black_overlay">#66000000</color>
     <color name="facebook_color">#416BC1</color>
     <color name="google_color">#db3236</color>

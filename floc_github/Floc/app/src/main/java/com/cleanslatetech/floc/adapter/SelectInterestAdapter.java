@@ -10,7 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.utilities.CommonVariables;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,25 +28,18 @@ import java.util.List;
 public class SelectInterestAdapter extends BaseAdapter {
     public static ArrayList<Integer> iArraySelectedPositions;
     private Context context;
-    // Keep all Images in array
-    public Integer[] mThumbIds = {
-            R.drawable.movie, R.drawable.theater,R.drawable.festival,
-            R.drawable.music, R.drawable.dance, R.drawable.literatures,
-            R.drawable.food_drinks, R.drawable.sports, R.drawable.health_wellness
-    };
+    private JSONArray getCategory;
 
-    public String[] mThumbString = {
-        "Movie", "Theater", "Festival", "Music", "Dance", "Literature", "Food\n&\nDrinks", "Sports", "Health\n&\nWellness"
-    };
-
-    public SelectInterestAdapter(Context context) {
+    public SelectInterestAdapter(Context context, JSONArray getCategory) {
         this.context = context;
+        this.getCategory = getCategory;
+        System.out.println(getCategory);
         iArraySelectedPositions = new ArrayList<Integer>();
     }
 
     @Override
     public int getCount() {
-        return mThumbIds.length;
+        return getCategory.length();
     }
 
     @Override
@@ -69,8 +67,22 @@ public class SelectInterestAdapter extends BaseAdapter {
             holder.textView = (TextView) gridview.findViewById(R.id.grid_text);
             holder.imageviewChk = (ImageView) gridview.findViewById(R.id.idCheckboxinterest);
 
-            holder.textView.setText(mThumbString[position]);
-            holder.imageViewThumbPic.setImageResource(mThumbIds[position]);
+            try {
+                holder.textView.setText(getCategory.getJSONObject(position).getString("EventCategoryName"));
+                String categoryPic = getCategory.getJSONObject(position).getString("CategoryPic");
+
+                Glide
+                    .with(context)
+                    .load( CommonVariables.INTEREST_CATEGORY_SERVER_URL + categoryPic)
+                    .centerCrop()
+                    .placeholder(R.drawable.progress)
+                    .crossFade()
+                    .into(holder.imageViewThumbPic);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             gridview.setTag(holder);
 
         } else {

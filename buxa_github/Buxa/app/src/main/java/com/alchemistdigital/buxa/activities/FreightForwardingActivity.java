@@ -49,25 +49,26 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
     private LinearLayout layoutCommomTransFeild;
     private ArrayAdapter<CommodityModel> commodity_adapter;
     private ArrayAdapter<PackageTypeModel> packagingType_adapter;
-    private AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtDestinationDeliveryAdr;
+    public AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtDestinationDeliveryAdr, txtPortOfCountry;
     private RadioGroup rgContainerSize, rgTypeOfShipment;
     private DatabaseClass dbClass ;
     private ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     private String strShipmentType = "LCL", bookId, strSelectedContainerSize = null, selectedIncoterm;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack;
-    private TextInputLayout inputLayout_destinationDeliveryAdr, inputLayout_cubicMeter, inputLayout_grossWeight,
-            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity;
-    private int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
-    private int loginId;
+    public TextInputLayout inputLayout_destinationDeliveryAdr, inputLayout_cubicMeter, inputLayout_grossWeight,
+            inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity, inputLayout_poc;
+    public int iSelectedCommodityId, iSelectedPackageType, iSelectedCfsAdr;
+    private int loginId, layoutItemId;
     private TransportationModel transportDataModel;
     public static CustomClearanceModel customClearanceModel_ff;
-    private ArrayAdapter<CFSAddressModel> cfs_adapter;
-    private Spinner spinnerIncoterm, spinnerPOC, spinnerPOD, spinnerPOL;
+    public ArrayAdapter<CFSAddressModel> cfs_adapter;
+    private Spinner spinnerIncoterm, spinnerPOD, spinnerPOL; // spinnerPOC
     private Boolean boolIsDDAVisible=false;
-    private CustomSpinnerAdapter adapterPortOfCountry, adapterPortOfDestination, adapterIncoterm, adapterPOL;
+    private CustomSpinnerAdapter adapterIncoterm, adapterPOL, adapterPortOfDestination;  // adapterPortOfCountry,
 
     public static Boolean isCCService = false;
     public static FreightForwardingModel freightForwardingModel;
+    private ArrayAdapter<String> adapterPortOfCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         inputLayout_packType = (TextInputLayout) findViewById(R.id.input_layout_pack_type_ff);
         inputLayout_noOfPack = (TextInputLayout) findViewById(R.id.input_layout_no_of_package_ff);
         inputLayout_commodity = (TextInputLayout) findViewById(R.id.input_layout_commodity_ff);
+        inputLayout_poc = (TextInputLayout) findViewById(R.id.input_layout_POC);
 
         // initialised all Edit Text
         txtBookId = (EditText) findViewById(R.id.book_id_ff);
@@ -161,10 +163,11 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         txtTypeOfPackaging = (AutoCompleteTextView) findViewById(R.id.id_type_of_package_ff);
 //        txtCfsAdr = (AutoCompleteTextView) findViewById(R.id.id_cfs_address);
         txtDestinationDeliveryAdr = (AutoCompleteTextView) findViewById(R.id.id_destination_delivery_adr);
+        txtPortOfCountry = (AutoCompleteTextView) findViewById(R.id.id_POC);
 
         // Incoterm Spinner
         spinnerIncoterm = (Spinner) findViewById(R.id.id_spinner_incoterm);
-        spinnerPOC = (Spinner) findViewById(R.id.id_spinner_poc);
+//        spinnerPOC = (Spinner) findViewById(R.id.id_spinner_poc);
         spinnerPOD = (Spinner) findViewById(R.id.id_spinner_pod);
         spinnerPOL = (Spinner) findViewById(R.id.id_spinner_pol);
 
@@ -219,7 +222,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             txtBookId.setText( bookId );
         }
 
-        int layoutItemId = android.R.layout.simple_dropdown_item_1line;
+        layoutItemId = android.R.layout.simple_dropdown_item_1line;
 
         // initialised comodity autocomplete textfield from database
         commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
@@ -255,11 +258,19 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         });*/
 
         // port of international country spinner
-        adapterPortOfCountry = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, dbClass.getPortOfCountry());
-        adapterPortOfCountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPOC.setAdapter(adapterPortOfCountry);
+        adapterPortOfCountry = new ArrayAdapter<String>(this, layoutItemId, dbClass.getPortOfCountry());
+        System.out.println(dbClass.getPortOfCountry());
+        txtPortOfCountry.setAdapter(adapterPortOfCountry);
+        txtPortOfCountry.setThreshold(1);
+        txtPortOfCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // port of international destination spinner
+                populatePODSpinner();
+            }
+        });
 
-        spinnerPOC.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*spinnerPOC.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // port of international country spinner
@@ -270,7 +281,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
 
 
         // click listener for shipment type radio group
@@ -365,9 +376,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         // port of international destination spinner
         adapterPortOfDestination = new CustomSpinnerAdapter(this,
                 android.R.layout.simple_spinner_item,
-                dbClass.getPortOfDestination( spinnerPOC.getSelectedItem().toString() ));
+                dbClass.getPortOfDestination( txtPortOfCountry.getText().toString() ));
         adapterPortOfDestination.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPOD.setAdapter(adapterPortOfDestination);
+
     }
 
     private void toolbarSetup() {
@@ -392,7 +404,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
         String strCommodity = txtComodity.getText().toString();
         String strTypeOfPack = txtTypeOfPackaging.getText().toString();
 
-//        Boolean boolPOD = isEmptyString(txtPodAdr.getText().toString());
+        Boolean boolPOC = isEmptyString(txtPortOfCountry.getText().toString());
         Boolean boolDDAdr = isEmptyString(txtDestinationDeliveryAdr.getText().toString());
         Boolean boolCBM = isEmptyString(txtCBM.getText().toString());
         Boolean boolGrossWt = isEmptyString(txtGrossWt.getText().toString());
@@ -406,6 +418,13 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             inputLayout_destinationDeliveryAdr.setErrorEnabled(true);
             inputLayout_destinationDeliveryAdr.setError(getResources().getString(R.string.hint_destination_delivery_adr)+
                                                 " field is empty.");
+        }
+
+        if (boolPOC) {
+            inputLayout_poc.setErrorEnabled(false);
+        } else {
+            inputLayout_poc.setErrorEnabled(true);
+            inputLayout_poc.setError("Port of country field is empty.");
         }
 
         if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
@@ -461,6 +480,10 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
                 return;
             }
 
+            if( !boolPOC ) {
+                return;
+            }
+
             /*System.out.println("booking id: "+txtBookId.getText().toString());
             System.out.println("POL: "+spinnerPOL.getSelectedItem().toString());
             System.out.println("POC: "+spinnerPOC.getSelectedItem().toString());
@@ -471,7 +494,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
                     spinnerPOL.getSelectedItem().toString(),
-                    spinnerPOC.getSelectedItem().toString(),
+                    txtPortOfCountry.getText().toString(),
                     spinnerPOD.getSelectedItem().toString(),
                     spinnerIncoterm.getSelectedItem().toString(),
                     txtDestinationDeliveryAdr.getText().toString(),
@@ -489,7 +512,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
 
             intentActions();
         }
-        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity ) {
+        else if ( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity && boolPOC ) {
 
             if( boolIsDDAVisible && !boolDDAdr ) {
                 return;
@@ -512,7 +535,7 @@ public class FreightForwardingActivity extends AppCompatActivity implements Adap
             freightForwardingModel = new FreightForwardingModel(
                     txtBookId.getText().toString(),
                     spinnerPOL.getSelectedItem().toString(),
-                    spinnerPOC.getSelectedItem().toString(),
+                    txtPortOfCountry.getText().toString(),
                     spinnerPOD.getSelectedItem().toString(),
                     spinnerIncoterm.getSelectedItem().toString(),
                     txtDestinationDeliveryAdr.getText().toString(),

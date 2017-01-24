@@ -1,13 +1,26 @@
 package com.cleanslatetech.floc.utilities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.LoginActivity;
 import com.cleanslatetech.floc.activities.SelectInterestsActivity;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
@@ -65,14 +78,45 @@ public class CommonUtilities {
             String personName = acct.getDisplayName();
 //            String personPhotoUrl = acct.getPhotoUrl().toString();
             String email = acct.getEmail();
-
 //            System.out.println("Name: " + personName + ", email: " + email + ", Image: " + personPhotoUrl);
-            context.startActivity(new Intent(context, SelectInterestsActivity.class));
+
+            // intet for next activity
+            handleIntentWhenSignIn(context,  context.getResources().getString(R.string.googleLogin), true, personName, email, 0);
 
         } else {
-            // Signed out, show unauthenticated UI.
-            System.out.println("handleGoogleSignInResult: sign out");
+
+            // intet for next activity
+            handleIntentWhenSignOut(context, false);
         }
+    }
+
+    public static void handleIntentWhenSignIn(Context context, String type, boolean isSignIn,
+                                              String name,String email, int id) {
+        System.out.println("handleIntentWhenSignIn-Login Type: "+type);
+        System.out.println("handleIntentWhenSignIn-issign: "+isSignIn);
+
+        context.startActivity(new Intent(context, SelectInterestsActivity.class));
+
+        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn),isSignIn);
+        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdLoginType), type);
+        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserName), name);
+
+        // not getting email id from user, when user logging.
+        // so from logging activity, email="";
+        // dont store email id in preference at time of loggin.
+        if(email.length() > 0 ) {
+            new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
+        }
+
+        new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
+
+        ((Activity)context).finish();
+    }
+
+    public static void handleIntentWhenSignOut(Context context, boolean isSingOut) {
+        context.startActivity(new Intent(context, LoginActivity.class));
+        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn), isSingOut);
+        ((Activity)context).finish();
     }
 
     public static void showProgressDialog(Context context) {
@@ -91,10 +135,30 @@ public class CommonUtilities {
         }
     }
 
-    public static String isFacebookLoggedIn() {
-        if( Profile.getCurrentProfile() != null )
-            return Profile.getCurrentProfile().getId() ;
+    public static AccessToken isFacebookLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if (accessToken != null)
+            return accessToken;
         return null;
+    }
+
+    /**
+     * Checking for all possible internet providers
+     * **/
+    public static boolean isConnectingToInternet(Context _context){
+        ConnectivityManager connectivity = (ConnectivityManager) _context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
+
+        }
+        return false;
     }
 
 }

@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout layout_noConnection;
     TextView errorMessage;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

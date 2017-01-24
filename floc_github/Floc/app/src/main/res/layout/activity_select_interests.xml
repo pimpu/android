@@ -52,6 +52,13 @@
             android:textSize="@dimen/login__screen_texts"/>
     </RelativeLayout>-->
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="" />
+
+
     <GridView
         android:id="@+id/id_gridview_selectInterest"
         android:layout_width="fill_parent"

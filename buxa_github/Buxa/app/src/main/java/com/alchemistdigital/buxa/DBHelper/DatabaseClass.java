@@ -1141,7 +1141,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return id;
     }
 
-    public ArrayList getPortOfCountry(){
+    public ArrayList getPortOfCountry() {
         ArrayList<String> poc = new ArrayList<String>();
 
         DatabaseClass sqliteDb = openDatabase();

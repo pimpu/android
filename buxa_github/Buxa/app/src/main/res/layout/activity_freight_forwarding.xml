@@ -24,11 +24,12 @@
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -88,7 +89,7 @@
                 android:gravity="center_horizontal"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
-                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                <!--<com.alchemistdigital.buxa.utilities.SegoeFontTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/hint_poc"
@@ -101,7 +102,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
-                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined" />-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_POC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.alchemistdigital.buxa.utilities.SegoeFontAutoComplete
+                        android:id="@+id/id_POC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_poc"
+                        app:Segoe="segoe_light"/>
+                </android.support.design.widget.TextInputLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -126,6 +141,7 @@
                     android:layout_height="wrap_content"
                     app:Segoe="segoe_light"
                     style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+
             </LinearLayout>
 
             <!--<android.support.design.widget.TextInputLayout

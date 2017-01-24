@@ -88,9 +88,21 @@
                 android:inputType="text"
                 android:padding="10dp"
                 android:background="@drawable/blackroundrectangle"
+                android:textColor="@color/white"
                 android:hint="@string/hintUsrName"
                 android:textColorHint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_person_pin_white"/>
+
+            <TextView
+                android:id="@+id/errorNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/user_field_is_empty"
+                android:textSize="@dimen/fourteen_textsize"
+                android:textColor="@color/google_color"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/idRegisterUserEmail"
@@ -100,9 +112,20 @@
                 android:padding="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/blackroundrectangle"
+                android:textColor="@color/white"
                 android:hint="@string/hintUsrEmail"
                 android:textColorHint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_email_white"/>
+            <TextView
+                android:id="@+id/errorEmailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/email_field_is_not_validate"
+                android:textSize="@dimen/fourteen_textsize"
+                android:textColor="@color/google_color"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/idRegisterUserPassword"
@@ -112,9 +135,45 @@
                 android:padding="10dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/blackroundrectangle"
+                android:textColor="@color/white"
                 android:hint="@string/hintPassword"
                 android:textColorHint="@color/colorPrimary"
                 android:drawableLeft="@drawable/ic_lock_outline_white"/>
+
+            <TextView
+                android:id="@+id/errorPwdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/password_field_is_empty"
+                android:textSize="@dimen/fourteen_textsize"
+                android:textColor="@color/google_color"
+                android:visibility="gone"/>
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/idRegisterUserConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/blackroundrectangle"
+                android:textColor="@color/white"
+                android:hint="@string/hintConfirmPassword"
+                android:textColorHint="@color/colorPrimary"
+                android:drawableLeft="@drawable/ic_lock_outline_white"/>
+
+            <TextView
+                android:id="@+id/errorCnfrmPwdText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/confirm_password_field_is_empty"
+                android:textSize="@dimen/fourteen_textsize"
+                android:textColor="@color/google_color"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/idRegisterContinueBtn"
@@ -124,7 +183,8 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/orangeroundrectangle"
                 android:text="@string/strContinue"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:onClick="registerUser"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"

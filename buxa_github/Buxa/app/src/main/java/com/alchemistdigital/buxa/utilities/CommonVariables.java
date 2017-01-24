@@ -30,8 +30,8 @@ public class CommonVariables {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
-//    static String SERVER_URL = "http://d4f28c15.ngrok.io/buxa/v1/";
-    static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
+    static String SERVER_URL = "http://b8a8a560.ngrok.io/buxa/v1/";
+//    static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
 
     public static String DOWNLOAD_FILE_URL = "http://www.buxa.tech/admin/pdf/";
 
