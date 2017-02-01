@@ -1,19 +1,24 @@
 package com.cleanslatetech.floc.asynctask;
 
-
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.adapter.SelectInterestAdapter;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.adapter.AllEventsRecyclerViewAdapter;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -22,74 +27,68 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 
-import static com.cleanslatetech.floc.activities.SelectInterestsActivity.gotoNext;
-import static com.cleanslatetech.floc.activities.SelectInterestsActivity.mActionBarToolbar;
+import static android.R.attr.progressDrawable;
 
 /**
- * Created by pimpu on 1/24/2017.
+ * Created by pimpu on 1/31/2017.
  */
-public class GetInterestCategoryAsyncTask {
+public class GetAllEventsAsyncTask {
+    private ProgressBar progressBar;
+    private RelativeLayout refreshBtnPageLayout;
     private Context context;
-    private int iCounter=5;
-    private GridView selectInterestGridview;
-    public static List<Integer> iArraySelectedPositions;
-    LinearLayout refreshBtnPageLayout, prgDialogLayout;
+    private RecyclerView allEventRecyclerView;
 
-    public GetInterestCategoryAsyncTask(Context context, GridView selectInterestGridview) {
+    public GetAllEventsAsyncTask(Context context) {
         this.context = context;
-        this.selectInterestGridview = selectInterestGridview;
-
-        // set pickup interest text to textview
-        setPickupInterestText(iCounter);
+        allEventRecyclerView = (RecyclerView) ((AppCompatActivity)context).findViewById(R.id.all_events_recycler);
 
         // Instantiate Progress Dialog object
-        prgDialogLayout = (LinearLayout) ((AppCompatActivity)context).findViewById(R.id.linlaHeaderProgress);
-        refreshBtnPageLayout = (LinearLayout) ((AppCompatActivity)context).findViewById(R.id.refreshSelectInterestPage);
-        AppCompatButton btnRefresh = (AppCompatButton) ((AppCompatActivity) context).findViewById(R.id.btnRefreshInterestPage);
+        progressBar = (ProgressBar) ((AppCompatActivity)context).findViewById(R.id.eventHeaderProgress);
+
+        refreshBtnPageLayout = (RelativeLayout) ((AppCompatActivity)context).findViewById(R.id.refreshAllEventPage);
+        AppCompatButton btnRefresh = (AppCompatButton) ((AppCompatActivity) context).findViewById(R.id.btnRefreshAllEventPage);
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 refreshBtnPageLayout.setVisibility(View.GONE);
-                postData();
+                getData();
             }
         });
 
-        postData();
     }
 
-    private void postData() {
-        prgDialogLayout.setVisibility(View.VISIBLE);
+    public void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         invokeWS(context);
     }
 
     private void invokeWS(final Context context) {
-
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.get(CommonVariables.GET_INTEREST_CATEGORY_SERVER_URL, null, new JsonHttpResponseHandler() {
+        RestClient.get(CommonVariables.GET_ALL_EVENTS_SERVER_URL, null, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialogLayout.setVisibility(View.GONE);
-                selectInterestGridview.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                allEventRecyclerView.setVisibility(View.VISIBLE);
                 try{
                     System.out.println(json);
 
                     // manipulate gride view
-                    populateGridview(json.getJSONArray("GetCategory"));
+                    populateAllEventRecyclerview(json.getJSONArray("Event"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
+
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialogLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
@@ -97,7 +96,7 @@ public class GetInterestCategoryAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialogLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -137,12 +136,13 @@ public class GetInterestCategoryAsyncTask {
         });
     }
 
-    private void populateGridview(final JSONArray getCategory) {
+    private void populateAllEventRecyclerview(JSONArray getEvents) {
         // set adapter for interests grid view
-        SelectInterestAdapter adapter = new SelectInterestAdapter(context, getCategory);
-        selectInterestGridview.setAdapter(adapter);
+        RecyclerView.Adapter allEventRecyclerAdapter = new AllEventsRecyclerViewAdapter(context, getEvents);
+        allEventRecyclerView.setAdapter(allEventRecyclerAdapter);
+        allEventRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // video play when video thumbnail get click.
+        /*// video play when video thumbnail get click.
         final SelectInterestAdapter finalImageLoadAdapter = adapter;
 
         selectInterestGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -170,23 +170,6 @@ public class GetInterestCategoryAsyncTask {
 
                 finalImageLoadAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
     }
-
-    private void setPickupInterestText(int iCounter) {
-        String strInterestText =  String.format(context.getResources().getString(R.string.strPick5Interests), iCounter);
-        if( iCounter == 0 ) {
-//            tvSelectInterestText.setText(R.string.strThanking);
-            mActionBarToolbar.setTitle(R.string.strThanking);
-            gotoNext.setVisibility(View.VISIBLE);
-
-        }
-        else {
-            mActionBarToolbar.setTitle(strInterestText);
-            gotoNext.setVisibility(View.GONE);
-//            tvSelectInterestText.setText(strInterestText);
-        }
-        ((AppCompatActivity)context).setSupportActionBar(mActionBarToolbar);
-    }
-
 }

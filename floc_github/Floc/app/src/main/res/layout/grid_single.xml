@@ -5,11 +5,10 @@
     android:padding="2dp"
     style="@android:style/TextAppearance.DeviceDefault.Medium">
 
-
     <ImageView
         android:id="@+id/grid_image"
         android:layout_width="@dimen/grid_column_width"
-        android:layout_height="@dimen/grid_column_width"
+        android:layout_height="@dimen/grid_column_height"
         android:scaleType="centerCrop" />
 
     <ImageView
@@ -20,7 +19,7 @@
         android:layout_alignBottom="@id/grid_image"
         android:layout_alignLeft="@id/grid_image"
         android:layout_alignRight="@id/grid_image"
-        android:background="@color/blackOpacity"
+        android:background="@color/blackOpacity_selectedInterest"
         android:scaleType="fitXY" />
 
     <ImageView
@@ -32,17 +31,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_check_box_white"
-        android:tint="@color/colorPrimary"/>
-
-    <TextView
-        android:id="@+id/grid_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="SomeText"
-        android:textColor="@color/white"
-        android:textSize="@dimen/grid_column_textsize"
-        android:textAlignment="center">
-    </TextView>
+        android:tint="@color/yellow"/>
 
 </RelativeLayout>

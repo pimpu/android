@@ -1,24 +1,21 @@
 package com.cleanslatetech.floc.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.utilities.CommonVariables;
+import com.cleanslatetech.floc.utilities.TextDrawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,14 +23,13 @@ import java.util.List;
  */
 
 public class SelectInterestAdapter extends BaseAdapter {
-    public static ArrayList<Integer> iArraySelectedPositions;
+    public static List<Integer> iArraySelectedPositions;
     private Context context;
     private JSONArray getCategory;
 
     public SelectInterestAdapter(Context context, JSONArray getCategory) {
         this.context = context;
         this.getCategory = getCategory;
-        System.out.println(getCategory);
         iArraySelectedPositions = new ArrayList<Integer>();
     }
 
@@ -56,27 +52,34 @@ public class SelectInterestAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View gridview = convertView;
         ViewHolder holder;
+        int eventCategoryId = 0;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        try {
+            eventCategoryId = getCategory.getJSONObject(position).getInt("EventCategoryId");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if(convertView == null) {
             gridview = inflater.inflate(R.layout.grid_single, null);
             holder = new ViewHolder();
 
             holder.imageViewThumbPic = (ImageView) gridview.findViewById(R.id.grid_image);
-            holder.textView = (TextView) gridview.findViewById(R.id.grid_text);
             holder.imageviewChk = (ImageView) gridview.findViewById(R.id.idCheckboxinterest);
+            holder.outsideImgView = (ImageView) gridview.findViewById(R.id.outside_imageview);
 
             try {
-                holder.textView.setText(getCategory.getJSONObject(position).getString("EventCategoryName"));
                 String categoryPic = getCategory.getJSONObject(position).getString("CategoryPic");
+                String interestText = getCategory.getJSONObject(position).getString("EventCategoryName");
 
                 Glide
                     .with(context)
                     .load( CommonVariables.INTEREST_CATEGORY_SERVER_URL + categoryPic)
                     .centerCrop()
-                    .placeholder(R.drawable.progress)
-                    .crossFade()
+                    .placeholder(new TextDrawable(context, interestText))
+                    .dontAnimate()
                     .into(holder.imageViewThumbPic);
 
             } catch (JSONException e) {
@@ -89,14 +92,14 @@ public class SelectInterestAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if(iArraySelectedPositions.contains(position)) {
+        if(iArraySelectedPositions.contains(eventCategoryId)) {
             holder.imageviewChk.setVisibility(convertView.VISIBLE);
-            holder.textView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            gridview.setBackgroundResource(R.drawable.grid_selected);
+            holder.outsideImgView.setVisibility(convertView.VISIBLE);
+//            gridview.setBackgroundResource(R.drawable.grid_selected);
         } else {
             holder.imageviewChk.setVisibility(convertView.GONE);
-            holder.textView.setTextColor(ContextCompat.getColor(context, R.color.white));
-            gridview.setBackgroundDrawable(null);
+            holder.outsideImgView.setVisibility(convertView.GONE);
+//            gridview.setBackgroundDrawable(null);
         }
 
         return gridview;
@@ -105,7 +108,7 @@ public class SelectInterestAdapter extends BaseAdapter {
     static class ViewHolder {
         ImageView imageViewThumbPic;
         ImageView imageviewChk;
-        TextView textView;
+        ImageView outsideImgView;
     }
 
 }

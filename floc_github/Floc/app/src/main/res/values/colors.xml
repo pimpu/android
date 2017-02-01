@@ -7,6 +7,9 @@
     <color name="black_overlay">#66000000</color>
     <color name="facebook_color">#416BC1</color>
     <color name="google_color">#db3236</color>
-    <color name="blackOpacity">#9e0a0a0a</color>
+    <color name="blackOpacity">#be0a0a0a</color>
+    <color name="blackOpacity_selectedInterest">#aa0a0a0a</color>
+    <color name="darkYellow">#efba2e</color>
+    <color name="yellow">#edcf0a</color>
 
 </resources>

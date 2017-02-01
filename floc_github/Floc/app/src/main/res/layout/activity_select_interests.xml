@@ -29,7 +29,7 @@
                 android:src="@drawable/ic_arrow_forward_black"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:tint="@color/mdtp_white"
+                android:tint="@color/white"
                 android:onClick="gotoNext"
                 android:visibility="gone"/>
         </android.support.v7.widget.Toolbar>
@@ -52,23 +52,47 @@
             android:textSize="@dimen/login__screen_texts"/>
     </RelativeLayout>-->
 
-    <ImageView
+    <LinearLayout
+        android:id="@+id/linlaHeaderProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="" />
+        android:orientation="vertical"
+        android:visibility="gone" >
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/refreshSelectInterestPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:clickable="true">
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnRefreshInterestPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:text="Try again"
+            android:textColor="@color/blackOpacity" />
+    </LinearLayout>
 
     <GridView
         android:id="@+id/id_gridview_selectInterest"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:paddingTop="15dp"
+        android:visibility="gone"
         android:numColumns="auto_fit"
         android:columnWidth="@dimen/grid_column_width"
         android:verticalSpacing="12dp"
         android:gravity="center"
         android:stretchMode="spacingWidthUniform" />
+
 </RelativeLayout>
 

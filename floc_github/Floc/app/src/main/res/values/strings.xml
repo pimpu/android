@@ -37,4 +37,6 @@
     <string name="strOTPTest">OTP is sent on</string>
     <string name="password_length_error_message">The Password must be at least 6 characters long.</string>
     <string name="password_hasUpperCase_error_message">Passwords must have at least one uppercase (\'A\'-\'Z\').</string>
+    <string name="interestCategory">interestCategory</string>
+    <string name="eventimage">EventImage</string>
 </resources>

@@ -130,7 +130,6 @@ public class EnquiriesActivity extends AppCompatActivity implements ItemClickLis
         enquiry_Adapter = new Enquiry_Adapter(this, shipmentData);
         enquiry_RecyclerView.setAdapter(enquiry_Adapter);
         enquiry_RecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override

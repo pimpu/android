@@ -1,5 +1,6 @@
 package com.cleanslatetech.floc.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
 import com.facebook.AccessToken;
@@ -22,6 +24,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleGoogleSignInResult;
+import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
 public class SplashScreenActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
@@ -65,12 +68,17 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
 
                         boolean isSignIn = getSharedPreference.getBoolean(getResources().getString(R.string.isAppSignIn));
                         if(isSignIn) {
-                            startActivity(new Intent(getApplicationContext(), SelectInterestsActivity.class));
-                            finish();
+                            handleIntentWhenSignIn(
+                                    SplashScreenActivity.this,
+                                    loginType,
+                                    true,
+                                    new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserName)),
+                                    new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserEmail)),
+                                    new GetSharedPreference(SplashScreenActivity.this).getInt(getResources().getString(R.string.shrdLoginId)) );
                         }
                         else {
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                            finish();
+                            // intet for next activity
+                            handleIntentWhenSignOut(SplashScreenActivity.this, false);
                         }
                     }
                     else if(loginType.equals(getResources().getString(R.string.facebookLogin))) {

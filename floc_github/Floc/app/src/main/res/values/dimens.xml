@@ -5,6 +5,8 @@
     <dimen name="login__screen_texts">18sp</dimen>
     <dimen name="register_screen_texts">35sp</dimen>
     <dimen name="grid_column_width">100dp</dimen>
+    <dimen name="grid_column_height">140dp</dimen>
+    <dimen name="event_image_column_height">180dp</dimen>
     <dimen name="grid_column_textsize">12dp</dimen>
     <dimen name="selectedCheckboxSize">30dp</dimen>
     <dimen name="fourteen_textsize">14dp</dimen>

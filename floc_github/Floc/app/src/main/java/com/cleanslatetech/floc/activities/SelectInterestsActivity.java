@@ -1,5 +1,6 @@
 package com.cleanslatetech.floc.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
+import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -25,6 +27,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
+import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 
 public class SelectInterestsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     public static ImageView gotoNext;
@@ -62,7 +65,16 @@ public class SelectInterestsActivity extends AppCompatActivity implements Google
     }
 
     public void gotoNext(View view) {
-        Toast.makeText(getApplicationContext(),"Hello", Toast.LENGTH_SHORT).show();
+
+        // Check if Internet present
+        if (!isConnectingToInternet(SelectInterestsActivity.this)) {
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoInternet),Toast.LENGTH_LONG).show();
+            // stop executing code by return
+            return;
+        } else {
+//            new SetInterestAsyncTask( SelectInterestsActivity.this, iArraySelectedPositions ).postData();
+            startActivity(new Intent(getApplicationContext(), AllEventsActivity.class));
+        }
     }
 
     @Override
@@ -114,4 +126,5 @@ public class SelectInterestsActivity extends AppCompatActivity implements Google
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }

@@ -188,6 +188,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         finish();
                     }
                 })
