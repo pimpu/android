@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/floc_mobile_apps_main_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/dark_blue"
     android:fillViewport="true"
     android:id="@+id/activity_otp"
     tools:context="com.cleanslatetech.floc.activities.OTPActivity">
@@ -25,7 +26,7 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/logo"/>
 
-            <TextView
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
                 android:id="@+id/id_otptext_splashscreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,10 +34,11 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="45dp"
                 android:text="@string/strOTPTest"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="@dimen/login__screen_texts"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/login__screen_texts"
+                app:OpenSans="openSans_regular" />
 
-            <TextView
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
                 android:id="@+id/id_email_cnfm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,8 +46,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:textColor="@color/cardview_dark_background"
-                android:textSize="@dimen/login__screen_texts"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/login__screen_texts"
+                app:OpenSans="openSans_regular" />
 
             <LinearLayout
                 android:id="@+id/otp_layout"
@@ -56,71 +59,90 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/id_email_cnfm">
 
-                <android.support.design.widget.TextInputLayout
+                <!--<android.support.design.widget.TextInputLayout
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    >-->
 
-                    <EditText
+                    <com.cleanslatetech.floc.utilities.OpenSansEditText
                         android:id="@+id/firstOTP"
-                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/OTPtextsize"
+                        android:textColor="@color/white"
                         android:maxLength="1"
                         android:inputType="numberSigned"
-                        android:nextFocusForward="@+id/secondOTP" />
-                </android.support.design.widget.TextInputLayout>
+                        android:nextFocusForward="@+id/secondOTP"
+                        android:backgroundTint="@color/white"
+                        app:OpenSans="openSans_regular" />
+                <!--</android.support.design.widget.TextInputLayout>-->
 
-                <android.support.design.widget.TextInputLayout
+                <!--<android.support.design.widget.TextInputLayout
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginLeft="5dp">
+                    android:layout_marginLeft="5dp">-->
 
-                    <EditText
+                    <com.cleanslatetech.floc.utilities.OpenSansEditText
                         android:id="@+id/secondOTP"
-                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/OTPtextsize"
                         android:maxLength="1"
                         android:inputType="numberSigned"
-                        android:nextFocusForward="@+id/thirdOTP"/>
-                </android.support.design.widget.TextInputLayout>
+                        android:nextFocusForward="@+id/thirdOTP"
+                        android:backgroundTint="@color/white"
+                        app:OpenSans="openSans_regular" />
+                <!--</android.support.design.widget.TextInputLayout>-->
 
-                <android.support.design.widget.TextInputLayout
+               <!-- <android.support.design.widget.TextInputLayout
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginLeft="5dp">
+                    android:layout_marginLeft="5dp">-->
 
-                    <EditText
+                    <com.cleanslatetech.floc.utilities.OpenSansEditText
                         android:id="@+id/thirdOTP"
-                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/OTPtextsize"
                         android:maxLength="1"
                         android:inputType="numberSigned"
-                        android:nextFocusForward="@+id/fourthOTP"/>
-                </android.support.design.widget.TextInputLayout>
+                        android:nextFocusForward="@+id/fourthOTP"
+                        android:backgroundTint="@color/white"
+                        app:OpenSans="openSans_regular" />
+                <!--</android.support.design.widget.TextInputLayout>-->
 
-                <android.support.design.widget.TextInputLayout
+                <!--<android.support.design.widget.TextInputLayout
                     android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginLeft="5dp">
+                    android:layout_marginLeft="5dp">-->
 
-                    <EditText
+                    <com.cleanslatetech.floc.utilities.OpenSansEditText
                         android:id="@+id/fourthOTP"
-                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/OTPtextsize"
                         android:maxLength="1"
-                        android:inputType="numberSigned"/>
-                </android.support.design.widget.TextInputLayout>
+                        android:inputType="numberSigned"
+                        android:backgroundTint="@color/white"
+                        app:OpenSans="openSans_regular" />
+                <!--</android.support.design.widget.TextInputLayout>-->
 
             </LinearLayout>
 
-            <Button
+            <com.cleanslatetech.floc.utilities.OpenSansButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -129,7 +151,8 @@
                 android:text="@string/strconform"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimary"
-                android:onClick="btnConformOTP"/>
+                android:onClick="btnConformOTP"
+                app:OpenSans="openSans_regular" />
 
         </RelativeLayout>
 

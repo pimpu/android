@@ -5,7 +5,7 @@
     android:id="@+id/activity_splash_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/floc_mobile_apps_main_bg"
+    android:background="@color/dark_blue"
     tools:context="com.cleanslatetech.floc.activities.SplashScreenActivity">
 
     <ImageView
@@ -23,12 +23,14 @@
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
-        <TextView
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
             android:id="@+id/id_loadintText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/strLoading"
-            android:textSize="25sp" />
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:OpenSans="openSans_regular" />
 
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/avloadingIndicatorView"
@@ -37,7 +39,7 @@
             android:layout_marginLeft="8sp"
             android:visibility="visible"
             app:indicator="BallPulse"
-            app:indicator_color="#6c6f6f" />
+            app:indicator_color="@color/white" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -46,14 +47,14 @@ public class OTPActivity extends AppCompatActivity {
 
         txtFirstOTP.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start,int before, int count) {
-                if(txtFirstOTP.getText().toString().length()== 1 ) {
-                    txtSecondOTP.requestFocus();
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if(txtFirstOTP.getText().toString().length() == 1 ) {
+                    txtSecondOTP.requestFocus();
+                }
             }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -63,14 +64,17 @@ public class OTPActivity extends AppCompatActivity {
 
         txtSecondOTP.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start,int before, int count) {
-                if(txtSecondOTP.getText().toString().length()== 1 ) {
-                    txtThirdOTP.requestFocus();
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if(txtSecondOTP.getText().toString().length()== 1 ) {
+                    txtThirdOTP.requestFocus();
+                }
+                else if(txtSecondOTP.getText().toString().length()== 0 ) {
+                    txtFirstOTP.requestFocus();
+                }
             }
             public void beforeTextChanged(CharSequence s, int start,
                                           int count, int after) {
@@ -80,13 +84,35 @@ public class OTPActivity extends AppCompatActivity {
 
         txtThirdOTP.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start,int before, int count) {
-                if(txtThirdOTP.getText().toString().length()== 1 ) {
-                    txtFourthOTP.requestFocus();
-                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if(txtThirdOTP.getText().toString().length()== 1 ) {
+                    txtFourthOTP.requestFocus();
+                }
+                else if(txtThirdOTP.getText().toString().length() == 0 ) {
+                    txtSecondOTP.requestFocus();
+                }
+
+            }
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+        });
+
+        txtFourthOTP.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start,int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(txtFourthOTP.getText().toString().length() == 0 ) {
+                    txtThirdOTP.requestFocus();
+                }
 
             }
             public void beforeTextChanged(CharSequence s, int start,

@@ -1,6 +1,6 @@
 <resources>
     <string name="hintUsrEmail">Email</string>
-    <string name="hintUsrName">Username</string>
+    <string name="hintUsrName">Name</string>
     <string name="hintPassword">Password</string>
 
     <string name="app_name">Floc</string>
@@ -39,4 +39,32 @@
     <string name="password_hasUpperCase_error_message">Passwords must have at least one uppercase (\'A\'-\'Z\').</string>
     <string name="interestCategory">interestCategory</string>
     <string name="eventimage">EventImage</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_logout">Log out</string>
+    <string name="home">HOME</string>
+    <string name="create_floc">CREATE FLOC</string>
+    <string name="events">EVENTS</string>
+
+    <string-array name="interests">
+        <item>Music Festival</item>
+        <item>Sufi Theme</item>
+        <item>Workshops</item>
+        <item>Movies</item>
+        <item>Karaoke</item>
+        <item>Theater</item>
+        <item>Festivals</item>
+        <item>Fashion</item>
+        <item>Photography</item>
+        <item>Art</item>
+        <item>Dance</item>
+        <item>Sports</item>
+        <item>Food</item>
+        <item>Tourism</item>
+        <item>Lifestyle</item>
+        <item>Fitness</item>
+    </string-array>
 </resources>

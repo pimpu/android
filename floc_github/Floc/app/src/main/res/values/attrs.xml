@@ -9,4 +9,12 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="TypefacedTextView">
+        <attr name="OpenSans"/>
+    </declare-styleable>
+
+    <attr name="OpenSans" format="enum">
+        <enum name="openSans_regular" value="0"/>
+    </attr>
+
 </resources>

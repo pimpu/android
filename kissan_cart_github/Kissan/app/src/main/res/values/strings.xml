@@ -118,5 +118,6 @@
     <string name="createVendor">Create Vendor</string>
     <string name="singleVendorDetails">Vendor Details</string>
     <string name="editVendor">Edit Vendor</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 </resources>

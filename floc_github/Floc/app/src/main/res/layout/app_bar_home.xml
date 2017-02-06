@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.cleanslatetech.floc.activities.HomeActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <include layout="@layout/toolbar" />
+
+        <LinearLayout
+            android:id="@+id/optionsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical|start"
+                android:text="@string/home"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/create_floc"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="center"
+                app:OpenSans="openSans_regular" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="end"
+                android:text="@string/events"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="textEnd"
+                app:OpenSans="openSans_regular" />
+
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_home" />
+
+</android.support.design.widget.CoordinatorLayout>

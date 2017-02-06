@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.LoginActivity;
 import com.cleanslatetech.floc.activities.SelectInterestsActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
@@ -87,22 +89,23 @@ public class CommonUtilities {
         System.out.println("handleIntentWhenSignIn-Login Type: "+type);
         System.out.println("handleIntentWhenSignIn-issign: "+isSignIn);
 
-        context.startActivity(new Intent(context, SelectInterestsActivity.class));
 
         new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn),isSignIn);
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdLoginType), type);
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserName), name);
+        new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
 
         // not getting email id from user, when user logging.
         // so from logging activity, email="";
         // dont store email id in preference at time of loggin.
-        if(email.length() > 0 ) {
-            new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
+        if(email != null) {
+            if(email.length() > 0 ) {
+                new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
+            }
         }
 
-        new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
-
-        ((Activity)context).finish();
+        context.startActivity(new Intent(context, HomeActivity.class));
+        ((AppCompatActivity)context).finish();
     }
 
     public static void handleIntentWhenSignOut(Context context, boolean isSingOut) {

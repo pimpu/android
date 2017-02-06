@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F36E23</color>
+    <color name="colorPrimary">#f36d21</color>
     <color name="colorPrimaryDark">#020202</color>
     <color name="colorAccent">#cc4a01</color>
     <color name="white">#ffffff</color>
+    <color name="hint">#bea4a4a4</color>
     <color name="black_overlay">#66000000</color>
     <color name="facebook_color">#416BC1</color>
     <color name="google_color">#db3236</color>
@@ -11,5 +12,6 @@
     <color name="blackOpacity_selectedInterest">#aa0a0a0a</color>
     <color name="darkYellow">#efba2e</color>
     <color name="yellow">#edcf0a</color>
+    <color name="dark_blue">#111c24</color>
 
 </resources>

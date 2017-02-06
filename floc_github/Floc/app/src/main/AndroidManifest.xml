@@ -39,21 +39,26 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:launchMode= "singleInstance"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.RegisterActivity"
-            android:launchMode= "singleInstance"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activities.SelectInterestsActivity"
-            android:launchMode= "singleInstance"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.OTPActivity" />
         <activity
             android:name=".activities.AllEventsActivity"
-            android:launchMode= "singleInstance"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activities.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

@@ -53,6 +53,13 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
 
     @Override
     protected void onResume() {
+
+
+        super.onResume();
+    }
+
+    @Override
+    public void onStart() {
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -67,6 +74,7 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
                     if (loginType.equals(getResources().getString(R.string.appLogin))) {
 
                         boolean isSignIn = getSharedPreference.getBoolean(getResources().getString(R.string.isAppSignIn));
+                        System.out.println("Splash: "+isSignIn);
                         if(isSignIn) {
                             handleIntentWhenSignIn(
                                     SplashScreenActivity.this,
@@ -113,10 +121,6 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
                             });
                         }
                     }
-                    else {
-                        // intet for next activity
-                        handleIntentWhenSignOut(SplashScreenActivity.this, false);
-                    }
                 }
                 catch (Exception e){
                     // intet for next activity
@@ -126,11 +130,6 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
             }
         }, SPLASH_TIME_OUT);
 
-        super.onResume();
-    }
-
-    @Override
-    public void onStart() {
         super.onStart();
     }
 

@@ -112,7 +112,8 @@
         <activity
             android:name=".activities.View_Vendor_Details"
             android:label="@string/singleVendorDetails" />
-        <activity android:name=".activities.Edit_Vendor_Details"
+        <activity
+            android:name=".activities.Edit_Vendor_Details"
             android:label="@string/editVendor" />
         <activity
             android:name=".activities.AndroidDatabaseManager"

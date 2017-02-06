@@ -443,7 +443,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
      * @param Query
      * @return
      */
-    public ArrayList<Cursor> getData(String Query){
+    public ArrayList<Cursor> getData(String Query) {
         //get writable database
         SQLiteDatabase sqlDB = this.getWritableDatabase();
         String[] columns = new String[] { "mesage" };

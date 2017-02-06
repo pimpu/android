@@ -32,27 +32,11 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToIn
 public class SelectInterestsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     public static ImageView gotoNext;
     public static Toolbar mActionBarToolbar;
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // initialization of facebook sdk prior to create content view of activity.
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-        AppEventsLogger.activateApp(this);
-
         setContentView(R.layout.activity_select_interests);
-
-        // google setup
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
         mActionBarToolbar = (Toolbar) findViewById(R.id.id_toolbar_selectinterest);
         setSupportActionBar(mActionBarToolbar);
@@ -93,30 +77,7 @@ public class SelectInterestsActivity extends AppCompatActivity implements Google
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            String loginType = new GetSharedPreference(SelectInterestsActivity.this)
-                    .getString(getResources().getString(R.string.shrdLoginType));
 
-            if(loginType.equals(getResources().getString(R.string.appLogin))) {
-                // intet for next activity
-                handleIntentWhenSignOut(SelectInterestsActivity.this, false);
-            }
-            else if(loginType.equals(getResources().getString(R.string.facebookLogin))) {
-                LoginManager.getInstance().logOut();
-
-                // intet for next activity
-                handleIntentWhenSignOut(SelectInterestsActivity.this, false);
-            }
-            else if(loginType.equals(getResources().getString(R.string.googleLogin))) {
-
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                // intet for next activity
-                                handleIntentWhenSignOut(SelectInterestsActivity.this, false);
-                            }
-                        });
-            }
         }
 
         return super.onOptionsItemSelected(item);
