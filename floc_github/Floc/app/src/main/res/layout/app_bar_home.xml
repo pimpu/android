@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical|start"
                 android:text="@string/home"
-                android:textSize="@dimen/sixteen_textsize"
+                android:textSize="@dimen/fourteen_textsize"
                 android:textColor="@color/colorPrimary"
                 android:textAlignment="textStart"
                 app:OpenSans="openSans_regular" />
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="@string/create_floc"
-                android:textSize="@dimen/sixteen_textsize"
+                android:textSize="@dimen/fourteen_textsize"
                 android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
                 app:OpenSans="openSans_regular" />
@@ -49,7 +49,8 @@
                 android:layout_weight="1"
                 android:layout_gravity="end"
                 android:text="@string/events"
-                android:textSize="@dimen/sixteen_textsize"
+                android:textSize="@dimen/fourteen_textsize"
+                android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
                 android:textAlignment="textEnd"
                 app:OpenSans="openSans_regular" />

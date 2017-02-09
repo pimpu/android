@@ -105,7 +105,7 @@ public class SelectInterestAdapter extends BaseAdapter {
         return gridview;
     }
 
-    static class ViewHolder {
+    private static class ViewHolder {
         ImageView imageViewThumbPic;
         ImageView imageviewChk;
         ImageView outsideImgView;

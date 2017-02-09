@@ -2,6 +2,7 @@
     <string name="hintUsrEmail">Email</string>
     <string name="hintUsrName">Name</string>
     <string name="hintPassword">Password</string>
+    <string name="hintConfirmPassword">Confirm password</string>
 
     <string name="app_name">Floc</string>
     <string name="strLoading">Loading</string>
@@ -17,7 +18,7 @@
     <string name="facebook_app_id">241076362984762</string>
     <string name="fb_login_protocol_scheme">fb241076362984762</string>
     <string name="strThanking">Thank you !</string>
-    <string name="hintConfirmPassword">Confirm password</string>
+
     <string name="strNoInternet">No internet connection !</string>
     <string name="user_field_is_empty">User name field is empty.</string>
     <string name="email_field_is_not_validate">Email field is not validate.</string>
@@ -47,7 +48,11 @@
     <string name="action_logout">Log out</string>
     <string name="home">HOME</string>
     <string name="create_floc">CREATE FLOC</string>
-    <string name="events">EVENTS</string>
+    <string name="events">Events</string>
+    <string name="save">Save</string>
+    <string name="shrdIsInterestSelected">isInterestSelected</string>
+    <string name="recent_flocs">Recent Flocs</string>
+    <string name="more">More</string>
 
     <string-array name="interests">
         <item>Music Festival</item>
@@ -67,4 +72,12 @@
         <item>Lifestyle</item>
         <item>Fitness</item>
     </string-array>
+
+    <integer-array name="img_id_arr">
+        <item>@drawable/guitarist</item>
+        <item>@drawable/guitarist</item>
+        <item>@drawable/guitarist</item>
+        <item>@drawable/guitarist</item>
+    </integer-array>
+
 </resources>

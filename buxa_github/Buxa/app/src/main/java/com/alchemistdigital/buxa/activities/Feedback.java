@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.alchemistdigital.buxa.R;
 import com.alchemistdigital.buxa.asynctask.FeedbackAsynTask;
 import com.alchemistdigital.buxa.sharedprefrencehelper.GetSharedPreference;
+import com.alchemistdigital.buxa.utilities.CommonVariables;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
@@ -28,9 +29,6 @@ public class Feedback extends AppCompatActivity {
     TextInputLayout inputLayout_feedback;
     EditText txtFeedback;
     private GetSharedPreference getSharedPreference;
-
-    private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
-    String[] PERMISSIONS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +50,8 @@ public class Feedback extends AppCompatActivity {
         tvUserName.setText(loginName);
         tvUserEmail.setText(loginEmail);
 
-        PERMISSIONS = new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.VIBRATE};
-
-        if(!hasPermissions(this, PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_READ_EXTERNAL_STORAGE);
+        if(!hasPermissions(this, CommonVariables.PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, CommonVariables.PERMISSIONS, CommonVariables.REQUEST_PERMISSION);
         }
 
     }
@@ -77,7 +70,7 @@ public class Feedback extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_READ_EXTERNAL_STORAGE:
+            case CommonVariables.REQUEST_PERMISSION:
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     System.out.println("Permission has been denied by user");
                     Toast.makeText(getApplicationContext(), "Permission require for registering with Buxa.",Toast.LENGTH_LONG).show();

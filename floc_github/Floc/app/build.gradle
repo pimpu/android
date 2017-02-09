@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.cleanslatetech.floc"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -51,7 +51,11 @@ dependencies {
     // google sign in
     compile 'com.google.android.gms:play-services-auth:10.0.1'
 
+    // facebook sign in
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    // slid show
+    compile 'com.chabbal:slidingdotsplash:1.0.1'
 
 }
 

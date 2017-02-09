@@ -5,14 +5,21 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
+import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.adapter.EventFlocAdapter;
 import com.cleanslatetech.floc.adapter.InterestAdapter;
+import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.ResultCallback;
@@ -22,6 +29,10 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhen
 
 public class HomeActivity extends BaseAppCompactActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private LinearLayout linearLayoutSelectInterest;
+    private SlidingSplashView sliderLayout;
+    private AppCompatTextView tvBtnSaveInterest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,13 +52,66 @@ public class HomeActivity extends BaseAppCompactActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        interestGridview();
+        setSlideOrInterestGrid();
+
+        initRecentFlocGridview();
+        initEventGridview();
+    }
+
+    private void setSlideOrInterestGrid() {
+        linearLayoutSelectInterest = (LinearLayout) findViewById(R.id.selectIntrest_layout);
+        sliderLayout = (SlidingSplashView) findViewById(R.id.slider_layout);
+
+        boolean isAvailInterest = new GetSharedPreference(this).getBoolean(getResources().getString(R.string.shrdIsInterestSelected));
+
+        if( !isAvailInterest ) {
+            sliderLayout.setVisibility(View.GONE);
+            linearLayoutSelectInterest.setVisibility(View.VISIBLE);
+            interestGridview();
+        }
+
     }
 
     private void interestGridview() {
+        tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
         GridView gridview = (GridView) findViewById(R.id.gridviewInterest);
-        gridview.setAdapter(new InterestAdapter(this));
+        final InterestAdapter adapterInterest = new InterestAdapter(this);
+        gridview.setAdapter(adapterInterest);
+
+        tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(adapterInterest.iArraySelectedPositions);
+                new SetSharedPreference(HomeActivity.this).setBoolean(getResources().getString(R.string.shrdIsInterestSelected),true);
+                sliderLayout.setVisibility(View.VISIBLE);
+                linearLayoutSelectInterest.setVisibility(View.GONE);
+            }
+        });
     }
+
+    public void changeState_saveInterest(int counter) {
+        if(counter == 0) {
+            tvBtnSaveInterest.setVisibility(View.VISIBLE);
+        }
+        else {
+            tvBtnSaveInterest.setVisibility(View.GONE);
+        }
+    }
+
+    public void initRecentFlocGridview() {
+        AppCompatTextView tvBtnMoreRecentFloc = (AppCompatTextView) findViewById(R.id.tvBtnMoreRecentFloc);
+        GridView gridviewRecentFloc = (GridView) findViewById(R.id.gridviewRecentFloc);
+        RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this);
+        gridviewRecentFloc.setAdapter(adapterRecent);
+    }
+
+     public void initEventGridview() {
+        AppCompatTextView tvBtnMoreEvent = (AppCompatTextView) findViewById(R.id.tvBtnMoreEvent);
+        GridView gridviewEvent = (GridView) findViewById(R.id.gridviewEvent);
+        EventFlocAdapter adapterRecent = new EventFlocAdapter(this);
+        gridviewEvent.setAdapter(adapterRecent);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -128,4 +192,5 @@ public class HomeActivity extends BaseAppCompactActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

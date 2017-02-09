@@ -7,15 +7,11 @@
     android:layout_height="?attr/actionBarSize"
     app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-    <com.cleanslatetech.floc.utilities.OpenSansTextView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center"
-        android:text="FLOC"
-        android:textSize="@dimen/thirty_textsize"
-        android:textColor="@color/colorPrimary"
-        android:textAlignment="center"
-        app:OpenSans="openSans_regular" />
+        android:src="@drawable/logo" />
 
     <android.support.v7.widget.CardView
         android:layout_width="45dp"

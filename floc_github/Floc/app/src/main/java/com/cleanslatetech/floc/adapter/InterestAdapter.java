@@ -3,6 +3,7 @@ package com.cleanslatetech.floc.adapter;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -20,16 +21,22 @@ import com.cleanslatetech.floc.utilities.TextDrawable;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by pimpu on 2/7/2017.
  */
 public class InterestAdapter extends BaseAdapter {
     private String[] stringArray;
     private Context context;
+    public List<String> iArraySelectedPositions;
+    private int iCounter=5;
 
     public InterestAdapter(Context context) {
         stringArray = context.getResources().getStringArray(R.array.interests);
         this.context = context;
+        iArraySelectedPositions = new ArrayList<String>();
     }
 
     @Override
@@ -48,58 +55,82 @@ public class InterestAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View gridview = convertView;
-        final ViewInterestHolder holder;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewInterestHolder holder;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if(convertView == null) {
-            gridview = inflater.inflate(R.layout.interest_grid_single, null);
+            convertView = inflater.inflate(R.layout.interest_grid_single, null);
             holder = new ViewInterestHolder();
 
-            holder.tvInterestName = (AppCompatTextView) gridview.findViewById(R.id.tv_interest_name);
-            holder.imgBtn_interest = (AppCompatImageButton) gridview.findViewById(R.id.imgBtn_selectInterest);
+            holder.tvInterestName = (AppCompatTextView) convertView.findViewById(R.id.tv_interest_name);
+            holder.imgBtn_interest = (AppCompatImageButton) convertView.findViewById(R.id.imgBtn_selectInterest);
             holder.imgBtn_interest.setSelected(true);
 
-            holder.tvInterestName.setText(stringArray[position]);
-
-            holder.imgBtn_interest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.imgBtn_interest.setSelected(!holder.imgBtn_interest.isSelected());
-                    holder.imgBtn_interest.setImageResource(holder.imgBtn_interest.isSelected() ? R.drawable.animated_plus : R.drawable.animated_minus);
-                    Drawable drawable = holder.imgBtn_interest.getDrawable();
-                    if (drawable instanceof Animatable) {
-                        ((Animatable) drawable).start();
-                    }
-
-
-                }
-            });
-
-
-            gridview.setTag(holder);
-
+            convertView.setTag(holder);
         } else {
             holder = (ViewInterestHolder) convertView.getTag();
         }
 
-        /*if(iArraySelectedPositions.contains(eventCategoryId)) {
-            holder.imageviewChk.setVisibility(convertView.VISIBLE);
-            holder.outsideImgView.setVisibility(convertView.VISIBLE);
-//            gridview.setBackgroundResource(R.drawable.grid_selected);
-        } else {
-            holder.imageviewChk.setVisibility(convertView.GONE);
-            holder.outsideImgView.setVisibility(convertView.GONE);
-//            gridview.setBackgroundDrawable(null);
-        }*/
+        holder.tvInterestName.setText(stringArray[position]);
 
-        return gridview;
+        holder.imgBtn_interest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View p = (View) v.getParent();
+                ViewInterestHolder holder1 = (ViewInterestHolder) p.getTag();
+
+                    /*holder.imgBtn_interest.setSelected(!holder.imgBtn_interest.isSelected());
+                    holder.imgBtn_interest.setImageResource(holder.imgBtn_interest.isSelected() ? R.drawable.animated_plus : R.drawable.animated_minus);
+                    Drawable drawable = holder.imgBtn_interest.getDrawable();
+                    if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).start();
+                    }*/
+
+                if( iArraySelectedPositions.contains(stringArray[position]) && (iCounter >= 0 ) ) {
+
+                    holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.white));
+
+                    iArraySelectedPositions.remove(iArraySelectedPositions.indexOf(stringArray[position]));
+                    iCounter++;
+
+                    holder1.imgBtn_interest.setImageResource(R.drawable.animated_plus );
+                    Drawable drawable = holder1.imgBtn_interest.getDrawable();
+                    if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).start();
+                    }
+                }
+                else if(iCounter <= 5 && iCounter > 0 ) {
+                    holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+
+                    iCounter--;
+                    iArraySelectedPositions.add(stringArray[position]);
+                    holder1.imgBtn_interest.setImageResource(R.drawable.animated_minus );
+                    Drawable drawable = holder1.imgBtn_interest.getDrawable();
+                    if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).start();
+                    }
+                }
+
+                ((HomeActivity)context).changeState_saveInterest(iCounter);
+            }
+        });
+
+        return convertView;
     }
 
-    static class ViewInterestHolder {
+    @Override
+    public int getViewTypeCount() {
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    private static class ViewInterestHolder {
         AppCompatTextView tvInterestName;
         AppCompatImageButton imgBtn_interest;
     }

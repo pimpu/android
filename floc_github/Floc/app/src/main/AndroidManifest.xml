@@ -57,6 +57,7 @@
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTask" />
     </application>
