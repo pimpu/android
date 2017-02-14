@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/recentFloc"
+        android:title="@string/recent_flocs"
+        app:showAsAction="never|withText"
+        android:orderInCategory="1" >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/experiential"
+                android:title="@string/experiential" />
+            <item
+                android:id="@+id/professional"
+                android:title="@string/professional" />
+            <item
+                android:id="@+id/personal"
+                android:title="@string/personal" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/activity"
+        android:title="@string/activity"
+        app:showAsAction="never|withText"
+        android:orderInCategory="2" >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/uploadPicture"
+                android:title="@string/upload_pictures" />
+            <item
+                android:id="@+id/uploadVideo"
+                android:title="@string/upload_video" />
+            <item
+                android:id="@+id/comment"
+                android:title="@string/comment" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/floc"
+        android:title="@string/app_name"
+        app:showAsAction="never|withText"
+        android:orderInCategory="3" >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/runningFloc"
+                android:title="@string/running_floc" />
+            <item
+                android:id="@+id/completedFloc"
+                android:title="@string/completed_floc" />
+            <item
+                android:id="@+id/pauseFloc"
+                android:title="@string/pause_floc" />
+            <item
+                android:id="@+id/cancelledFloc"
+                android:title="@string/cancelled_floc" />
+            <item
+                android:id="@+id/inviteUser"
+                android:title="@string/invite_users_to_event" />
+            <item
+                android:id="@+id/requestToJoin"
+                android:title="@string/request_to_join" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/inviteFriend"
+        android:title="@string/invite_friend"
+        app:showAsAction="never|withText"
+        android:orderInCategory="4" />
+    <item
+        android:id="@+id/profile"
+        android:title="@string/my_profile"
+        app:showAsAction="never|withText"
+        android:orderInCategory="5" >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/profilePersonal"
+                android:title="@string/personal" />
+            <item
+                android:id="@+id/financial"
+                android:title="@string/financial" />
+            <!--<item
+                android:id="@+id/profilePic"
+                android:title="@string/profile_picture" />-->
+        </menu>
+    </item>
+    <item
+        android:id="@+id/setting"
+        android:title="@string/setting"
+        app:showAsAction="never|withText"
+        android:orderInCategory="6" >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/changePwd"
+                android:title="@string/change_password" />
+            <item
+                android:id="@+id/forgotPwd"
+                android:title="@string/forgot_password" />
+            <item
+                android:id="@+id/deleteAccount"
+                android:title="@string/delete_account" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/logout"
+        android:title="@string/action_logout"
+        app:showAsAction="never|withText"
+        android:orderInCategory="7" />
+</menu>

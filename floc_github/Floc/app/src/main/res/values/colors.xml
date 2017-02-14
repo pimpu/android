@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#020202</color>
     <color name="colorAccent">#cc4a01</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <color name="hint">#bea4a4a4</color>
     <color name="black_overlay">#66000000</color>
+    <color name="darkGray">#4d4d4d</color>
     <color name="facebook_color">#416BC1</color>
     <color name="google_color">#db3236</color>
     <color name="blackOpacity">#be0a0a0a</color>

@@ -109,9 +109,10 @@ public class CommonUtilities {
     }
 
     public static void handleIntentWhenSignOut(Context context, boolean isSingOut) {
-        context.startActivity(new Intent(context, LoginActivity.class));
+        ((AppCompatActivity)context).overridePendingTransition(0,0);
+        context.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) );
+
         new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn), isSingOut);
-        ((Activity)context).finish();
     }
 
     public static void showProgressDialog(Context context) {

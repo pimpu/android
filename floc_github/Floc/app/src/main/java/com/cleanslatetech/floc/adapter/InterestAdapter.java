@@ -81,13 +81,6 @@ public class InterestAdapter extends BaseAdapter {
                 View p = (View) v.getParent();
                 ViewInterestHolder holder1 = (ViewInterestHolder) p.getTag();
 
-                    /*holder.imgBtn_interest.setSelected(!holder.imgBtn_interest.isSelected());
-                    holder.imgBtn_interest.setImageResource(holder.imgBtn_interest.isSelected() ? R.drawable.animated_plus : R.drawable.animated_minus);
-                    Drawable drawable = holder.imgBtn_interest.getDrawable();
-                    if (drawable instanceof Animatable) {
-                        ((Animatable) drawable).start();
-                    }*/
-
                 if( iArraySelectedPositions.contains(stringArray[position]) && (iCounter >= 0 ) ) {
 
                     holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.white));

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <com.cleanslatetech.floc.utilities.OpenSansTextView
             android:id="@+id/id_loadintText"
@@ -29,14 +29,14 @@
             android:layout_height="wrap_content"
             android:text="@string/strLoading"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="@dimen/register_screen_texts"
             app:OpenSans="openSans_regular" />
 
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/avloadingIndicatorView"
             android:layout_width="30sp"
-            android:layout_height="60sp"
-            android:layout_marginLeft="8sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center"
             android:visibility="visible"
             app:indicator="BallPulse"
             app:indicator_color="@color/white" />

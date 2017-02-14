@@ -1,5 +1,7 @@
 package com.cleanslatetech.floc.utilities;
 
+import android.Manifest;
+
 /**
  * Created by pimpu on 1/13/2017.
  */
@@ -10,6 +12,13 @@ public class CommonVariables {
     public static final String TAG_MESSAGE_OBJ = "Msg";
     public static final String TAG_ID = "Id";
     public static final String DISPLAY_MESSAGE_ACTION = "com.cleanslatetech.floc.DISPLAY_MESSAGE";
+
+    public static final String[] PERMISSIONS = new String[] {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public static final int REQUEST_PERMISSION = 101;
 
     // server api calling strings
     public static final String USER_REGISTER_SERVER_URL = "http://demo.floc.world/api/AccountApi/Register";

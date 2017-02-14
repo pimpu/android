@@ -1,5 +1,6 @@
 package com.cleanslatetech.floc.utilities;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,14 +17,17 @@ public class DateHelper {
     private final static SimpleDateFormat HOURS = new SimpleDateFormat("hh");
     private final static SimpleDateFormat MINUTE= new SimpleDateFormat("mm");
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
-    private final static SimpleDateFormat sdfQuotationDate = new SimpleDateFormat("dd/MM/yyyy");
-    private final static SimpleDateFormat sdfBookId = new SimpleDateFormat("ddMMyyhhmmss");
-    private final static SimpleDateFormat ENQUIRY_TODAY_TIME = new SimpleDateFormat("hh:mm a");
+    private final static SimpleDateFormat DATE_ONLY = new SimpleDateFormat("dd MMM yyyy");
+    private final static SimpleDateFormat TIME_ONLY = new SimpleDateFormat("hh:mm a");
 
-
-    public static long convertToMillis () {
-        Date dates = new Date();
-        return dates.getTime();
+    public static long convertToMillis (String dateFormili) {
+        Date date = null;
+        try {
+            date = sdf.parse(dateFormili);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date.getTime();
     }
 
     /**
@@ -34,21 +38,6 @@ public class DateHelper {
     public static String convertToString(long millis) {
         Date currentDate = new Date(millis);
         return sdf.format(currentDate);
-    }
-
-    public static String convertToTodayEnquiryString(long millis) {
-        Date currentDate = new Date(millis);
-        return ENQUIRY_TODAY_TIME.format(currentDate);
-    }
-
-    public static String convertToFullDateString(long millis) {
-        Date dates = new Date(millis);
-        return sdfQuotationDate.format(dates);
-    }
-
-    public static String getBookId(){
-        Date dates = new Date();
-        return sdfBookId.format(dates);
     }
 
     public static String getMonth(long millis) {
@@ -84,5 +73,10 @@ public class DateHelper {
     public static String getSecond(long millis) {
         Date currentDate = new Date(millis);
         return SECOND.format(currentDate);
+    }
+
+    public static String getDateOnly(long millis) {
+        Date currentDate = new Date(millis);
+        return DATE_ONLY.format(currentDate);
     }
 }

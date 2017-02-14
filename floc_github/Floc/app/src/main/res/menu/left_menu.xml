@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.HomeActivity">
+    <item
+        android:id="@+id/nav_home"
+        android:title="@string/home"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/nav_about_us"
+        android:title="@string/about_us"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/nav_contact_us"
+        android:title="@string/contact_us"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/nav_create_floc"
+        android:title="@string/create_floc"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/nav_faq"
+        android:title="@string/f_amp_q"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/nav_tac"
+        android:title="@string/terms_amp_conditions"
+        app:showAsAction="ifRoom|withText" />
+</menu>

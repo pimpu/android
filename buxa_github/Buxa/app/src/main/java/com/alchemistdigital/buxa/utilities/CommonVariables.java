@@ -39,8 +39,8 @@ public class CommonVariables {
 
     public static final int REQUEST_PERMISSION = 1;
 
-    static String SERVER_URL = "http://cee4d01f.ngrok.io/buxa/v1/";
-//    static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
+//    static String SERVER_URL = "http://cee4d01f.ngrok.io/buxa/v1/";
+    static String SERVER_URL = "http://www.buxa.tech/android_webservices/v1/";
 
     public static String DOWNLOAD_FILE_URL = "http://www.buxa.tech/admin/pdf/";
 
