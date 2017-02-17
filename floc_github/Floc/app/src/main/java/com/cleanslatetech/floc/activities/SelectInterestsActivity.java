@@ -14,19 +14,9 @@ import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
-import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
-import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 
 public class SelectInterestsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
@@ -57,7 +47,7 @@ public class SelectInterestsActivity extends AppCompatActivity implements Google
             return;
         } else {
 //            new SetInterestAsyncTask( SelectInterestsActivity.this, iArraySelectedPositions ).postData();
-            startActivity(new Intent(getApplicationContext(), AllEventsActivity.class));
+//            startActivity(new Intent(getApplicationContext(), AllEventsActivity.class));
         }
     }
 

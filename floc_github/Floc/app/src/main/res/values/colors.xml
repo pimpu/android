@@ -6,6 +6,7 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="hint">#bea4a4a4</color>
+    <color name="light_gray">#53cfcfcf</color>
     <color name="black_overlay">#66000000</color>
     <color name="darkGray">#4d4d4d</color>
     <color name="facebook_color">#416BC1</color>
@@ -14,6 +15,7 @@
     <color name="blackOpacity_selectedInterest">#aa0a0a0a</color>
     <color name="darkYellow">#efba2e</color>
     <color name="yellow">#edcf0a</color>
-    <color name="dark_blue">#111c24</color>
+    <color name="dark_blue">#121c25</color>
+    <color name="wifiSymbolColor">#cfcdcd</color>
 
 </resources>

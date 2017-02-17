@@ -24,4 +24,6 @@
     <dimen name="event_image_column_height">180dp</dimen>
     <dimen name="twoFifty_height">250dp</dimen>
     <dimen name="three_hundred_height">260dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

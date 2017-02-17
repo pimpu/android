@@ -13,6 +13,7 @@ public class RecentFlocPersonalActivity extends BaseAppCompactActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_floc_personal);
+
         super.setToolBar(getResources().getString(R.string.recent_flocs));
 
         init();

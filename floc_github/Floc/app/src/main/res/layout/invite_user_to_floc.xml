@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/id_spinner_flocName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:drawSelectorOnTop="true"
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"/>
+
+    <com.cleanslatetech.floc.utilities.OpenSansEditText
+        android:id="@+id/selectedInviteUserToFloc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/friend_email_id"
+        android:textColorHint="@color/hint"
+        app:OpenSans="openSans_regular"/>
+
+</LinearLayout>

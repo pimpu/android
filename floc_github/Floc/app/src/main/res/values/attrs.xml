@@ -10,11 +10,11 @@
     </declare-styleable>
 
     <declare-styleable name="TypefacedTextView">
-        <attr name="OpenSans"/>
+        <attr name="OpenSans" />
     </declare-styleable>
 
     <attr name="OpenSans" format="enum">
-        <enum name="openSans_regular" value="0"/>
+        <enum name="openSans_regular" value="0" />
     </attr>
 
 </resources>

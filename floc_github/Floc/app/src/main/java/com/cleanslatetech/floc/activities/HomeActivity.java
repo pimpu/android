@@ -49,13 +49,6 @@ public class HomeActivity extends BaseAppCompactActivity {
 
         initRecentFlocGridview();
         initEventGridview();
-
-        ((AppCompatTextView)findViewById(R.id.onClickCreateFloc)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, CreateFlocActivity.class));
-            }
-        });
     }
 
     private void setSlideOrInterestGrid() {

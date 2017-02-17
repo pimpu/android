@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.AppBarLayout android:layout_width="match_parent"
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="@color/dark_blue"
+    android:background="@drawable/toolbar_gradient"
     app:theme="@style/AppBaseTheme.AppBarOverlay"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -29,6 +30,7 @@
         android:padding="10dp">
 
         <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/onClickHomeOption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_margin="7dp"
+    android:background="@drawable/toolbar_gradient">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/floc_image"
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:src="@drawable/textarea_gradient_bg"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/fab_margin">
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/row_floc_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textStyle="bold"
+            android:text="Event Name"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/row_floc_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textStyle="bold"
+            android:text="City"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/row_floc_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textStyle="bold"
+            android:text="Date"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />
+
+    </LinearLayout>
+
+</LinearLayout>

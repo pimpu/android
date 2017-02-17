@@ -113,6 +113,12 @@
     <string name="hint_bank_name">Bank Name</string>
     <string name="hint_ifsc_code">IFSC Code</string>
     <string name="hint_account_number">Account Number</string>
+    <string name="shrdSelectedSubmenu">selectedSubmenu</string>
+    <string name="personal_profile">Personal Profile</string>
+    <string name="personal_floc">Personal Floc</string>
+    <string name="empty_running_floc_message">No running floc found.</string>
+    <string name="shrdSelectedMenu">selectedMenu</string>
+    <string name="friend_email_id">Friend Email ID</string>
 
     <string-array name="interests">
         <item>Music Festival</item>
@@ -349,5 +355,6 @@
         <item>Smaller Territories of the UK</item>
         <item>Solomon Islands</item>
     </string-array>
+
 
 </resources>
