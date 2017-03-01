@@ -1,26 +1,37 @@
 package com.cleanslatetech.floc.utilities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.LoginActivity;
-import com.cleanslatetech.floc.activities.SelectInterestsActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.loopj.android.http.Base64;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -157,4 +168,47 @@ public class CommonUtilities {
         return false;
     }
 
+    public static String getStringImage(File f) {
+        try {
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // The new size we want to scale to
+            final int REQUIRED_SIZE=70;
+
+            // Find the correct scale value. It should be the power of 2.
+            int scale = 1;
+            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                scale *= 2;
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+            byte[] imageBytes = baos.toByteArray();
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        } catch (FileNotFoundException e) {}
+        return null;
+    }
+
+    public static void customToast(Context context, String msg) {
+        LayoutInflater inflater = ((AppCompatActivity)context).getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,(ViewGroup) ((AppCompatActivity)context).findViewById(R.id.toast_layout_root));
+
+        AppCompatTextView text= (AppCompatTextView) layout.findViewById(R.id.toast_text);
+        text.setText(msg);
+
+        Toast toast = new Toast(((AppCompatActivity)context).getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
 }

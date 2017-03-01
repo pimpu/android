@@ -1,6 +1,5 @@
 package com.cleanslatetech.floc.activities;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -35,7 +33,7 @@ public class SelectInterestsActivity extends AppCompatActivity implements Google
         gotoNext = (ImageView) findViewById(R.id.submitInterest);
         GridView selectInterestGridview = (GridView) findViewById(R.id.id_gridview_selectInterest);
 
-        new GetInterestCategoryAsyncTask(SelectInterestsActivity.this, selectInterestGridview);
+//        new GetInterestCategoryAsyncTask(SelectInterestsActivity.this, selectInterestGridview);
     }
 
     public void gotoNext(View view) {

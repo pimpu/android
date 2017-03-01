@@ -3,6 +3,7 @@ package com.cleanslatetech.floc.utilities;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by pimpu on 1/20/2017.
@@ -19,6 +20,7 @@ public class DateHelper {
     private final static SimpleDateFormat SECOND = new SimpleDateFormat("ss");
     private final static SimpleDateFormat DATE_ONLY = new SimpleDateFormat("dd MMM yyyy");
     private final static SimpleDateFormat TIME_ONLY = new SimpleDateFormat("hh:mm a");
+
 
     public static long convertToMillis (String dateFormili) {
         Date date = null;

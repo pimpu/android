@@ -11,15 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.utilities.CommonVariables;
 
 /**
  * Created by pimpu on 2/7/2017.
  */
 public class RecentFlocAdapter extends BaseAdapter {
     private Context context;
-    private int[] images = new int[]{R.drawable.guitarist, R.drawable.guitarist, R.drawable.guitarist, R.drawable.guitarist};
+    private String[] images = new String[]{"ET00045354.jpg", "ET00044478.jpg", "ET00045065.jpg", "ET00045085.jpg"};
 
     public RecentFlocAdapter(Context context) {
         this.context = context;
@@ -57,7 +59,12 @@ public class RecentFlocAdapter extends BaseAdapter {
             holder = (ViewRecentFlocHolder) convertView.getTag();
         }
 
-        holder.imgview_bg.setBackgroundResource(images[position]);
+        Glide
+                .with(context)
+                .load( CommonVariables.EVENT_IMAGE_SERVER_URL + images[position])
+                .placeholder(R.drawable.textarea_gradient_bg)
+                .dontAnimate()
+                .into(holder.imgview_bg);
 
         return convertView;
     }

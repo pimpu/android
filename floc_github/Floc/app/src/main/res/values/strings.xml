@@ -17,6 +17,7 @@
     <string name="strPick5Interests">Pick %1$d Events That Interests You</string>
     <string name="facebook_app_id">241076362984762</string>
     <string name="fb_login_protocol_scheme">fb241076362984762</string>
+    <string name="share_on">Share on</string>
     <string name="strThanking">Thank you !</string>
 
     <string name="strNoInternet">No internet connection !</string>
@@ -31,6 +32,10 @@
     <string name="shrdUserName">userName</string>
     <string name="shrdUserEmail">userEmail</string>
     <string name="shrdLoginId">loginId</string>
+    <string name="shrdAllCategoryList">allCategoryList</string>
+    <string name="shrdIsInterestSelected">isInterestSelected</string>
+    <string name="shrdSelectedSubmenu">selectedSubmenu</string>
+    <string name="shrdSelectedMenu">selectedMenu</string>
     <string name="facebookLogin">facebookLogin</string>
     <string name="googleLogin">googleLogin</string>
     <string name="appLogin">appLogin</string>
@@ -50,7 +55,7 @@
     <string name="create_floc">Create Floc</string>
     <string name="events">Events</string>
     <string name="save">Save</string>
-    <string name="shrdIsInterestSelected">isInterestSelected</string>
+
     <string name="recent_flocs">Recent Flocs</string>
     <string name="more">More</string>
     <string name="about_us">About Us</string>
@@ -113,12 +118,20 @@
     <string name="hint_bank_name">Bank Name</string>
     <string name="hint_ifsc_code">IFSC Code</string>
     <string name="hint_account_number">Account Number</string>
-    <string name="shrdSelectedSubmenu">selectedSubmenu</string>
     <string name="personal_profile">Personal Profile</string>
     <string name="personal_floc">Personal Floc</string>
     <string name="empty_running_floc_message">No running floc found.</string>
-    <string name="shrdSelectedMenu">selectedMenu</string>
     <string name="friend_email_id">Friend Email ID</string>
+    <string name="no_of_likes">No Of Likes:\t\t</string>
+    <string name="likes">\tLikes</string>
+    <string name="rating">Rating:\t\t</string>
+    <string name="review">Review:</string>
+    <string name="submit">Submit</string>
+    <string name="send">Send</string>
+    <string name="my_floc_bookings">My Floc Bookings</string>
+    <string name="try_again">Try again</string>
+    <string name="share">Share</string>
+    <string name="shrdStringPic">shrdStringPic</string>
 
     <string-array name="interests">
         <item>Music Festival</item>

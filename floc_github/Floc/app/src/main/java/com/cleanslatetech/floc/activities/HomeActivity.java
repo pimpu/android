@@ -1,42 +1,29 @@
 package com.cleanslatetech.floc.activities;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.EventFlocAdapter;
-import com.cleanslatetech.floc.adapter.InterestAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
+import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
+import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
+import java.io.File;
 
 public class HomeActivity extends BaseAppCompactActivity {
 
-    private LinearLayout linearLayoutSelectInterest;
-    private SlidingSplashView sliderLayout;
     private AppCompatTextView tvBtnSaveInterest;
+    SlidingSplashView sliderLayout;
+    LinearLayout linearLayoutSelectInterest;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +39,7 @@ public class HomeActivity extends BaseAppCompactActivity {
     }
 
     private void setSlideOrInterestGrid() {
+
         linearLayoutSelectInterest = (LinearLayout) findViewById(R.id.selectIntrest_layout);
         sliderLayout = (SlidingSplashView) findViewById(R.id.slider_layout);
 
@@ -68,16 +56,17 @@ public class HomeActivity extends BaseAppCompactActivity {
     private void interestGridview() {
         tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
         GridView gridview = (GridView) findViewById(R.id.gridviewInterest);
-        final InterestAdapter adapterInterest = new InterestAdapter(this);
-        gridview.setAdapter(adapterInterest);
+
+        final GetInterestCategoryAsyncTask getInterestCategoryAsyncTask = new GetInterestCategoryAsyncTask(HomeActivity.this, gridview);
 
         tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(adapterInterest.iArraySelectedPositions);
-                new SetSharedPreference(HomeActivity.this).setBoolean(getResources().getString(R.string.shrdIsInterestSelected),true);
-                sliderLayout.setVisibility(View.VISIBLE);
-                linearLayoutSelectInterest.setVisibility(View.GONE);
+                new SetInterestAsyncTask(
+                        HomeActivity.this,
+                        getInterestCategoryAsyncTask.getSelectedCategoryArray(),
+                        sliderLayout,
+                        linearLayoutSelectInterest).postData();
             }
         });
     }

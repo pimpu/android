@@ -42,15 +42,12 @@
                     android:id="@+id/floc_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:layout_toRightOf="@+id/labelName"
-                    android:background="@drawable/white_border_bottom"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:enabled="false"
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
@@ -94,18 +91,17 @@
                     android:text="@string/description"
                     android:textSize="@dimen/sixteen_textsize"
                     android:textColor="@color/colorPrimary"
-                    android:layout_centerVertical="true"
                     app:OpenSans="openSans_regular"/>
 
                 <com.cleanslatetech.floc.utilities.OpenSansEditText
                     android:id="@+id/floc_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_below="@+id/labelDescription"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="textMultiLine"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
             </LinearLayout>
@@ -130,8 +126,10 @@
                     android:id="@+id/id_file_chooser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/white_border"
                     android:layout_toRightOf="@+id/labelPicture"
                     android:text="Choose File"
+                    android:textColor="@color/white"
                     android:onClick="selectPicture" />
 
                 <com.cleanslatetech.floc.utilities.OpenSansTextView
@@ -176,11 +174,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/labelStartDate"
-                    android:background="@drawable/textarea_gradient_bg"
-                    android:layout_centerVertical="true"
                     android:padding="5dp"
+                    android:background="@drawable/white_border"
+                    android:layout_centerVertical="true"
                     android:text="dd-mm-yyyy"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:onClick="selectStarDate"
                     app:OpenSans="openSans_regular" />
 
@@ -202,11 +200,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/labelStartTime"
-                    android:background="@drawable/textarea_gradient_bg"
-                    android:layout_centerVertical="true"
                     android:padding="5dp"
+                    android:background="@drawable/white_border"
+                    android:layout_centerVertical="true"
                     android:text="hh:mm"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     android:onClick="selectStarTime"
                     app:OpenSans="openSans_regular" />
@@ -237,9 +235,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:padding="5dp"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:background="@drawable/white_border"
                     android:text="dd-mm-yyyy"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:onClick="selectEndDate"
                     app:OpenSans="openSans_regular" />
 
@@ -264,9 +262,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:padding="5dp"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:background="@drawable/white_border"
                     android:text="hh:mm"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     android:onClick="selectEndTime"
                     app:OpenSans="openSans_regular" />
@@ -299,9 +297,11 @@
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/id_layout_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
 
                 <com.cleanslatetech.floc.utilities.OpenSansTextView
                     android:id="@+id/labelPrice"
@@ -318,11 +318,11 @@
                     android:id="@+id/id_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelPrice"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="numberSigned"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 

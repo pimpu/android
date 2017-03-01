@@ -2,18 +2,22 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.FlocDescriptionActivity;
 import com.cleanslatetech.floc.adapter.AllFlocRecyclerAdapter;
+import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.utilities.CommonVariables;
-import com.cleanslatetech.floc.utilities.RecyclerItemClickListener;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -21,20 +25,43 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by pimpu on 1/31/2017.
  */
-public class GetFlocAsyncTask {
+public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
+    private AllFlocRecyclerAdapter allFlocRecyclerAdapter;
     private ProgressBar progressBar;
     private AppCompatButton btnRefresh;
     private Context context;
-    private RecyclerView recyclerFloc;
+    private RecyclerView recyclerRunningFloc, recyclerCompletedFloc, recyclerPauseFloc, recyclerCancelFloc,
+            recyclerRequestedFloc, recyclerMyFloc;
+    private AppCompatSpinner spinnerFlocName;
 
-    public GetFlocAsyncTask(final Context context, RecyclerView recyclerFloc, ProgressBar progressBar, final AppCompatButton btnRefresh) {
+    public GetFlocAsyncTask(
+            final Context context,
+            RecyclerView recyclerRunningFloc,
+            RecyclerView recyclerCompletedFloc,
+            RecyclerView recyclerPauseFloc,
+            RecyclerView recyclerCancelFloc,
+            RecyclerView recyclerRequestedFloc,
+            RecyclerView recyclerMyFloc,
+            ProgressBar progressBar,
+            final AppCompatButton btnRefresh,
+            AppCompatSpinner spinnerFlocName) {
+
         this.context = context;
-        this.recyclerFloc = recyclerFloc;
+        this.recyclerRunningFloc = recyclerRunningFloc;
+        this.recyclerCompletedFloc = recyclerCompletedFloc;
+        this.recyclerPauseFloc = recyclerPauseFloc;
+        this.recyclerCancelFloc = recyclerCancelFloc;
+        this.recyclerRequestedFloc = recyclerRequestedFloc;
+        this.recyclerMyFloc = recyclerMyFloc;
+        this.spinnerFlocName = spinnerFlocName;
 
         // Instantiate Progress Dialog object
         this.progressBar = progressBar;
@@ -66,7 +93,7 @@ public class GetFlocAsyncTask {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 progressBar.setVisibility(View.GONE);
-                recyclerFloc.setVisibility(View.VISIBLE);
+                ((AppCompatActivity)context).findViewById(R.id.layout_floc_data_panel).setVisibility(View.VISIBLE);
                 try{
                     System.out.println(json);
 
@@ -131,12 +158,69 @@ public class GetFlocAsyncTask {
     }
 
     private void populateAllEventRecyclerview(final JSONArray getEvents) {
-        // set adapter for interests grid view
-        final RecyclerView.Adapter allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, getEvents);
-        recyclerFloc.setAdapter(allFlocRecyclerAdapter);
-        recyclerFloc.setLayoutManager(new LinearLayoutManager(context));
+        JSONArray runningObj = new JSONArray();
+        JSONArray completedObj = new JSONArray();
+        JSONArray pauseObj = new JSONArray();
+        JSONArray cancelObj = new JSONArray();
+        JSONArray requestObj = new JSONArray();
+        JSONArray myFlocObj = new JSONArray();
+        List<String> stringArrayFlocName = new ArrayList<String>();
 
-        recyclerFloc.addOnItemTouchListener(
+        for(int j = 0 ; j < getEvents.length(); j++ ) {
+
+            try {
+                stringArrayFlocName.add(getEvents.getJSONObject(j).getString("EventName"));
+
+                if( j < 4) {
+                    runningObj.put(getEvents.getJSONObject(j));
+                } else if(j < 6) {
+                    completedObj.put(getEvents.getJSONObject(j));
+                } else if(j < 10) {
+                    pauseObj.put(getEvents.getJSONObject(j));
+                } else if(j < 13) {
+                    cancelObj.put(getEvents.getJSONObject(j));
+                } else if(j < 14) {
+                    requestObj.put(getEvents.getJSONObject(j));
+                } else if(j < 20) {
+                    myFlocObj.put(getEvents.getJSONObject(j));
+                    break;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, runningObj);
+        recyclerRunningFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerRunningFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, completedObj);
+        recyclerCompletedFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerCompletedFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, pauseObj);
+        recyclerPauseFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerPauseFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, cancelObj);
+        recyclerCancelFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerCancelFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, requestObj);
+        recyclerRequestedFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerRequestedFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, myFlocObj);
+        recyclerMyFloc.setAdapter(allFlocRecyclerAdapter);
+        recyclerMyFloc.setLayoutManager(new LinearLayoutManager(context));
+
+        CustomSpinnerAdapter adapterInterest = new CustomSpinnerAdapter(context, android.R.layout.simple_spinner_item, stringArrayFlocName);
+        adapterInterest.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFlocName.setAdapter(adapterInterest);
+        spinnerFlocName.setOnItemSelectedListener(this);
+
+        /*recyclerFloc.addOnItemTouchListener(
                 new RecyclerItemClickListener(context, recyclerFloc ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         try {
@@ -152,6 +236,19 @@ public class GetFlocAsyncTask {
                         // do whatever
                     }
                 })
-        );
+        );*/
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        TextView selectedText = (TextView) parent.getChildAt(0);
+        if (selectedText != null) {
+            selectedText.setTextColor(context.getResources().getColor(R.color.white));
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

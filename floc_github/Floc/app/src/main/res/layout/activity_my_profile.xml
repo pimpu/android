@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_my_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_blue"
+    tools:context="com.cleanslatetech.floc.activities.MyProfileActivity">
+
+    <include layout="@layout/appbar_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/openPersonaPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:paddingRight="12dp"
+                android:paddingLeft="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/personal"
+                android:textColor="@color/white"
+                android:textSize="@dimen/register_screen_texts"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                app:OpenSans="openSans_regular"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:onClick="toggle_personal_contents"/>
+
+            <include
+                android:id="@+id/personal_layout"
+                layout="@layout/activity_personal_profile" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/openFinancePanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:paddingRight="12dp"
+                android:paddingLeft="3dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/financial"
+                android:textColor="@color/white"
+                android:textSize="@dimen/register_screen_texts"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                app:OpenSans="openSans_regular"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:onClick="toggle_finance_contents"/>
+
+            <include
+                android:id="@+id/finance_layout"
+                layout="@layout/activity_personal_finance" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

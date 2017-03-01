@@ -1,11 +1,10 @@
 package com.cleanslatetech.floc.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.GridView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.adapter.IndividualFlocAdapter;
+import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 
 public class RecentFlocProfessionalActivity extends BaseAppCompactActivity {
 
@@ -26,7 +25,7 @@ public class RecentFlocProfessionalActivity extends BaseAppCompactActivity {
 
     private void init() {
         GridView gridviewProfessional = (GridView) findViewById(R.id.grideview_professional);
-        IndividualFlocAdapter individualFlocAdapter = new IndividualFlocAdapter(this);
-        gridviewProfessional.setAdapter(individualFlocAdapter);
+        RecentFlocRecyclerAdapter individualFlocAdapter = new RecentFlocRecyclerAdapter(this);
+//        gridviewProfessional.setAdapter(individualFlocAdapter);
     }
 }

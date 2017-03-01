@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.GridView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.adapter.IndividualFlocAdapter;
+import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 
 public class RecentFlocExperientalActivity extends BaseAppCompactActivity {
 
@@ -26,7 +26,7 @@ public class RecentFlocExperientalActivity extends BaseAppCompactActivity {
 
     private void init() {
         GridView gridviewExperiental = (GridView) findViewById(R.id.grideview_experiential);
-        IndividualFlocAdapter individualFlocAdapter = new IndividualFlocAdapter(this);
-        gridviewExperiental.setAdapter(individualFlocAdapter);
+        RecentFlocRecyclerAdapter individualFlocAdapter = new RecentFlocRecyclerAdapter(this);
+//        gridviewExperiental.setAdapter(individualFlocAdapter);
     }
 }

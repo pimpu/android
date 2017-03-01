@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,15 +20,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_margin="@dimen/activity_vertical_margin"
-            android:background="#626365"
-            android:visibility="gone" >
+            android:background="#626365">
+
+            <ProgressBar
+                android:id="@+id/getCategoryProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:progressBackgroundTint="@color/white"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnRefreshgetCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:text="@string/try_again"
+                android:textColor="@color/blackOpacity" />
 
             <GridView
                 android:id="@+id/gridviewInterest"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/twoFifty_height"
                 android:nestedScrollingEnabled="true"
+                android:visibility="gone"
                 android:clipToPadding="false"
                 android:padding="@dimen/nav_header_vertical_spacing"
                 android:columnWidth="150dp"
@@ -43,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_gravity="center_vertical|end"
-                android:padding="@dimen/sixteen_textsize"
+                android:padding="@dimen/grid_column_textsize"
                 android:text="@string/save"
                 android:textSize="@dimen/register_screen_texts"
                 android:textColor="@color/colorPrimary"
@@ -91,9 +109,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:padding="@dimen/sixteen_textsize"
+                android:layout_marginTop="@dimen/fab_margin"
                 android:text="@string/more"
-                android:textSize="@dimen/register_screen_texts"
+                android:textSize="@dimen/login__screen_texts"
                 android:textColor="@color/white"
                 android:textAlignment="textEnd"
                 app:OpenSans="openSans_regular" />
@@ -133,9 +151,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:padding="@dimen/sixteen_textsize"
                 android:text="@string/more"
-                android:textSize="@dimen/register_screen_texts"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:textSize="@dimen/login__screen_texts"
                 android:textColor="@color/white"
                 android:textAlignment="textEnd"
                 app:OpenSans="openSans_regular" />

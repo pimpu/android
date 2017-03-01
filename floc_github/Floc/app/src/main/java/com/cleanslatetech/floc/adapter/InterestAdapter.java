@@ -19,6 +19,7 @@ import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.TextDrawable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -28,20 +29,20 @@ import java.util.List;
  * Created by pimpu on 2/7/2017.
  */
 public class InterestAdapter extends BaseAdapter {
-    private String[] stringArray;
+    private JSONArray categories;
     private Context context;
-    public List<String> iArraySelectedPositions;
+    public List<Integer> iArraySelectedPositions;
     private int iCounter=5;
 
-    public InterestAdapter(Context context) {
-        stringArray = context.getResources().getStringArray(R.array.interests);
+    public InterestAdapter(Context context, JSONArray categories) {
+        this.categories = categories;
         this.context = context;
-        iArraySelectedPositions = new ArrayList<String>();
+        iArraySelectedPositions = new ArrayList<Integer>();
     }
 
     @Override
     public int getCount() {
-        return stringArray.length;
+        return categories.length();
     }
 
     @Override
@@ -73,42 +74,53 @@ public class InterestAdapter extends BaseAdapter {
             holder = (ViewInterestHolder) convertView.getTag();
         }
 
-        holder.tvInterestName.setText(stringArray[position]);
+        try {
+            final int eventCategoryId = categories.getJSONObject(position).getInt("EventCategoryId");
 
-        holder.imgBtn_interest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View p = (View) v.getParent();
-                ViewInterestHolder holder1 = (ViewInterestHolder) p.getTag();
+            holder.tvInterestName.setText(categories.getJSONObject(position).getString("EventCategoryName"));
+            holder.imgBtn_interest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View p = (View) v.getParent();
+                    ViewInterestHolder holder1 = (ViewInterestHolder) p.getTag();
 
-                if( iArraySelectedPositions.contains(stringArray[position]) && (iCounter >= 0 ) ) {
+                    if( iArraySelectedPositions.contains(eventCategoryId) && (iCounter >= 0 ) ) {
+                        // set text colour
+                        holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.white));
 
-                    holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.white));
+                        iArraySelectedPositions.remove(iArraySelectedPositions.indexOf(eventCategoryId));
+                        iCounter++;
 
-                    iArraySelectedPositions.remove(iArraySelectedPositions.indexOf(stringArray[position]));
-                    iCounter++;
-
-                    holder1.imgBtn_interest.setImageResource(R.drawable.animated_plus );
-                    Drawable drawable = holder1.imgBtn_interest.getDrawable();
-                    if (drawable instanceof Animatable) {
-                        ((Animatable) drawable).start();
+                        // animations
+                        holder1.imgBtn_interest.setImageResource(R.drawable.animated_plus );
+                        Drawable drawable = holder1.imgBtn_interest.getDrawable();
+                        if (drawable instanceof Animatable) {
+                            ((Animatable) drawable).start();
+                        }
                     }
-                }
-                else if(iCounter <= 5 && iCounter > 0 ) {
-                    holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    else if(iCounter <= 5 && iCounter > 0 ) {
+                        // set text colour
+                        holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 
-                    iCounter--;
-                    iArraySelectedPositions.add(stringArray[position]);
-                    holder1.imgBtn_interest.setImageResource(R.drawable.animated_minus );
-                    Drawable drawable = holder1.imgBtn_interest.getDrawable();
-                    if (drawable instanceof Animatable) {
-                        ((Animatable) drawable).start();
+                        iCounter--;
+                        iArraySelectedPositions.add(eventCategoryId);
+
+                        // animations
+                        holder1.imgBtn_interest.setImageResource(R.drawable.animated_minus );
+                        Drawable drawable = holder1.imgBtn_interest.getDrawable();
+                        if (drawable instanceof Animatable) {
+                            ((Animatable) drawable).start();
+                        }
                     }
-                }
 
-                ((HomeActivity)context).changeState_saveInterest(iCounter);
-            }
-        });
+                    ((HomeActivity)context).changeState_saveInterest(iCounter);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         return convertView;
     }

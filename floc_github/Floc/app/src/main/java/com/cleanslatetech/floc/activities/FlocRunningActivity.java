@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.GetFlocAsyncTask;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -44,7 +43,7 @@ public class FlocRunningActivity extends BaseAppCompactActivity {
             return;
         } else {
             findViewById(R.id.layout_noInternet).setVisibility(View.GONE);
-            new GetFlocAsyncTask( FlocRunningActivity.this, recyclerRunningFloc, progressBar, btnRefresh ).getData();
+//            new GetFlocAsyncTask( FlocRunningActivity.this, recyclerRunningFloc, recyclerCompletedFloc, recyclerPauseFloc, recyclerCancelFloc, recyclerRequestedFloc, recyclerRunningFloc, progressBar, btnRefresh ).getData();
         }
     }
 }

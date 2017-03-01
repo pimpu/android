@@ -9,8 +9,6 @@
     android:background="@color/dark_blue"
     tools:context="com.cleanslatetech.floc.activities.CreateFlocActivitySecond">
 
-    <include layout="@layout/appbar_layout" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/activity_horizontal_margin">
 
@@ -42,11 +40,11 @@
                     android:id="@+id/id_member_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelMemberCount"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="numberSigned"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 
@@ -71,12 +69,12 @@
                     android:id="@+id/id_website_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelWebsiteUrl"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="textWebEditText"
                     android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
@@ -100,11 +98,11 @@
                     android:id="@+id/id_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelCity"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 
@@ -129,11 +127,11 @@
                     android:id="@+id/id_area"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelArea"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 
@@ -158,11 +156,11 @@
                     android:id="@+id/id_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelAddress"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 
@@ -187,15 +185,46 @@
                     android:id="@+id/id_state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_toRightOf="@+id/labelState"
-                    android:background="@drawable/textarea_gradient_bg"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/sixteen_textsize"
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/labelCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/country"
+                    android:textSize="@dimen/sixteen_textsize"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_centerVertical="true"
+                    app:OpenSans="openSans_regular"/>
+
+                <com.cleanslatetech.floc.utilities.OpenSansAutoCompleteText
+                    android:id="@+id/id_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/labelCountry"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
+                    android:ems="10"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular"/>
+
+            </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -248,35 +277,7 @@
                     style="@style/Base.Widget.AppCompat.Spinner.Underlined"/>
 
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
 
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:id="@+id/labelCountry"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:text="@string/country"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/colorPrimary"
-                    android:layout_centerVertical="true"
-                    app:OpenSans="openSans_regular"/>
-
-                <com.cleanslatetech.floc.utilities.OpenSansAutoCompleteText
-                    android:id="@+id/id_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_toRightOf="@+id/labelCountry"
-                    android:background="@drawable/textarea_gradient_bg"
-                    android:ems="10"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/sixteen_textsize"
-                    app:OpenSans="openSans_regular"/>
-
-            </RelativeLayout>
 
             <com.cleanslatetech.floc.utilities.OpenSansButton
                 android:layout_width="110dp"
@@ -287,8 +288,12 @@
                 android:text="@string/create"
                 android:textColor="@color/white"
                 android:textSize="20dp"
-                app:OpenSans="openSans_regular" />
+                app:OpenSans="openSans_regular"
+                android:onClick="btnCreateFloc"/>
 
         </LinearLayout>
     </ScrollView>
+
+    <include layout="@layout/appbar_layout" />
+
 </LinearLayout>

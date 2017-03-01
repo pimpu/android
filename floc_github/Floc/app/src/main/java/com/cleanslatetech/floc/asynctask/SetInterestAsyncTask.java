@@ -2,11 +2,14 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.SelectInterestsActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -29,10 +32,18 @@ public class SetInterestAsyncTask {
     private Context context;
     private ArrayList<Integer> iArraySelectedPositions;
     private static ProgressDialog prgDialog;
+    private SlidingSplashView sliderLayout;
+    private LinearLayout linearLayoutSelectInterest;
 
-    public SetInterestAsyncTask(Context context, List<Integer> iArraySelectedPositions) {
+    public SetInterestAsyncTask(
+            Context context,
+            List<Integer> iArraySelectedPositions,
+            SlidingSplashView sliderLayout,
+            LinearLayout linearLayoutSelectInterest) {
         this.context = context;
         this.iArraySelectedPositions = (ArrayList<Integer>) iArraySelectedPositions;
+        this.sliderLayout = sliderLayout;
+        this.linearLayoutSelectInterest = linearLayoutSelectInterest;
     }
 
     public void postData() {
@@ -46,9 +57,8 @@ public class SetInterestAsyncTask {
         RequestParams params;
         params = new RequestParams();
         params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
-        params.put("Interest", iArraySelectedPositions );
         System.out.println(new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
-        System.out.println(iArraySelectedPositions);
+        params.put("Interest", iArraySelectedPositions);
         invokeWS(context, params);
     }
 
@@ -57,7 +67,7 @@ public class SetInterestAsyncTask {
         prgDialog.show();
 
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.SET_USER_INTEREST_SERVER_URL, params, new JsonHttpResponseHandler() {
+        RestClient.get(CommonVariables.SET_USER_INTEREST_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
@@ -76,7 +86,13 @@ public class SetInterestAsyncTask {
                             Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                         }
                     } else {
-
+                        String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        if(msg.equals("Success")) {
+                            sliderLayout.setVisibility(View.VISIBLE);
+                            linearLayoutSelectInterest.setVisibility(View.GONE);
+                            new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

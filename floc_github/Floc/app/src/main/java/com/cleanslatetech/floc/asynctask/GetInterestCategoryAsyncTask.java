@@ -1,18 +1,16 @@
 package com.cleanslatetech.floc.asynctask;
 
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.adapter.SelectInterestAdapter;
+import com.cleanslatetech.floc.adapter.InterestAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -26,34 +24,31 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.cleanslatetech.floc.activities.SelectInterestsActivity.gotoNext;
-import static com.cleanslatetech.floc.activities.SelectInterestsActivity.mActionBarToolbar;
-
 /**
  * Created by pimpu on 1/24/2017.
  */
 public class GetInterestCategoryAsyncTask {
+    private final ProgressBar prgDialogLayout;
+    private final AppCompatButton btnRefresh;
     private Context context;
-    private int iCounter=5;
     private GridView selectInterestGridview;
-    public static List<Integer> iArraySelectedPositions;
-    LinearLayout refreshBtnPageLayout, prgDialogLayout;
+    private InterestAdapter adapterInterest;
 
     public GetInterestCategoryAsyncTask(Context context, GridView selectInterestGridview) {
         this.context = context;
         this.selectInterestGridview = selectInterestGridview;
 
-        // set pickup interest text to textview
-        setPickupInterestText(iCounter);
-
         // Instantiate Progress Dialog object
-        prgDialogLayout = (LinearLayout) ((AppCompatActivity)context).findViewById(R.id.linlaHeaderProgress);
-        refreshBtnPageLayout = (LinearLayout) ((AppCompatActivity)context).findViewById(R.id.refreshSelectInterestPage);
-        AppCompatButton btnRefresh = (AppCompatButton) ((AppCompatActivity) context).findViewById(R.id.btnRefreshInterestPage);
+        prgDialogLayout = (ProgressBar) ((AppCompatActivity)context).findViewById(R.id.getCategoryProgress);
+        this.prgDialogLayout.getIndeterminateDrawable().setColorFilter(
+                context.getResources().getColor(R.color.white),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
+        btnRefresh = (AppCompatButton) ((AppCompatActivity) context).findViewById(R.id.btnRefreshgetCategory);
         btnRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshBtnPageLayout.setVisibility(View.GONE);
+                btnRefresh.setVisibility(View.GONE);
                 postData();
             }
         });
@@ -116,7 +111,7 @@ public class GetInterestCategoryAsyncTask {
                         if (errorResponse == null) {
                             Toast.makeText(context,"Sorry for inconvenience. Please, Try again.",Toast.LENGTH_LONG).show();
 
-                            refreshBtnPageLayout.setVisibility(View.VISIBLE);
+                            btnRefresh.setVisibility(View.VISIBLE);
 
                             return;
                         }
@@ -138,55 +133,14 @@ public class GetInterestCategoryAsyncTask {
     }
 
     private void populateGridview(final JSONArray getCategory) {
-        // set adapter for interests grid view
-        SelectInterestAdapter adapter = new SelectInterestAdapter(context, getCategory);
-        selectInterestGridview.setAdapter(adapter);
+        // set all categories which are fetch from server.
+        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdAllCategoryList), getCategory.toString());
 
-        // video play when video thumbnail get click.
-        final SelectInterestAdapter finalImageLoadAdapter = adapter;
-
-        selectInterestGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                // used for change background resources i.e. border to selected item
-                iArraySelectedPositions = finalImageLoadAdapter.iArraySelectedPositions;
-
-                try {
-                    int eventCategoryId = getCategory.getJSONObject(position).getInt("EventCategoryId");
-                    if( iArraySelectedPositions.contains(eventCategoryId) && (iCounter >= 0 ) ) {
-                        iArraySelectedPositions.remove(iArraySelectedPositions.indexOf(eventCategoryId));
-                        iCounter++;
-                        setPickupInterestText(iCounter);
-                    }
-                    else if(iCounter <= 5 && iCounter > 0 ) {
-                        iCounter--;
-                        setPickupInterestText(iCounter);
-                        iArraySelectedPositions.add(eventCategoryId);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                finalImageLoadAdapter.notifyDataSetChanged();
-            }
-        });
+        adapterInterest = new InterestAdapter(context, getCategory);
+        selectInterestGridview.setAdapter(adapterInterest);
     }
 
-    private void setPickupInterestText(int iCounter) {
-        String strInterestText =  String.format(context.getResources().getString(R.string.strPick5Interests), iCounter);
-        if( iCounter == 0 ) {
-//            tvSelectInterestText.setText(R.string.strThanking);
-            mActionBarToolbar.setTitle(R.string.strThanking);
-            gotoNext.setVisibility(View.VISIBLE);
-
-        }
-        else {
-            mActionBarToolbar.setTitle(strInterestText);
-            gotoNext.setVisibility(View.GONE);
-//            tvSelectInterestText.setText(strInterestText);
-        }
-        ((AppCompatActivity)context).setSupportActionBar(mActionBarToolbar);
+    public List getSelectedCategoryArray() {
+        return adapterInterest.iArraySelectedPositions;
     }
-
 }

@@ -85,27 +85,9 @@ public class SelectTimeFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        //Get the AM or PM for current time
-        String aMpM = "AM";
-        if(hourOfDay >11)
-        {
-            aMpM = "PM";
-        }
-
-        //Make the 24 hour time format to 12 hour time format
-        int currentHour;
-        if(hourOfDay>11)
-        {
-            currentHour = hourOfDay - 12;
-        }
-        else
-        {
-            currentHour = hourOfDay;
-        }
-
         if(from.equals("CreateFloc")) {
             if( ((CreateFlocActivity)context).interfaceOnTimeSet != null) {
-                ((CreateFlocActivity)context).interfaceOnTimeSet.getTimeSet(currentHour, minute, aMpM, strTitle);
+                ((CreateFlocActivity)context).interfaceOnTimeSet.getTimeSet(hourOfDay, minute, strTitle);
             }
         }
     }

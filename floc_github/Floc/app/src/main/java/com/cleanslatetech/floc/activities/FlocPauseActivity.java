@@ -1,6 +1,5 @@
 package com.cleanslatetech.floc.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.GetFlocAsyncTask;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -45,7 +43,7 @@ public class FlocPauseActivity extends BaseAppCompactActivity {
             return;
         } else {
             findViewById(R.id.layout_noInternet_pauseFloc).setVisibility(View.GONE);
-            new GetFlocAsyncTask( FlocPauseActivity.this, recyclerPauseFloc, progressBar, btnRefresh ).getData();
+//            new GetFlocAsyncTask( FlocPauseActivity.this, recyclerRunningFloc, recyclerCompletedFloc, recyclerPauseFloc, recyclerCancelFloc, recyclerRequestedFloc, recyclerPauseFloc, progressBar, btnRefresh ).getData();
         }
     }
 

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_flocs"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_blue"
+    tools:context="com.cleanslatetech.floc.activities.FlocsActivity">
+
+    <include
+        android:id="@+id/layOut_appbar"
+        layout="@layout/appbar_layout" />
+
+    <ProgressBar
+        android:id="@+id/runningProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:progressBackgroundTint="@color/white"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnRefreshRunningPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:text="@string/try_again"
+        android:textColor="@color/blackOpacity" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/layout_noInternet"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/wireless_wifi"
+            android:tint="@color/wifiSymbolColor" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/strNoInternet"
+            android:textColor="@color/wifiSymbolColor"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textAlignment="center"
+            app:OpenSans="openSans_regular"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/layout_floc_data_panel"
+        android:layout_below="@+id/layOut_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/running_floc"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_runningFloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/completed_floc"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_completedFloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/pause_floc"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_pauseFloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/cancelled_floc"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_cancelFloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/invite_users_to_event"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/id_spinner_flocName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true"
+                android:backgroundTint="@color/white"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined" />
+
+            <RelativeLayout
+                android:id="@+id/inviteFriendPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/id_friend_to_invite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
+                    android:layout_marginRight="5dp"
+                    android:hint="@string/friend_email_id"
+                    android:textColorHint="@color/hint"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular"/>
+
+                <com.cleanslatetech.floc.utilities.OpenSansButton
+                    android:id="@+id/btn_sent_invitation"
+                    android:layout_toRightOf="@+id/id_friend_to_invite"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/send"
+                    android:textColor="@color/white"
+                    app:OpenSans="openSans_regular"/>
+            </RelativeLayout>
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/request_to_join"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_RequestToJoinFloc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/my_floc_bookings"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_MyFlocBooking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

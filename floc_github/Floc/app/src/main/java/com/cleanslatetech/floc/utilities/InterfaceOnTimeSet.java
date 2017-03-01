@@ -5,5 +5,5 @@ package com.cleanslatetech.floc.utilities;
  */
 
 public interface InterfaceOnTimeSet {
-    void getTimeSet(int hour, int minute, String aMpM, String title);
+    void getTimeSet(int hourOfDay, int minute, String strTitle);
 }

@@ -53,8 +53,6 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
 
     @Override
     protected void onResume() {
-
-
         super.onResume();
     }
 
@@ -62,8 +60,8 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
     public void onStart() {
         new Handler().postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
                 try {
