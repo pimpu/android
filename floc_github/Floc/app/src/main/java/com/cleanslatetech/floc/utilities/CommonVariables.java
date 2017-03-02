@@ -34,4 +34,11 @@ public class CommonVariables {
     public static final String GET_ALL_EVENTS_SERVER_URL = domian_server_url + "GetEvent";
     public static final String CREATE_FLOC_SERVER_URL = domian_server_url + "CreateFloc";
     public static final String POST_IMAGE_SERVER_URL = domian_server_url + "Post";
+
+    private static String domian_event_server_url = "http://demo.floc.world/api/ActivityApi/";
+    public static final String GET_EVENT_DETAILS_SERVER_URL = domian_server_url + "GetActivites";
+
+
+
+
 }
