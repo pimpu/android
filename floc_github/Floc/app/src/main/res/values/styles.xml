@@ -10,12 +10,9 @@
     </style>
 
     <style name="MyPopupMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:itemBackground">@drawable/drawer_list_selector</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
     </style>
-
-    <style name="AppTheme.NoActionBar" parent="AppBaseTheme"></style>
 
     <style name="MyButton" parent="Widget.AppCompat.Button">
         <item name="android:textAllCaps">false</item>

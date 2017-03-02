@@ -10,7 +10,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppBaseTheme">
+        android:theme="@style/AppBaseTheme"
+        android:allowBackup="true">
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -52,10 +53,9 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activities.SelectInterestsActivity"
+            android:name=".activities.OTPActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTask" />
-        <activity android:name=".activities.OTPActivity" />
         <activity
             android:name=".activities.HomeActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -69,46 +69,6 @@
         <activity
             android:name=".activities.CreateFlocActivitySecond"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.PersonalProfileActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.PersonalFinanceActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.RecentFlocExperientalActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.RecentFlocProfessionalActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.RecentFlocPersonalActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlocRunningActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlocCompletedActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlocPauseActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlocCancelActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.FlocRequestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity

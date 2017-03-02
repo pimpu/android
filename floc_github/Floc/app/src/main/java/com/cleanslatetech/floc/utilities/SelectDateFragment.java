@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
-import com.cleanslatetech.floc.activities.PersonalProfileActivity;
+import com.cleanslatetech.floc.activities.MyProfileActivity;
 
 import java.util.Calendar;
 
@@ -93,9 +93,9 @@ public class SelectDateFragment  extends DialogFragment implements DatePickerDia
             if( ((CreateFlocActivity)context).interfaceOnDateSet != null) {
                 ((CreateFlocActivity)context).interfaceOnDateSet.getDateSet(dd,(mm+1), yy, strTitle);
             }
-        }else if(from.equals("PersonalProfile")) {
-            if( ((PersonalProfileActivity)context).interfaceOnDateSet != null) {
-                ((PersonalProfileActivity)context).interfaceOnDateSet.getDateSet(dd,(mm+1), yy, strTitle);
+        }else if(from.equals("MyProfileActivity")) {
+            if( ((MyProfileActivity)context).interfaceOnDateSet != null) {
+                ((MyProfileActivity)context).interfaceOnDateSet.getDateSet(dd,(mm+1), yy, strTitle);
             }
         }
     }
