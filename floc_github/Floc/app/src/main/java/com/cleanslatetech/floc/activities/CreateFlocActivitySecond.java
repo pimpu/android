@@ -17,6 +17,7 @@ import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.asynctask.FileUploadAsyncTask;
 import com.cleanslatetech.floc.models.EventsModel;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.Validations;
 
@@ -116,7 +117,7 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
     public void btnCreateFloc(View view) {
         // Check if Internet present
         if (!isConnectingToInternet(CreateFlocActivitySecond.this)) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoInternet),Toast.LENGTH_LONG).show();
+            CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
             // stop executing code by return
             return;
         }

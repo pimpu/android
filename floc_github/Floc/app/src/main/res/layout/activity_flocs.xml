@@ -54,6 +54,16 @@
             android:textAlignment="center"
             app:OpenSans="openSans_regular"/>
 
+        <com.cleanslatetech.floc.utilities.OpenSansButton
+            android:id="@+id/id_btn_retry_all_flocs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/white_border"
+            android:layout_marginTop="10dp"
+            android:text="@string/retry"
+            android:textColor="@color/white"/>
+
     </LinearLayout>
 
     <ScrollView
@@ -62,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -159,7 +169,7 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <com.cleanslatetech.floc.utilities.OpenSansEditText
-                    android:id="@+id/id_friend_to_invite"
+                    android:id="@+id/id_txt_friend_to_invite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -174,13 +184,14 @@
 
                 <com.cleanslatetech.floc.utilities.OpenSansButton
                     android:id="@+id/btn_sent_invitation"
-                    android:layout_toRightOf="@+id/id_friend_to_invite"
+                    android:layout_toRightOf="@+id/id_txt_friend_to_invite"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
                     android:background="@color/colorPrimary"
                     android:text="@string/send"
                     android:textColor="@color/white"
-                    app:OpenSans="openSans_regular"/>
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickEventInvitation" />
             </RelativeLayout>
 
             <com.cleanslatetech.floc.utilities.OpenSansTextView

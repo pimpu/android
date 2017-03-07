@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.InterfaceOnDateSet;
 import com.cleanslatetech.floc.utilities.InterfaceOnTimeSet;
@@ -157,8 +158,7 @@ public class CreateFlocActivity extends BaseAppCompactActivity implements Adapte
                     FILE_SELECT_CODE);
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(this, "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
+            CommonUtilities.customToast(this, "Please install a File Manager.");
         }
     }
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/floc_topic_profle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/blank_profile"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/floc_topic_profle">
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/floc_topic_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sixteen_textsize"
+            android:textAlignment="textStart"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/floc_topic_subtopic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dull_white"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textAlignment="textStart"
+            app:OpenSans="openSans_regular" />
+
+    </LinearLayout>
+</RelativeLayout>

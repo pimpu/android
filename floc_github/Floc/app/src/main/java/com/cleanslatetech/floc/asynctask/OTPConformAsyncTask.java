@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.activities.OTPActivity;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -99,7 +100,7 @@ public class OTPConformAsyncTask {
 
                     if (error) {
                         JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
-                        Toast.makeText(context, "Invalid recipient addresses.", Toast.LENGTH_LONG).show();
+                        CommonUtilities.customToast(context, "Invalid recipient addresses.");
                         System.out.println(jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
                     } else {
                         Intent intent = new Intent(context, OTPActivity.class);
@@ -120,7 +121,7 @@ public class OTPConformAsyncTask {
                 prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
-                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+                CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
             }
 
             @Override
@@ -129,29 +130,29 @@ public class OTPConformAsyncTask {
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
-                    Toast.makeText(context, "Requested resource not found", Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
                     System.out.println("Something went wrong at server end");
-                    Toast.makeText(context, "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
                 // When Http response code other than 404, 500
                 else {
                     try {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
-                            Toast.makeText(context,"Sorry for inconvenience. Please, Try again.",Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
                             return;
                         }
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));
-                            Toast.makeText(context, errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context, errorResponse.getString("message"));
                         }
                         else {
                             System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                            Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -11,170 +11,442 @@
 
     <include layout="@layout/appbar_layout" />
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-        <LinearLayout
+        android:layout_height="match_parent">
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/activity_horizontal_margin">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_floc_desc"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="end">
-
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/share_on"
-                    android:textColor="@color/white"
-                    app:OpenSans="openSans_regular"/>
-
-                <com.facebook.share.widget.ShareButton
-                    android:id="@+id/shareButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:contentDescription="@string/share"/>
-
-                <com.google.android.gms.plus.PlusOneButton
-                    xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
-                    android:id="@+id/plus_one_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    plus:size="standard"
-                    plus:annotation="none" />
-
-            </LinearLayout>
-
-            <com.cleanslatetech.floc.utilities.OpenSansTextView
-                android:id="@+id/floc_description_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/name"
-                android:textSize="@dimen/sixteen_textsize"
-                android:textColor="@color/white"
-                app:OpenSans="openSans_regular"/>
+            android:fitsSystemWindows="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/no_of_likes"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/white"
-                    app:OpenSans="openSans_regular"/>
-
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="0"
-                    android:textSize="@dimen/OTPtextsize"
-                    android:textColor="@color/colorPrimary"
-                    app:OpenSans="openSans_regular"/>
-
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/likes"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/white"
-                    app:OpenSans="openSans_regular"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/rating"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/white"
-                    app:OpenSans="openSans_regular"/>
-
-                <android.support.v7.widget.AppCompatRatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:progressBackgroundTint="@color/white"
-                    android:secondaryProgress="@color/colorPrimary"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp">
-                <com.cleanslatetech.floc.utilities.OpenSansTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/review"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"
-                    app:OpenSans="openSans_regular"/>
+                android:padding="@dimen/activity_horizontal_margin">
 
-                <com.cleanslatetech.floc.utilities.OpenSansEditText
-                    android:id="@+id/personal_bank_branch"
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/img_floc_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true" />
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@drawable/white_border"
-                    android:inputType="textMultiLine"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="5dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansButton
+                        android:id="@+id/id_btn_booked_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@color/colorPrimary"
+                        android:text="@string/join_this_floc"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/fourteen_textsize"
+                        app:OpenSans="openSans_regular"
+                        android:onClick="onClickBookEvent"/>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_tv_booked"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/white_border"
+                        android:layout_gravity="center_vertical"
+                        android:padding="5dp"
+                        android:text="Booked"
+                        android:textSize="@dimen/login__screen_texts"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        app:OpenSans="openSans_regular" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_alignParentEnd="true">
+
+                        <com.cleanslatetech.floc.utilities.OpenSansTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/share_on"
+                            android:textColor="@color/white"
+                            app:OpenSans="openSans_regular"/>
+
+                        <com.facebook.share.widget.ShareButton
+                            android:id="@+id/shareButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:contentDescription="@string/share"/>
+
+                        <!--<com.google.android.gms.plus.PlusOneButton
+                            xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
+                            android:id="@+id/plus_one_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            plus:size="standard"
+                            plus:annotation="none" />-->
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_tv_txtNoLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/no_of_likes"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular" />
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_likes_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/id_tv_txtNoLike"
+                        android:layout_marginTop="3dp"
+                        android:textSize="@dimen/OTPtextsize"
+                        android:textColor="@color/colorPrimary"
+                        app:OpenSans="openSans_regular"/>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_txt_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/id_likes_count"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/likes"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular"/>
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/img_btn_unlike_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/id_txt_like"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_thumb_up_black"
+                        android:background="@drawable/white_border"
+                        android:tint="@color/white"
+                        android:onClick="onClickLikeEvent"/>
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/img_btn_like_event"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_toRightOf="@+id/id_txt_like"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/ic_thumb_up_orange"
+                        android:background="@drawable/white_border"
+                        android:onClick="onClickLikeEvent"/>
+
+                </RelativeLayout>
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/floc_description_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/name"
                     android:textSize="@dimen/sixteen_textsize"
+                    android:textColor="@color/white"
                     app:OpenSans="openSans_regular"/>
 
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/rating"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular"/>
+
+                    <android.support.v7.widget.AppCompatRatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:progressBackgroundTint="@color/white"
+                        android:stepSize="1.0"
+                        android:secondaryProgress="@color/colorPrimary"/>
+                </LinearLayout>
 
                 <com.cleanslatetech.floc.utilities.OpenSansButton
-                    android:layout_width="110dp"
-                    android:layout_height="35dp"
-                    android:background="@color/colorPrimary"
+                    android:id="@+id/id_btn_submit_review"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_gravity="end"
-                    android:text="@string/submit"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/submit_review"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:OpenSans="openSans_regular" />
+                    android:textSize="@dimen/fourteen_textsize"
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickSubmitReview"/>
 
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
 
-        </LinearLayout>
-    </ScrollView>
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_tv_txtNoBooking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/booking"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular" />
 
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_booking_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/id_tv_txtNoBooking"
+                        android:layout_marginTop="3dp"
+                        android:textSize="@dimen/OTPtextsize"
+                        android:textColor="@color/colorPrimary"
+                        app:OpenSans="openSans_regular"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/organizer"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular" />
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_organiser_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/organizer"
+                        android:textSize="@dimen/login__screen_texts"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.cleanslatetech.floc.utilities.OpenSansTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/review"
+                            android:textSize="@dimen/sixteen_textsize"
+                            android:textColor="@color/white"
+                            android:textAlignment="center"
+                            app:OpenSans="openSans_regular"/>
+
+                        <com.cleanslatetech.floc.utilities.OpenSansTextView
+                            android:id="@+id/id_reviews_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="@dimen/OTPtextsize"
+                            android:textColor="@color/colorPrimary"
+                            app:OpenSans="openSans_regular" />
+
+                    </LinearLayout>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansEditText
+                        android:id="@+id/id_txt_review"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:padding="10dp"
+                        android:background="@drawable/white_border"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen_textsize"
+                        app:OpenSans="openSans_regular"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansButton
+                        android:layout_width="110dp"
+                        android:layout_height="35dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_gravity="end"
+                        android:text="@string/submit"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:OpenSans="openSans_regular"
+                        android:onClick="OnClickSubmitReview"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/floc_talk"
+                        android:textSize="@dimen/OTPtextsize"
+                        android:textColor="@color/white"
+                        app:OpenSans="openSans_regular" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerview_comments"
+                        android:nestedScrollingEnabled="true"
+                        android:background="@color/hint"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginTop="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="11">
+
+                            <RelativeLayout
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="top|end"
+                                android:background="@drawable/top_right_trangle_shape"
+                                android:rotation="360" />
+
+                            <com.cleanslatetech.floc.utilities.OpenSansEditText
+                                android:id="@+id/id_txt_comment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingTop="12dp"
+                                android:paddingStart="10dp"
+                                android:paddingBottom="12dp"
+                                android:layout_marginEnd="11dp"
+                                android:inputType="textMultiLine"
+                                android:overScrollMode="always"
+                                android:scrollbarStyle="insideInset"
+                                android:scrollbars="vertical"
+                                android:fadeScrollbars="false"
+                                android:maxLines="5"
+                                android:minLines="1"
+                                android:background="@drawable/bubble_shape_topright_plain"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sixteen_textsize"
+                                app:OpenSans="openSans_regular"/>
+                        </FrameLayout>
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/id_fab_comment_send"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_attach_file_black"
+                            app:fabSize="mini"
+                            android:tint="@color/white"
+                            android:onClick="onClickSentComment" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/id_getactivity_progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:background="@color/white"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/id_floc_desc_async_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/fourteen_textsize"
+                android:layout_centerVertical="true"
+                app:OpenSans="openSans_regular"/>
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/onClickRetryGetActivity"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:text="@string/retry"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textColor="@color/google_color"
+                app:OpenSans="openSans_regular" />
+
+            <ProgressBar
+                android:id="@+id/prgdlgGetAcivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

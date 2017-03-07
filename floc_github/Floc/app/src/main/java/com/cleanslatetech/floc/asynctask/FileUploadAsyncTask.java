@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
 import com.cleanslatetech.floc.models.EventsModel;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
 import org.json.JSONArray;
@@ -44,7 +45,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
     private ProgressDialog prgDialog;
     private String filepath, postImageServerUrl;
     private Context context;
-    EventsModel eventsModel;
+    private EventsModel eventsModel;
 
     public FileUploadAsyncTask(Context context, EventsModel eventsModel, String filepath, String postImageServerUrl) {
         this.filepath = filepath;
@@ -93,7 +94,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
                 for( int i = 0 ; i < jsonArray.length(); i++) {
                     String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
                     System.out.println(msg);
-                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(context, msg);
                 }
             } else {
                 String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);

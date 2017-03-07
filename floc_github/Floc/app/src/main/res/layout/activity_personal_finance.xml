@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/fourty_space"
     android:paddingTop="@dimen/nav_header_vertical_spacing"
     android:paddingBottom="@dimen/fourty_space"
-    tools:context="com.cleanslatetech.floc.activities.PersonalFinanceActivity">
+    tools:context="com.cleanslatetech.floc.activities.MyProfileActivity">
 
     <!--<include layout="@layout/appbar_layout" />
 

@@ -43,6 +43,8 @@ import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.models.MenuModel;
 import com.cleanslatetech.floc.models.SubMenuModels;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.InterfaceRightMenuClick;
 import com.facebook.FacebookSdk;
@@ -55,8 +57,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
@@ -90,10 +96,25 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             ActivityCompat.requestPermissions(this, CommonVariables.PERMISSIONS, CommonVariables.REQUEST_PERMISSION);
         }
 
+        String strActivityId = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdActivityId));
+        if(strActivityId == null) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("rate", 5);
+                jsonObject.put("like", 1);
+                jsonObject.put("review", 4);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new SetSharedPreference(this).setString(getResources().getString(R.string.shrdActivityId), String.valueOf(jsonObject));
+        }
+
+
     }
 
     @Override
     public void onBackPressed() {
+        new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -119,7 +140,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             case CommonVariables.REQUEST_PERMISSION:
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     System.out.println("Permission has been denied by user");
-                    Toast.makeText(getApplicationContext(), "Permission require for registering with Buxa.",Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(getApplicationContext(), "Permission require for registering with Buxa.");
                 } else {
                     System.out.println("Permission has been granted by user");
                 }
@@ -127,7 +148,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         }
     }
 
-    public void setToolBar(String title) {
+    public void setToolBar(final String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -139,18 +160,31 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         findViewById(R.id.onClickHomeOption).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
+
+                if(! title.equals("Home")) {
+                    onBackPressed();
+                }
             }
         });
 
         findViewById(R.id.onClickCreateFloc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
                 startActivity(new Intent(BaseAppCompactActivity.this, CreateFlocActivity.class));
             }
         });
 
-        if(title == null || title.length() <= 0 || title.equals(getResources().getString(R.string.app_name)) ) {
+        findViewById(R.id.onClickEvent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
+                startActivity(new Intent(BaseAppCompactActivity.this, AllEventActivity.class));
+            }
+        });
+
+        if( title.equals("Home") || title.equals(getResources().getString(R.string.app_name)) ) {
             logo.setVisibility(View.VISIBLE);
 //            optionText.setVisibility(View.VISIBLE);
             titleToolBar.setVisibility(View.GONE);
@@ -172,28 +206,6 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.open_right_menu_icon, menu);
-
-        MenuItem item = menu.findItem(R.id.idOpenRightMEnu);
-
-        MenuItemCompat.getActionView(item).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rightPopupWindow.showAsDropDown(findViewById(R.id.appBarRight));
-            }
-        });
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }*/
 
     private void createRightPopupMenu() {
         CardView imgviewRightOption = (CardView) findViewById(R.id.rightMenuBar);
@@ -237,54 +249,26 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         if(menuSide.equals("LeftMenu")) {
             arrayMenuModels = new ArrayList<MenuModel>();
 
-//            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.home)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.about_us)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.contact_us)));
-//            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.create_floc)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.f_amp_q)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.terms_amp_conditions)));
         } else {
 
             arrayMenuModels = new ArrayList<MenuModel>();
 
-            /*arraySubMenuModel = new ArrayList<SubMenuModels>();
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.experiential)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.professional)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.personal_floc)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.recent_flocs), arraySubMenuModel));*/
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.recent_flocs)));
 
-            arraySubMenuModel = new ArrayList<SubMenuModels>();
+           /* arraySubMenuModel = new ArrayList<SubMenuModels>();
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.upload_pictures)));
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.upload_video)));
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.comment)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.activity), arraySubMenuModel));
+            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.activity), arraySubMenuModel));*/
 
-            /*arraySubMenuModel = new ArrayList<SubMenuModels>();
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.running_floc)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.completed_floc)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.pause_floc)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.cancelled_floc)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.invite_users_to_event)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.request_to_join)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.app_name), arraySubMenuModel));*/
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.app_name)));
-
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.invite_friend)));
-
-            /*arraySubMenuModel = new ArrayList<SubMenuModels>();
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.personal_profile)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.financial)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.my_profile), arraySubMenuModel));*/
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.my_profile)));
-
-            /*arraySubMenuModel = new ArrayList<SubMenuModels>();
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.change_password)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.forgot_password)));
-            arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.delete_account)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.setting), arraySubMenuModel)); */
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.setting)));
-
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.action_logout)));
 
         }
@@ -319,7 +303,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
         }*/ else if( menuName.equals(getResources().getString(R.string.recent_flocs))) {
 
-            startActivity(new Intent(getApplicationContext(), RecentFlocActivity.class));
+            startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));
 
         } /*else if( menuName.equals(getResources().getString(R.string.experiential))) {
 

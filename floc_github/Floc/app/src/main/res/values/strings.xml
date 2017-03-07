@@ -36,6 +36,7 @@
     <string name="shrdIsInterestSelected">isInterestSelected</string>
     <string name="shrdSelectedSubmenu">selectedSubmenu</string>
     <string name="shrdSelectedMenu">selectedMenu</string>
+    <string name="shrdActivityId">activityId</string>
     <string name="facebookLogin">facebookLogin</string>
     <string name="googleLogin">googleLogin</string>
     <string name="appLogin">appLogin</string>
@@ -60,7 +61,7 @@
     <string name="more">More</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
-    <string name="f_amp_q"><![CDATA[F&Q]]></string>
+    <string name="f_amp_q">FAQS</string>
     <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
     <string name="experiential">Experiential</string>
     <string name="professional">Professional</string>
@@ -125,13 +126,20 @@
     <string name="no_of_likes">No Of Likes:\t\t</string>
     <string name="likes">\tLikes</string>
     <string name="rating">Rating:\t\t</string>
-    <string name="review">Review:</string>
+    <string name="review">Review:\t\t</string>
     <string name="submit">Submit</string>
     <string name="send">Send</string>
     <string name="my_floc_bookings">My Floc Bookings</string>
     <string name="try_again">Try again</string>
     <string name="share">Share</string>
     <string name="shrdStringPic">shrdStringPic</string>
+    <string name="retry">Retry</string>
+    <string name="join_this_floc">Join This Floc</string>
+    <string name="booking">Booking:\t\t</string>
+    <string name="rate_the_organiser">Rate The Organiser</string>
+    <string name="organizer">Organizer:\t\t</string>
+    <string name="submit_review">Submit Review</string>
+    <string name="floc_talk">Floc talk:</string>
 
     <string-array name="interests">
         <item>Music Festival</item>
@@ -368,6 +376,5 @@
         <item>Smaller Territories of the UK</item>
         <item>Solomon Islands</item>
     </string-array>
-
 
 </resources>

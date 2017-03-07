@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.OTPConformAsyncTask;
 import com.cleanslatetech.floc.asynctask.RegisterUserAsyncTask;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 
@@ -139,7 +140,7 @@ public class OTPActivity extends AppCompatActivity {
 
             // Check if Internet present
             if (!isConnectingToInternet(this)) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoInternet),Toast.LENGTH_LONG).show();
+                CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
                 return;
             } else {
                 View view1 = getCurrentFocus();
@@ -153,7 +154,7 @@ public class OTPActivity extends AppCompatActivity {
 
         }
         else {
-            Toast.makeText(getApplicationContext(),"OTP did not match",Toast.LENGTH_LONG).show();
+            CommonUtilities.customToast(getApplicationContext(),"OTP did not match");
         }
 
     }

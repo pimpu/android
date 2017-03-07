@@ -2,11 +2,13 @@ package com.cleanslatetech.floc.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.HandleExpandLayoutMethods;
 import com.cleanslatetech.floc.utilities.InterfaceOnDateSet;
@@ -16,6 +18,7 @@ import java.util.Calendar;
 
 public class MyProfileActivity extends BaseAppCompactActivity implements InterfaceOnDateSet {
     AppCompatTextView tv_personal, tv_finance, tv_dob;
+    AppCompatEditText txtEmail;
     View personalLayout, financeLayout;
     public InterfaceOnDateSet interfaceOnDateSet;
 
@@ -46,12 +49,16 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
         tv_personal = (AppCompatTextView) findViewById(R.id.openPersonaPanel);
         tv_finance = (AppCompatTextView) findViewById(R.id.openFinancePanel);
         tv_dob = (AppCompatTextView) findViewById(R.id.id_btn_birthDate);
+        txtEmail = (AppCompatEditText) findViewById(R.id.personal_email);
+
 
         personalLayout = findViewById(R.id.personal_layout);
         financeLayout = findViewById(R.id.finance_layout);
 
         personalLayout.setVisibility(View.GONE);
         financeLayout.setVisibility(View.GONE);
+
+        txtEmail.setText(new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserEmail)));
     }
 
     public void toggle_personal_contents(View view) {

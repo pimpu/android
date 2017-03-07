@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.AppCompatImageView
@@ -11,19 +12,25 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true" />
 
-    <com.cleanslatetech.floc.utilities.OpenSansTextView
-        android:id="@+id/tvRecentFlocName"
-        android:layout_below="@+id/recentFlocBg"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center_vertical|start"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:text="Stairway Project"
-        android:textSize="@dimen/fourteen_textsize"
-        android:textColor="@color/white"
-        android:textAlignment="textStart"
-        app:OpenSans="openSans_regular" />
+        android:padding="@dimen/activity_horizontal_margin">
 
-</RelativeLayout>
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/tvRecentFlocName"
+            android:layout_width="@dimen/event_image_column_height"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fourteen_textsize"
+            android:textColor="@color/white"
+            android:textAlignment="textStart"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:freezesText="true"
+            app:OpenSans="openSans_regular" />
+    </LinearLayout>
+
+</LinearLayout>

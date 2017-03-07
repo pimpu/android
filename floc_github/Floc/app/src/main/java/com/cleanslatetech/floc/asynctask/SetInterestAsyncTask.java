@@ -10,6 +10,7 @@ import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -83,11 +84,11 @@ public class SetInterestAsyncTask {
                         for( int i = 0 ; i < jsonArray.length(); i++) {
                             String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
                             System.out.println(msg);
-                            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context, msg);
                         }
                     } else {
                         String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        CommonUtilities.customToast(context, msg);
                         if(msg.equals("Success")) {
                             sliderLayout.setVisibility(View.VISIBLE);
                             linearLayoutSelectInterest.setVisibility(View.GONE);
@@ -104,7 +105,7 @@ public class SetInterestAsyncTask {
                 prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
-                Toast.makeText(context, "Error "+statusCode+" : "+responseString, Toast.LENGTH_LONG).show();
+                CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
             }
 
             @Override
@@ -113,29 +114,29 @@ public class SetInterestAsyncTask {
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
-                    Toast.makeText(context, "Requested resource not found", Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
                     System.out.println("Something went wrong at server end");
-                    Toast.makeText(context, "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                    CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
                 // When Http response code other than 404, 500
                 else {
                     try {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
-                            Toast.makeText(context,"Sorry for inconvenience. Please, Try again.",Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
                             return;
                         }
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));
-                            Toast.makeText(context, errorResponse.getString("message"),Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context, errorResponse.getString("message"));
                         }
                         else {
                             System.out.println("Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
-                            Toast.makeText(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
+                            CommonUtilities.customToast(context, "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

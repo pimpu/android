@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 
 public class CustomMenuAdapter extends ArrayAdapter {
-    String texta = null;
+    private String texta = null;
     private Context mContext;
     private PopupWindow popupWindow;
     private View appBarRight;
@@ -76,13 +76,13 @@ public class CustomMenuAdapter extends ArrayAdapter {
             viewHolder.subMenuOptionIcon.setVisibility(View.GONE);
         }
 
-        if(menuData.get(position).getMenuName().equals(texta)) {
+        final String previousSelectedTxt = new GetSharedPreference(mContext).getString(mContext.getResources().getString(R.string.shrdSelectedMenu));
+        if( previousSelectedTxt != null && menuData.get(position).getMenuName().equals(previousSelectedTxt) ) {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.dark_blue));
         }
         else {
             convertView.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary));
         }
-
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

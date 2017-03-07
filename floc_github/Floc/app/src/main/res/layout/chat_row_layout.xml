@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <FrameLayout
+        android:id="@+id/chat_other_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginEnd="60dp">
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/top_right_trangle_shape"
+            android:layout_gravity="start"
+            android:rotation="360" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/bubble_shape_topleft_plain">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/chat_other_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User name"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                android:textColor="@color/darkGray"
+                app:OpenSans="openSans_regular" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/chat_other_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="text"
+                android:textSize="@dimen/grid_column_textsize"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/chat_other_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="60dp"
+        android:layout_gravity="start"
+        android:background="@drawable/bubble_shape">
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/chat_other_continuation_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="User name"
+            android:textSize="@dimen/sixteen_textsize"
+            android:textColor="@color/darkGray"
+            android:textAlignment="textStart"
+            android:textStyle="bold"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/chat_other_continuation_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textAlignment="textStart"
+            app:OpenSans="openSans_regular" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/chat_my_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="60dp">
+
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="top|end"
+            android:background="@drawable/top_right_trangle_shape"
+            android:rotation="360" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bubble_shape_topright_plain">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/chat_my_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User name"
+                android:textColor="@color/darkGray"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textAlignment="textStart"
+                android:textStyle="bold"
+                app:OpenSans="openSans_regular" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/chat_my_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="text"
+                android:textSize="@dimen/grid_column_textsize"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/chat_my_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:background="@drawable/bubble_shape"
+        android:padding="10dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="20dp">
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/chat_my_continuation_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="User name"
+            android:textColor="@color/darkGray"
+            android:textSize="@dimen/sixteen_textsize"
+            android:textAlignment="textStart"
+            android:textStyle="bold"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/chat_my_continuation_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/grid_column_textsize"
+            android:textAlignment="textStart"
+            app:OpenSans="openSans_regular" />
+    </LinearLayout>
+
+</LinearLayout>

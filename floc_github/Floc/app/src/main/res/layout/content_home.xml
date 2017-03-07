@@ -117,46 +117,53 @@
                 app:OpenSans="openSans_regular" />
         </LinearLayout>
 
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:text="@string/events"
-            android:textSize="@dimen/login__screen_texts"
-            android:textColor="@color/white"
-            android:textAlignment="textStart"
-            app:OpenSans="openSans_regular" />
-
         <LinearLayout
+            android:id="@+id/id_home_event_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/activity_vertical_margin">
-
-            <GridView
-                android:id="@+id/gridviewEvent"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/three_hundred_height"
-                android:nestedScrollingEnabled="true"
-                android:columnWidth="150dp"
-                android:numColumns="auto_fit"
-                android:verticalSpacing="10dp"
-                android:horizontalSpacing="20dp"
-                android:stretchMode="columnWidth" />
+            android:orientation="vertical">
 
             <com.cleanslatetech.floc.utilities.OpenSansTextView
-                android:id="@+id/tvBtnMoreEvent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:text="@string/more"
-                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_gravity="center_vertical|start"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:text="@string/events"
                 android:textSize="@dimen/login__screen_texts"
                 android:textColor="@color/white"
-                android:textAlignment="textEnd"
+                android:textAlignment="textStart"
                 app:OpenSans="openSans_regular" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/activity_vertical_margin">
+
+                <GridView
+                    android:id="@+id/gridviewEvent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/three_hundred_height"
+                    android:nestedScrollingEnabled="true"
+                    android:columnWidth="150dp"
+                    android:numColumns="auto_fit"
+                    android:verticalSpacing="10dp"
+                    android:horizontalSpacing="20dp"
+                    android:stretchMode="columnWidth" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/tvBtnMoreEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:text="@string/more"
+                    android:layout_marginTop="@dimen/fab_margin"
+                    android:textSize="@dimen/login__screen_texts"
+                    android:textColor="@color/white"
+                    android:textAlignment="textEnd"
+                    app:OpenSans="openSans_regular" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

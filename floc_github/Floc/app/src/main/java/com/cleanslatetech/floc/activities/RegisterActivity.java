@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.OTPConformAsyncTask;
 import com.cleanslatetech.floc.asynctask.RegisterUserAsyncTask;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -138,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Check if Internet present
         if (!isConnectingToInternet(RegisterActivity.this)) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.strNoInternet),Toast.LENGTH_LONG).show();
+            CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
             // stop executing code by return
             return;
         } else {

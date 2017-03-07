@@ -1,8 +1,12 @@
 package com.cleanslatetech.floc.utilities;
 
+import android.os.Looper;
+
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
 
 /**
  * Created by pimpu on 1/13/2017.
@@ -10,9 +14,21 @@ import com.loopj.android.http.RequestParams;
 
 public class RestClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
+    public static AsyncHttpClient syncHttpClient= new SyncHttpClient();
 
     public static void get(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
         client.get(url, params, responseHandler);
+    }
+
+    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        getClient().get(url, params, responseHandler);
+    }
+
+    private static AsyncHttpClient getClient() {
+        // Return the synchronous HTTP client when the thread is not prepared
+        if (Looper.myLooper() == null)
+            return syncHttpClient;
+        return client;
     }
 
     public static void post(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {

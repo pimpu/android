@@ -16,20 +16,24 @@ import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 /**
  * Created by pimpu on 2/7/2017.
  */
 public class RecentFlocAdapter extends BaseAdapter {
     private Context context;
-    private String[] images = new String[]{"ET00045354.jpg", "ET00044478.jpg", "ET00045065.jpg", "ET00045085.jpg"};
+    private JSONArray jsonArrayLatestRecent;
 
-    public RecentFlocAdapter(Context context) {
+    public RecentFlocAdapter(Context context, JSONArray jsonArrayLatestRecent) {
         this.context = context;
+        this.jsonArrayLatestRecent = jsonArrayLatestRecent;
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return jsonArrayLatestRecent.length();
     }
 
     @Override
@@ -53,18 +57,29 @@ public class RecentFlocAdapter extends BaseAdapter {
             holder = new ViewRecentFlocHolder();
 
             holder.imgview_bg = (AppCompatImageView) convertView.findViewById(R.id.recentFlocBg);
+            holder.eventName = (AppCompatTextView) convertView.findViewById(R.id.tvRecentFlocName);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewRecentFlocHolder) convertView.getTag();
         }
 
-        Glide
-                .with(context)
-                .load( CommonVariables.EVENT_IMAGE_SERVER_URL + images[position])
-                .placeholder(R.drawable.textarea_gradient_bg)
-                .dontAnimate()
-                .into(holder.imgview_bg);
+        try {
+            String eventPicture = jsonArrayLatestRecent.getJSONObject(position).getString("EventPicture");
+            String eventName = jsonArrayLatestRecent.getJSONObject(position).getString("EventName");
+
+            holder.eventName.setText(eventName);
+            holder.eventName.setSelected(true);
+            Glide
+                    .with(context)
+                    .load( CommonVariables.EVENT_IMAGE_SERVER_URL + eventPicture)
+                    .placeholder(R.drawable.textarea_gradient_bg)
+                    .dontAnimate()
+                    .into(holder.imgview_bg);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return convertView;
     }
@@ -81,5 +96,6 @@ public class RecentFlocAdapter extends BaseAdapter {
 
     private static class ViewRecentFlocHolder {
         AppCompatImageView imgview_bg;
+        AppCompatTextView eventName;
     }
 }

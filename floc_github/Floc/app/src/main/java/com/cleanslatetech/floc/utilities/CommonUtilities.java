@@ -105,18 +105,19 @@ public class CommonUtilities {
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdLoginType), type);
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserName), name);
         new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
+        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
 
-        // not getting email id from user, when user logging.
-        // so from logging activity, email="";
-        // dont store email id in preference at time of loggin.
-        if(email != null) {
-            if(email.length() > 0 ) {
-                new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
-            }
+
+        if (!isConnectingToInternet(context)) {
+            CommonUtilities.customToast(context, context.getResources().getString(R.string.strNoInternet));
+
+            // stop executing code by return
+            return;
         }
-
-        context.startActivity(new Intent(context, HomeActivity.class));
-        ((AppCompatActivity)context).finish();
+        else {
+            context.startActivity(new Intent(context, HomeActivity.class));
+            ((AppCompatActivity)context).finish();
+        }
     }
 
     public static void handleIntentWhenSignOut(Context context, boolean isSingOut) {
