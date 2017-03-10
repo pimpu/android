@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,19 +27,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:paddingRight="12dp"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
                 android:background="@color/colorPrimary"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:onClick="toggle_personal_contents"
+                android:paddingBottom="3dp"
+                android:paddingEnd="12dp"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
                 android:text="@string/personal"
-                android:textColor="@color/white"
-                android:textSize="@dimen/register_screen_texts"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                app:OpenSans="openSans_regular"
-                android:drawableRight="@android:drawable/arrow_down_float"
-                android:onClick="toggle_personal_contents"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/register_screen_texts"
+                app:OpenSans="openSans_regular" />
 
             <include
                 android:id="@+id/personal_layout"
@@ -49,19 +50,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:paddingRight="12dp"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
                 android:background="@color/colorPrimary"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:onClick="toggle_finance_contents"
+                android:paddingBottom="3dp"
+                android:paddingLeft="3dp"
+                android:paddingRight="12dp"
+                android:paddingTop="3dp"
                 android:text="@string/financial"
-                android:textColor="@color/white"
-                android:textSize="@dimen/register_screen_texts"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                app:OpenSans="openSans_regular"
-                android:drawableRight="@android:drawable/arrow_down_float"
-                android:onClick="toggle_finance_contents"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/register_screen_texts"
+                app:OpenSans="openSans_regular" />
 
             <include
                 android:id="@+id/finance_layout"

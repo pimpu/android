@@ -17,7 +17,7 @@ import com.cleanslatetech.floc.models.MenuModel;
 import com.cleanslatetech.floc.models.SubMenuModels;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
-import com.cleanslatetech.floc.utilities.InterfaceRightMenuClick;
+import com.cleanslatetech.floc.interfaces.InterfaceRightMenuClick;
 
 import java.util.ArrayList;
 

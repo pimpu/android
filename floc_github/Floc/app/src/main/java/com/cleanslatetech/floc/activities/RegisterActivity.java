@@ -139,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Check if Internet present
         if (!isConnectingToInternet(RegisterActivity.this)) {
-            CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
+            CommonUtilities.customToast(RegisterActivity.this, getResources().getString(R.string.strNoInternet));
             // stop executing code by return
             return;
         } else {

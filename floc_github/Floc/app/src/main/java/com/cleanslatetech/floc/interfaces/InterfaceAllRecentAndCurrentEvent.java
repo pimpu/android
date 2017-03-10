@@ -1,4 +1,4 @@
-package com.cleanslatetech.floc.utilities;
+package com.cleanslatetech.floc.interfaces;
 
 import org.json.JSONArray;
 

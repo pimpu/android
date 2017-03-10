@@ -76,7 +76,8 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
 
         // initialised country autocomplete textfield
         acCountry = (AppCompatAutoCompleteTextView) findViewById(R.id.id_country);
-        ArrayList<String> stringArrayCountry = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.country)));
+        final ArrayList<String> stringArrayCountry = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.country)));
+        final ArrayList<String> stringArrayCountryCode = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.country_code)));
         country_adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, stringArrayCountry );
         acCountry.setAdapter(country_adapter);
         acCountry.setThreshold(1);
@@ -84,7 +85,10 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
         acCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedCountry = country_adapter.getItem(position).toString();
+//                selectedCountry = country_adapter.getItem(position).toString();
+                String selected = (String) parent.getItemAtPosition(position);
+                int pos = stringArrayCountry.indexOf(selected);
+                selectedCountry = stringArrayCountryCode.get(pos).toString();
             }
         });
 
@@ -117,7 +121,7 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
     public void btnCreateFloc(View view) {
         // Check if Internet present
         if (!isConnectingToInternet(CreateFlocActivitySecond.this)) {
-            CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
+            CommonUtilities.customToast(CreateFlocActivitySecond.this, getResources().getString(R.string.strNoInternet));
             // stop executing code by return
             return;
         }
@@ -169,6 +173,7 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
             }
 
             JSONObject jsonObjFlocData = new JSONObject(flocFirstData);
+
             /*System.out.println("pic: "+ jsonObjFlocData.getString("filePath"));
             System.out.println("name: "+jsonObjFlocData.getString("name"));
             System.out.println("catId: "+jsonObjFlocData.getInt("catId"));

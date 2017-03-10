@@ -88,8 +88,8 @@ public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
 
         RequestParams params;
         params = new RequestParams();
-//        params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
-        params.put("UserId", 2);
+        params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
+//        params.put("UserId", 2);
 
         invokeWS(context, params);
     }

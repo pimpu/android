@@ -62,6 +62,28 @@
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/personal_middle_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
+                    android:hint="@string/middle_name"
+                    android:textColorHint="@color/hint"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    android:textAlignment="center"
+                    app:OpenSans="openSans_regular"/>
+
+            </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,15 +127,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/radioGroup"
+                    android:id="@+id/rgGender"
                     android:orientation="horizontal">
 
                     <RadioButton
                         android:id="@+id/rbMale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:paddingLeft="5dp"
+                        android:layout_marginStart="20dp"
+                        android:paddingStart="5dp"
                         android:buttonTint="@color/white"
                         android:text="M"
                         android:textSize="@dimen/sixteen_textsize"
@@ -142,18 +164,18 @@
             android:id="@+id/personal_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/white_border"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sixteen_textsize"
-            android:textAlignment="center"
+            android:enabled="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:enabled="false"
-            app:OpenSans="openSans_regular"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sixteen_textsize"
+            app:OpenSans="openSans_regular" />
 
     </RelativeLayout>
 
@@ -177,26 +199,7 @@
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
 
-                <com.cleanslatetech.floc.utilities.OpenSansEditText
-                    android:id="@+id/personal_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@drawable/white_border"
-                    android:hint="@string/hint_city"
-                    android:textColorHint="@color/hint"
-                    android:inputType="text"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sixteen_textsize"
-                    android:textAlignment="center"
-                    app:OpenSans="openSans_regular"/>
-
-            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -217,6 +220,28 @@
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/personal_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/white_border"
+                    android:hint="@string/hint_city"
+                    android:textColorHint="@color/hint"
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    android:textAlignment="center"
+                    app:OpenSans="openSans_regular"/>
+
+            </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -237,6 +262,7 @@
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -298,6 +324,7 @@
                     app:OpenSans="openSans_regular"/>
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -308,7 +335,9 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/white_border"
-                    android:src="@drawable/ic_username_icon"/>
+                    android:src="@drawable/ic_username_icon"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"/>
 
                 <com.cleanslatetech.floc.utilities.OpenSansButton
                     android:id="@+id/id_profilePic_chooser"
@@ -322,24 +351,17 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.cleanslatetech.floc.utilities.OpenSansButton
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp">
-
-                <com.cleanslatetech.floc.utilities.OpenSansButton
-                    android:layout_width="110dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/colorPrimary"
-                    android:layout_gravity="end"
-                    android:text="@string/update"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:OpenSans="openSans_regular" />
-
-            </RelativeLayout>
+                android:text="@string/update"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:OpenSans="openSans_regular"
+                android:onClick="onClickUpdatePersonalInfo" />
 
         <!--</LinearLayout>
     </ScrollView>-->

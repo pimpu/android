@@ -140,7 +140,7 @@ public class OTPActivity extends AppCompatActivity {
 
             // Check if Internet present
             if (!isConnectingToInternet(this)) {
-                CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
+                CommonUtilities.customToast(this, getResources().getString(R.string.strNoInternet));
                 return;
             } else {
                 View view1 = getCurrentFocus();
@@ -154,7 +154,7 @@ public class OTPActivity extends AppCompatActivity {
 
         }
         else {
-            CommonUtilities.customToast(getApplicationContext(),"OTP did not match");
+            CommonUtilities.customToast(this,"OTP did not match");
         }
 
     }

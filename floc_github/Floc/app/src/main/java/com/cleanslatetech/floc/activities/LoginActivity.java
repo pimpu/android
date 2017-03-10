@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void loginUser(View view) {
         // Check if Internet present
         if (!isConnectingToInternet(LoginActivity.this)) {
-            CommonUtilities.customToast(getApplicationContext(), getResources().getString(R.string.strNoInternet));
+            CommonUtilities.customToast(LoginActivity.this, getResources().getString(R.string.strNoInternet));
             // stop executing code by return
             return;
         } else {

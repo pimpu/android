@@ -140,6 +140,9 @@
     <string name="organizer">Organizer:\t\t</string>
     <string name="submit_review">Submit Review</string>
     <string name="floc_talk">Floc talk:</string>
+    <string name="shrdSelectedCategory">selectedCategory</string>
+    <string name="middle_name">Middle Name</string>
+    <string name="shrdMyProfile">myProfileData</string>
 
     <string-array name="interests">
         <item>Music Festival</item>
@@ -177,6 +180,206 @@
         <item>@drawable/guitarist</item>
     </integer-array>
 
+    <string-array name="country_code">
+        <item>AF</item>
+        <item>AL</item>
+        <item>DZ</item>
+        <item>AS</item>
+        <item>AD</item>
+        <item>AO</item>
+        <item>AI</item>
+        <item>AQ</item>
+        <item>AG</item>
+        <item>AR</item>
+        <item>AM</item>
+        <item>AW</item>
+        <item>AU</item>
+        <item>AT</item>
+        <item>AZ</item>
+        <item>BS</item>
+        <item>BH</item>
+        <item>BD</item>
+        <item>BB</item>
+        <item>BY</item>
+        <item>BE</item>
+        <item>BZ</item>
+        <item>BJ</item>
+        <item>BM</item>
+        <item>BT</item>
+        <item>BO</item>
+        <item>BA</item>
+        <item>BW</item>
+        <item>BV</item>
+        <item>BR</item>
+        <item>IO</item>
+        <item>Bulgaria	BG</item>
+        <item>BF</item>
+        <item>BI</item>
+        <item>KH</item>
+        <item>CM</item>
+        <item>CA</item>
+        <item>CV</item>
+        <item>KY</item>
+        <item>CF</item>
+        <item>TD</item>
+        <item>CL</item>
+        <item>CN</item>
+        <item>CX</item>
+        <item>CC</item>
+        <item>CO</item>
+        <item>KM</item>
+        <item>CG</item>
+        <item>CD</item>
+        <item>CK</item>
+        <item>CR</item>
+        <item>CI</item>
+        <item>HR</item>
+        <item>CU</item>
+        <item>Y</item>
+        <item>CZ</item>
+        <item>DK</item>
+        <item>DJ</item>
+        <item>DM</item>
+        <item>DO</item>
+        <item>TP</item>
+        <item>EC</item>
+        <item>EG</item>
+        <item>SV</item>
+        <item>GQ</item>
+        <item>ER</item>
+        <item>EE</item>
+        <item>ET</item>
+        <item>XA</item>
+        <item>FK</item>
+        <item>FO</item>
+        <item>FJ</item>
+        <item>FI</item>
+        <item>FR</item>
+        <item>GF</item>
+        <item>PF</item>
+        <item>TF</item>
+        <item>GA</item>
+        <item>GM</item>
+        <item>GE</item>
+        <item>DE</item>
+        <item>GH</item>
+        <item>GI</item>
+        <item>GR</item>
+        <item>GL</item>
+        <item>GD</item>
+        <item>GP</item>
+        <item>GU</item>
+        <item>GT</item>
+        <item>XU</item>
+        <item>GN</item>
+        <item>GW</item>
+        <item>GY</item>
+        <item>HT</item>
+        <item>HM</item>
+        <item>HN</item>
+        <item>HK</item>
+        <item>HU</item>
+        <item>IS</item>
+        <item>IN</item>
+        <item>ID</item>
+        <item>IR</item>
+        <item>IQ</item>
+        <item>IE</item>
+        <item>IL</item>
+        <item>IT</item>
+        <item>JM</item>
+        <item>JP</item>
+        <item>XJ</item>
+        <item>JO</item>
+        <item>KZ</item>
+        <item>KE</item>
+        <item>KI</item>
+        <item>KP</item>
+        <item>KR</item>
+        <item>KW</item>
+        <item>KG</item>
+        <item>LA</item>
+        <item>LV</item>
+        <item>LB</item>
+        <item>LS</item>
+        <item>LR</item>
+        <item>LY</item>
+        <item>LI</item>
+        <item>LT</item>
+        <item>LU</item>
+        <item>MO</item>
+        <item>Madagascar,MG</item>
+        <item>MW</item>
+        <item>MY</item>
+        <item>MV</item>
+        <item>ML</item>
+        <item>MT</item>
+        <item>XM</item>
+        <item>MH</item>
+        <item>MQ</item>
+        <item>MR</item>
+        <item>MU</item>
+        <item>YT</item>
+        <item>MX</item>
+        <item>FM</item>
+        <item>MD</item>
+        <item>MC</item>
+        <item>MN</item>
+        <item>MS</item>
+        <item>MA</item>
+        <item>MZ</item>
+        <item>MM</item>
+        <item>NA</item>
+        <item>NR</item>
+        <item>NP</item>
+        <item>AN</item>
+        <item>NL</item>
+        <item>NC</item>
+        <item>NZ</item>
+        <item>NI</item>
+        <item>NE</item>
+        <item>NG</item>
+        <item>NU</item>
+        <item>NF</item>
+        <item>MP</item>
+        <item>NO</item>
+        <item>OM</item>
+        <item>PK</item>
+        <item>PW</item>
+        <item>PS</item>
+        <item>PA</item>
+        <item>PG</item>
+        <item>PY</item>
+        <item>PE</item>
+        <item>PH</item>
+        <item>PN</item>
+        <item>PL</item>
+        <item>PT</item>
+        <item>PR</item>
+        <item>QA</item>
+        <item>RE</item>
+        <item>RO</item>
+        <item>RU</item>
+        <item>RW</item>
+        <item>SH</item>
+        <item>KN</item>
+        <item>Saint Pierre and Miquelon,PM</item>
+        <item>VC</item>
+        <item>WS</item>
+        <item>SM</item>
+        <item>ST</item>
+        <item>SA</item>
+        <item>SN</item>
+        <item>RS</item>
+        <item>SC</item>
+        <item>SL</item>
+        <item>SG</item>
+        <item>SK</item>
+        <item>SI</item>
+        <item>XG</item>
+        <item>SB</item>
+    </string-array>
+
     <string-array name="country">
         <item>Afghanistan</item>
         <item>Albania</item>
@@ -209,7 +412,7 @@
         <item>Bouvet Island</item>
         <item>Brazil</item>
         <item>British Indian Ocean Territory</item>
-        <item>Brunei	BN 33</item>
+        <item>Brunei BN 33</item>
         <item>Burkina Faso</item>
         <item>Burundi</item>
         <item>Cambodia</item>
@@ -305,7 +508,7 @@
         <item>Lithuania</item>
         <item>Luxembourg</item>
         <item>Macau S.A.R.</item>
-        <item>Macedonia MK 130</item>
+        <item>Macedonia	MK 130</item>
         <item>Malawi</item>
         <item>Malaysia</item>
         <item>Maldives</item>
@@ -320,7 +523,7 @@
         <item>Mexico</item>
         <item>Micronesia</item>
         <item>Moldova</item>
-        <item>Monaco</item>
+        <item> Monaco</item>
         <item>Mongolia</item>
         <item>Montserrat</item>
         <item>Morocco</item>
@@ -332,7 +535,7 @@
         <item>Netherlands Antilles</item>
         <item>Netherlands The</item>
         <item>New Caledonia</item>
-        <item>New Zealand</item>
+        <item> New Zealand</item>
         <item>Nicaragua</item>
         <item>Niger</item>
         <item>Nigeria</item>
@@ -363,7 +566,7 @@
         <item>Saint Lucia LC 186</item>
         <item>Saint Vincent And The Grenadines</item>
         <item>Samoa</item>
-        <item>San Marino</item>
+        <item> San Marino</item>
         <item>Sao Tome and Principe</item>
         <item>Saudi Arabia</item>
         <item>Senegal</item>

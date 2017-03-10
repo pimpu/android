@@ -80,7 +80,8 @@ public class GetAllEventsAsyncTask {
                         System.out.println(errorResponse);
 
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+//                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+                            getData();
                             return;
                         }
 

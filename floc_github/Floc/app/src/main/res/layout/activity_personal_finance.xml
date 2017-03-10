@@ -121,24 +121,17 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.cleanslatetech.floc.utilities.OpenSansButton
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorPrimary"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp">
-
-                <com.cleanslatetech.floc.utilities.OpenSansButton
-                    android:layout_width="110dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="30dp"
-                    android:background="@color/colorPrimary"
-                    android:layout_gravity="end"
-                    android:text="@string/update"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:OpenSans="openSans_regular" />
-
-            </RelativeLayout>
+                android:text="@string/update"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:OpenSans="openSans_regular"
+                android:onClick="onClickUpdatePersonalFinance" />
 
         <!--</LinearLayout>
     </ScrollView>-->

@@ -1,4 +1,4 @@
-package com.cleanslatetech.floc.utilities;
+package com.cleanslatetech.floc.interfaces;
 
 /**
  * Created by pimpu on 2/15/2017.

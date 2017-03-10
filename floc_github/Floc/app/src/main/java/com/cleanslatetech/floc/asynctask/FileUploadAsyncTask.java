@@ -16,7 +16,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
+import com.cleanslatetech.floc.activities.MyProfileActivity;
 import com.cleanslatetech.floc.models.EventsModel;
+import com.cleanslatetech.floc.models.MyProfileModel;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
@@ -46,12 +48,20 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
     private String filepath, postImageServerUrl;
     private Context context;
     private EventsModel eventsModel;
+    private MyProfileModel myProfileModel;
 
     public FileUploadAsyncTask(Context context, EventsModel eventsModel, String filepath, String postImageServerUrl) {
         this.filepath = filepath;
         this.context = context;
         this.postImageServerUrl = postImageServerUrl;
         this.eventsModel = eventsModel;
+    }
+
+    public FileUploadAsyncTask(Context context, MyProfileModel myProfileModel, String filepath, String postImageServerUrl) {
+        this.filepath = filepath;
+        this.context = context;
+        this.postImageServerUrl = postImageServerUrl;
+        this.myProfileModel = myProfileModel;
     }
 
     @Override
@@ -61,7 +71,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
-        prgDialog.setMessage("creating floc ...");
+        prgDialog.setMessage("Floc ...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
         prgDialog.show();
@@ -98,9 +108,17 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
                 }
             } else {
                 String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                eventsModel.setEventPicture(msg);
                 System.out.println("file uploaded successfully.");
-                new CreateFlocAsyncTask(context, eventsModel, prgDialog).postData();
+
+                if (eventsModel != null) {
+                    eventsModel.setEventPicture(msg);
+                    new CreateFlocAsyncTask(context, eventsModel, prgDialog).postData();
+
+                } else if (myProfileModel != null) {
+                    myProfileModel.setProfilePic(msg);
+                    new InsertMyProfileAsyncTask(context, myProfileModel, prgDialog).postData();
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -222,9 +240,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
 
         double xFactor = 0;
         double width = (double) convertesBitmap.getWidth();
-        Log.v("WIDTH", String.valueOf(width));
         double height = (double) convertesBitmap.getHeight();
-        Log.v("height", String.valueOf(height));
         if(width>height){
             xFactor = 400/width;
         }

@@ -2,13 +2,9 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.models.MyProfileModel;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
@@ -20,84 +16,61 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by pimpu on 1/31/2017.
+ * Created by pimpu on 3/10/2017.
  */
-public class SetInterestAsyncTask {
-    private Context context;
-    private ArrayList<Integer> iArraySelectedPositions;
-    private static ProgressDialog prgDialog;
-    private SlidingSplashView sliderLayout;
-    private LinearLayout linearLayoutSelectInterest;
 
-    public SetInterestAsyncTask(
-            Context context,
-            List<Integer> iArraySelectedPositions,
-            SlidingSplashView sliderLayout,
-            LinearLayout linearLayoutSelectInterest) {
+class InsertMyProfileAsyncTask {
+    private ProgressDialog prgDialog;
+    private Context context;
+    private MyProfileModel myProfileModel;
+
+    public InsertMyProfileAsyncTask(Context context, MyProfileModel myProfileModel, ProgressDialog prgDialog) {
         this.context = context;
-        this.iArraySelectedPositions = (ArrayList<Integer>) iArraySelectedPositions;
-        this.sliderLayout = sliderLayout;
-        this.linearLayoutSelectInterest = linearLayoutSelectInterest;
+        this.myProfileModel = myProfileModel;
+        this.prgDialog = prgDialog;
     }
 
     public void postData() {
-        // Instantiate Progress Dialog object
-        prgDialog = new ProgressDialog(context);
-        // Set Progress Dialog Text
-        prgDialog.setMessage("posting interest ...");
-        // Set Cancelable as False
-        prgDialog.setCancelable(false);
-
         RequestParams params;
         params = new RequestParams();
-        params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
-        params.put("Interest", iArraySelectedPositions);
+
+        params.put("Id", myProfileModel.getUserId());
+        params.put("UserName",myProfileModel.getUserName());
+        params.put("FirstName",myProfileModel.getFirstName());
+        params.put("LastName",myProfileModel.getLastName());
+        params.put("MiddleName",myProfileModel.getMiddleName());
+        params.put("Gender",myProfileModel.getGender());
+        params.put("Contact",myProfileModel.getContact());
+        params.put("EmailId",myProfileModel.getEmailId());
+        params.put("Profession",myProfileModel.getProfession());
+        params.put("City",myProfileModel.getCity());
+        params.put("State",myProfileModel.getState());
+        params.put("Country",myProfileModel.getCountry());
+        params.put("PinCode",myProfileModel.getPinCode());
+        params.put("ProfilePic",myProfileModel.getProfilePic());
+        params.put("BirthDate",myProfileModel.getBirthDate());
+        params.put("BankName",myProfileModel.getBankName());
+        params.put("Branch",myProfileModel.getBranch());
+        params.put("IFSC",myProfileModel.getIFSC());
+        params.put("Account",myProfileModel.getAccount());
+        params.put("URL",myProfileModel.getURL());
+
         invokeWS(context, params);
     }
 
     private void invokeWS(final Context context, RequestParams params) {
-        // Show Progress Dialog
-        prgDialog.show();
-
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.get(CommonVariables.SET_USER_INTEREST_SERVER_URL, params, new JsonHttpResponseHandler() {
-            // When the response returned by REST has Http response code '200'
+        RestClient.post(CommonVariables.USER_PROFILE_SERVER_URL, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 prgDialog.cancel();
-                try{
-                    System.out.println(json);
+                System.out.println(json);
 
-                    Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
-                    JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
-
-                    if (error) {
-                        for( int i = 0 ; i < jsonArray.length(); i++) {
-                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                            System.out.println(msg);
-                            CommonUtilities.customToast(context, msg);
-                        }
-                    } else {
-                        String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                        CommonUtilities.customToast(context, msg);
-                        if(msg.equals("Success")) {
-                            sliderLayout.setVisibility(View.VISIBLE);
-                            linearLayoutSelectInterest.setVisibility(View.GONE);
-                            new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
-                            new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdSelectedCategory),iArraySelectedPositions.toString());
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdMyProfile), json.toString());
             }
 
             @Override

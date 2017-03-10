@@ -11,19 +11,17 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.DateHelper;
-import com.cleanslatetech.floc.utilities.InterfaceOnDateSet;
-import com.cleanslatetech.floc.utilities.InterfaceOnTimeSet;
+import com.cleanslatetech.floc.interfaces.InterfaceOnDateSet;
+import com.cleanslatetech.floc.interfaces.InterfaceOnTimeSet;
 import com.cleanslatetech.floc.utilities.SelectDateFragment;
 import com.cleanslatetech.floc.utilities.SelectTimeFragment;
 import com.cleanslatetech.floc.utilities.Validations;
@@ -38,6 +36,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.customToast;
+import static com.cleanslatetech.floc.utilities.CommonUtilities.getFileName;
+import static com.cleanslatetech.floc.utilities.CommonUtilities.getPath;
 
 public class CreateFlocActivity extends BaseAppCompactActivity implements AdapterView.OnItemSelectedListener,
                                             InterfaceOnDateSet, InterfaceOnTimeSet {
@@ -173,6 +173,8 @@ public class CreateFlocActivity extends BaseAppCompactActivity implements Adapte
                     // Get the path
                     try {
                         filePath = getPath(CreateFlocActivity.this, uri);
+                        tvSelectedFile.setText(getFileName(filePath));
+                        tvSelectedFile.setSelected(true);
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
@@ -180,33 +182,6 @@ public class CreateFlocActivity extends BaseAppCompactActivity implements Adapte
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data", MediaStore.Video.Media.TITLE };
-            Cursor cursor = null;
-
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE);
-                if (cursor.moveToFirst()) {
-                    tvSelectedFile.setText(cursor.getString(columnIndex));
-                    tvSelectedFile.setSelected(true);
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                // Eat it
-            }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            tvSelectedFile.setText(uri.getLastPathSegment());
-            tvSelectedFile.setSelected(true);
-            return uri.getPath();
-        }
-
-        return null;
     }
 
     public void selectStarDate(View view) {

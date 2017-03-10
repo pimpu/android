@@ -17,7 +17,7 @@ import com.cleanslatetech.floc.asynctask.GetAllEventsAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
 import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.utilities.InterfaceAllRecentAndCurrentEvent;
+import com.cleanslatetech.floc.interfaces.InterfaceAllRecentAndCurrentEvent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
