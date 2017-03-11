@@ -55,12 +55,12 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
         rvPersonal.setLayoutManager(mLayoutManagerPer);
 
         // Initialize a new Adapter for RecyclerView
-        RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this);
+//        RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
 
         // Set an adapter for RecyclerView
-        rvExperiential.setAdapter(mAdapter);
-        rvProfessional.setAdapter(mAdapter);
-        rvPersonal.setAdapter(mAdapter);
+//        rvExperiential.setAdapter(mAdapter);
+//        rvProfessional.setAdapter(mAdapter);
+//        rvPersonal.setAdapter(mAdapter);
 
     }
 }

@@ -14,10 +14,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
+import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomMenuAdapter;
 import com.cleanslatetech.floc.models.MenuModel;
@@ -185,8 +187,35 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
     }
 
-    private void createRightPopupMenu() {
+    public void createRightPopupMenu() {
         CardView imgviewRightOption = (CardView) findViewById(R.id.rightMenuBar);
+        ImageView profileImage = (ImageView) findViewById(R.id.profileImage_toolbar);
+
+        String strMyProfile = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdMyProfile));
+        try {
+            if(strMyProfile == null) {
+                Glide
+                        .with(this)
+                        .load( getResources().getDrawable(R.drawable.blank_profile))
+                        .placeholder(R.drawable.textarea_gradient_bg)
+                        .dontAnimate()
+                        .into(profileImage);
+            }
+            else {
+
+                JSONObject joMyProfile = new JSONObject(strMyProfile);
+
+                Glide
+                        .with(this)
+                        .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
+                        .placeholder(R.drawable.textarea_gradient_bg)
+                        .dontAnimate()
+                        .into(profileImage);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // initialize a pop up window type
         final PopupWindow popupWindow = new PopupWindow(this);

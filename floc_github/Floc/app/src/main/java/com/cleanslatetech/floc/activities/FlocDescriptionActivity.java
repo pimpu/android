@@ -100,7 +100,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
     @Override
     protected void onResume() {
         super.onResume();
-//        mPlusOneButton.initialize(URL, PLUS_ONE_REQUEST_CODE);
+        mPlusOneButton.initialize(URL, PLUS_ONE_REQUEST_CODE);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         shareButton.setShareContent(content);
 
         // Google+ share
-//        mPlusOneButton = (PlusOneButton) findViewById(R.id.plus_one_button);
+        mPlusOneButton = (PlusOneButton) findViewById(R.id.plus_one_button);
         URL = CommonVariables.EVENT_IMAGE_SERVER_URL + eventPicture;
 
     }

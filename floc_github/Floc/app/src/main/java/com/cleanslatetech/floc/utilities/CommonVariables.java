@@ -55,5 +55,6 @@ public class CommonVariables {
     public static final String GROUP_CHAT_SERVER_URL = domian_event_server_url + "GroupChat";
     public static final String FLOC_LIST_SERVER_URL = domian_event_server_url + "GetFlocList";
     public static final String USER_PROFILE_SERVER_URL = domian_event_server_url + "UserProfile";
+    public static final String GET_USER_PROFILE_SERVER_URL = domian_event_server_url + "GetProfile";
 
 }

@@ -1,14 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'ADM'
-            keyPassword 'Adm12345@@'
-            storeFile file('D:/Android_workbench/keystore_android_signature.jks')
-            storePassword 'Adm12345@@'
-        }
-    }
+
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -23,9 +16,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            signingConfig signingConfigs.config
         }
     }
     lintOptions{

@@ -4,8 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.MyProfileActivity;
-import com.cleanslatetech.floc.models.MyProfileModel;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
@@ -20,64 +21,37 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by pimpu on 3/10/2017.
+ * Created by ashish on 11/3/17.
  */
 
-public class InsertMyProfileAsyncTask {
-    private ProgressDialog prgDialog;
-    private Context context;
-    private MyProfileModel myProfileModel;
+public class GetMyProfile {
+    Context context;
 
-    public InsertMyProfileAsyncTask(Context context, MyProfileModel myProfileModel, ProgressDialog prgDialog) {
+    public GetMyProfile(Context context) {
         this.context = context;
-        this.myProfileModel = myProfileModel;
-        this.prgDialog = prgDialog;
     }
 
-    public void postData() {
+    public void getData() {
         RequestParams params;
         params = new RequestParams();
+        params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
 
-        params.put("Id", myProfileModel.getUserId());
-        params.put("UserName",myProfileModel.getUserName());
-        params.put("FirstName",myProfileModel.getFirstName());
-        params.put("LastName",myProfileModel.getLastName());
-        params.put("MiddleName",myProfileModel.getMiddleName());
-        params.put("Gender",myProfileModel.getGender());
-        params.put("Contact",myProfileModel.getContact());
-        params.put("EmailId",myProfileModel.getEmailId());
-        params.put("Profession",myProfileModel.getProfession());
-        params.put("City",myProfileModel.getCity());
-        params.put("State",myProfileModel.getState());
-        params.put("Country",myProfileModel.getCountry());
-        params.put("PinCode",myProfileModel.getPinCode());
-        params.put("ProfilePic",myProfileModel.getProfilePic());
-        params.put("BirthDate",myProfileModel.getBirthDate());
-        params.put("BankName",myProfileModel.getBankName());
-        params.put("Branch",myProfileModel.getBranch());
-        params.put("IFSC",myProfileModel.getIFSC());
-        params.put("Account",myProfileModel.getAccount());
-        params.put("URL",myProfileModel.getURL());
-
-        invokeWS(context, params);
-    }
-
-    private void invokeWS(final Context context, RequestParams params) {
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.USER_PROFILE_SERVER_URL, params, new JsonHttpResponseHandler() {
+        RestClient.get(CommonVariables.GET_USER_PROFILE_SERVER_URL, params, new JsonHttpResponseHandler() {
+            // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialog.cancel();
-                System.out.println(json);
+                    System.out.println("MyProfile: "+json);
+                    new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdMyProfile), json.toString());
 
-                new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdMyProfile), json.toString());
-                ((MyProfileActivity)context).createRightPopupMenu();
+                    new GetAllEventsAsyncTask(context, null).getData();
             }
+
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
@@ -85,7 +59,6 @@ public class InsertMyProfileAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -100,8 +73,10 @@ public class InsertMyProfileAsyncTask {
                 else {
                     try {
                         System.out.println(errorResponse);
+
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+//                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+                            getData();
                             return;
                         }
 

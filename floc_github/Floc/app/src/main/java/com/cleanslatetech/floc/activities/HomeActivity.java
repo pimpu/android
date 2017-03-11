@@ -15,6 +15,7 @@ import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
 import com.cleanslatetech.floc.asynctask.GetAllEventsAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
+import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecentAndCurrentEvent;
@@ -43,7 +44,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
         interfaceAllRecentAndCurrentEvent = this;
 
-        new GetAllEventsAsyncTask(this, null).getData();
+        new GetMyProfile(this).getData();
     }
 
     private void setSlideOrInterestGrid() {
