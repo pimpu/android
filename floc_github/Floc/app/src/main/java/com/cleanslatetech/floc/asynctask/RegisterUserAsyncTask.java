@@ -124,8 +124,9 @@ public class RegisterUserAsyncTask {
                     try {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
-                            return;
+//                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+//                            return;
+                            postData();
                         }
 
                         if( errorResponse.getBoolean("error") ) {

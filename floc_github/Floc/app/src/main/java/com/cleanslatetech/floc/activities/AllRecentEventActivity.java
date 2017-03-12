@@ -95,6 +95,7 @@ public class AllRecentEventActivity extends BaseAppCompactActivity {
                     try {
                         if(key == joAllCategory.getJSONObject(k).getInt("EventCategoryId")) {
                             categoryName = joAllCategory.getJSONObject(k).getString("EventCategoryName");
+                            joAllCategory.remove(k);
                             break;
                         }
                     } catch (JSONException e) {
@@ -139,6 +140,7 @@ public class AllRecentEventActivity extends BaseAppCompactActivity {
                     try {
                         if(key == joAllCategory.getJSONObject(k).getInt("EventCategoryId")) {
                             categoryName = joAllCategory.getJSONObject(k).getString("EventCategoryName");
+                            joAllCategory.remove(k);
                             break;
                         }
                     } catch (JSONException e) {
