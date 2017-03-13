@@ -159,8 +159,14 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         findViewById(R.id.onClickEvent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
-                startActivity(new Intent(BaseAppCompactActivity.this, AllEventActivity.class));
+                String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+                if(selectedCategory == null) {
+                    CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Selecte Interest");
+                }
+                else {
+                    new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
+                    startActivity(new Intent(BaseAppCompactActivity.this, AllEventActivity.class));
+                }
             }
         });
 
@@ -310,7 +316,13 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
         }*/ else if( menuName.equals(getResources().getString(R.string.recent_flocs))) {
 
-            startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));
+            String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+            if(selectedCategory == null) {
+                CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Selecte Interest");
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));
+            }
 
         } /*else if( menuName.equals(getResources().getString(R.string.experiential))) {
 

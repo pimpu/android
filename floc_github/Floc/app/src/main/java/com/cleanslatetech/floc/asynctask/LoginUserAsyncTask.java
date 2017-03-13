@@ -114,8 +114,8 @@ public class LoginUserAsyncTask {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
 //                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
-//                            return;
                             postData();
+                            return;
                         }
 
                         if( errorResponse.getBoolean("error") ) {

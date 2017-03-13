@@ -19,6 +19,7 @@ import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecentAndCurrentEvent;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -182,7 +183,13 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             tvBtnMoreEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(HomeActivity.this, AllEventActivity.class));
+                    String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+                    if(selectedCategory == null) {
+                        CommonUtilities.customToast(HomeActivity.this, "Please, Selecte Interest");
+                    }
+                    else {
+                        startActivity(new Intent(HomeActivity.this, AllEventActivity.class));
+                    }
                 }
             });
 
@@ -237,7 +244,13 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
         tvBtnMoreRecentFloc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, AllRecentEventActivity.class));
+                String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+                if(selectedCategory == null) {
+                    CommonUtilities.customToast(HomeActivity.this, "Please, Selecte Interest");
+                }
+                else {
+                    startActivity(new Intent(HomeActivity.this, AllRecentEventActivity.class));
+                }
             }
         });
     }
