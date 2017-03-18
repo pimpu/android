@@ -39,7 +39,7 @@ public class LoginUserAsyncTask {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
-        prgDialog.setMessage("logging ...");
+        prgDialog.setMessage("Signing in ...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 

@@ -161,7 +161,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             public void onClick(View v) {
                 String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
                 if(selectedCategory == null) {
-                    CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Selecte Interest");
+                    CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Select Interest");
                 }
                 else {
                     new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
@@ -196,6 +196,9 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
     public void createRightPopupMenu() {
         CardView imgviewRightOption = (CardView) findViewById(R.id.rightMenuBar);
         ImageView profileImage = (ImageView) findViewById(R.id.profileImage_toolbar);
+
+        if(profileImage == null)
+            return;
 
         String strMyProfile = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdMyProfile));
         try {
@@ -306,9 +309,11 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
     @Override
     public void getSubmenuClick(String menuName) {
-        if( menuName.equals(getResources().getString(R.string.home))) {
+        if( menuName.equals(getResources().getString(R.string.about_us))) {
 
-            onBackPressed();
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.about_us))
+                    .putExtra("url", "http://floc.world/Home/About"));
 
         } /*else if( menuName.equals(getResources().getString(R.string.create_floc))) {
 
@@ -318,7 +323,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
             String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
             if(selectedCategory == null) {
-                CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Selecte Interest");
+                CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Select Interest");
             }
             else {
                 startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));

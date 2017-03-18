@@ -1,84 +1,61 @@
 package com.cleanslatetech.floc.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.view.View;
 
-import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.BaseAppCompactActivity;
-import com.cleanslatetech.floc.activities.MyProfileActivity;
-import com.cleanslatetech.floc.models.MyProfileModel;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.activities.SettingActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by pimpu on 3/10/2017.
+ * Created by pimpu on 3/19/2017.
  */
 
-public class InsertMyProfileAsyncTask {
-    private ProgressDialog prgDialog;
+public class ForgotPwdAsyncTask {
     private Context context;
-    private MyProfileModel myProfileModel;
+    private String userEmail;
 
-    public InsertMyProfileAsyncTask(Context context, MyProfileModel myProfileModel, ProgressDialog prgDialog) {
+    public ForgotPwdAsyncTask(Context context, String userEmail) {
         this.context = context;
-        this.myProfileModel = myProfileModel;
-        this.prgDialog = prgDialog;
+        this.userEmail = userEmail;
     }
 
     public void postData() {
-        RequestParams params;
-        params = new RequestParams();
-
-        params.put("Id", myProfileModel.getUserId());
-        params.put("UserName",myProfileModel.getUserName());
-        params.put("FirstName",myProfileModel.getFirstName());
-        params.put("LastName",myProfileModel.getLastName());
-        params.put("MiddleName",myProfileModel.getMiddleName());
-        params.put("Gender",myProfileModel.getGender());
-        params.put("Contact",myProfileModel.getContact());
-        params.put("EmailId",myProfileModel.getEmailId());
-        params.put("Profession",myProfileModel.getProfession());
-        params.put("City",myProfileModel.getCity());
-        params.put("State",myProfileModel.getState());
-        params.put("Country",myProfileModel.getCountry());
-        params.put("PinCode",myProfileModel.getPinCode());
-        params.put("ProfilePic",myProfileModel.getProfilePic());
-        params.put("BirthDate",myProfileModel.getBirthDate());
-        params.put("BankName",myProfileModel.getBankName());
-        params.put("Branch",myProfileModel.getBranch());
-        params.put("IFSC",myProfileModel.getIFSC());
-        params.put("Account",myProfileModel.getAccount());
-        params.put("URL",myProfileModel.getURL());
-
+        RequestParams params = new RequestParams();
+        params.put("Email", userEmail);
         invokeWS(context, params);
     }
 
     private void invokeWS(final Context context, RequestParams params) {
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.USER_PROFILE_SERVER_URL, params, new JsonHttpResponseHandler() {
+        RestClient.post(CommonVariables.FORGOT_PASSWORD_SERVER_URL, params, new JsonHttpResponseHandler() {
 
+            // When the response returned by REST has Http response code '200'
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialog.cancel();
-                System.out.println(json);
+                System.out.println("forgot Pwd: "+json);
 
-                new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdMyProfile), json.toString());
-                ((BaseAppCompactActivity)context).createRightPopupMenu();
+                try {
+                    if( json.getBoolean(CommonVariables.TAG_ERROR) ) {
+                        String errMsg = json.getJSONArray(CommonVariables.TAG_MESSAGE).getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                        CommonUtilities.customToast(context, errMsg);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialog.cancel();
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
@@ -86,7 +63,6 @@ public class InsertMyProfileAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialog.cancel();
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
@@ -101,8 +77,8 @@ public class InsertMyProfileAsyncTask {
                 else {
                     try {
                         System.out.println(errorResponse);
+
                         if (errorResponse == null) {
-//                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
                             postData();
                             return;
                         }

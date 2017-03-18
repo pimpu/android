@@ -46,7 +46,7 @@ public class RegisterUserAsyncTask {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
-        prgDialog.setMessage("registering ...");
+        prgDialog.setMessage("Signing up ...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
 

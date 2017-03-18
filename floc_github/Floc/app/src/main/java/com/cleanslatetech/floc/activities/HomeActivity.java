@@ -121,6 +121,12 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        createRightPopupMenu();
+    }
+
+    @Override
     public void getAllEvents(JSONArray jsonArray) {
         jsonArrayAllEvents = jsonArray;
     }
@@ -185,7 +191,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
                 public void onClick(View v) {
                     String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
                     if(selectedCategory == null) {
-                        CommonUtilities.customToast(HomeActivity.this, "Please, Selecte Interest");
+                        CommonUtilities.customToast(HomeActivity.this, "Please, Select Interest");
                     }
                     else {
                         startActivity(new Intent(HomeActivity.this, AllEventActivity.class));
@@ -246,7 +252,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             public void onClick(View v) {
                 String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
                 if(selectedCategory == null) {
-                    CommonUtilities.customToast(HomeActivity.this, "Please, Selecte Interest");
+                    CommonUtilities.customToast(HomeActivity.this, "Please, Select Interest");
                 }
                 else {
                     startActivity(new Intent(HomeActivity.this, AllRecentEventActivity.class));

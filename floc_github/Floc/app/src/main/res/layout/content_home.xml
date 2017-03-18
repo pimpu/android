@@ -41,6 +41,17 @@
                 android:text="@string/try_again"
                 android:textColor="@color/blackOpacity" />
 
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingTop="5dp"
+                android:text="@string/click_on_at_least_5_interests_below"
+                android:textSize="@dimen/sixteen_textsize"
+                android:textColor="@color/white"
+                android:textAlignment="textStart"
+                app:OpenSans="openSans_regular" />
+
             <GridView
                 android:id="@+id/gridviewInterest"
                 android:layout_width="fill_parent"
