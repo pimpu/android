@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         GoogleApiClient.OnConnectionFailedListener {
 
     SignInButton btn_google_signIn;
-    private GoogleApiClient mGoogleApiClient;
+    public GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 007;
     private LoginButton btn_facebook_signIn;
     private CallbackManager callbackManager;

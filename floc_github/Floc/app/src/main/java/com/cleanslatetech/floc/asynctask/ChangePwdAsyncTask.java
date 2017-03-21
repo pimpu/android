@@ -82,6 +82,7 @@ public class ChangePwdAsyncTask {
                     }
                     else {
                         nbutton.performClick();
+                        CommonUtilities.handleIntentWhenSignOut(context, false);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

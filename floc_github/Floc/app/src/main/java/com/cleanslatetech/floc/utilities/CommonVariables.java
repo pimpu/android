@@ -27,14 +27,14 @@ public class CommonVariables {
     public static final int RATE = 5;
     public static final int REVIEW = 6;
 
-
-
     // server api calling strings
     public static final String USER_REGISTER_SERVER_URL = "http://demo.floc.world/api/AccountApi/Register";
     public static final String USER_LOGIN_SERVER_URL = "http://demo.floc.world/api/AccountApi/Login";
     public static final String CHANGE_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/ChangePassword";
     public static final String FORGOT_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/ForgotPassword";
     public static final String DELETE_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/DeleteUser";
+    public static final String CHECK_SOCIAL_SERVER_URL = "http://demo.floc.world/api/AccountApi/CheckSocial";
+    public static final String REGISTER_SOCIAL_SERVER_URL = "http://demo.floc.world/api/AccountApi/RegisterSocial";
 
     public static final String INTEREST_CATEGORY_SERVER_URL = "http://demo.floc.world/img/category/";
 

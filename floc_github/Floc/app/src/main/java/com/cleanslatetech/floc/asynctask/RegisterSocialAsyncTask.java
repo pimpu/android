@@ -2,18 +2,16 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.CreateFlocActivity;
-import com.cleanslatetech.floc.activities.CreateFlocActivitySecond;
-import com.cleanslatetech.floc.activities.HomeActivity;
-import com.cleanslatetech.floc.models.EventsModel;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.activities.UserNameFeedActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -23,77 +21,90 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-/**
- * Created by pimpu on 2/26/2017.
- */
-public class CreateFlocAsyncTask {
-    private ProgressDialog prgDialog;
-    private Context context;
-    private EventsModel eventsModel;
+import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
 
-    public CreateFlocAsyncTask(Context context, EventsModel eventsModel, ProgressDialog prgDialog) {
+/**
+ * Created by pimpu on 3/21/2017.
+ */
+
+public class RegisterSocialAsyncTask {
+    private Context context;
+    private String user, email, provider, providerKey;
+    private ProgressDialog prgDialog;
+
+    public RegisterSocialAsyncTask(Context context, String user, String email, String provider, String providerKey) {
         this.context = context;
-        this.eventsModel = eventsModel;
-        this.prgDialog = prgDialog;
+        this.user = user;
+        this.email = email;
+        this.provider = provider;
+        this.providerKey = providerKey;
     }
 
     public void postData() {
+        // Instantiate Progress Dialog object
+        prgDialog = new ProgressDialog(context);
+        // Set Progress Dialog Text
+        prgDialog.setMessage("Signing in ...");
+        // Set Cancelable as False
+        prgDialog.setCancelable(false);
 
         RequestParams params;
         params = new RequestParams();
+        params.put("ExtUsername", user);
+        params.put("Email", email);
+        params.put("Provider", provider);
+        params.put("ProviderKey", providerKey);
 
-        params.put("EventId", eventsModel.getEventId());
-        params.put("EventCreatorId",eventsModel.getEventCreatorId());
-        params.put("EventName",eventsModel.getEventName());
-        params.put("EventCategory",eventsModel.getEventCategory());
-        params.put("EventDescription",eventsModel.getEventDescription());
-        params.put("EventPicture",eventsModel.getEventPicture());
-        params.put("EventStartDate",eventsModel.getEventStartDate());
-        params.put("EventStartHour",eventsModel.getEventStartHour());
-        params.put("EventStartMin",eventsModel.getEventStartMin());
-        params.put("EventEndDate",eventsModel.getEventEndDate());
-        params.put("EventEndHour",eventsModel.getEventEndHour());
-        params.put("EventEndMin",eventsModel.getEventEndMin());
-        params.put("EventPriceType",eventsModel.getEventPriceType());
-        params.put("EventPrice",eventsModel.getEventPrice());
-        params.put("EventMembers",eventsModel.getEventMembers());
-        params.put("EventCity",eventsModel.getEventCity());
-        params.put("EventArea",eventsModel.getEventArea());
-        params.put("EventAddress",eventsModel.getEventAddress());
-        params.put("EventState",eventsModel.getEventState());
-        params.put("EventCountry",eventsModel.getEventCountry());
-        params.put("EventUrl",eventsModel.getEventUrl());
-        params.put("EventReason",eventsModel.getEventReason());
-        params.put("EventPublish",eventsModel.getEventPublish());
-        params.put("ManagementService",eventsModel.getManagementService());
-        params.put("ConciergeServices",eventsModel.getConciergeServices());
-        params.put("EventStatus",eventsModel.getEventStatus());
-        params.put("IsExclusive",eventsModel.getIsExclusive());
-                
         invokeWS(context, params);
     }
 
     private void invokeWS(final Context context, RequestParams params) {
+        // Show Progress Dialog
+        prgDialog.show();
+
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.post(CommonVariables.CREATE_FLOC_SERVER_URL, params, new JsonHttpResponseHandler() {
+        RestClient.post(CommonVariables.REGISTER_SOCIAL_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                prgDialog.cancel();
                 try{
                     System.out.println(json);
 
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
-                    JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
                     if (error) {
-                        for( int i = 0 ; i < jsonArray.length(); i++) {
-                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                            System.out.println(msg);
-                            CommonUtilities.customToast(context, msg);
+                        JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
+                        CommonUtilities.customToast(context, jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
+                        System.out.println("Error: "+jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
+
+                        if(provider.equals("Facebook")) {
+                            LoginManager.getInstance().logOut();
                         }
+                        else if(provider.equals("Google")) {
+                            Auth.GoogleSignInApi.signOut( ((UserNameFeedActivity)context).mGoogleApiClient).setResultCallback(
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(Status status) {
+                                        }
+                                    });
+                        }
+
                     } else {
-                        new GetAllEventsAsyncTask(context, prgDialog).getData();
+                        String userName = json.getString("UserName");
+                        int userId = json.getInt("Id");
+
+                        String loginType = null;
+
+                        if(provider.equals("Facebook")) {
+                            loginType = context.getResources().getString(R.string.facebookLogin);
+                        }
+                        else if(provider.equals("Google")) {
+                            loginType = context.getResources().getString(R.string.googleLogin);
+                        }
+                        handleIntentWhenSignIn(context, loginType, true, userName,
+                                email, userId);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -126,7 +137,6 @@ public class CreateFlocAsyncTask {
                     try {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
-//                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
                             postData();
                             return;
                         }

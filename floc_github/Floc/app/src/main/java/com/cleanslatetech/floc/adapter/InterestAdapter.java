@@ -32,7 +32,7 @@ public class InterestAdapter extends BaseAdapter {
     private JSONArray categories;
     private Context context;
     public List<Integer> iArraySelectedPositions;
-    private int iCounter=5;
+    private int iCounter=0;
 
     public InterestAdapter(Context context, JSONArray categories) {
         this.categories = categories;
@@ -84,12 +84,13 @@ public class InterestAdapter extends BaseAdapter {
                     View p = (View) v.getParent();
                     ViewInterestHolder holder1 = (ViewInterestHolder) p.getTag();
 
-                    if( iArraySelectedPositions.contains(eventCategoryId) && (iCounter >= 0 ) ) {
+//                    if( iArraySelectedPositions.contains(eventCategoryId) && (iCounter >= 0 ) ) {
+                    if( iArraySelectedPositions.contains(eventCategoryId) ) {
                         // set text colour
                         holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.white));
 
                         iArraySelectedPositions.remove(iArraySelectedPositions.indexOf(eventCategoryId));
-                        iCounter++;
+                        iCounter--;
 
                         // animations
                         holder1.imgBtn_interest.setImageResource(R.drawable.animated_plus );
@@ -98,11 +99,12 @@ public class InterestAdapter extends BaseAdapter {
                             ((Animatable) drawable).start();
                         }
                     }
-                    else if(iCounter <= 5 && iCounter > 0 ) {
+//                    else if(iCounter <= 5 && iCounter > 0 ) {
+                    else {
                         // set text colour
                         holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 
-                        iCounter--;
+                        iCounter++;
                         iArraySelectedPositions.add(eventCategoryId);
 
                         // animations

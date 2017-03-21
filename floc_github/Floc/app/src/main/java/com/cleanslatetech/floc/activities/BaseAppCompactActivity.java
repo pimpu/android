@@ -197,17 +197,28 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         CardView imgviewRightOption = (CardView) findViewById(R.id.rightMenuBar);
         ImageView profileImage = (ImageView) findViewById(R.id.profileImage_toolbar);
 
-        if(profileImage == null)
+        if(profileImage == null) {
             return;
+        }
 
+        String loginType = new GetSharedPreference(BaseAppCompactActivity.this)
+                .getString(getResources().getString(R.string.shrdLoginType));
         String strMyProfile = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdMyProfile));
+
         try {
-            if(strMyProfile == null) {
+            if(loginType.equals(getResources().getString(R.string.facebookLogin)) ||
+                    loginType.equals(getResources().getString(R.string.googleLogin)) ) {
+                Glide
+                        .with(this)
+                        .load(new GetSharedPreference(this).getString("social_profilePic"))
+                        .placeholder(R.drawable.textarea_gradient_bg)
+                        .into(profileImage);
+            }
+            else if(strMyProfile == null) {
                 Glide
                         .with(this)
                         .load( getResources().getDrawable(R.drawable.blank_profile))
                         .placeholder(R.drawable.textarea_gradient_bg)
-                        .dontAnimate()
                         .into(profileImage);
             }
             else {
@@ -218,7 +229,6 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                         .with(this)
                         .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
                         .placeholder(R.drawable.textarea_gradient_bg)
-                        .dontAnimate()
                         .into(profileImage);
             }
 
@@ -269,6 +279,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.contact_us)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.f_amp_q)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.terms_amp_conditions)));
+            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.privacy_policy)));
         } else {
 
             arrayMenuModels = new ArrayList<MenuModel>();
@@ -314,6 +325,18 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
                     .putExtra("from", getResources().getString(R.string.about_us))
                     .putExtra("url", "http://floc.world/Home/About"));
+
+        } else if( menuName.equals(getResources().getString(R.string.terms_amp_conditions))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.terms_amp_conditions))
+                    .putExtra("url", "http://floc.world/terms.html"));
+
+        } else if( menuName.equals(getResources().getString(R.string.privacy_policy))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.privacy_policy))
+                    .putExtra("url", "http://floc.world/privacy-policy.html"));
 
         } /*else if( menuName.equals(getResources().getString(R.string.create_floc))) {
 

@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private static final int RC_SIGN_IN = 006;
     private SignInButton btn_google_signIn;
-    private GoogleApiClient mGoogleApiClient;
+    public GoogleApiClient mGoogleApiClient;
     private LoginButton btn_facebook_signIn;
     private CallbackManager callbackManager;
     private EditText txtUserName, txtUserEmail, txtPassword, txtConformPwd;

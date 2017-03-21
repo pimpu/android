@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.LoginActivity;
+import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -89,12 +90,12 @@ public class CommonUtilities {
             GoogleSignInAccount acct = result.getSignInAccount();
 
             String personName = acct.getDisplayName();
-//            String personPhotoUrl = acct.getPhotoUrl().toString();
+            String personPhotoUrl = acct.getPhotoUrl().toString();
             String email = acct.getEmail();
-//            System.out.println("Name: " + personName + ", email: " + email + ", Image: " + personPhotoUrl);
+            String id = acct.getId();
+            System.out.println("Name: " + personName + ", email: " + email+", id: "+id);
 
-            // intet for next activity
-            handleIntentWhenSignIn(context,  context.getResources().getString(R.string.googleLogin), true, personName, email, 0);
+            new SocialLoginAsyncTask( context, email, "Google", id, personPhotoUrl).postData();
 
         } else {
 

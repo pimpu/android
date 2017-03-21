@@ -47,6 +47,9 @@ public class DeletePwdAsyncTask {
                         String errMsg = json.getJSONArray(CommonVariables.TAG_MESSAGE).getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
                         CommonUtilities.customToast(context, errMsg);
                     }
+                    else {
+                        CommonUtilities.handleIntentWhenSignOut(context, false);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

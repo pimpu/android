@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -45,11 +47,12 @@ public class FacebookCallBackMethod implements FacebookCallback<LoginResult> {
                 System.out.println("email: "+bFacebookData.getString("email"));
                 System.out.println("gender: "+bFacebookData.getString("gender"));
 
-                // intet for next activity
-                String profileName = bFacebookData.getString("first_name")+" "+bFacebookData.getString("last_name");
-
-                handleIntentWhenSignIn(context,  context.getResources().getString(R.string.facebookLogin), true, profileName,
-                        bFacebookData.getString("email"), 0);
+                new SocialLoginAsyncTask(
+                        context,
+                        bFacebookData.getString("email"),
+                        "Facebook",
+                        ""+bFacebookData.getString("idFacebook"),
+                        bFacebookData.getString("profile_pic")).postData();
 
             }
         });

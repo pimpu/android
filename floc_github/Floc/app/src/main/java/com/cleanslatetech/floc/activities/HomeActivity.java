@@ -82,7 +82,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     public void changeState_saveInterest(int counter) {
-        if(counter == 0) {
+        if(counter >= 5) {
             tvBtnSaveInterest.setVisibility(View.VISIBLE);
         }
         else {

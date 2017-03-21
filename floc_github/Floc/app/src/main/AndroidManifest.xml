@@ -35,7 +35,7 @@
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider241076362984762"
+            android:authorities="com.facebook.app.FacebookContentProvider286783521708817"
             android:exported="true" />
 
         <activity android:name=".activities.SplashScreenActivity">
@@ -106,7 +106,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.WebviewActivity"
-            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.UserNameFeedActivity"
             android:screenOrientation="portrait" />
     </application>
 

@@ -15,8 +15,8 @@
     <string name="strContinue">Continue</string>
     <string name="strTermCondition">Terms &amp; Conditions</string>
     <string name="strPick5Interests">Pick %1$d Events That Interests You</string>
-    <string name="facebook_app_id">241076362984762</string>
-    <string name="fb_login_protocol_scheme">fb241076362984762</string>
+    <string name="facebook_app_id">286783521708817</string>
+    <string name="fb_login_protocol_scheme">fb286783521708817</string>
     <string name="share_on">Share on</string>
     <string name="strThanking">Thank you !</string>
 
@@ -144,6 +144,7 @@
     <string name="middle_name">Middle Name</string>
     <string name="shrdMyProfile">myProfileData</string>
     <string name="click_on_at_least_5_interests_below">Click on at least 5 interests below.</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
     <string-array name="interests">
         <item>Music Festival</item>

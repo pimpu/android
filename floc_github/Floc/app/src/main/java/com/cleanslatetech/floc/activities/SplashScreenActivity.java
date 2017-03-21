@@ -28,7 +28,6 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhen
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
 public class SplashScreenActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
-    private static int SPLASH_TIME_OUT = 1000;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -58,36 +57,32 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
 
     @Override
     public void onStart() {
-        /*new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-            }
-        }, SPLASH_TIME_OUT);*/
-
         // This method will be executed once the timer is over
         // Start your app main activity
         try {
 
             GetSharedPreference getSharedPreference = new GetSharedPreference(SplashScreenActivity.this);
             String loginType = getSharedPreference.getString(getResources().getString(R.string.shrdLoginType));
+            System.out.println("loginType: "+loginType);
 
-            if (loginType.equals(getResources().getString(R.string.appLogin))) {
+            boolean isSignIn = getSharedPreference.getBoolean(getResources().getString(R.string.isAppSignIn));
+            if(isSignIn) {
+                handleIntentWhenSignIn(
+                        SplashScreenActivity.this,
+                        loginType,
+                        true,
+                        new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserName)),
+                        new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserEmail)),
+                        new GetSharedPreference(SplashScreenActivity.this).getInt(getResources().getString(R.string.shrdLoginId)) );
+            }
+            else {
+                // intet for next activity
+                hacd ndleIntentWhenSignOut(SplashScreenActivity.this, false);
+            }
 
-                boolean isSignIn = getSharedPreference.getBoolean(getResources().getString(R.string.isAppSignIn));
-                System.out.println("Splash: "+isSignIn);
-                if(isSignIn) {
-                    handleIntentWhenSignIn(
-                            SplashScreenActivity.this,
-                            loginType,
-                            true,
-                            new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserName)),
-                            new GetSharedPreference(SplashScreenActivity.this).getString(getResources().getString(R.string.shrdUserEmail)),
-                            new GetSharedPreference(SplashScreenActivity.this).getInt(getResources().getString(R.string.shrdLoginId)) );
-                }
-                else {
-                    // intet for next activity
-                    handleIntentWhenSignOut(SplashScreenActivity.this, false);
-                }
+
+            /*if (loginType.equals(getResources().getString(R.string.appLogin))) {
+
             }
             else if(loginType.equals(getResources().getString(R.string.facebookLogin))) {
 
@@ -120,9 +115,9 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
                         }
                     });
                 }
-            }
+            }*/
         }
-        catch (Exception e){
+        catch (Exception e) {
             // intet for next activity
             handleIntentWhenSignOut(SplashScreenActivity.this,false);
             System.err.println("SplashScreenActivity(Catch): "+e.getMessage());
