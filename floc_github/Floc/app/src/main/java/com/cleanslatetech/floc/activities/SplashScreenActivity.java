@@ -77,7 +77,7 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
             }
             else {
                 // intet for next activity
-                hacd ndleIntentWhenSignOut(SplashScreenActivity.this, false);
+                handleIntentWhenSignOut(SplashScreenActivity.this, false);
             }
 
 

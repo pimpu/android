@@ -29,6 +29,9 @@
     <string name="strNoConnection">No internet connection!</string>
     <string name="strLcl">LCL</string>
     <string name="strFcl">FCL</string>
+    <string name="strPartLoad">Part Load</string>
+    <string name="strFullLoad">Full Load</string>
+    <string name="strTruckLoad">Truck Load</string>
     <string name="strGpsName">GPS</string>
     <string name="strManualName">Manual</string>
     <string name="btn_signIn">Sign in</string>
@@ -59,7 +62,7 @@
     <string name="buxaAddress">Shop no 10/11, Shiv Surabhi bldg, Thakur village, Kandivali East, Mumbai-400101</string>
     <string name="buxaEmail">amruta@buxa.tech</string>
     <string name="buxaContact">+91 7738333539</string>
-    <string name="title_activity_feedback">Feedback</string>
+    <string name="title_activity_feedback" translatable="false">Feedback</string>
     <string name="str_trans">Transportation</string>
     <string name="str_cc">Custom Clr</string>
     <string name="str_ff">Freight Fwd</string>
@@ -139,6 +142,34 @@
         <item>Pondicherry</item>
     </string-array>
 
+    <string-array name="vehicle_type">
+        <item>Light Commercial Vehicle (LCV)</item>
+        <item>LPT</item>
+        <item>Full Truck Load (FTL)</item>
+        <item>Taurus</item>
+        <item>20 ft Open Truck</item>
+        <item>20 ft Trailer</item>
+        <item>40 ft Trailer (double Axel)</item>
+        <item>40 ft Trailer (Triple Axel)</item>
+        <item>Semi Low Bed Trailer</item>
+        <item>Low Bed Trailer</item>
+        <item>Multi Axel Trailer (Hydraulic)</item>
+    </string-array>
+
+    <string-array name="vehicle_capacity">
+        <item>3.50</item>
+        <item>5.50</item>
+        <item>9.00</item>
+        <item>16.00</item>
+        <item>9.00</item>
+        <item>20.00</item>
+        <item>22.00</item>
+        <item>27.00</item>
+        <item>22.00</item>
+        <item>22.00</item>
+        <item>per Axel 7 MT</item>
+    </string-array>
+
     <!--hints-->
     <string name="hint_commodity">Commodity</string>
     <string name="hint_type_of_package">Type of Package</string>
@@ -175,12 +206,14 @@
     <string name="hint_CC_address">Address</string>
     <string name="hint_pol_address">Port Of Loading</string>
     <string name="hint_pod_address">Port of Destination</string>
+    <string name="hint_vehicle_type">Types of Vehicles</string>
     <string name="hint_bookId">Booking id</string>
+    <string name="hint_capacity">Capacity (MT)</string>
     <string name="hint_cfs_address">Container freight station</string>
     <string name="hint_incoterm">INCOTERMS</string>
     <string name="hint_hs_code">Harmonized System Code</string>
     <string name="hint_local_address">Local location address</string>
-    <string name="hint_destination_delivery_adr">Destination delivery address</string>
+    <string name="hint_destination_delivery_adr" translatable="false">Destination delivery address</string>
     <string name="hint_poc">Port  of country</string>
     <string name="hint_landmark">Landmark</string>
     <string name="hint_pincode">Pincode</string>

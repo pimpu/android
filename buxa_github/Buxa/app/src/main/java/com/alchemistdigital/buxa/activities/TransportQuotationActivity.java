@@ -1,15 +1,11 @@
 package com.alchemistdigital.buxa.activities;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,10 +19,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
 import com.alchemistdigital.buxa.R;
+import com.alchemistdigital.buxa.adapter.CustomSpinnerAdapter;
 import com.alchemistdigital.buxa.asynctask.InsertTransportationAsyncTask;
 import com.alchemistdigital.buxa.model.CommodityModel;
 import com.alchemistdigital.buxa.model.CustomClearanceModel;
@@ -42,22 +40,23 @@ import com.alchemistdigital.buxa.utilities.WakeLocker;
 import com.alchemistdigital.buxa.utilities.enumServices;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.alchemistdigital.buxa.utilities.CommonUtilities.isConnectingToInternet;
 import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 
 public class TransportQuotationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    LinearLayout layuotCommonFreight;
+    LinearLayout layuotCommonFreight, shipment_international, shipment_domestic;
     ArrayAdapter<CommodityModel> commodity_adapter;
     ArrayAdapter<PackageTypeModel> packagingType_adapter;
     AutoCompleteTextView txtComodity, txtTypeOfPackaging, txtPickup, txtDrop, txtManualPickup, txtManualDrop;
-    RadioGroup rgContainerSize, rgTypeOfShipment;
+    RadioGroup rgContainerSize, rgTypeOfShipment, rgDomeShipment;
     DatabaseClass dbClass ;
     ArrayList<String> ids, names, availedServicesId, availedServicesName;
-    String strSelectedShipmentType = "LCL", bookId, strSelectedContainerSize = null;
+    String strSelectedShipmentType, bookId, strSelectedContainerSize = null, strSelectedVehicleType;
     private EditText txtBookId, txtCBM, txtGrossWt, txt_noOfPack, txtDimenLen,
                     txtDimenHeight, txtDimenWidth, txtPickupLandmark, txtPickupPincode,
-                    txtDropLandmark, txtDropPincode;
+                    txtDropLandmark, txtDropPincode, txtMatricTone;
     TextInputLayout inputLayout_pickUp, inputLayout_drop, inputLayout_cubicMeter, inputLayout_grossWeight,
                     inputLayout_packType, inputLayout_noOfPack, inputLayout_commodity,
                     inputLayout_dimen_len, inputLayout_dimen_height, inputLayout_dimen_width,
@@ -69,6 +68,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
     private LinearLayout layout_drop, layout_manual_drop, id_not_find_drop_google_text, id_backTo_drop_google_text;
     private FreightForwardingModel freightForwardingModel;
     private CustomClearanceModel customClearanceModel;
+    private CustomSpinnerAdapter adapterVehicleType;
+    private Spinner spinnerVehicleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,13 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         availedServicesName = getIntent().getStringArrayListExtra("availedServicesName");
         freightForwardingModel = getIntent().getExtras().getParcelable("freightForwardingModel");
         customClearanceModel = getIntent().getExtras().getParcelable("customClearanceData");
+
+        if(ShipAreaVariableSingleton.getInstance().shipAreaName.equals(getResources().getString(R.string.international))) {
+            strSelectedShipmentType = "LCL";
+        }
+        else {
+            strSelectedShipmentType = "Part Load";
+        }
 
         if ( getIntent().getExtras().getString("shipmentType") != null ) {
             strSelectedShipmentType = getIntent().getExtras().getString("shipmentType");
@@ -148,6 +156,18 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
     private void init() {
         layuotCommonFreight = (LinearLayout) findViewById(R.id.id_commomFreightLayout);
+        shipment_international = (LinearLayout) findViewById(R.id.layout_shipmentType);
+        shipment_domestic = (LinearLayout) findViewById(R.id.domestic_shipmentType);
+
+        if(ShipAreaVariableSingleton.getInstance().shipAreaName.equals(getResources().getString(R.string.international))) {
+            shipment_international.setVisibility(View.VISIBLE);
+            shipment_domestic.setVisibility(View.GONE);
+        }
+        else {
+            shipment_international.setVisibility(View.GONE);
+            shipment_domestic.setVisibility(View.VISIBLE);
+        }
+
 
         // initialised all Linear Layout
         layout_pickup = (LinearLayout) findViewById(R.id.layout_pickup);
@@ -189,6 +209,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         txtPickupPincode = (EditText) findViewById(R.id.id_pick_pincode);
         txtDropLandmark = (EditText) findViewById(R.id.id_drop_landmark);
         txtDropPincode = (EditText) findViewById(R.id.id_drop_pincode);
+        txtMatricTone = (EditText) findViewById(R.id.matric_tone);
 
         // initialised all Auto Complete TextView
         txtComodity = (AutoCompleteTextView) findViewById(R.id.id_commodity);
@@ -201,6 +222,28 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         // initialised all Radio Group
         rgContainerSize = (RadioGroup) findViewById(R.id.radiogroup2040);
         rgTypeOfShipment = (RadioGroup) findViewById(R.id.radiogroupTypeOfShipment_transport);
+        rgDomeShipment = (RadioGroup) findViewById(R.id.rgDomeShpType_transport);
+
+        final ArrayList<String> stringArrayVehicleCapacity = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.vehicle_capacity)));
+
+        // populate port of loading spinner
+        spinnerVehicleType = (Spinner) findViewById(R.id.id_spinner_vehicletype);
+        final ArrayList<String> stringArrayVehicleType = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.vehicle_type)));
+        adapterVehicleType = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_item, stringArrayVehicleType);
+        adapterVehicleType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerVehicleType.setAdapter(adapterVehicleType);
+        spinnerVehicleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strSelectedVehicleType = stringArrayVehicleType.get(position);
+                txtMatricTone.setText(stringArrayVehicleCapacity.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(this);
         loginId = getSharedPreference.getLoginId(getResources().getString(R.string.loginId));
@@ -235,6 +278,25 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
             }
         });
 
+        rgDomeShipment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_part_load:
+                        strSelectedShipmentType = getResources().getString(R.string.strPartLoad);
+                        break;
+
+                    case R.id.rb_full_load:
+                        strSelectedShipmentType = getResources().getString(R.string.strFullLoad);
+                        break;
+
+                    case R.id.rb_truck_load:
+                        strSelectedShipmentType = getResources().getString(R.string.strTruckLoad);
+                        break;
+                }
+            }
+        });
+
         // click listener for container size radio group
         rgContainerSize.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -260,15 +322,31 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
         // autoselect and disable shipment type radio button
         if( availedServicesName != null ) {
+            if(ShipAreaVariableSingleton.getInstance().shipAreaName.equals(getResources().getString(R.string.international))) {
 
-            if(strSelectedShipmentType.equals("LCL")) {
-                rgTypeOfShipment.check(R.id.rbLcl_transport);
+                if(strSelectedShipmentType.equals("LCL")) {
+                    rgTypeOfShipment.check(R.id.rbLcl_transport);
+                }
+                else {
+                    rgTypeOfShipment.check(R.id.rbFcl_transport);
+                }
+                ((RadioButton)findViewById(R.id.rbLcl_transport)).setEnabled(false);
+                ((RadioButton)findViewById(R.id.rbFcl_transport)).setEnabled(false);
             }
             else {
-                rgTypeOfShipment.check(R.id.rbFcl_transport);
+                if(strSelectedShipmentType.equals(getResources().getString(R.string.strPartLoad))) {
+                    rgDomeShipment.check(R.id.rb_part_load);
+                }
+                else if(strSelectedShipmentType.equals(getResources().getString(R.string.strFullLoad))) {
+                    rgDomeShipment.check(R.id.rb_full_load);
+                }
+                else {
+                    rgDomeShipment.check(R.id.rb_truck_load);
+                }
+                ((RadioButton)findViewById(R.id.rb_part_load)).setEnabled(false);
+                ((RadioButton)findViewById(R.id.rb_full_load)).setEnabled(false);
+                ((RadioButton)findViewById(R.id.rb_truck_load)).setEnabled(false);
             }
-            ((RadioButton)findViewById(R.id.rbLcl_transport)).setEnabled(false);
-            ((RadioButton)findViewById(R.id.rbFcl_transport)).setEnabled(false);
 
         }
 
@@ -351,7 +429,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.db_view_menu, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -366,7 +444,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
         }
 
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     public void storeTransportEnquiry(View view) {
 
@@ -517,7 +595,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
 
         if ( boolDimenLen && boolDimenHeight && boolDimenWeight ) {
 
-            String measurment, strPickUp, strDrop;
+            String measurment = null, strPickUp, strDrop;
             if ( !boolPickUp && (layout_pickup.getVisibility() == View.VISIBLE)) {
                 return;
             }
@@ -559,22 +637,29 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                 iAvail = 1;
             }
 
+            String strMatricTone = txtMatricTone.getText().toString().trim();
+            if(strMatricTone.length() <= 0) {
+                strMatricTone = "";
+            }
             if (layuotCommonFreight.getVisibility() == View.VISIBLE) {
 
                 if( boolGrossWt && boolTypeOfPack && boolNoOfPack && boolCommodity) {
 
-                    if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
-                        return;
-                    }
-                    else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
-                        return;
-                    }
+                    if(ShipAreaVariableSingleton.getInstance().shipAreaName.equals(getResources().getString(R.string.international))) {
 
-                    if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
-                        measurment = txtCBM.getText().toString();
-                    }
-                    else {
-                        measurment = strSelectedContainerSize;
+                        if ((inputLayout_cubicMeter.getVisibility() == View.VISIBLE && !boolCBM) ) {
+                            return;
+                        }
+                        else if( rgContainerSize.getVisibility() == View.VISIBLE && strSelectedContainerSize == null ) {
+                            return;
+                        }
+
+                        if (inputLayout_cubicMeter.getVisibility() == View.VISIBLE) {
+                            measurment = txtCBM.getText().toString();
+                        }
+                        else {
+                            measurment = strSelectedContainerSize;
+                        }
                     }
 
                     TransportationModel transportationModel = new TransportationModel(
@@ -583,6 +668,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                             strDrop,
                             strSelectedShipmentType,
                             measurment,
+                            strSelectedVehicleType,
+                            strMatricTone,
                             Float.parseFloat(txtGrossWt.getText().toString()),
                             strPackType,
                             Integer.parseInt(txt_noOfPack.getText().toString()),
@@ -597,6 +684,7 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                     );
 
                     intentActions(transportationModel);
+
                 }
 
             } else {
@@ -607,6 +695,8 @@ public class TransportQuotationActivity extends AppCompatActivity implements Ada
                         strDrop,
                         freightForwardingModel.getStrShipmentType(),
                         freightForwardingModel.getMeasurement(),
+                        strSelectedVehicleType,
+                        strMatricTone,
                         freightForwardingModel.getGrossWeight(),
                         freightForwardingModel.getStrPackType(),
                         freightForwardingModel.getNoOfPack(),

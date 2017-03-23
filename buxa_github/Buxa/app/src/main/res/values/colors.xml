@@ -20,5 +20,6 @@
     <color name="orange_tag">#ffff5722</color>
     <color name="green_tag">#ff0f9d58</color>
     <color name="horizontalline">#b9b9b9</color>
+    <color name="mdtp_ampm_text_color">#ff212121</color>
 
 </resources>

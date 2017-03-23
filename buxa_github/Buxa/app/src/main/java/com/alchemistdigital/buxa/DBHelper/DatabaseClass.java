@@ -38,7 +38,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private Context context;
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     // Database Name
     private static final String DATABASE_NAME = "Buxa.db";
     // Table Names
@@ -111,6 +111,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
     private static final String  DROP = "dropLocation";
     private static final String  SHIPMENT_TYPE = "shipment_type";
     private static final String  MEASUREMENT = "measurement";
+    private static final String  VEHICLE_TYPE = "vehicle_type";
+    private static final String  VEHICLE_CAPACITY = "vehicle_capacity";
     private static final String  GROSS_WEIGHT = "gross_weight";
     private static final String  PACK_TYPE = "pack_type";
     private static final String  NO_OF_PACK = "no_of_pack";
@@ -236,6 +238,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                     DROP +" VARCHAR(200)," +
                     SHIPMENT_TYPE +" INTEGER," +
                     MEASUREMENT +" VARCHAR(10)," +
+                    VEHICLE_TYPE +" VARCHAR(100)," +
+                    VEHICLE_CAPACITY +" VARCHAR(10)," +
                     GROSS_WEIGHT +" REAL," +
                     PACK_TYPE +" INTEGER," +
                     NO_OF_PACK +" INTEGER," +
@@ -350,6 +354,14 @@ public class DatabaseClass extends SQLiteOpenHelper {
             "ALTER TABLE "+ TABLE_SHIPMENT_CONFORMATION +
                     " ADD " + SHIPMENT_AREA + " VARCHAR(30);";
 
+    private static final String UPDATE_VEHICLE_TYPE_IN_TABLE_TRANSPORTATION =
+            "ALTER TABLE "+ TABLE_TRANSPORTATION +
+                    " ADD " + VEHICLE_TYPE + " VARCHAR(100);";
+
+    private static final String UPDATE_VEHICLE_CAPACITY_IN_TABLE_TRANSPORTATION =
+            "ALTER TABLE "+ TABLE_TRANSPORTATION +
+                    " ADD " +VEHICLE_CAPACITY + " VARCHAR(10);";
+
     public DatabaseClass(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -375,31 +387,33 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        /*if (oldVersion > newVersion) {
-            // on upgrade drop older tables
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMODITY);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_LOCATION);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE_CATEGORY);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_SHIPMENT);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORTATION);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_TYPE);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSPORT_SERVICE);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CUSTOM_CLEARANCE);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_FREIGHT_FORWARDING);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHIPMENT_CONFORMATION);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE_OF_PACKAGE);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CFS_ADDRESS);
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_INTERNATIONAL_DESTINATION_PORT);
-
-            // create new tables
-            onCreate(db);
-
+        if( oldVersion == 1 ) {
+            db.execSQL(UPDATE_TABLE_SHIPMENT_CONFORMATION);
         }
-        else {
-        }*/
 
-        db.execSQL(UPDATE_TABLE_SHIPMENT_CONFORMATION);
+        db.execSQL(UPDATE_VEHICLE_TYPE_IN_TABLE_TRANSPORTATION);
+        db.execSQL(UPDATE_VEHICLE_CAPACITY_IN_TABLE_TRANSPORTATION);
+
+        String insertPartLoad = "INSERT INTO "+TABLE_TYPE_OF_SHIPMENT + " (" +
+                TOS_SERVER_ID + ", "+TOS_name+", "+KEY_STATUS+", "+KEY_CREATED_AT+") VALUES ("+
+                "3, 'Part Load', 1, '"+getDateTime()+"');";
+
+        String insertFullLoad = "INSERT INTO "+TABLE_TYPE_OF_SHIPMENT + " (" +
+                TOS_SERVER_ID + ", "+TOS_name+", "+KEY_STATUS+", "+KEY_CREATED_AT+") VALUES ("+
+                "4, 'Full Load', 1, '"+getDateTime()+"');";
+
+        String insertTruckLoad = "INSERT INTO "+TABLE_TYPE_OF_SHIPMENT + " (" +
+                TOS_SERVER_ID + ", "+TOS_name+", "+KEY_STATUS+", "+KEY_CREATED_AT+") VALUES ("+
+                "5, 'Truck Load', 1, '"+getDateTime()+"');";
+
+        String insertCartonIntoPackage = "INSERT INTO " + TABLE_TYPE_OF_PACKAGE + " ("+
+                PACKAGE_TYPE_SERVER_ID + ", "+ PACKAGE_TYPE_NAME + ", " + KEY_STATUS + ", " +KEY_CREATED_AT+") VALUES ("+
+                "42, 'Carton box', 1, '"+getDateTime()+"');";
+
+        db.execSQL(insertPartLoad);
+        db.execSQL(insertFullLoad);
+        db.execSQL(insertTruckLoad);
+        db.execSQL(insertCartonIntoPackage);
     }
 
     public synchronized DatabaseClass openDatabase() {
@@ -756,8 +770,11 @@ public class DatabaseClass extends SQLiteOpenHelper {
         if( serviceName.equals("LCL") ) {
             name = "Less than Container Load";
         }
-        else {
+        else if(serviceName.equals("FCL")) {
             name = "Full Container Load";
+        }
+        else {
+            name = serviceName;
         }
 
         DatabaseClass sqLiteDatabase = openDatabase();
@@ -1206,6 +1223,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
         contentValues.put(DROP, transportationModel.getDrop());
         contentValues.put(SHIPMENT_TYPE, transportationModel.getShipmentType());
         contentValues.put(MEASUREMENT, transportationModel.getMeasurement());
+        contentValues.put(VEHICLE_TYPE, transportationModel.getVehicleType());
+        contentValues.put(VEHICLE_CAPACITY, transportationModel.getVehicleCapacity());
         contentValues.put(GROSS_WEIGHT, transportationModel.getGrossWeight());
         contentValues.put(PACK_TYPE, transportationModel.getPackType());
         contentValues.put(NO_OF_PACK, transportationModel.getNoOfPack());
@@ -1285,6 +1304,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 transportationModel.setDrop(res.getString(res.getColumnIndex(DROP)));
                 transportationModel.setShipmentType(res.getInt(res.getColumnIndex(SHIPMENT_TYPE)));
                 transportationModel.setMeasurement(res.getString(res.getColumnIndex(MEASUREMENT)));
+                transportationModel.setVehicleType(res.getString(res.getColumnIndex(VEHICLE_TYPE)));
+                transportationModel.setVehicleCapacity(res.getString(res.getColumnIndex(VEHICLE_CAPACITY)));
                 transportationModel.setGrossWeight(res.getFloat(res.getColumnIndex(GROSS_WEIGHT)));
                 transportationModel.setPackType(res.getInt(res.getColumnIndex(PACK_TYPE)));
                 transportationModel.setNoOfPack(res.getInt(res.getColumnIndex(NO_OF_PACK)));

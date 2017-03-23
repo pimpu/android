@@ -7,7 +7,8 @@
     android:id="@+id/activity_transportation_details"
     android:orientation="vertical"
     android:background="@drawable/splash_background"
-    tools:context="com.alchemistdigital.buxa.activities.TransportationDetailsActivity">
+    tools:context="com.alchemistdigital.buxa.activities.TransportationDetailsActivity"
+    android:baselineAligned="false">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -36,6 +37,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="30dp"
+            android:baselineAligned="false"
             android:orientation="vertical">
 
             <com.alchemistdigital.buxa.utilities.SegoeFontTextView
@@ -170,6 +172,69 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 app:Segoe="segoe_regular" />
+
+            <LinearLayout
+                android:id="@+id/domestic_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/horizontalline"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_vehicle_type"
+                    android:textSize="@dimen/enquirydetail_hint_textSize"
+                    android:textColor="@color/hintGray"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:Segoe="segoe_light" />
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/transDetails_vehicle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_vehicle_type"
+                    android:textSize="@dimen/enquirydetail_text_textSize"
+                    android:textColor="@color/colorBlack"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:Segoe="segoe_regular" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/horizontalline"/>
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_capacity"
+                    android:textSize="@dimen/enquirydetail_hint_textSize"
+                    android:textColor="@color/hintGray"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:Segoe="segoe_light" />
+
+                <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                    android:id="@+id/transDetails_vehicle_capacity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hint_capacity"
+                    android:textSize="@dimen/enquirydetail_text_textSize"
+                    android:textColor="@color/colorBlack"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:Segoe="segoe_regular" />
+            </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"

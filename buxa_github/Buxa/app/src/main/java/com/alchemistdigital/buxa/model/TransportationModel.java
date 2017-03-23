@@ -18,6 +18,8 @@ public class TransportationModel implements Parcelable {
     private String strShipmentType;
     private int shipmentType ;
     private String measurement;
+    private String vehicleType;
+    private String vehicleCapacity;
     private float grossWeight;
     private int packType ;
     private String strPackType ;
@@ -42,6 +44,8 @@ public class TransportationModel implements Parcelable {
             String drop,
             String strShipmentType,
             String measurement,
+            String vehicleType,
+            String vehicleCapacity,
             float grossWeight,
             String strPackType,
             int noOfPack,
@@ -66,6 +70,8 @@ public class TransportationModel implements Parcelable {
         this.createdAt = createdAt;
         this.bookingId = bookingId;
         this.measurement = measurement;
+        this.vehicleType = vehicleType;
+        this.vehicleCapacity = vehicleCapacity;
         this.grossWeight = grossWeight;
         this.strShipmentType = strShipmentType;
         this.userId = userId;
@@ -79,6 +85,8 @@ public class TransportationModel implements Parcelable {
                 ",\"drop\":\"" + drop + '\"' +
                 ",\"shipmentType\":\"" + shipmentType + '\"' +
                 ",\"measurement\":\"" + measurement + '\"' +
+                ",\"vehicleType\":\"" + vehicleType + '\"' +
+                ",\"vehicleCapacity\":\"" + vehicleCapacity + '\"' +
                 ",\"grossWeight\":\"" + grossWeight + '\"' +
                 ",\"packType\":\"" + packType + '\"' +
                 ",\"noOfPack\":\"" + noOfPack + '\"' +
@@ -171,6 +179,22 @@ public class TransportationModel implements Parcelable {
 
     public void setMeasurement(String measurement) {
         this.measurement = measurement;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getVehicleCapacity() {
+        return vehicleCapacity;
+    }
+
+    public void setVehicleCapacity(String vehicleCapacity) {
+        this.vehicleCapacity = vehicleCapacity;
     }
 
     public float getGrossWeight() {
@@ -281,6 +305,8 @@ public class TransportationModel implements Parcelable {
         dest.writeString(drop);
         dest.writeString(strShipmentType);
         dest.writeString(measurement);
+        dest.writeString(vehicleType);
+        dest.writeString(vehicleCapacity);
         dest.writeFloat(grossWeight);
         dest.writeString(strPackType);
         dest.writeInt(packType);
@@ -305,6 +331,8 @@ public class TransportationModel implements Parcelable {
         drop = in.readString();
         strShipmentType = in.readString();
         measurement = in.readString();
+        vehicleType = in.readString();
+        vehicleCapacity = in.readString();
         grossWeight = in.readFloat();
         strPackType = in.readString();
         packType = in.readInt();

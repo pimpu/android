@@ -113,6 +113,7 @@ public class ShipmentAreaActivity extends AppCompatActivity {
             DatabaseClass dbClass = new DatabaseClass(ShipmentAreaActivity.this);
             List<TransportServiceModel> transportServiceData = dbClass.getTransportServiceData();
 
+            // if user select international option then user goes to all service
             if(selectedText.equals(getResources().getString(R.string.international))) {
 
                 for (int i = 0 ; i < transportServiceData.size() ; i++ ) {
@@ -120,6 +121,7 @@ public class ShipmentAreaActivity extends AppCompatActivity {
                     selchkboxlistName.add(transportServiceData.get(i).getName());
                 }
             }
+            // if user select domestic option then user get only Transportation service
             else {
                 for (int i = 0 ; i < transportServiceData.size() ; i++ ) {
                     if( transportServiceData.get(i).getName().equals(enumServices.TRANSPORTATION.toString()) ) {

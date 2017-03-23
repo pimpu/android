@@ -93,7 +93,7 @@ public class CommonUtilities {
             String personPhotoUrl = acct.getPhotoUrl().toString();
             String email = acct.getEmail();
             String id = acct.getId();
-            System.out.println("Name: " + personName + ", email: " + email+", id: "+id);
+//            System.out.println("Name: " + personName + ", email: " + email+", id: "+id);
 
             new SocialLoginAsyncTask( context, email, "Google", id, personPhotoUrl).postData();
 

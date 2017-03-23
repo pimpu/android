@@ -50,9 +50,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/LoginTheme" />
         <activity
-            android:name=".activities.CustomImageGalleryActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.AndroidDatabaseManager"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light" />

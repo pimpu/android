@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alchemistdigital.buxa.DBHelper.DatabaseClass;
@@ -13,7 +14,8 @@ import com.alchemistdigital.buxa.utilities.DateHelper;
 
 public class TransportationDetailsActivity extends AppCompatActivity {
     TextView tv_bookingId, tv_pick, tv_drop, tv_shipmentType, tv_gross, tv_packType,
-            tv_noOfPack, tv_commodity, tv_length, tv_height, tv_width, tv_date;
+            tv_noOfPack, tv_commodity, tv_length, tv_height, tv_width, tv_date,tv_vehcle, tv_capacity;
+    LinearLayout layout_domestic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,9 @@ public class TransportationDetailsActivity extends AppCompatActivity {
         tv_pick = (TextView) findViewById(R.id.transDetails_pick);
         tv_drop = (TextView) findViewById(R.id.transDetails_drop);
         tv_shipmentType = (TextView) findViewById(R.id.transDetails_shipment);
+        tv_vehcle = (TextView) findViewById(R.id.transDetails_vehicle);
+        tv_capacity = (TextView) findViewById(R.id.transDetails_vehicle_capacity);
+        tv_shipmentType = (TextView) findViewById(R.id.transDetails_shipment);
         tv_gross = (TextView) findViewById(R.id.transDetails_gross);
         tv_packType = (TextView) findViewById(R.id.transDetails_packType);
         tv_noOfPack = (TextView) findViewById(R.id.transDetails_noOfPack);
@@ -58,6 +63,8 @@ public class TransportationDetailsActivity extends AppCompatActivity {
         tv_length = (TextView) findViewById(R.id.transDetails_length);
         tv_height = (TextView) findViewById(R.id.transDetails_height);
         tv_width = (TextView) findViewById(R.id.transDetails_width);
+
+        layout_domestic = (LinearLayout) findViewById(R.id.domestic_layout);
     }
 
     @Override
@@ -71,23 +78,34 @@ public class TransportationDetailsActivity extends AppCompatActivity {
 
         String shipmentName = dbClass.getShipmentNameByServerId(transportstionData.getShipmentType());
         String measurement = transportstionData.getMeasurement();
-        String text = shipmentName + " - ";
-        if( shipmentName.equals("LCL")) {
-            text = text + measurement +" CBM";
+        String text = shipmentName;
+
+        if(getIntent().getExtras().getString("shipmentArea").equals(getResources().getString(R.string.international))) {
+            layout_domestic.setVisibility(View.GONE);
+
+            if( shipmentName.equals("LCL")) {
+                text = text + measurement +" CBM";
+            }
+            else {
+                switch (measurement){
+                    case "20":
+                        text = text + " - " + measurement +"\'";
+                        break;
+                    case "40":
+                        text = text + " - " + measurement +"\'";
+                        break;
+                    case "40_HQ":
+                        text = text + " - " + "40\' HQ";
+                        break;
+
+                }
+            }
         }
         else {
-            switch (measurement){
-                case "20":
-                    text = text + measurement +"\'";
-                    break;
-                case "40":
-                    text = text + measurement +"\'";
-                    break;
-                case "40_HQ":
-                    text = text + "40\' HQ";
-                    break;
+            layout_domestic.setVisibility(View.VISIBLE);
 
-            }
+            tv_vehcle.setText(transportstionData.getVehicleType());
+            tv_capacity.setText(transportstionData.getVehicleCapacity());
         }
 
         tv_bookingId.setText(transportstionData.getBookingId());
