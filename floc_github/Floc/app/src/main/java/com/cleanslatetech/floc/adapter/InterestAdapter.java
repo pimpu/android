@@ -3,21 +3,15 @@ package com.cleanslatetech.floc.adapter;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 
-import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
-import com.cleanslatetech.floc.utilities.CommonVariables;
-import com.cleanslatetech.floc.utilities.TextDrawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;

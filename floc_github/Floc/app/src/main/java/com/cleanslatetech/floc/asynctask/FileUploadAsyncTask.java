@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by pimpu on 2/24/2017.
@@ -252,30 +253,32 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
 
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(convertesBitmap, NWidth, Nheight, true);
 
-        FileOutputStream out = null;
-        String filename = getFilename(filepath);
+        File imagePath = new File(context.getCacheDir(), "images");
+        if(!imagePath.exists()) {
+            imagePath.mkdir();
+        }
+
+        File newFile = new File(imagePath, "image.png");
+
         try {
-            out = new FileOutputStream(filename);
+            if( newFile.exists() ) {
+                newFile.delete();
+            }
 
-//          write the compressed bitmap at the destination specified by filename.
-            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            newFile.createNewFile();
 
-        } catch (FileNotFoundException e) {
+            FileOutputStream fos = new FileOutputStream(newFile);
+            // Write the bitmap to the output stream (and thus the file) in PNG format (lossless compression)
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            // Flush and close the output stream
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return new File(filename);
-    }
-
-    public String getFilename(String imageUri) {
-        File file = new File(Environment.getExternalStorageDirectory().getPath(), "Floc/EventImages");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        String uriSting = (file.getAbsolutePath() + "/" + new File(imageUri).getName());
-        return uriSting;
+        return newFile;
 
     }
-
 
 }

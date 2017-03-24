@@ -3,6 +3,7 @@ package com.cleanslatetech.floc.asynctask;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
@@ -42,6 +43,8 @@ public class SocialLoginAsyncTask {
         this.providerKey = providerKey;
         this.profile_pic = profile_pic;
         this.context = context;
+
+        ((AppCompatActivity)context).setContentView(R.layout.activity_splash_screen);
     }
 
     public void postData() {
@@ -56,7 +59,6 @@ public class SocialLoginAsyncTask {
     }
 
     private void invokeWS(final Context context, RequestParams params) {
-
         // Make RESTful webservice call using AsyncHttpClient object
         RestClient.post(CommonVariables.CHECK_SOCIAL_SERVER_URL, params, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
@@ -95,6 +97,15 @@ public class SocialLoginAsyncTask {
                             }
                         }
 
+                        Handler handler = new Handler();
+                        Runnable r = new Runnable() {
+                            public void run() {
+                                ((AppCompatActivity)context).recreate();
+                                ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            }
+                        };
+                        handler.postDelayed(r, 500);
+
                     } else {
                         String userName = json.getString("UserName");
                         int userId = json.getInt("Id");
@@ -108,6 +119,7 @@ public class SocialLoginAsyncTask {
                             else if(provider.equals("Google")) {
                                 loginType = context.getResources().getString(R.string.googleLogin);
                             }
+
                             handleIntentWhenSignIn(context, loginType, true, userName,
                                     email, userId);
 
@@ -132,6 +144,15 @@ public class SocialLoginAsyncTask {
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
+
+                Handler handler = new Handler();
+                Runnable r = new Runnable() {
+                    public void run() {
+                        ((AppCompatActivity)context).recreate();
+                        ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                };
+                handler.postDelayed(r, 500);
             }
 
             @Override
@@ -167,6 +188,15 @@ public class SocialLoginAsyncTask {
                         e.printStackTrace();
                     }
                 }
+
+                Handler handler = new Handler();
+                Runnable r = new Runnable() {
+                    public void run() {
+                        ((AppCompatActivity)context).recreate();
+                        ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                };
+                handler.postDelayed(r, 500);
             }
         });
     }

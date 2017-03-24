@@ -1,9 +1,6 @@
 package com.cleanslatetech.floc.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
-import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -13,7 +10,6 @@ import android.widget.BaseAdapter;
 
 import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
 import org.json.JSONArray;

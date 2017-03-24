@@ -2,15 +2,8 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
-import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.CreateFlocActivity;
-import com.cleanslatetech.floc.activities.CreateFlocActivitySecond;
-import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.models.EventsModel;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;

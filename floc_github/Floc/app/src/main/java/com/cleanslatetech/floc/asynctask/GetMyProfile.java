@@ -1,11 +1,8 @@
 package com.cleanslatetech.floc.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
-import com.cleanslatetech.floc.activities.MyProfileActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -14,7 +11,6 @@ import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
