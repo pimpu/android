@@ -96,7 +96,6 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
     public void onBackPressed() {
         new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         overridePendingTransition(0,0);
@@ -326,6 +325,12 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                     .putExtra("from", getResources().getString(R.string.about_us))
                     .putExtra("url", "http://floc.world/Home/About"));
 
+        } else if( menuName.equals(getResources().getString(R.string.contact_us))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.contact_us))
+                    .putExtra("url", "http://floc.world/Home/Contact"));
+
         } else if( menuName.equals(getResources().getString(R.string.terms_amp_conditions))) {
 
             startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
@@ -338,11 +343,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                     .putExtra("from", getResources().getString(R.string.privacy_policy))
                     .putExtra("url", "http://floc.world/privacy-policy.html"));
 
-        } /*else if( menuName.equals(getResources().getString(R.string.create_floc))) {
-
-            startActivity(new Intent(BaseAppCompactActivity.this, CreateFlocActivity.class));
-
-        }*/ else if( menuName.equals(getResources().getString(R.string.recent_flocs))) {
+        } else if( menuName.equals(getResources().getString(R.string.recent_flocs))) {
 
             String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
             if(selectedCategory == null) {
@@ -352,49 +353,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                 startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));
             }
 
-        } /*else if( menuName.equals(getResources().getString(R.string.experiential))) {
-
-            startActivity(new Intent(getApplicationContext(), RecentFlocExperientalActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.professional))) {
-
-            startActivity(new Intent(getApplicationContext(), RecentFlocProfessionalActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.personal_floc))) {
-
-            startActivity(new Intent(getApplicationContext(), RecentFlocPersonalActivity.class));
-
-        }*/ else if(menuName.equals(getResources().getString(R.string.upload_pictures))){
-
-        } else if(menuName.equals(getResources().getString(R.string.upload_video))) {
-
-        } else if(menuName.equals(getResources().getString(R.string.comment))) {
-
-        } /*else if(menuName.equals(getResources().getString(R.string.running_floc))) {
-
-            startActivity(new Intent(getApplicationContext(), FlocRunningActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.completed_floc))) {
-
-            startActivity(new Intent(getApplicationContext(), FlocCompletedActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.pause_floc))) {
-
-            startActivity(new Intent(getApplicationContext(), FlocPauseActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.cancelled_floc))) {
-
-            startActivity(new Intent(getApplicationContext(), FlocCancelActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.invite_users_to_event))) {
-
-            openInviteUserToFlocDialog();
-
-        } else if(menuName.equals(getResources().getString(R.string.request_to_join))) {
-
-            startActivity(new Intent(getApplicationContext(), FlocRequestActivity.class));
-
-        }*/ else if(menuName.equals(getResources().getString(R.string.app_name))) {
+        } else if(menuName.equals(getResources().getString(R.string.app_name))) {
 
             startActivity(new Intent(getApplicationContext(), FlocsActivity.class));
 
@@ -406,44 +365,24 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
             startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
 
-        }/* else if(menuName.equals(getResources().getString(R.string.personal_profile))) {
-
-            startActivity(new Intent(getApplicationContext(), PersonalProfileActivity.class));
-
-        } else if(menuName.equals(getResources().getString(R.string.financial))) {
-
-            startActivity(new Intent(getApplicationContext(), PersonalFinanceActivity.class));
-
-        }*/ else if(menuName.equals(getResources().getString(R.string.setting))) {
+        }else if(menuName.equals(getResources().getString(R.string.setting))) {
 
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
 
-        } /*else if(menuName.equals(getResources().getString(R.string.change_password))) {
-
-            openChangePwdDialog();
-
-        } else if(menuName.equals(getResources().getString(R.string.forgot_password))) {
-
-            openForgotPwdDialog();
-
-        } else if(menuName.equals(getResources().getString(R.string.delete_account))) {
-
-            openDeleteAcDialog();
-
-        }*/ else if(menuName.equals(getResources().getString(R.string.action_logout))) {
+        } else if(menuName.equals(getResources().getString(R.string.action_logout))) {
 
             String loginType = new GetSharedPreference(BaseAppCompactActivity.this)
                     .getString(getResources().getString(R.string.shrdLoginType));
 
             if(loginType.equals(getResources().getString(R.string.appLogin))) {
                 // intet for next activity
-                handleIntentWhenSignOut(BaseAppCompactActivity.this, false);
+                handleIntentWhenSignOut(BaseAppCompactActivity.this);
             }
             else if(loginType.equals(getResources().getString(R.string.facebookLogin))) {
                 LoginManager.getInstance().logOut();
 
                 // intet for next activity
-                handleIntentWhenSignOut(BaseAppCompactActivity.this, false);
+                handleIntentWhenSignOut(BaseAppCompactActivity.this);
             }
             else if(loginType.equals(getResources().getString(R.string.googleLogin))) {
 
@@ -452,7 +391,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                             @Override
                             public void onResult(Status status) {
                                 // intet for next activity
-                                handleIntentWhenSignOut(BaseAppCompactActivity.this, false);
+                                handleIntentWhenSignOut(BaseAppCompactActivity.this);
                             }
                         });
             }

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
-import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -16,7 +15,6 @@ import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
 
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
 /**
@@ -63,20 +61,19 @@ public class FacebookCallBackMethod implements FacebookCallback<LoginResult> {
         parameters.putString("fields", "id, first_name, last_name, email,gender"); // Parámetros que pedimos a facebook
         request.setParameters(parameters);
         request.executeAsync();
-
     }
 
     @Override
     public void onCancel() {
         System.out.println("fb On cancel");
         // intet for next activity
-        handleIntentWhenSignOut(context, false);
+        handleIntentWhenSignOut(context);
     }
 
     @Override
     public void onError(FacebookException error) {
         System.out.println("fb On error: "+ error.getMessage());
         // intet for next activity
-        handleIntentWhenSignOut(context, false);
+        handleIntentWhenSignOut(context);
     }
 }

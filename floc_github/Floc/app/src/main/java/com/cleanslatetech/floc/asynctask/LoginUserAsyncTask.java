@@ -2,11 +2,8 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.LoginActivity;
-import com.cleanslatetech.floc.activities.RegisterActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -80,7 +77,7 @@ public class LoginUserAsyncTask {
                         int id = json.getInt(CommonVariables.TAG_ID);
                         String email = json.getString("EmailId");
 
-                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), true, user, email, id);
+                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), user, email, id);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

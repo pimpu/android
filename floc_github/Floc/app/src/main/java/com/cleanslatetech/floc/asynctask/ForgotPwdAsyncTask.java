@@ -2,6 +2,7 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 
 import com.cleanslatetech.floc.activities.SettingActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -22,10 +23,12 @@ import cz.msebera.android.httpclient.Header;
 public class ForgotPwdAsyncTask {
     private Context context;
     private String userEmail;
+    private Button nbutton;
 
-    public ForgotPwdAsyncTask(Context context, String userEmail) {
+    public ForgotPwdAsyncTask(Context context, String userEmail, Button nbutton) {
         this.context = context;
         this.userEmail = userEmail;
+        this.nbutton = nbutton;
     }
 
     public void postData() {
@@ -47,6 +50,15 @@ public class ForgotPwdAsyncTask {
                     if( json.getBoolean(CommonVariables.TAG_ERROR) ) {
                         String errMsg = json.getJSONArray(CommonVariables.TAG_MESSAGE).getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
                         CommonUtilities.customToast(context, errMsg);
+                    }
+                    else {
+                        nbutton.performClick();
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        CommonUtilities.handleIntentWhenSignOut(context);
                     }
 
                 } catch (JSONException e) {

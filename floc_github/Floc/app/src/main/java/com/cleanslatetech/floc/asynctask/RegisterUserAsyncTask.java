@@ -6,11 +6,9 @@ import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.LoginActivity;
-import com.cleanslatetech.floc.activities.OTPActivity;
 import com.cleanslatetech.floc.activities.RegisterActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
-import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -87,7 +85,7 @@ public class RegisterUserAsyncTask {
                         // intet for next activity
                         int id = json.getInt(CommonVariables.TAG_ID);
 
-                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), true, name, email, id);
+                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), name, email, id);
 
                         RegisterActivity.registerActivity.finish();
                         LoginActivity.loginActivity.finish();

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.LoginUserAsyncTask;
 import com.cleanslatetech.floc.asynctask.RegisterSocialAsyncTask;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.facebook.FacebookSdk;
@@ -63,7 +62,7 @@ public class UserNameFeedActivity extends AppCompatActivity implements GoogleApi
                         }
                     });
         }
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, SignupOptionActivity.class));
         super.onBackPressed();
     }
 

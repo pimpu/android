@@ -103,8 +103,7 @@ public class RegisterSocialAsyncTask {
                         else if(provider.equals("Google")) {
                             loginType = context.getResources().getString(R.string.googleLogin);
                         }
-                        handleIntentWhenSignIn(context, loginType, true, userName,
-                                email, userId);
+                        handleIntentWhenSignIn(context, loginType, userName, email, userId);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

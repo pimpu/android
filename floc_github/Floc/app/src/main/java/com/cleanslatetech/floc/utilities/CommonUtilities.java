@@ -24,8 +24,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.BaseAppCompactActivity;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.LoginActivity;
+import com.cleanslatetech.floc.activities.SignupOptionActivity;
 import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
@@ -100,17 +102,15 @@ public class CommonUtilities {
         } else {
 
             // intet for next activity
-            handleIntentWhenSignOut(context, false);
+            handleIntentWhenSignOut(context);
         }
     }
 
-    public static void handleIntentWhenSignIn(Context context, String type, boolean isSignIn,
-                                              String name,String email, int id) {
+    public static void handleIntentWhenSignIn(Context context, String type, String name,String email, int id) {
         System.out.println("handleIntentWhenSignIn-Login Type: "+type);
-        System.out.println("handleIntentWhenSignIn-issign: "+isSignIn);
 
 
-        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn),isSignIn);
+        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn),true);
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdLoginType), type);
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserName), name);
         new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
@@ -129,27 +129,13 @@ public class CommonUtilities {
         }
     }
 
-    public static void handleIntentWhenSignOut(Context context, boolean isSingOut) {
+    public static void handleIntentWhenSignOut(Context context) {
         ((AppCompatActivity)context).overridePendingTransition(0,0);
-        context.startActivity(new Intent(context, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) );
+        context.startActivity(
+                new Intent(context, SignupOptionActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) );
 
-        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn), isSingOut);
-    }
-
-    public static void showProgressDialog(Context context) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(context);
-            mProgressDialog.setMessage("Loading");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-
-    public static void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
-        }
+        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn), false);
     }
 
     public static AccessToken isFacebookLoggedIn() {
@@ -176,36 +162,6 @@ public class CommonUtilities {
 
         }
         return false;
-    }
-
-    public static String getStringImage(File f) {
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            // The new size we want to scale to
-            final int REQUIRED_SIZE=70;
-
-            // Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
-                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
-                scale *= 2;
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
-            byte[] imageBytes = baos.toByteArray();
-            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        } catch (FileNotFoundException e) {}
-        return null;
     }
 
     public static void customToast(Context context, String msg) {

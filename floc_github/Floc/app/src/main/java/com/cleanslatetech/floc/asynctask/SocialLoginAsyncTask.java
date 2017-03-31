@@ -1,14 +1,11 @@
 package com.cleanslatetech.floc.asynctask;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.LoginActivity;
-import com.cleanslatetech.floc.activities.RegisterActivity;
+import com.cleanslatetech.floc.activities.SignupOptionActivity;
 import com.cleanslatetech.floc.activities.UserNameFeedActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -79,32 +76,22 @@ public class SocialLoginAsyncTask {
                             LoginManager.getInstance().logOut();
                         }
                         else if(provider.equals("Google")) {
-                            if (context.getClass().getSimpleName().equals("LoginActivity")) {
-                                Auth.GoogleSignInApi.signOut( ((LoginActivity)context).mGoogleApiClient).setResultCallback(
-                                        new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                            }
-                                        });
-                            }
-                            else {
-                                Auth.GoogleSignInApi.signOut( ((RegisterActivity)context).mGoogleApiClient).setResultCallback(
-                                        new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                            }
-                                        });
-                            }
+                            Auth.GoogleSignInApi.signOut( ((SignupOptionActivity)context).mGoogleApiClient).setResultCallback(
+                                    new ResultCallback<Status>() {
+                                        @Override
+                                        public void onResult(Status status) {
+                                        }
+                                    });
                         }
 
-                        Handler handler = new Handler();
+                        /*Handler handler = new Handler();
                         Runnable r = new Runnable() {
                             public void run() {
                                 ((AppCompatActivity)context).recreate();
                                 ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             }
                         };
-                        handler.postDelayed(r, 500);
+                        handler.postDelayed(r, 500);*/
 
                     } else {
                         String userName = json.getString("UserName");
@@ -120,8 +107,7 @@ public class SocialLoginAsyncTask {
                                 loginType = context.getResources().getString(R.string.googleLogin);
                             }
 
-                            handleIntentWhenSignIn(context, loginType, true, userName,
-                                    email, userId);
+                            handleIntentWhenSignIn(context, loginType, userName, email, userId);
 
                         }
                         else {
@@ -145,14 +131,14 @@ public class SocialLoginAsyncTask {
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
 
-                Handler handler = new Handler();
+                /*Handler handler = new Handler();
                 Runnable r = new Runnable() {
                     public void run() {
                         ((AppCompatActivity)context).recreate();
                         ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 };
-                handler.postDelayed(r, 500);
+                handler.postDelayed(r, 500);*/
             }
 
             @Override
@@ -189,14 +175,14 @@ public class SocialLoginAsyncTask {
                     }
                 }
 
-                Handler handler = new Handler();
+                /*Handler handler = new Handler();
                 Runnable r = new Runnable() {
                     public void run() {
                         ((AppCompatActivity)context).recreate();
                         ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 };
-                handler.postDelayed(r, 500);
+                handler.postDelayed(r, 500);*/
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.cleanslatetech.floc.asynctask;
 
 import android.content.Context;
+import android.widget.Button;
 
 import com.cleanslatetech.floc.activities.SettingActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -21,10 +22,12 @@ import cz.msebera.android.httpclient.Header;
 public class DeletePwdAsyncTask {
     private Context context;
     private String userEmail;
+    private Button nbutton;
 
-    public DeletePwdAsyncTask(Context context, String userEmail) {
+    public DeletePwdAsyncTask(Context context, String userEmail, Button nbutton) {
         this.context = context;
         this.userEmail = userEmail;
+        this.nbutton = nbutton;
     }
 
     public void postData() {
@@ -48,7 +51,13 @@ public class DeletePwdAsyncTask {
                         CommonUtilities.customToast(context, errMsg);
                     }
                     else {
-                        CommonUtilities.handleIntentWhenSignOut(context, false);
+                        nbutton.performClick();
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        CommonUtilities.handleIntentWhenSignOut(context);
                     }
 
                 } catch (JSONException e) {

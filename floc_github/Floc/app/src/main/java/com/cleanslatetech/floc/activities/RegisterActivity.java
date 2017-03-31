@@ -33,34 +33,19 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToIn
 import static com.cleanslatetech.floc.utilities.Validations.emailValidate;
 import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener,
-        GoogleApiClient.OnConnectionFailedListener {
+public class RegisterActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 006;
-    private SignInButton btn_google_signIn;
-    public GoogleApiClient mGoogleApiClient;
-    private LoginButton btn_facebook_signIn;
-    private CallbackManager callbackManager;
     private EditText txtUserName, txtUserEmail, txtPassword, txtConformPwd;
     public static Activity registerActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // initialization of facebook sdk prior to create content view of activity.
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
-        AppEventsLogger.activateApp(this);
-
         setContentView(R.layout.activity_register);
 
         registerActivity = this;
 
         init();
-
-        googleSignInSetup();
-
-        facebookSignInSetup();
     }
 
     private void init() {
@@ -68,71 +53,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             txtUserEmail = (EditText) findViewById(R.id.idRegisterUserEmail);
             txtPassword = (EditText) findViewById(R.id.idRegisterUserPassword);
             txtConformPwd = (EditText) findViewById(R.id.idRegisterUserConfirmPassword);
-    }
-
-    private void googleSignInSetup() {
-        btn_google_signIn = (SignInButton) findViewById(R.id.btn_google_sign_register);
-        btn_google_signIn.setOnClickListener(this);
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        // Customizing G+ button
-        btn_google_signIn.setSize(SignInButton.SIZE_STANDARD);
-        btn_google_signIn.setColorScheme(SignInButton.COLOR_DARK);
-        btn_google_signIn.setScopes(gso.getScopeArray());
-    }
-
-    private void facebookSignInSetup() {
-        btn_facebook_signIn = (LoginButton) findViewById(R.id.btn_facebook_register);
-        btn_facebook_signIn.setReadPermissions("public_profile");
-        btn_facebook_signIn.setReadPermissions("email");
-
-        callbackManager = CallbackManager.Factory.create();
-
-        btn_facebook_signIn.registerCallback(callbackManager, new FacebookCallBackMethod(RegisterActivity.this) );
-    }
-
-    public void btnGoogleSign() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.btn_google_sign_register:
-                btnGoogleSign();
-                break;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleGoogleSignInResult(RegisterActivity.this, result);
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        System.out.println("onConnectionFailed:" + connectionResult);
     }
 
     public void registerUser(View view) {

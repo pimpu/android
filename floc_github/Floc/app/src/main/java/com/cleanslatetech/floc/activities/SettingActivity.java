@@ -161,7 +161,7 @@ public class SettingActivity extends BaseAppCompactActivity {
         final AlertDialog dialog = alertDialog.create();
         dialog.show();
 
-        Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        final Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
         nbutton.setTextColor(Color.BLACK);
 
         Button pbutton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -177,8 +177,7 @@ public class SettingActivity extends BaseAppCompactActivity {
                     return;
                 }
                 else {
-                    new ForgotPwdAsyncTask(SettingActivity.this, userEmail).postData();
-                    dialog.cancel();
+                    new ForgotPwdAsyncTask(SettingActivity.this, userEmail, nbutton).postData();
                 }
             }
         });
@@ -198,23 +197,33 @@ public class SettingActivity extends BaseAppCompactActivity {
                     }
                 });
 
-        alertDialog.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        String userEmail = new GetSharedPreference(SettingActivity.this).getString(getResources().getString(R.string.shrdUserEmail));
-                        new DeletePwdAsyncTask(SettingActivity.this, userEmail).postData();
-                        dialog.cancel();
-                    }
-                });
+        alertDialog.setPositiveButton("Yes",null);
 
         final AlertDialog dialog = alertDialog.create();
         dialog.show();
 
-        Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        final Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
         nbutton.setTextColor(Color.BLACK);
 
         Button pbutton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
         pbutton.setTextColor(Color.BLACK);
+
+        pbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isConnectingToInternet(SettingActivity.this)) {
+
+                    dialog.cancel();
+                    CommonUtilities.customToast(SettingActivity.this, getResources().getString(R.string.strNoInternet));
+                    // stop executing code by return
+                    return;
+                }
+                else {
+                    String userEmail = new GetSharedPreference(SettingActivity.this).getString(getResources().getString(R.string.shrdUserEmail));
+                    new DeletePwdAsyncTask(SettingActivity.this, userEmail, nbutton).postData();
+                }
+            }
+        });
 
     }
 }
