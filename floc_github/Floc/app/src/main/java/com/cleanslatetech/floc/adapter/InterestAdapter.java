@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.SelectInterestActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -96,7 +97,7 @@ public class InterestAdapter extends BaseAdapter {
 //                    else if(iCounter <= 5 && iCounter > 0 ) {
                     else {
                         // set text colour
-                        holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                        holder1.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
                         iCounter++;
                         iArraySelectedPositions.add(eventCategoryId);
@@ -109,7 +110,7 @@ public class InterestAdapter extends BaseAdapter {
                         }
                     }
 
-                    ((HomeActivity)context).changeState_saveInterest(iCounter);
+                    ((SelectInterestActivity)context).changeState_saveInterest(iCounter);
                 }
             });
 

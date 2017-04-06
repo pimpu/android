@@ -68,12 +68,46 @@
 
             </LinearLayout>
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radiogroupExpoImpo"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:checkedButton="@+id/rbImport" >
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rbImport"
+                    android:text="@string/strImport"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:id="@+id/rbExport"
+                    android:text="@string/strExport"/>
+
+            </RadioGroup>
+
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/hint_inter_pick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="hint international pick"
+                android:textSize="16sp"
+                android:textColor="@color/orange_tag"
+                android:paddingLeft="5dp"
+                app:Segoe="segoe_regular" />
+
             <LinearLayout
                 android:id="@+id/layout_pickup"
                 android:layout_width="fill_parent"
                 android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
                 <android.support.design.widget.TextInputLayout
@@ -98,7 +132,7 @@
                 android:layout_width="fill_parent"
                 android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:visibility="gone"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -212,10 +246,21 @@
 
             </LinearLayout>
 
+            <com.alchemistdigital.buxa.utilities.SegoeFontTextView
+                android:id="@+id/hint_inter_drop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="hint international drop"
+                android:textSize="16sp"
+                android:textColor="@color/orange_tag"
+                android:paddingLeft="5dp"
+                app:Segoe="segoe_regular" />
+
             <LinearLayout
                 android:id="@+id/layout_drop"
                 android:layout_width="fill_parent"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="2dp"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
                 android:layout_height="wrap_content"
@@ -243,7 +288,7 @@
                 android:layout_width="fill_parent"
                 android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:visibility="gone"
                 xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -598,6 +643,7 @@
                             android:id="@+id/id_type_of_package"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:hint="@string/hint_type_of_package"
                             app:Segoe="segoe_light"/>
 
@@ -645,6 +691,7 @@
                             android:id="@+id/id_commodity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:hint="@string/hint_commodity"
                             app:Segoe="segoe_light"/>
                     </android.support.design.widget.TextInputLayout>

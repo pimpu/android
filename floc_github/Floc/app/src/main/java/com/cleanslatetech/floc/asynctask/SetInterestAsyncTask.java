@@ -2,12 +2,15 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -33,18 +36,12 @@ public class SetInterestAsyncTask {
     private Context context;
     private ArrayList<Integer> iArraySelectedPositions;
     private static ProgressDialog prgDialog;
-    private SlidingSplashView sliderLayout;
-    private LinearLayout linearLayoutSelectInterest;
 
     public SetInterestAsyncTask(
             Context context,
-            List<Integer> iArraySelectedPositions,
-            SlidingSplashView sliderLayout,
-            LinearLayout linearLayoutSelectInterest) {
+            List<Integer> iArraySelectedPositions) {
         this.context = context;
         this.iArraySelectedPositions = (ArrayList<Integer>) iArraySelectedPositions;
-        this.sliderLayout = sliderLayout;
-        this.linearLayoutSelectInterest = linearLayoutSelectInterest;
     }
 
     public void postData() {
@@ -87,12 +84,13 @@ public class SetInterestAsyncTask {
                         }
                     } else {
                         String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                        CommonUtilities.customToast(context, msg);
+//                        CommonUtilities.customToast(context, msg);
                         if(msg.equals("Success")) {
-                            sliderLayout.setVisibility(View.VISIBLE);
-                            linearLayoutSelectInterest.setVisibility(View.GONE);
                             new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
                             new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdSelectedCategory),iArraySelectedPositions.toString());
+
+                            context.startActivity(new Intent(context, HomeActivity.class));
+                            ((AppCompatActivity)context).finish();
                         }
                     }
                 } catch (JSONException e) {

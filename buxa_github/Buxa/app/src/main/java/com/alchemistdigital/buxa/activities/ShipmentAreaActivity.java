@@ -102,6 +102,7 @@ public class ShipmentAreaActivity extends AppCompatActivity {
         int selectedId=rgShipmentArea.getCheckedRadioButtonId();
         RadioButton radioShipAreaButton = (RadioButton) findViewById(selectedId);
         if(radioShipAreaButton != null) {
+            Intent intentForServiceParameterActivity = null;
             String selectedText = radioShipAreaButton.getText().toString().trim();
 
             // set shipment area value(International.Domestic) in global variable of singleton class
@@ -115,11 +116,11 @@ public class ShipmentAreaActivity extends AppCompatActivity {
 
             // if user select international option then user goes to all service
             if(selectedText.equals(getResources().getString(R.string.international))) {
-
                 for (int i = 0 ; i < transportServiceData.size() ; i++ ) {
                     selchkboxlistId.add(""+transportServiceData.get(i).getServerId());
                     selchkboxlistName.add(transportServiceData.get(i).getName());
                 }
+                intentForServiceParameterActivity = new Intent(ShipmentAreaActivity.this, InternationalFeatureBuxa.class);
             }
             // if user select domestic option then user get only Transportation service
             else {
@@ -127,12 +128,12 @@ public class ShipmentAreaActivity extends AppCompatActivity {
                     if( transportServiceData.get(i).getName().equals(enumServices.TRANSPORTATION.toString()) ) {
                         selchkboxlistId.add(""+transportServiceData.get(i).getServerId());
                         selchkboxlistName.add(transportServiceData.get(i).getName());
+                        break;
                     }
-                    break;
                 }
+                intentForServiceParameterActivity = new Intent(ShipmentAreaActivity.this, TransportQuotationActivity.class);
             }
 
-            Intent intentForServiceParameterActivity = new Intent(ShipmentAreaActivity.this, TransportQuotationActivity.class);
             intentForServiceParameterActivity.putStringArrayListExtra("ServicesId", (ArrayList<String>) selchkboxlistId);
             intentForServiceParameterActivity.putStringArrayListExtra("ServicesName", (ArrayList<String>) selchkboxlistName);
             startActivity(intentForServiceParameterActivity);

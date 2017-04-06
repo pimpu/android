@@ -43,7 +43,7 @@ import static com.alchemistdigital.buxa.utilities.Validations.isEmptyString;
 public class CustomClearanceActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     AutoCompleteTextView txtCCAddress, txtCommodity;
     EditText txtBookId, txtGrossWt, txtHSC;
-    RadioGroup rgShipmentType, rgFCLStuffing, rgImpoExpo;
+    RadioGroup rgShipmentType, rgFCLStuffing;
     TextView hintAddress;
     ArrayList<String> arrayServicesId, arrayServicesName, availedServicesId, availedServicesName;
     String strShipmentType = "LCL", sPickupAddress, sBookId, strSelectedStuffing,
@@ -56,7 +56,6 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
     String strCommodity;
     float fGrossWt;
     LinearLayout layout_cc_fcl_adddress;
-    private ArrayAdapter<CommodityModel> commodity_adapter;
     public static CustomClearanceModel customClearanceModel;
 
     @Override
@@ -124,7 +123,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
     private void init() {
         dbClass = new DatabaseClass(this);
-        strSelectedImpoExpo = getResources().getString(R.string.strImport);
+        strSelectedImpoExpo = getIntent().getExtras().getString("selectedImpoExpo");
 
         layout_cc_fcl_adddress = (LinearLayout) findViewById(R.id.id_cc_fcl_addresses);
 
@@ -143,7 +142,7 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
 
         // initialised comodity autocomplete textfield from database
         int layoutItemId = android.R.layout.simple_dropdown_item_1line;
-        commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData() );
+        ArrayAdapter<CommodityModel> commodity_adapter = new ArrayAdapter<CommodityModel>(this, layoutItemId, dbClass.getCommodityData());
         txtCommodity.setAdapter(commodity_adapter);
         txtCommodity.setThreshold(1);
         /*txtCommodity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -230,21 +229,6 @@ public class CustomClearanceActivity extends AppCompatActivity implements Adapte
                             txtCCAddress.setFocusableInTouchMode(true);
                         }
                         strSelectedStuffing = getResources().getString(R.string.strDockStuff);
-                        break;
-                }
-            }
-        });
-
-        rgImpoExpo = (RadioGroup) findViewById(R.id.radiogroupExpoImpo);
-        rgImpoExpo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                switch (checkedId){
-                    case R.id.rbImport:
-                        strSelectedImpoExpo = getResources().getString(R.string.strImport);
-                        break;
-                    case R.id.rbExport:
-                        strSelectedImpoExpo = getResources().getString(R.string.strExport);
                         break;
                 }
             }

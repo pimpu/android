@@ -83,7 +83,6 @@ public class LoginActivity extends AppCompatActivity{
 
                 new LoginUserAsyncTask(LoginActivity.this, user, pwd).postData();
             }
-
         }
     }
 }

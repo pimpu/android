@@ -59,7 +59,7 @@
     <string name="strCompanyContactPerson">Contact Person User Details</string>
     <string name="strExport">Export</string>
     <string name="strImport">Import</string>
-    <string name="buxaAddress">Shop no 10/11, Shiv Surabhi bldg, Thakur village, Kandivali East, Mumbai-400101</string>
+    <string name="buxaAddress">Vaishnav Villa Co-op. Hsg. Soc. Ltd.\nRow House No 7-B, 1st Floor.\nadjacent to The Living Room\nThakur Complex, Kandivali (East), Mumbai 400101.</string>
     <string name="buxaEmail">amruta@buxa.tech</string>
     <string name="buxaContact">+91 7738333539</string>
     <string name="title_activity_feedback" translatable="false">Feedback</string>
@@ -223,5 +223,6 @@
     <string name="hint_stuffing_address">Stuffing address</string>
     <string name="hint_stuffing_type">Stuffing type</string>
     <string name="hint_otp">Enter OTP</string>
+    <string name="buxaWebsite">www.buxa.tech</string>
 
 </resources>

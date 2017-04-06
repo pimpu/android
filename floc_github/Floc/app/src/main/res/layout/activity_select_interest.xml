@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+    android:orientation="vertical"
+    tools:context="com.cleanslatetech.floc.activities.SelectInterestActivity" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/logo" />
+
+    <com.cleanslatetech.floc.utilities.OpenSansTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="5dp"
+        android:text="@string/click_on_at_least_5_interests_below"
+        android:textSize="@dimen/sixteen_textsize"
+        android:textColor="@color/colorPrimary"
+        android:textAlignment="textStart"
+        app:OpenSans="openSans_regular" />
+
+    <LinearLayout
+        android:id="@+id/id_post_selection_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/grid_column_textsize"
+        android:visibility="gone" >
+
+        <!--<com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thanks! "
+            android:textSize="@dimen/fourteen_textsize"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />-->
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/tvBtnSaveInterest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/click_here"
+            android:textSize="@dimen/sixteen_textsize"
+            android:textColor="@color/colorPrimary"
+            app:OpenSans="openSans_regular" />
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" for FLOCs based on your interests."
+            android:textSize="@dimen/fourteen_textsize"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gridviewInterest"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="@dimen/nav_header_vertical_spacing"
+        android:columnWidth="150dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth" />
+
+</LinearLayout>

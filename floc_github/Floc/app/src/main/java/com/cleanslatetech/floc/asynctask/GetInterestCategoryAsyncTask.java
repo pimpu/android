@@ -1,13 +1,9 @@
 package com.cleanslatetech.floc.asynctask;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
-import android.view.View;
 import android.widget.GridView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.InterestAdapter;
@@ -29,8 +25,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by pimpu on 1/24/2017.
  */
 public class GetInterestCategoryAsyncTask {
-    private final ProgressBar prgDialogLayout;
-    private final AppCompatButton btnRefresh;
+    private ProgressDialog progressBar;
     private Context context;
     private GridView selectInterestGridview;
     private InterestAdapter adapterInterest;
@@ -39,30 +34,20 @@ public class GetInterestCategoryAsyncTask {
         this.context = context;
         this.selectInterestGridview = selectInterestGridview;
 
-        // Instantiate Progress Dialog object
-        prgDialogLayout = (ProgressBar) ((AppCompatActivity)context).findViewById(R.id.getCategoryProgress);
-        this.prgDialogLayout.getIndeterminateDrawable().setColorFilter(
-                context.getResources().getColor(R.color.white),
-                android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        btnRefresh = (AppCompatButton) ((AppCompatActivity) context).findViewById(R.id.btnRefreshgetCategory);
-        btnRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnRefresh.setVisibility(View.GONE);
-                postData();
-            }
-        });
+        progressBar = new ProgressDialog(context);
+        progressBar.setMessage("getting interests. Please wait ... ");
+        progressBar.setCancelable(false);
 
         postData();
+
     }
 
     private void postData() {
-        prgDialogLayout.setVisibility(View.VISIBLE);
         invokeWS(context);
     }
 
     private void invokeWS(final Context context) {
+        progressBar.show();
 
         // Make RESTful webservice call using AsyncHttpClient object
         RestClient.get(CommonVariables.GET_INTEREST_CATEGORY_SERVER_URL, null, new JsonHttpResponseHandler() {
@@ -70,8 +55,7 @@ public class GetInterestCategoryAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialogLayout.setVisibility(View.GONE);
-                selectInterestGridview.setVisibility(View.VISIBLE);
+//                selectInterestGridview.setVisibility(View.VISIBLE);
                 try{
                     System.out.println(json);
 
@@ -85,7 +69,8 @@ public class GetInterestCategoryAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialogLayout.setVisibility(View.GONE);
+                progressBar.dismiss();
+
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
@@ -93,14 +78,17 @@ public class GetInterestCategoryAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialogLayout.setVisibility(View.GONE);
                 // When Http response code is '404'
                 if (statusCode == 404) {
+                    progressBar.dismiss();
+
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
+                    progressBar.dismiss();
+
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
@@ -110,12 +98,12 @@ public class GetInterestCategoryAsyncTask {
                         System.out.println(errorResponse);
 
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
 
-                            btnRefresh.setVisibility(View.VISIBLE);
-
+                            postData();
                             return;
                         }
+
+                        progressBar.dismiss();
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));
@@ -133,12 +121,14 @@ public class GetInterestCategoryAsyncTask {
         });
     }
 
-    private void populateGridview(final JSONArray getCategory) {
+    private void populateGridview(JSONArray getCategory) {
         // set all categories which are fetch from server.
         new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdAllCategoryList), getCategory.toString());
 
         adapterInterest = new InterestAdapter(context, getCategory);
         selectInterestGridview.setAdapter(adapterInterest);
+
+        progressBar.dismiss();
     }
 
     public List getSelectedCategoryArray() {

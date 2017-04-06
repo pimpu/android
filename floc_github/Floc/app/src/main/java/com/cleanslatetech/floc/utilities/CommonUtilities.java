@@ -27,8 +27,10 @@ import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.BaseAppCompactActivity;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.LoginActivity;
+import com.cleanslatetech.floc.activities.SelectInterestActivity;
 import com.cleanslatetech.floc.activities.SignupOptionActivity;
 import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -100,7 +102,6 @@ public class CommonUtilities {
             new SocialLoginAsyncTask( context, email, "Google", id, personPhotoUrl).postData();
 
         } else {
-
             // intet for next activity
             handleIntentWhenSignOut(context);
         }
@@ -109,12 +110,13 @@ public class CommonUtilities {
     public static void handleIntentWhenSignIn(Context context, String type, String name,String email, int id) {
         System.out.println("handleIntentWhenSignIn-Login Type: "+type);
 
+        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
 
-        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn),true);
-        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdLoginType), type);
-        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserName), name);
-        new SetSharedPreference(context).setInt(context.getResources().getString(R.string.shrdLoginId), id);
-        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdUserEmail), email);
+        setSharedPreference.setBoolean(context.getResources().getString(R.string.isAppSignIn),true);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdLoginType), type);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdUserName), name);
+        setSharedPreference.setInt(context.getResources().getString(R.string.shrdLoginId), id);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdUserEmail), email);
 
 
         if (!isConnectingToInternet(context)) {
@@ -124,7 +126,15 @@ public class CommonUtilities {
             return;
         }
         else {
-            context.startActivity(new Intent(context, HomeActivity.class));
+            boolean isAvailInterest = new GetSharedPreference(context).getBoolean(
+                    context.getResources().getString(R.string.shrdIsInterestSelected));
+
+            if ( isAvailInterest ) {
+                context.startActivity(new Intent(context, HomeActivity.class));
+            }
+            else  {
+                context.startActivity(new Intent(context, SelectInterestActivity.class));
+            }
             ((AppCompatActivity)context).finish();
         }
     }

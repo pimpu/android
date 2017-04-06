@@ -3,16 +3,20 @@ package com.cleanslatetech.floc.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
 import com.cleanslatetech.floc.asynctask.GetAllEventsAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
@@ -28,11 +32,13 @@ import org.json.JSONObject;
 
 public class HomeActivity extends BaseAppCompactActivity implements InterfaceAllRecentAndCurrentEvent {
 
-    private AppCompatTextView tvBtnSaveInterest;
-    SlidingSplashView sliderLayout;
-    LinearLayout linearLayoutSelectInterest;
-    public static JSONArray jsonArrayAllRecent, jsonArrayAllEvents;
+    ViewPager mViewPager;
+    private CustomSliderPagerAdapter mAdapter;
+    private LinearLayout pager_indicator;
+    private int dotsCount;
+    private ImageView[] dots;
 
+    public static JSONArray jsonArrayAllRecent, jsonArrayAllEvents;
     public static InterfaceAllRecentAndCurrentEvent interfaceAllRecentAndCurrentEvent;
 
     @Override
@@ -51,44 +57,34 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
     private void setSlideOrInterestGrid() {
 
-        linearLayoutSelectInterest = (LinearLayout) findViewById(R.id.selectIntrest_layout);
-        sliderLayout = (SlidingSplashView) findViewById(R.id.slider_layout);
-
-        boolean isAvailInterest = new GetSharedPreference(this).getBoolean(getResources().getString(R.string.shrdIsInterestSelected));
-
-        if( !isAvailInterest ) {
-            sliderLayout.setVisibility(View.GONE);
-            linearLayoutSelectInterest.setVisibility(View.VISIBLE);
-            interestGridview();
-        }
-
-    }
-
-    private void interestGridview() {
-        tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
-        GridView gridview = (GridView) findViewById(R.id.gridviewInterest);
-
-        final GetInterestCategoryAsyncTask getInterestCategoryAsyncTask = new GetInterestCategoryAsyncTask(HomeActivity.this, gridview);
-
-        tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
+        mViewPager = (ViewPager) findViewById(R.id.slider_viewpager);
+        pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
+        mAdapter = new CustomSliderPagerAdapter(this);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View v) {
-                new SetInterestAsyncTask(
-                        HomeActivity.this,
-                        getInterestCategoryAsyncTask.getSelectedCategoryArray(),
-                        sliderLayout,
-                        linearLayoutSelectInterest).postData();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < dotsCount; i++) {
+                    dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+                }
+
+                dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
-    }
 
-    public void changeState_saveInterest(int counter) {
-        if(counter >= 5) {
-            tvBtnSaveInterest.setVisibility(View.VISIBLE);
-        }
-        else {
-            tvBtnSaveInterest.setVisibility(View.GONE);
-        }
+        setPageViewIndicator();
+
     }
 
     @Override
@@ -260,5 +256,39 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
                 }
             }
         });
+    }
+
+    private void setPageViewIndicator() {
+
+        dotsCount = mAdapter.getCount();
+        dots = new ImageView[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(20, 0, 20, 0);
+
+            final int presentPosition = i;
+            dots[presentPosition].setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    mViewPager.setCurrentItem(presentPosition);
+                    return true;
+                }
+
+            });
+
+
+            pager_indicator.addView(dots[i], params);
+        }
+
+        dots[0].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
     }
 }

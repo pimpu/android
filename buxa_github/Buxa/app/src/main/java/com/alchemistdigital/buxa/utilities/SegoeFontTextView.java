@@ -3,6 +3,7 @@ package com.alchemistdigital.buxa.utilities;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
@@ -13,7 +14,7 @@ import com.alchemistdigital.buxa.R;
 /**
  * Created by user on 8/3/2016.
  */
-public class SegoeFontTextView extends TextView implements View.OnClickListener {
+public class SegoeFontTextView extends AppCompatTextView implements View.OnClickListener {
 
     OnClickListener _wrappedOnClickListener;
 

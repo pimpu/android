@@ -56,9 +56,10 @@
     <string name="create_floc">Create Floc</string>
     <string name="events">Events</string>
     <string name="save">Save</string>
+    <string name="done">Done</string>
 
     <string name="recent_flocs">Recent Flocs</string>
-    <string name="more">More</string>
+    <string name="more">Much much more ..</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
     <string name="f_amp_q">FAQS</string>
@@ -143,8 +144,9 @@
     <string name="shrdSelectedCategory">selectedCategory</string>
     <string name="middle_name">Middle Name</string>
     <string name="shrdMyProfile">myProfileData</string>
-    <string name="click_on_at_least_5_interests_below">Click on at least 5 interests below.</string>
+    <string name="click_on_at_least_5_interests_below">We want to understand you better (Click at least 5 interests)</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="click_here">Click here</string>
 
     <string-array name="interests">
         <item>Music Festival</item>
@@ -174,13 +176,6 @@
         <item>Yes</item>
         <item>No</item>
     </string-array>
-
-    <integer-array name="img_id_arr">
-        <item>@drawable/guitarist</item>
-        <item>@drawable/guitarist</item>
-        <item>@drawable/guitarist</item>
-        <item>@drawable/guitarist</item>
-    </integer-array>
 
     <string-array name="country_code">
         <item>AF</item>
