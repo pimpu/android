@@ -38,7 +38,7 @@
                 android:layout_gravity="center"
                 app:OpenSans="openSans_regular"/>
 
-            <com.cleanslatetech.floc.utilities.OpenSansEditText
+            <!--<com.cleanslatetech.floc.utilities.OpenSansEditText
                 android:id="@+id/idRegisterUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:textColorHint="@color/hint"
                 android:drawableTint="@color/white"
                 android:drawableLeft="@drawable/ic_name_icon"
-                app:OpenSans="openSans_regular" />
+                app:OpenSans="openSans_regular" />-->
 
             <com.cleanslatetech.floc.utilities.OpenSansTextView
                 android:id="@+id/errorNameText"

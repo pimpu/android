@@ -60,7 +60,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<ChatRecyclerAdapte
                     holder.linearLayoutOther.setVisibility(View.GONE);
                     holder.linearLayoutMy.setVisibility(View.VISIBLE);
 
-                    holder.tvMyContinueName.setText(userName);
+                    holder.tvMyContinueName.setText("you");
                     holder.tvMyContinueText.setText(msg);
                 } else {
                     holder.frameLayoutMy.setVisibility(View.GONE);
@@ -80,7 +80,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<ChatRecyclerAdapte
                     holder.linearLayoutOther.setVisibility(View.GONE);
                     holder.linearLayoutMy.setVisibility(View.GONE);
 
-                    holder.tvMyName.setText(userName);
+                    holder.tvMyName.setText("you");
                     holder.tvMyText.setText(msg);
                 } else {
                     holder.frameLayoutMy.setVisibility(View.GONE);

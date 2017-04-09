@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.RegisterSocialAsyncTask;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -96,12 +95,12 @@ public class UserNameFeedActivity extends AppCompatActivity implements GoogleApi
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new RegisterSocialAsyncTask(
+                /*new RegisterSocialAsyncTask(
                         UserNameFeedActivity.this,
                         user,
                         getIntent().getExtras().getString("email"),
                         getIntent().getExtras().getString("provider"),
-                        getIntent().getExtras().getString("providerKey") ).postData();
+                        getIntent().getExtras().getString("providerKey") ).postData();*/
             }
 
         }

@@ -25,7 +25,6 @@
                 android:layout_height="match_parent" />
 
             <RelativeLayout
-                android:id="@+id/viewPagerIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
@@ -43,48 +42,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|start"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:text="@string/recent_flocs"
-            android:textSize="@dimen/login__screen_texts"
-            android:textColor="@color/white"
-            android:textAlignment="textStart"
-            app:OpenSans="openSans_regular" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/activity_vertical_margin">
-
-            <GridView
-                android:id="@+id/gridviewRecentFloc"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/three_hundred_height"
-                android:nestedScrollingEnabled="true"
-                android:columnWidth="150dp"
-                android:numColumns="auto_fit"
-                android:verticalSpacing="10dp"
-                android:horizontalSpacing="20dp"
-                android:stretchMode="columnWidth" />
-
-            <com.cleanslatetech.floc.utilities.OpenSansTextView
-                android:id="@+id/tvBtnMoreRecentFloc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:text="@string/more"
-                android:textSize="@dimen/login__screen_texts"
-                android:textColor="@color/white"
-                android:textAlignment="textEnd"
-                app:OpenSans="openSans_regular" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/id_home_event_panel"
@@ -133,6 +90,48 @@
                     android:textAlignment="textEnd"
                     app:OpenSans="openSans_regular" />
             </LinearLayout>
+        </LinearLayout>
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/others"
+            android:textSize="@dimen/login__screen_texts"
+            android:textColor="@color/white"
+            android:textAlignment="textStart"
+            app:OpenSans="openSans_regular" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/activity_vertical_margin">
+
+            <GridView
+                android:id="@+id/gridviewRecentFloc"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/three_hundred_height"
+                android:nestedScrollingEnabled="true"
+                android:columnWidth="150dp"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="10dp"
+                android:horizontalSpacing="20dp"
+                android:stretchMode="columnWidth" />
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:id="@+id/tvBtnMoreRecentFloc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:text="@string/more"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                android:textAlignment="textEnd"
+                app:OpenSans="openSans_regular" />
         </LinearLayout>
 
     </LinearLayout>

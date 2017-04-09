@@ -28,11 +28,13 @@ public class InterestAdapter extends BaseAdapter {
     private Context context;
     public List<Integer> iArraySelectedPositions;
     private int iCounter=0;
+    private JSONArray userInterest;
 
-    public InterestAdapter(Context context, JSONArray categories) {
+    public InterestAdapter(Context context, JSONArray categories, JSONArray userInterest) {
         this.categories = categories;
         this.context = context;
         iArraySelectedPositions = new ArrayList<Integer>();
+        this.userInterest = userInterest;
     }
 
     @Override
@@ -72,7 +74,28 @@ public class InterestAdapter extends BaseAdapter {
         try {
             final int eventCategoryId = categories.getJSONObject(position).getInt("EventCategoryId");
 
-            holder.tvInterestName.setText(categories.getJSONObject(position).getString("EventCategoryName"));
+            String eventCategoryName = categories.getJSONObject(position).getString("EventCategoryName");
+            holder.tvInterestName.setText(eventCategoryName);
+
+            for (int i = 0; i < userInterest.length() ; i++ ) {
+                if (userInterest.getJSONObject(i).getString("EventCategoryName").equals(eventCategoryName)) {
+                    holder.tvInterestName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
+                    iCounter++;
+                    iArraySelectedPositions.add(eventCategoryId);
+
+                    // animations
+                    holder.imgBtn_interest.setImageResource(R.drawable.animated_minus );
+                    Drawable drawable = holder.imgBtn_interest.getDrawable();
+                    if (drawable instanceof Animatable) {
+                        ((Animatable) drawable).start();
+                    }
+                    ((SelectInterestActivity)context).changeState_saveInterest(iCounter);
+
+                    userInterest.remove(i);
+                }
+            }
+
             holder.imgBtn_interest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,7 +140,6 @@ public class InterestAdapter extends BaseAdapter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         return convertView;
     }

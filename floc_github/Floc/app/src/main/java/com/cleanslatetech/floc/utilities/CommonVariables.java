@@ -28,36 +28,41 @@ public class CommonVariables {
     public static final int REVIEW = 6;
 
     // server api calling strings
-    public static final String USER_REGISTER_SERVER_URL = "http://demo.floc.world/api/AccountApi/Register";
-    public static final String USER_LOGIN_SERVER_URL = "http://demo.floc.world/api/AccountApi/Login";
-    public static final String CHANGE_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/ChangePassword";
-    public static final String FORGOT_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/ForgotPassword";
-    public static final String DELETE_PASSWORD_SERVER_URL = "http://demo.floc.world/api/AccountApi/DeleteUser";
-    public static final String CHECK_SOCIAL_SERVER_URL = "http://demo.floc.world/api/AccountApi/CheckSocial";
-    public static final String REGISTER_SOCIAL_SERVER_URL = "http://demo.floc.world/api/AccountApi/RegisterSocial";
 
-    public static final String INTEREST_CATEGORY_SERVER_URL = "http://demo.floc.world/img/category/";
+    private static String accountapi_server_url = "http://floc.world/api/AccountApi/";
+    public static final String USER_REGISTER_SERVER_URL = accountapi_server_url + "Register";
+    public static final String USER_LOGIN_SERVER_URL = accountapi_server_url + "Login";
+    public static final String CHANGE_PASSWORD_SERVER_URL = accountapi_server_url + "ChangePassword";
+    public static final String FORGOT_PASSWORD_SERVER_URL = accountapi_server_url + "ForgotPassword";
+    public static final String DELETE_PASSWORD_SERVER_URL = accountapi_server_url + "DeleteUser";
+    public static final String CHECK_SOCIAL_SERVER_URL = accountapi_server_url + "CheckSocial";
+    public static final String REGISTER_SOCIAL_SERVER_URL = accountapi_server_url + "RegisterSocial";
 
-    public static final String EVENT_IMAGE_SERVER_URL = "http://demo.floc.world/img/";
-    private static String domian_server_url = "http://demo.floc.world/api/MobileOperationApi/";
-    public static final String OTP_CONFIRM_SERVER_URL = domian_server_url + "SendOtp";
-    public static final String GET_INTEREST_CATEGORY_SERVER_URL = domian_server_url + "GetCategory";
-    public static final String SET_USER_INTEREST_SERVER_URL = domian_server_url + "UserInterest";
-    public static final String GET_ALL_EVENTS_SERVER_URL = domian_server_url + "GetEvent";
-    public static final String GET_ALL_RECENT_SERVER_URL = domian_server_url + "GetRecent";
-    public static final String CREATE_FLOC_SERVER_URL = domian_server_url + "CreateFloc";
+//    public static final String INTEREST_CATEGORY_SERVER_URL = "http://demo.floc.world/img/category/";
 
-    public static final String POST_IMAGE_SERVER_URL = domian_server_url + "Post";
-    private static String domian_event_server_url = "http://demo.floc.world/api/ActivityApi/";
-    public static final String GET_EVENT_DETAILS_SERVER_URL = domian_event_server_url + "GetActivites";
-    public static final String EVENT_LIKE_SERVER_URL = domian_event_server_url + "LikeEvent";
-    public static final String EVENT_REVIEWSERVER_URL = domian_event_server_url + "WriteReview";
-    public static final String EVENT_BOOKING_SERVER_URL = domian_event_server_url + "EventBooking";
-    public static final String EVENT_RATING_SERVER_URL = domian_event_server_url + "Rating";
-    public static final String EVENT_INVITATION_SERVER_URL = domian_event_server_url + "EventInvitation";
-    public static final String GROUP_CHAT_SERVER_URL = domian_event_server_url + "GroupChat";
-    public static final String FLOC_LIST_SERVER_URL = domian_event_server_url + "GetFlocList";
-    public static final String USER_PROFILE_SERVER_URL = domian_event_server_url + "UserProfile";
-    public static final String GET_USER_PROFILE_SERVER_URL = domian_event_server_url + "GetProfile";
+    public static final String EVENT_IMAGE_SERVER_URL = "http://floc.world";
+
+    private static String mobileoperationapi_server_url = "http://floc.world/api/MobileOperationApi/";
+    public static final String OTP_CONFIRM_SERVER_URL = mobileoperationapi_server_url + "SendOtp";
+    public static final String GET_USER_INTEREST_SERVER_URL = mobileoperationapi_server_url + "GetInterest";
+    public static final String GET_INTEREST_CATEGORY_SERVER_URL = mobileoperationapi_server_url + "GetCategory";
+    public static final String SET_USER_INTEREST_SERVER_URL = mobileoperationapi_server_url + "UserInterest";
+    public static final String GET_ALL_EVENTS_SERVER_URL = mobileoperationapi_server_url + "GetEvent";
+    public static final String GET_ALL_RECENT_SERVER_URL = mobileoperationapi_server_url + "GetRecent";
+    public static final String CREATE_FLOC_SERVER_URL = mobileoperationapi_server_url + "CreateFloc";
+    public static final String POST_IMAGE_SERVER_URL = mobileoperationapi_server_url + "Post";
+    public static final String POST_PROFILE_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostProfile";
+
+    private static String activityapi_server_url = "http://floc.world/api/ActivityApi/";
+    public static final String GET_EVENT_DETAILS_SERVER_URL = activityapi_server_url + "GetActivites";
+    public static final String EVENT_LIKE_SERVER_URL = activityapi_server_url + "LikeEvent";
+    public static final String EVENT_REVIEWSERVER_URL = activityapi_server_url + "WriteReview";
+    public static final String EVENT_BOOKING_SERVER_URL = activityapi_server_url + "EventBooking";
+    public static final String EVENT_RATING_SERVER_URL = activityapi_server_url + "Rating";
+    public static final String EVENT_INVITATION_SERVER_URL = activityapi_server_url + "EventInvitation";
+    public static final String GROUP_CHAT_SERVER_URL = activityapi_server_url + "GroupChat";
+    public static final String FLOC_LIST_SERVER_URL = activityapi_server_url + "GetFlocList";
+    public static final String USER_PROFILE_SERVER_URL = activityapi_server_url + "UserProfile";
+    public static final String GET_USER_PROFILE_SERVER_URL = activityapi_server_url + "GetProfile";
 
 }

@@ -107,7 +107,7 @@ public class CommonUtilities {
         }
     }
 
-    public static void handleIntentWhenSignIn(Context context, String type, String name,String email, int id) {
+    public static void handleIntentWhenSignIn(Context context, String type, String name, String email, int id) {
         System.out.println("handleIntentWhenSignIn-Login Type: "+type);
 
         SetSharedPreference setSharedPreference = new SetSharedPreference(context);

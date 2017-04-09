@@ -147,6 +147,9 @@
     <string name="click_on_at_least_5_interests_below">We want to understand you better (Click at least 5 interests)</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="click_here">Click here</string>
+    <string name="others">Others</string>
+    <string name="skip">Skip</string>
+    <string name="isShowFeatureActivity">boolShowFeature</string>
 
     <string-array name="interests">
         <item>Music Festival</item>

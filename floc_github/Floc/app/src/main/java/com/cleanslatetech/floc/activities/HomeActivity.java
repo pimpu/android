@@ -2,10 +2,12 @@ package com.cleanslatetech.floc.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,10 +58,11 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     private void setSlideOrInterestGrid() {
+        int[] mResources = new int[]{R.drawable.slider_1, R.drawable.slider_3, R.drawable.slider_4, R.drawable.slider_5};
 
         mViewPager = (ViewPager) findViewById(R.id.slider_viewpager);
         pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
-        mAdapter = new CustomSliderPagerAdapter(this);
+        mAdapter = new CustomSliderPagerAdapter(this, mResources);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -166,6 +169,12 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
                 jsonArrayLatestEvent = jsonArrayAllEvents;
             }
 
+            if (jsonArrayLatestEvent.length() <= 2) {
+                ViewGroup.LayoutParams layoutParams = gridviewEvent.getLayoutParams();
+                layoutParams.height = layoutParams.WRAP_CONTENT; //this is in pixels
+                gridviewEvent.setLayoutParams(layoutParams);
+            }
+
             RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this, jsonArrayLatestEvent);
             gridviewEvent.setAdapter(adapterRecent);
             final JSONArray finalJsonArrayLatestEvent = jsonArrayLatestEvent;
@@ -223,6 +232,12 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
         }
         else {
             jsonArrayLatestRecent = jsonArrayAllRecent;
+        }
+
+        if (jsonArrayLatestRecent.length() <= 2) {
+            ViewGroup.LayoutParams layoutParams = gridviewRecentFloc.getLayoutParams();
+            layoutParams.height = layoutParams.WRAP_CONTENT; //this is in pixels
+            gridviewRecentFloc.setLayoutParams(layoutParams);
         }
 
         RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this, jsonArrayLatestRecent);

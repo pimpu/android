@@ -29,12 +29,11 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhen
 
 public class RegisterSocialAsyncTask {
     private Context context;
-    private String user, email, provider, providerKey;
+    private String email, provider, providerKey;
     private ProgressDialog prgDialog;
 
-    public RegisterSocialAsyncTask(Context context, String user, String email, String provider, String providerKey) {
+    public RegisterSocialAsyncTask(Context context, String email, String provider, String providerKey) {
         this.context = context;
-        this.user = user;
         this.email = email;
         this.provider = provider;
         this.providerKey = providerKey;
@@ -50,7 +49,7 @@ public class RegisterSocialAsyncTask {
 
         RequestParams params;
         params = new RequestParams();
-        params.put("ExtUsername", user);
+
         params.put("Email", email);
         params.put("Provider", provider);
         params.put("ProviderKey", providerKey);

@@ -194,7 +194,11 @@
                         android:layout_gravity="center_vertical"
                         android:progressBackgroundTint="@color/white"
                         android:stepSize="1.0"
-                        android:secondaryProgress="@color/colorPrimary"/>
+                        android:secondaryProgress="@color/colorPrimary"
+                        android:scaleX="0.7"
+                        android:scaleY="0.7"
+                        android:transformPivotX="0dp"
+                        android:transformPivotY="0dp" />
                 </LinearLayout>
 
                 <com.cleanslatetech.floc.utilities.OpenSansButton

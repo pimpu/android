@@ -35,7 +35,7 @@ import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 public class LoginActivity extends AppCompatActivity{
 
 
-    EditText txtLoginUser, txtLoginPwd;
+    EditText txtLoginEmail, txtLoginPwd;
     public static Activity loginActivity;
 
     @Override
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity{
 
         loginActivity = this;
 
-        txtLoginUser = (EditText) findViewById(R.id.idLoginUserName);
+        txtLoginEmail = (EditText) findViewById(R.id.idLoginUserEmail);
         txtLoginPwd = (EditText) findViewById(R.id.idLoginUserPassword);
     }
 
@@ -56,16 +56,16 @@ public class LoginActivity extends AppCompatActivity{
             // stop executing code by return
             return;
         } else {
-            String user = txtLoginUser.getText().toString();
+            String email = txtLoginEmail.getText().toString();
             String pwd = txtLoginPwd.getText().toString();
 
-            Boolean boolUserName = isEmptyString(user);
+            Boolean boolUserEmail = isEmptyString(email);
             Boolean boolUserPwd = isEmptyString(pwd);
 
-            if (boolUserName) {
-                findViewById(R.id.errorLoginNameText).setVisibility(View.GONE);
+            if (boolUserEmail) {
+                findViewById(R.id.errorLoginEmailText).setVisibility(View.GONE);
             } else {
-                findViewById(R.id.errorLoginNameText).setVisibility(View.VISIBLE);
+                findViewById(R.id.errorLoginEmailText).setVisibility(View.VISIBLE);
             }
 
             if (boolUserPwd) {
@@ -74,14 +74,14 @@ public class LoginActivity extends AppCompatActivity{
                 findViewById(R.id.errorLoginPwdText).setVisibility(View.VISIBLE);
             }
 
-            if( boolUserName && boolUserPwd ) {
+            if( boolUserEmail && boolUserPwd ) {
                 View view1 = getCurrentFocus();
                 if (view1 != null) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new LoginUserAsyncTask(LoginActivity.this, user, pwd).postData();
+                new LoginUserAsyncTask(LoginActivity.this, email, pwd).postData();
             }
         }
     }

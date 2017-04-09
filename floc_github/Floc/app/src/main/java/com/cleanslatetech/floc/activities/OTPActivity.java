@@ -23,7 +23,7 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToIn
 public class OTPActivity extends AppCompatActivity {
     EditText txtFirstOTP, txtSecondOTP, txtThirdOTP, txtFourthOTP;
     TextView tvEmailText;
-    String name, email, pwd, cnfrmPwd, OTP;
+    String email, pwd, cnfrmPwd, OTP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class OTPActivity extends AppCompatActivity {
 
         tvEmailText = (TextView) findViewById(R.id.id_email_cnfm);
 
-        name = getIntent().getExtras().getString("name");
         email = getIntent().getExtras().getString("email");
         pwd = getIntent().getExtras().getString("pwd");
         cnfrmPwd = getIntent().getExtras().getString("cnfrmPwd");
@@ -149,7 +148,7 @@ public class OTPActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new RegisterUserAsyncTask(OTPActivity.this, name, email, pwd, cnfrmPwd).postData();
+                new RegisterUserAsyncTask(OTPActivity.this, email, pwd, cnfrmPwd).postData();
             }
 
         }

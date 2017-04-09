@@ -17,9 +17,9 @@ public class CustomSliderPagerAdapter extends PagerAdapter {
     private LayoutInflater mLayoutInflater;
     private int[] mResources;
 
-    public CustomSliderPagerAdapter(Context context) {
+    public CustomSliderPagerAdapter(Context context, int[] mResources) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mResources = new int[]{R.drawable.slider_1, R.drawable.slider_3, R.drawable.slider_4, R.drawable.slider_5};
+        this.mResources = mResources;
     }
 
     @Override

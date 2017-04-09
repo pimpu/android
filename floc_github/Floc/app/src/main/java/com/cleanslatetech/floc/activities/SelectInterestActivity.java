@@ -12,11 +12,12 @@ import android.widget.LinearLayout;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
+import com.cleanslatetech.floc.asynctask.GetUserInterestAsyncTask;
 import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 
 public class SelectInterestActivity extends AppCompatActivity {
 
-    private AppCompatTextView tvBtnSaveInterest;
     private LinearLayout layoutPostSelectionText;
 
     @Override
@@ -25,19 +26,11 @@ public class SelectInterestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_interest);
 
         GridView gridLinearLayout = (GridView) findViewById(R.id.gridviewInterest);
-        tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
+        AppCompatTextView tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
         layoutPostSelectionText = (LinearLayout) findViewById(R.id.id_post_selection_text);
 
-        final GetInterestCategoryAsyncTask getInterestCategoryAsyncTask = new GetInterestCategoryAsyncTask(SelectInterestActivity.this, gridLinearLayout);
-
-        tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SetInterestAsyncTask(
-                        SelectInterestActivity.this,
-                        getInterestCategoryAsyncTask.getSelectedCategoryArray()).postData();
-            }
-        });
+        int userId = new GetSharedPreference(this).getInt(getResources().getString(R.string.shrdLoginId));
+        new GetUserInterestAsyncTask(this, gridLinearLayout, userId, tvBtnSaveInterest).getData();
     }
 
     public void changeState_saveInterest(int counter) {

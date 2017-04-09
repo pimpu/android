@@ -48,12 +48,11 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 public class OTPConformAsyncTask {
     private ProgressDialog prgDialog;
     private Context context;
-    private String name, email, pwd, cnfrmPwd, OTP;
+    private String email, pwd, cnfrmPwd, OTP;
     private String response;
 
-    public OTPConformAsyncTask(Context context, String name, String email, String pwd, String cnfrmPwd) {
+    public OTPConformAsyncTask(Context context, String email, String pwd, String cnfrmPwd) {
         this.context = context;
-        this.name = name;
         this.email = email;
         this.pwd = pwd;
         this.cnfrmPwd = cnfrmPwd;
@@ -75,7 +74,7 @@ public class OTPConformAsyncTask {
 
         RequestParams params;
         params = new RequestParams();
-        params.put("UserName", name);
+        params.put("UserName", email);
         params.put("EmailId", email);
         params.put("OTP", OTP);
 
@@ -97,14 +96,16 @@ public class OTPConformAsyncTask {
                     System.out.println(json);
 
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);
+                    JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
                     if (error) {
-                        JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
-                        CommonUtilities.customToast(context, "Invalid recipient addresses.");
-                        System.out.println(jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
+                        for( int i = 0 ; i < jsonArray.length(); i++) {
+                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                            System.out.println(msg);
+                            CommonUtilities.customToast(context, msg);
+                        }
                     } else {
                         Intent intent = new Intent(context, OTPActivity.class);
-                        intent.putExtra("name", name);
                         intent.putExtra("email", email);
                         intent.putExtra("pwd", pwd);
                         intent.putExtra("cnfrmPwd", cnfrmPwd);

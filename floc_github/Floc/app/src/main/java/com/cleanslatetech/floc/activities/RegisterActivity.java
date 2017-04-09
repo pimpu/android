@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void init() {
-            txtUserName = (EditText) findViewById(R.id.idRegisterUserName);
+//            txtUserName = (EditText) findViewById(R.id.idRegisterUserName);
             txtUserEmail = (EditText) findViewById(R.id.idRegisterUserEmail);
             txtPassword = (EditText) findViewById(R.id.idRegisterUserPassword);
             txtConformPwd = (EditText) findViewById(R.id.idRegisterUserConfirmPassword);
@@ -65,22 +65,22 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             boolean hasError = false;
 
-            String name = txtUserName.getText().toString();
+//            String name = txtUserName.getText().toString();
             String email = txtUserEmail.getText().toString();
             String pwd = txtPassword.getText().toString();
             String cnfrmPwd = txtConformPwd.getText().toString();
 
-            Boolean boolUserName = isEmptyString(name);
+//            Boolean boolUserName = isEmptyString(name);
             Boolean boolEmail = emailValidate(email);
             Boolean boolUserPwd = isEmptyString(pwd);
             Boolean boolUserCnfrmPwd = isEmptyString(cnfrmPwd);
 
-            if (boolUserName) {
+            /*if (boolUserName) {
                 findViewById(R.id.errorNameText).setVisibility(View.GONE);
             } else {
                 findViewById(R.id.errorNameText).setVisibility(View.VISIBLE);
                 hasError = true;
-            }
+            }*/
 
             if (boolEmail) {
                 findViewById(R.id.errorEmailText).setVisibility(View.GONE);
@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new OTPConformAsyncTask(RegisterActivity.this, name, email, pwd, cnfrmPwd).postData();
+                new OTPConformAsyncTask(RegisterActivity.this, email, pwd, cnfrmPwd).postData();
             }
 
         }

@@ -2,6 +2,7 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
@@ -70,7 +71,6 @@ public class SocialLoginAsyncTask {
                     if (error) {
                         JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
                         CommonUtilities.customToast(context, jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
-                        System.out.println("Error: "+jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ));
 
                         if(provider.equals("Facebook")) {
                             LoginManager.getInstance().logOut();
@@ -84,14 +84,14 @@ public class SocialLoginAsyncTask {
                                     });
                         }
 
-                        /*Handler handler = new Handler();
+                        Handler handler = new Handler();
                         Runnable r = new Runnable() {
                             public void run() {
                                 ((AppCompatActivity)context).recreate();
                                 ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             }
                         };
-                        handler.postDelayed(r, 500);*/
+                        handler.postDelayed(r, 500);
 
                     } else {
                         String userName = json.getString("UserName");
@@ -111,12 +111,19 @@ public class SocialLoginAsyncTask {
 
                         }
                         else {
-                            context.startActivity(new Intent(context, UserNameFeedActivity.class)
+                            /*context.startActivity(new Intent(context, UserNameFeedActivity.class)
                                     .putExtra("email", email)
                                     .putExtra("provider", provider)
-                                    .putExtra("providerKey", providerKey));
+                                    .putExtra("providerKey", providerKey));*/
 
-                            ((AppCompatActivity) context).finish();
+//                            ((AppCompatActivity) context).finish();
+
+                            new RegisterSocialAsyncTask(
+                                    context,
+                                    email,
+                                    provider,
+                                    providerKey ).postData();
+
                         }
 
                     }

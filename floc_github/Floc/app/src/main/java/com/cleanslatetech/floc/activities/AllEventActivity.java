@@ -1,34 +1,23 @@
 package com.cleanslatetech.floc.activities;
 
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.utilities.RecyclerItemClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 public class AllEventActivity extends BaseAppCompactActivity {
 
@@ -114,11 +103,11 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(10, 10, 10, 5);
                 txAppCompatTextView.setLayoutParams(layoutParams);
-                txAppCompatTextView.setPadding(0, 3, 0, 3);
-                txAppCompatTextView.setText(categoryName);
+                txAppCompatTextView.setText("Because you like "+categoryName);
                 txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
-                txAppCompatTextView.setTextSize(20);
+                txAppCompatTextView.setPadding(10, 3, 0, 3);
+                txAppCompatTextView.setTextSize(18);
                 txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                 Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
@@ -159,11 +148,11 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(10, 10, 10, 5);
                 txAppCompatTextView.setLayoutParams(layoutParams);
-                txAppCompatTextView.setPadding(0, 3, 0, 3);
                 txAppCompatTextView.setText(categoryName);
                 txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
-                txAppCompatTextView.setTextSize(20);
+                txAppCompatTextView.setPadding(10, 3, 0, 3);
+                txAppCompatTextView.setTextSize(18);
                 txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                 Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");

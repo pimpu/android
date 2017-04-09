@@ -213,22 +213,25 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                         .placeholder(R.drawable.textarea_gradient_bg)
                         .into(profileImage);
             }
-            else if(strMyProfile == null) {
-                Glide
-                        .with(this)
-                        .load( getResources().getDrawable(R.drawable.blank_profile))
-                        .placeholder(R.drawable.textarea_gradient_bg)
-                        .into(profileImage);
-            }
             else {
-
                 JSONObject joMyProfile = new JSONObject(strMyProfile);
+                System.out.println("strMyProfile: "+joMyProfile.getString("ProfilePic").length());
 
-                Glide
-                        .with(this)
-                        .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
-                        .placeholder(R.drawable.textarea_gradient_bg)
-                        .into(profileImage);
+                if( joMyProfile.getString("ProfilePic").equals("null") ) {
+                    Glide
+                            .with(getApplication())
+                            .load( R.drawable.blank_profile )
+                            .placeholder(R.drawable.textarea_gradient_bg)
+                            .into(profileImage);
+
+                } else {
+
+                    Glide
+                            .with(this)
+                            .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
+                            .placeholder(R.drawable.textarea_gradient_bg)
+                            .into(profileImage);
+                }
             }
 
         } catch (JSONException e) {

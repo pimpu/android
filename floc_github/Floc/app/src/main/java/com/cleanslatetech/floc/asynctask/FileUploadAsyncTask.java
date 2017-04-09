@@ -119,7 +119,6 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
                     myProfileModel.setProfilePic(msg);
                     new InsertMyProfileAsyncTask(context, myProfileModel, prgDialog).postData();
                 }
-
             }
         } catch (JSONException e) {
             e.printStackTrace();

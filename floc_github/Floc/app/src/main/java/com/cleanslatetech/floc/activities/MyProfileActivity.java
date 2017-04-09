@@ -349,10 +349,10 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
             String strBank = null, strBranch = null, strIFSC = null, strAc = null;
             try {
 
-                strBank = (joMyProfile.length() == 0 || joMyProfile.getString("BankName").equals("null")) ? "test" : joMyProfile.getString("BankName");
-                strBranch = (joMyProfile.length() == 0 || joMyProfile.getString("Branch").equals("null")) ? "test" : joMyProfile.getString("Branch");
-                strIFSC = (joMyProfile.length() == 0 || joMyProfile.getString("IFSC").equals("null")) ? "test" : joMyProfile.getString("IFSC");
-                strAc = (joMyProfile.length() == 0 || joMyProfile.getString("Account").equals("null")) ? "test" : joMyProfile.getString("Account");
+                strBank = joMyProfile.getString("BankName").equals("null") ? "test" : joMyProfile.getString("BankName");
+                strBranch = joMyProfile.getString("Branch").equals("null") ? "test" : joMyProfile.getString("Branch");
+                strIFSC = joMyProfile.getString("IFSC").equals("null") ? "test" : joMyProfile.getString("IFSC");
+                strAc = joMyProfile.getString("Account").equals("null") ? "test" : joMyProfile.getString("Account");
 
                 MyProfileModel myProfileModel = new MyProfileModel(
                         new GetSharedPreference(MyProfileActivity.this).getInt(getResources().getString(R.string.shrdLoginId)),
@@ -378,13 +378,15 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
 
                 if( new FormValidator().validateField(myProfileModel, MyProfileActivity.this)) {
 
-                    if(strMyProfile == null) {
-                        myProfileModel.setBankName("");
-                        myProfileModel.setBranch("");
-                        myProfileModel.setIFSC("");
-                        myProfileModel.setAccount("");
-                    }
+                    strBank = joMyProfile.getString("BankName").equals("null") ? "" : joMyProfile.getString("BankName");
+                    strBranch = joMyProfile.getString("Branch").equals("null") ? "" : joMyProfile.getString("Branch");
+                    strIFSC = joMyProfile.getString("IFSC").equals("null") ? "" : joMyProfile.getString("IFSC");
+                    strAc = joMyProfile.getString("Account").equals("null") ? "" : joMyProfile.getString("Account");
 
+                    myProfileModel.setBankName(strBank);
+                    myProfileModel.setBranch(strBranch);
+                    myProfileModel.setIFSC(strIFSC);
+                    myProfileModel.setAccount(strAc);
 
                     // hide soft keyboard when it is open
                     View view1 = getCurrentFocus();
@@ -394,7 +396,7 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                     }
 
                     if  (isPicUpload) {
-                        new FileUploadAsyncTask(MyProfileActivity.this, myProfileModel, filePath, CommonVariables.POST_IMAGE_SERVER_URL).execute();
+                        new FileUploadAsyncTask(MyProfileActivity.this, myProfileModel, filePath, CommonVariables.POST_PROFILE_IMAGE_SERVER_URL).execute();
                     } else {
                         // Instantiate Progress Dialog object
                         ProgressDialog prgDialog = new ProgressDialog(MyProfileActivity.this);
@@ -422,25 +424,24 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
             // stop executing code by return
             return;
         } else {
-            String strFirstName = null, strLastName = null, strMiddleName = null, strGender = null,
-                    strContact = null, strEmail = null, strProfession = null, strCity = null,
-                    strState = null, strCountry = null, strPin = null, strPic = null, strBirth = null, strUrl = null;
+            String strFirstName , strLastName, strMiddleName, strGender, strContact, strEmail,
+                    strProfession, strCity, strState, strCountry, strPin, strPic, strBirth, strUrl;
 
             try {
-                strFirstName = (joMyProfile.length() == 0 || joMyProfile.getString("FirstName").equals("null")) ? "test" : joMyProfile.getString("FirstName");
-                strMiddleName = (joMyProfile.length() == 0 || joMyProfile.getString("MiddleName").equals("null")) ? "test" : joMyProfile.getString("MiddleName");
-                strLastName = (joMyProfile.length() == 0 || joMyProfile.getString("LastName").equals("null")) ? "test" : joMyProfile.getString("LastName");
-                strGender = (joMyProfile.length() == 0 || joMyProfile.getString("Gender").equals("null")) ? "test" : joMyProfile.getString("Gender");
-                strContact = (joMyProfile.length() == 0 || joMyProfile.getString("Contact").equals("null")) ? "123" : joMyProfile.getString("Contact");
-                strEmail = (joMyProfile.length() == 0 || joMyProfile.getString("EmailId").equals("null")) ? "test@test.com" : joMyProfile.getString("EmailId");
-                strProfession = (joMyProfile.length() == 0 || joMyProfile.getString("Profession").equals("null")) ? "test" : joMyProfile.getString("Profession");
-                strCity = (joMyProfile.length() == 0 || joMyProfile.getString("City").equals("null")) ? "test" : joMyProfile.getString("City");
-                strState = (joMyProfile.length() == 0 || joMyProfile.getString("State").equals("null")) ? "test" : joMyProfile.getString("State");
-                strCountry = (joMyProfile.length() == 0 || joMyProfile.getString("Country").equals("null")) ? "test" : joMyProfile.getString("Country");
-                strPin = (joMyProfile.length() == 0 || joMyProfile.getString("PinCode").equals("null")) ? "test" : joMyProfile.getString("PinCode");
-                strPic = (joMyProfile.length() == 0 || joMyProfile.getString("ProfilePic").equals("null")) ? "test" : joMyProfile.getString("ProfilePic");
-                strBirth = (joMyProfile.length() == 0 || joMyProfile.getString("BirthDate").equals("null")) ? "test" : joMyProfile.getString("BirthDate");
-                strUrl = (joMyProfile.length() == 0 || joMyProfile.getString("URL").equals("null")) ? "test" : joMyProfile.getString("URL");
+                strFirstName = joMyProfile.getString("FirstName").equals("null") ? "test" : joMyProfile.getString("FirstName");
+                strMiddleName = joMyProfile.getString("MiddleName").equals("null") ? "test" : joMyProfile.getString("MiddleName");
+                strLastName = joMyProfile.getString("LastName").equals("null") ? "test" : joMyProfile.getString("LastName");
+                strGender = joMyProfile.getString("Gender").equals("null") ? "test" : joMyProfile.getString("Gender");
+                strContact = joMyProfile.getString("Contact").equals("null") ? "123" : joMyProfile.getString("Contact");
+                strEmail = joMyProfile.getString("EmailId").equals("null") ? "test@test.com" : joMyProfile.getString("EmailId");
+                strProfession = joMyProfile.getString("Profession").equals("null") ? "test" : joMyProfile.getString("Profession");
+                strCity = joMyProfile.getString("City").equals("null") ? "test" : joMyProfile.getString("City");
+                strState = joMyProfile.getString("State").equals("null") ? "test" : joMyProfile.getString("State");
+                strCountry = joMyProfile.getString("Country").equals("null") ? "test" : joMyProfile.getString("Country");
+                strPin = joMyProfile.getString("PinCode").equals("null") ? "test" : joMyProfile.getString("PinCode");
+                strPic = joMyProfile.getString("ProfilePic").equals("null") ? "test" : joMyProfile.getString("ProfilePic");
+                strBirth = joMyProfile.getString("BirthDate").equals("null") ? "test" : joMyProfile.getString("BirthDate");
+                strUrl = joMyProfile.getString("URL").equals("null") ? "test" : joMyProfile.getString("URL");
 
 
                 MyProfileModel myProfileModel = new MyProfileModel(
@@ -468,22 +469,35 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
 
                 if( new FormValidator().validateField(myProfileModel, MyProfileActivity.this)) {
 
-                    if(strMyProfile == null) {
-                        myProfileModel.setFirstName("");
-                        myProfileModel.setLastName("");
-                        myProfileModel.setMiddleName("");
-                        myProfileModel.setGender("");
-                        myProfileModel.setContact("");
-                        myProfileModel.setEmailId("");
-                        myProfileModel.setProfession("");
-                        myProfileModel.setCity("");
-                        myProfileModel.setState("");
-                        myProfileModel.setCountry("");
-                        myProfileModel.setPinCode("");
-                        myProfileModel.setProfilePic("");
-                        myProfileModel.setBirthDate("");
-                        myProfileModel.setURL("");
-                    }
+                    strFirstName = joMyProfile.getString("FirstName").equals("null") ? "" : joMyProfile.getString("FirstName");
+                    strMiddleName = joMyProfile.getString("MiddleName").equals("null") ? "" : joMyProfile.getString("MiddleName");
+                    strLastName = joMyProfile.getString("LastName").equals("null") ? "" : joMyProfile.getString("LastName");
+                    strGender = joMyProfile.getString("Gender").equals("null") ? "" : joMyProfile.getString("Gender");
+                    strContact = joMyProfile.getString("Contact").equals("null") ? "" : joMyProfile.getString("Contact");
+                    strEmail = joMyProfile.getString("EmailId").equals("null") ? "" : joMyProfile.getString("EmailId");
+                    strProfession = joMyProfile.getString("Profession").equals("null") ? "" : joMyProfile.getString("Profession");
+                    strCity = joMyProfile.getString("City").equals("null") ? "" : joMyProfile.getString("City");
+                    strState = joMyProfile.getString("State").equals("null") ? "" : joMyProfile.getString("State");
+                    strCountry = joMyProfile.getString("Country").equals("null") ? "" : joMyProfile.getString("Country");
+                    strPin = joMyProfile.getString("PinCode").equals("null") ? "" : joMyProfile.getString("PinCode");
+                    strPic = joMyProfile.getString("ProfilePic").equals("null") ? "" : joMyProfile.getString("ProfilePic");
+                    strBirth = joMyProfile.getString("BirthDate").equals("null") ? "" : joMyProfile.getString("BirthDate");
+                    strUrl = joMyProfile.getString("URL").equals("null") ? "" : joMyProfile.getString("URL");
+
+                    myProfileModel.setFirstName(strFirstName);
+                    myProfileModel.setMiddleName(strMiddleName);
+                    myProfileModel.setLastName(strLastName);
+                    myProfileModel.setGender(strGender);
+                    myProfileModel.setContact(strContact);
+                    myProfileModel.setEmailId(strEmail);
+                    myProfileModel.setProfession(strProfession);
+                    myProfileModel.setCity(strCity);
+                    myProfileModel.setState(strState);
+                    myProfileModel.setCountry(strCountry);
+                    myProfileModel.setPinCode(strPin);
+                    myProfileModel.setProfilePic(strPic);
+                    myProfileModel.setBirthDate(strBirth);
+                    myProfileModel.setURL(strUrl);
 
                     // hide soft keyboard when it is open
                     View view1 = getCurrentFocus();

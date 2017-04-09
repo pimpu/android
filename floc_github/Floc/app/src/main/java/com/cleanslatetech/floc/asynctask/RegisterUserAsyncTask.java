@@ -29,11 +29,10 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhen
 public class RegisterUserAsyncTask {
     private static ProgressDialog prgDialog;
     private Context context;
-    private String name, email, pwd, cnfrmPwd;
+    private String email, pwd, cnfrmPwd;
 
-    public RegisterUserAsyncTask(Context context, String name, String email, String pwd, String cnfrmPwd) {
+    public RegisterUserAsyncTask(Context context, String email, String pwd, String cnfrmPwd) {
         this.context = context;
-        this.name = name;
         this.email = email;
         this.pwd = pwd;
         this.cnfrmPwd = cnfrmPwd;
@@ -50,7 +49,6 @@ public class RegisterUserAsyncTask {
 
         RequestParams params;
         params = new RequestParams();
-        params.put("UserName", name);
         params.put("Email", email);
         params.put("Password", pwd);
         params.put("ConfirmPassword", cnfrmPwd);
@@ -85,7 +83,8 @@ public class RegisterUserAsyncTask {
                         // intet for next activity
                         int id = json.getInt(CommonVariables.TAG_ID);
 
-                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), name, email, id);
+                        String userName = json.getString("UserName");
+                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), userName, email, id);
 
                         RegisterActivity.registerActivity.finish();
                         LoginActivity.loginActivity.finish();
