@@ -64,10 +64,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/activity_vertical_margin">
+                android:orientation="vertical">
 
-                <GridView
+                <!--<GridView
                     android:id="@+id/gridviewEvent"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/three_hundred_height"
@@ -76,7 +75,15 @@
                     android:numColumns="auto_fit"
                     android:verticalSpacing="10dp"
                     android:horizontalSpacing="20dp"
-                    android:stretchMode="columnWidth" />
+                    android:stretchMode="columnWidth" />-->
+
+                <LinearLayout
+                    android:id="@+id/id_home_selected_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
 
                 <com.cleanslatetech.floc.utilities.OpenSansTextView
                     android:id="@+id/tvBtnMoreEvent"
@@ -85,6 +92,8 @@
                     android:layout_gravity="center_vertical|end"
                     android:text="@string/more"
                     android:layout_marginTop="@dimen/fab_margin"
+                    android:layout_marginBottom="@dimen/fab_margin"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
                     android:textSize="@dimen/login__screen_texts"
                     android:textColor="@color/white"
                     android:textAlignment="textEnd"
@@ -92,7 +101,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
+        <!--<com.cleanslatetech.floc.utilities.OpenSansTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|start"
@@ -132,7 +141,7 @@
                 android:textColor="@color/white"
                 android:textAlignment="textEnd"
                 app:OpenSans="openSans_regular" />
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 </ScrollView>

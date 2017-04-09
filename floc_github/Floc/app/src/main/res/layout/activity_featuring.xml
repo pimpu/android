@@ -21,33 +21,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <RelativeLayout
-                android:id="@+id/features_viewPagerIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="5dp"
-                android:gravity="center">
-
                 <LinearLayout
-                    android:id="@+id/features_viewPagerCountDots"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:orientation="horizontal" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <LinearLayout
+                        android:id="@+id/features_viewPagerCountDots"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+
+                    <com.cleanslatetech.floc.utilities.OpenSansButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="@string/skip"
+                        android:background="@android:color/transparent"
+                        android:onClick="gotoNext"/>
+                </LinearLayout>
 
         </RelativeLayout>
-
-        <com.cleanslatetech.floc.utilities.OpenSansButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="@string/skip"
-            android:onClick="gotoNext"/>
-
     </LinearLayout>
 
 </RelativeLayout>

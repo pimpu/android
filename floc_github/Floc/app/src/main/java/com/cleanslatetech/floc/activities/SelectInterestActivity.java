@@ -29,8 +29,7 @@ public class SelectInterestActivity extends AppCompatActivity {
         AppCompatTextView tvBtnSaveInterest = (AppCompatTextView) findViewById(R.id.tvBtnSaveInterest);
         layoutPostSelectionText = (LinearLayout) findViewById(R.id.id_post_selection_text);
 
-        int userId = new GetSharedPreference(this).getInt(getResources().getString(R.string.shrdLoginId));
-        new GetUserInterestAsyncTask(this, gridLinearLayout, userId, tvBtnSaveInterest).getData();
+        new GetUserInterestAsyncTask(this, gridLinearLayout, tvBtnSaveInterest).getData();
     }
 
     public void changeState_saveInterest(int counter) {

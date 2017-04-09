@@ -2,11 +2,17 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.GridView;
 
+import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.SelectInterestActivity;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.PopulateFloDescData;
@@ -18,7 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
@@ -36,12 +44,14 @@ public class GetUserInterestAsyncTask {
     private AppCompatTextView tvBtnSaveInterest;
     private ProgressDialog progressBar;
 
-    public GetUserInterestAsyncTask(Context context, GridView gridLinearLayout, int userId, AppCompatTextView tvBtnSaveInterest) {
+    public GetUserInterestAsyncTask(Context context, GridView gridLinearLayout, AppCompatTextView tvBtnSaveInterest) {
 
         this.context = context;
-        this.userId = userId;
         this.gridLinearLayout = gridLinearLayout;
         this.tvBtnSaveInterest = tvBtnSaveInterest;
+
+        GetSharedPreference getSharedPreference = new GetSharedPreference(context);
+        userId = getSharedPreference.getInt(context.getResources().getString(R.string.shrdLoginId));
 
         progressBar = new ProgressDialog(context);
         progressBar.setMessage("getting interests. Please wait ... ");
@@ -69,23 +79,45 @@ public class GetUserInterestAsyncTask {
                 try {
                     JSONArray userInterest = json.getJSONArray("UserInterest");
 
-                    final GetInterestCategoryAsyncTask getInterestCategoryAsyncTask = new GetInterestCategoryAsyncTask(
-                            context, gridLinearLayout, userInterest, progressBar);
+                    if (userInterest.length() > 0) {
+                        List<Integer> iArraySelectedInterest = new ArrayList<Integer>();
 
-                    tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Set<String> hs = new HashSet<>();
-                            hs.addAll(getInterestCategoryAsyncTask.getSelectedCategoryArray());
-                            getInterestCategoryAsyncTask.getSelectedCategoryArray().clear();
-                            getInterestCategoryAsyncTask.getSelectedCategoryArray().addAll(hs);
-                            /*new SetInterestAsyncTask(
-                                    context,
-                                    getInterestCategoryAsyncTask.getSelectedCategoryArray()).postData();*/
-
-                            System.out.println(getInterestCategoryAsyncTask.getSelectedCategoryArray());
+                        for (int i = 0, len = userInterest.length(); i < len; i++ ) {
+                            JSONObject jsonObject = userInterest.getJSONObject(i);
+                            iArraySelectedInterest.add(jsonObject.getInt("EventCategoryId"));
                         }
-                    });
+
+                        Set<Integer> hs = new HashSet<>();
+                        hs.addAll(iArraySelectedInterest);
+                        iArraySelectedInterest.clear();
+                        iArraySelectedInterest.addAll(hs);
+
+                        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
+                        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdSelectedCategory),iArraySelectedInterest.toString());
+
+                        new GetInterestCategoryAsyncTask(context, gridLinearLayout, progressBar, "interestAvailable");
+
+                    } else {
+                        final GetInterestCategoryAsyncTask getInterestCategoryAsyncTask = new GetInterestCategoryAsyncTask(
+                                context, gridLinearLayout, progressBar, "interestNotAvailable");
+
+                        tvBtnSaveInterest.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // remove duplicate entry from int array
+                                Set<String> hs = new HashSet<>();
+                                hs.addAll(getInterestCategoryAsyncTask.getSelectedCategoryArray());
+                                getInterestCategoryAsyncTask.getSelectedCategoryArray().clear();
+                                getInterestCategoryAsyncTask.getSelectedCategoryArray().addAll(hs);
+
+                            new SetInterestAsyncTask(
+                                    context,
+                                    getInterestCategoryAsyncTask.getSelectedCategoryArray()).postData();
+
+                                System.out.println(getInterestCategoryAsyncTask.getSelectedCategoryArray());
+                            }
+                        });
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

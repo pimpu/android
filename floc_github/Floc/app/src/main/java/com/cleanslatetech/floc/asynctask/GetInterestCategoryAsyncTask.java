@@ -3,9 +3,12 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.adapter.InterestAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -29,13 +32,14 @@ public class GetInterestCategoryAsyncTask {
     private Context context;
     private GridView selectInterestGridview;
     private InterestAdapter adapterInterest;
-    private JSONArray userInterest;
+    private String isInterestAvailable;
 
-    public GetInterestCategoryAsyncTask(Context context, GridView selectInterestGridview, JSONArray userInterest, ProgressDialog progressBar) {
+    public GetInterestCategoryAsyncTask(Context context, GridView selectInterestGridview,
+                                        ProgressDialog progressBar, String isInterestAvailable) {
         this.context = context;
         this.selectInterestGridview = selectInterestGridview;
-        this.userInterest = userInterest;
         this.progressBar = progressBar;
+        this.isInterestAvailable = isInterestAvailable;
 
         invokeWS();
     }
@@ -48,12 +52,25 @@ public class GetInterestCategoryAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-//                selectInterestGridview.setVisibility(View.VISIBLE);
-                try{
-                    System.out.println(json);
+                progressBar.dismiss();
 
-                    // manipulate gride view
-                    populateGridview(json.getJSONArray("GetCategory"));
+                System.out.println(json);
+
+                try{
+                    JSONArray allCategory = json.getJSONArray("GetCategory");
+
+                    // set all categories which are fetch from server.
+                    new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdAllCategoryList), allCategory.toString());
+
+                    if( isInterestAvailable.equals("interestAvailable") ) {
+
+                        context.startActivity(new Intent(context, HomeActivity.class));
+                        ((AppCompatActivity)context).finish();
+
+                    } else {
+                        // manipulate gride view
+                        populateGridview(allCategory);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -114,14 +131,9 @@ public class GetInterestCategoryAsyncTask {
         });
     }
 
-    private void populateGridview(JSONArray getCategory) {
-        // set all categories which are fetch from server.
-        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdAllCategoryList), getCategory.toString());
-
-        adapterInterest = new InterestAdapter(context, getCategory, userInterest);
+    private void populateGridview(JSONArray allCategory) {
+        adapterInterest = new InterestAdapter(context, allCategory);
         selectInterestGridview.setAdapter(adapterInterest);
-
-        progressBar.dismiss();
     }
 
     public List getSelectedCategoryArray() {

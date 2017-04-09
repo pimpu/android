@@ -224,7 +224,7 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
                             "Created",
                             selectedEventMgmt,
                             selectedConcierge,
-                            0,
+                            1,
                             false );
 
             View view1 = getCurrentFocus();

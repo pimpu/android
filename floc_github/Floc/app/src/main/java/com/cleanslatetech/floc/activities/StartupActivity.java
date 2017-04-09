@@ -3,13 +3,6 @@ package com.cleanslatetech.floc.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
-import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
-
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
-
 /**
  * Created by pimpu on 3/31/2017.
  */
@@ -19,7 +12,7 @@ public class StartupActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        GetSharedPreference getSharedPreference = new GetSharedPreference(StartupActivity.this);
+        /*GetSharedPreference getSharedPreference = new GetSharedPreference(StartupActivity.this);
 
         boolean boolShowFeature = getSharedPreference.getBoolean(getResources().getString(R.string.isShowFeatureActivity));
 
@@ -42,6 +35,9 @@ public class StartupActivity extends AppCompatActivity {
                 // intet for next activity
                 handleIntentWhenSignOut(this);
             }
-        }
+        }*/
+
+        startActivity(new Intent(this, SplashScreenActivity.class));
+        finish();
     }
 }

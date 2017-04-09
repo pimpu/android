@@ -3,10 +3,13 @@ package com.cleanslatetech.floc.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +23,7 @@ import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
+import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.asynctask.GetAllEventsAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
@@ -32,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class HomeActivity extends BaseAppCompactActivity implements InterfaceAllRecentAndCurrentEvent {
 
     ViewPager mViewPager;
@@ -42,6 +48,8 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
     public static JSONArray jsonArrayAllRecent, jsonArrayAllEvents;
     public static InterfaceAllRecentAndCurrentEvent interfaceAllRecentAndCurrentEvent;
+
+    private GetSharedPreference getSharedPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,19 +140,110 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     @Override
-    public void getAllRecent(JSONArray jsonArray) {
+    public void getAllRecent(JSONArray paramJsonArray) {
         setContentView(R.layout.activity_home);
         super.setToolBar("Home");
 
         setSlideOrInterestGrid();
 
-        jsonArrayAllRecent = jsonArray;
+        jsonArrayAllRecent = paramJsonArray;
 
-        initRecentFlocGridview();
-        initEventGridview();
+//        initRecentFlocGridview();
+//        initEventGridview();
+        getSharedPreference = new GetSharedPreference(HomeActivity.this);
+
+        LinearLayout ll = (LinearLayout) findViewById(R.id.id_home_selected_events);
+        AppCompatTextView tvBtnMoreEvent = (AppCompatTextView) findViewById(R.id.tvBtnMoreEvent);
+
+        tvBtnMoreEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, AllEventActivity.class));
+            }
+        });
+
+        String strIntArrayInterestCategory = getSharedPreference.getString(getResources().getString(R.string.shrdSelectedCategory));
+        String strIntArrayAllCategory = getSharedPreference.getString(getResources().getString(R.string.shrdAllCategoryList));
+        JSONArray joAllCategory = null;
+
+        try {
+            joAllCategory = new JSONArray(strIntArrayAllCategory);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        HashMap<Integer, JSONArray> hmapInterest = new HashMap<Integer, JSONArray>();
+
+        for( int j = 0 ; j < jsonArrayAllEvents.length() ; j++  ) {
+            try {
+                int eventCategoryId = jsonArrayAllEvents.getJSONObject(j).getInt("EventCategory");
+
+                JSONArray jsonArray = new JSONArray();
+
+                if (strIntArrayInterestCategory.contains(""+eventCategoryId) ) {
+
+                    boolean isEventCategory = hmapInterest.containsKey(eventCategoryId);
+
+                    if(isEventCategory) {
+                        jsonArray = hmapInterest.get(eventCategoryId);
+                    }
+
+                    jsonArray.put(jsonArrayAllEvents.getJSONObject(j));
+                    hmapInterest.put(eventCategoryId, jsonArray);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        for ( Integer key : hmapInterest.keySet() ) {
+            String categoryName = "";
+
+            for (int k = 0; k < joAllCategory.length(); k ++) {
+                try {
+                    if(key == joAllCategory.getJSONObject(k).getInt("EventCategoryId")) {
+                        categoryName = joAllCategory.getJSONObject(k).getString("EventCategoryName");
+                        joAllCategory.remove(k);
+                        break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            AppCompatTextView txAppCompatTextView = new AppCompatTextView(this);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0, 10, 0, 5);
+            txAppCompatTextView.setLayoutParams(layoutParams);
+            txAppCompatTextView.setText("Because you like "+categoryName);
+            txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
+            txAppCompatTextView.setPadding(10, 3, 0, 3);
+            txAppCompatTextView.setTextSize(18);
+            txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+            Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
+            txAppCompatTextView.setTypeface(font);
+
+            RecyclerView recyclerView = new RecyclerView(this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(
+                    this,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+            );
+            recyclerView.setLayoutManager(mLayoutManager);
+            // Initialize a new Adapter for RecyclerView
+            RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
+            recyclerView.setAdapter(mAdapter);
+
+            ll.addView(txAppCompatTextView);
+            ll.addView(recyclerView);
+        }
     }
 
-    public void initEventGridview() {
+    /*public void initEventGridview() {
         AppCompatTextView tvBtnMoreEvent = (AppCompatTextView) findViewById(R.id.tvBtnMoreEvent);
         GridView gridviewEvent = (GridView) findViewById(R.id.gridviewEvent);
         JSONArray jsonArrayLatestEvent;
@@ -271,7 +370,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
                 }
             }
         });
-    }
+    }*/
 
     private void setPageViewIndicator() {
 

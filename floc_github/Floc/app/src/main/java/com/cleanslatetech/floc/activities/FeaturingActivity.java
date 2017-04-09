@@ -10,8 +10,9 @@ import android.widget.LinearLayout;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 
+import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
 public class FeaturingActivity extends AppCompatActivity {
@@ -94,7 +95,25 @@ public class FeaturingActivity extends AppCompatActivity {
     }
 
     public void gotoNext(View view) {
-        new SetSharedPreference(this).setBoolean(getResources().getString(R.string.isShowFeatureActivity), true);
-        handleIntentWhenSignOut(this);
+        /*new SetSharedPreference(this).setBoolean(getResources().getString(R.string.isShowFeatureActivity), true);
+        handleIntentWhenSignOut(this);*/
+
+        GetSharedPreference getSharedPreference = new GetSharedPreference(FeaturingActivity.this);
+
+        boolean isSignIn = getSharedPreference.getBoolean(getResources().getString(R.string.isAppSignIn));
+
+        if(isSignIn) {
+            handleIntentWhenSignIn(
+                    this,
+                    getSharedPreference.getString(getResources().getString(R.string.shrdLoginType)),
+                    getSharedPreference.getString(getResources().getString(R.string.shrdUserName)),
+                    getSharedPreference.getString(getResources().getString(R.string.shrdUserEmail)),
+                    getSharedPreference.getInt(getResources().getString(R.string.shrdLoginId)) );
+        }
+        else {
+            // intet for next activity
+            handleIntentWhenSignOut(this);
+        }
     }
+
 }
