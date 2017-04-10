@@ -96,10 +96,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.RecentFlocActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activities.FlocsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -112,7 +108,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.AllRecentEventActivity"
+            android:name=".activities.ArchiveFlocActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -133,6 +129,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.FeaturingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.RecentFlocActivity"
             android:screenOrientation="portrait" />
     </application>
 

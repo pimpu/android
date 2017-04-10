@@ -24,9 +24,7 @@ public class GetActivityAsyncTask {
     private Context context;
     private int eventId, iUSerId;
 
-    public GetActivityAsyncTask(Context context, int eventId,
-                                AppCompatTextView tvAsyncText,
-                                int iUSerId) {
+    public GetActivityAsyncTask(Context context, int eventId, int iUSerId) {
         this.context = context;
         this.eventId = eventId;
         this.iUSerId = iUSerId;

@@ -1,44 +1,33 @@
 package com.cleanslatetech.floc.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
-import com.cleanslatetech.floc.adapter.RecentFlocAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
-import com.cleanslatetech.floc.asynctask.GetAllEventsAsyncTask;
-import com.cleanslatetech.floc.asynctask.GetInterestCategoryAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
-import com.cleanslatetech.floc.asynctask.SetInterestAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.interfaces.InterfaceAllRecentAndCurrentEvent;
-import com.cleanslatetech.floc.utilities.CommonUtilities;
+import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Event;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class HomeActivity extends BaseAppCompactActivity implements InterfaceAllRecentAndCurrentEvent {
+public class HomeActivity extends BaseAppCompactActivity implements InterfaceAllRecent_Current_Archive_Event {
 
     ViewPager mViewPager;
     private CustomSliderPagerAdapter mAdapter;
@@ -46,8 +35,8 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     private int dotsCount;
     private ImageView[] dots;
 
-    public static JSONArray jsonArrayAllRecent, jsonArrayAllEvents;
-    public static InterfaceAllRecentAndCurrentEvent interfaceAllRecentAndCurrentEvent;
+    public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent;
+    public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
 
     private GetSharedPreference getSharedPreference;
 
@@ -57,8 +46,9 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
         setContentView(R.layout.activity_splash_screen);
 
-        jsonArrayAllRecent = new JSONArray();
+        jsonArrayAllArchive = new JSONArray();
         jsonArrayAllEvents = new JSONArray();
+        jsonArrayAllRecent = new JSONArray();
 
         interfaceAllRecentAndCurrentEvent = this;
 
@@ -140,13 +130,18 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     @Override
-    public void getAllRecent(JSONArray paramJsonArray) {
+    public void getAllRecent(JSONArray jsonArray) {
+        jsonArrayAllRecent = jsonArray;
+    }
+
+    @Override
+    public void getAllArchive(JSONArray paramJsonArray) {
         setContentView(R.layout.activity_home);
         super.setToolBar("Home");
 
         setSlideOrInterestGrid();
 
-        jsonArrayAllRecent = paramJsonArray;
+        jsonArrayAllArchive = paramJsonArray;
 
 //        initRecentFlocGridview();
 //        initEventGridview();
@@ -172,6 +167,11 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             e.printStackTrace();
         }
 
+        if(jsonArrayAllEvents.length() <= 0) {
+            findViewById(R.id.id_home_event_panel).setVisibility(View.GONE);
+            return;
+        }
+
         HashMap<Integer, JSONArray> hmapInterest = new HashMap<Integer, JSONArray>();
 
         for( int j = 0 ; j < jsonArrayAllEvents.length() ; j++  ) {
@@ -195,7 +195,6 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
 
         for ( Integer key : hmapInterest.keySet() ) {
@@ -213,19 +212,10 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
                 }
             }
 
-            AppCompatTextView txAppCompatTextView = new AppCompatTextView(this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(0, 10, 0, 5);
-            txAppCompatTextView.setLayoutParams(layoutParams);
-            txAppCompatTextView.setText("Because you like "+categoryName);
-            txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
-            txAppCompatTextView.setPadding(10, 3, 0, 3);
-            txAppCompatTextView.setTextSize(18);
-            txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-            Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
-            txAppCompatTextView.setTypeface(font);
+            LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+            AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
+            tvCategory.setText(categoryName);
 
             RecyclerView recyclerView = new RecyclerView(this);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(
@@ -238,139 +228,10 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
             recyclerView.setAdapter(mAdapter);
 
-            ll.addView(txAppCompatTextView);
+            ll.addView(inflate);
             ll.addView(recyclerView);
         }
     }
-
-    /*public void initEventGridview() {
-        AppCompatTextView tvBtnMoreEvent = (AppCompatTextView) findViewById(R.id.tvBtnMoreEvent);
-        GridView gridviewEvent = (GridView) findViewById(R.id.gridviewEvent);
-        JSONArray jsonArrayLatestEvent;
-        if(jsonArrayAllEvents.length() > 0) {
-
-            jsonArrayLatestEvent = new JSONArray();
-
-            if(jsonArrayAllEvents.length() > 4) {
-
-                for(int i = 1 ; i < 5 ; i++ ) {
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        jsonObject = jsonArrayAllEvents.getJSONObject( jsonArrayAllEvents.length()-i );
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    jsonArrayLatestEvent.put(jsonObject);
-                }
-            }
-            else {
-                jsonArrayLatestEvent = jsonArrayAllEvents;
-            }
-
-            if (jsonArrayLatestEvent.length() <= 2) {
-                ViewGroup.LayoutParams layoutParams = gridviewEvent.getLayoutParams();
-                layoutParams.height = layoutParams.WRAP_CONTENT; //this is in pixels
-                gridviewEvent.setLayoutParams(layoutParams);
-            }
-
-            RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this, jsonArrayLatestEvent);
-            gridviewEvent.setAdapter(adapterRecent);
-            final JSONArray finalJsonArrayLatestEvent = jsonArrayLatestEvent;
-            gridviewEvent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        Intent intentFlocDesc = new Intent(HomeActivity.this, FlocDescriptionActivity.class);
-                        intentFlocDesc.putExtra("floc_data", finalJsonArrayLatestEvent.getJSONObject(position).toString());
-                        intentFlocDesc.putExtra("from", "Event");
-                        startActivity(intentFlocDesc);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            tvBtnMoreEvent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
-                    if(selectedCategory == null) {
-                        CommonUtilities.customToast(HomeActivity.this, "Please, Select Interest");
-                    }
-                    else {
-                        startActivity(new Intent(HomeActivity.this, AllEventActivity.class));
-                    }
-                }
-            });
-
-        } else {
-            findViewById(R.id.id_home_event_panel).setVisibility(View.GONE);
-        }
-
-    }
-
-    public void initRecentFlocGridview() {
-        AppCompatTextView tvBtnMoreRecentFloc = (AppCompatTextView) findViewById(R.id.tvBtnMoreRecentFloc);
-        GridView gridviewRecentFloc = (GridView) findViewById(R.id.gridviewRecentFloc);
-
-        JSONArray jsonArrayLatestRecent = new JSONArray();
-
-        if( jsonArrayAllRecent.length() > 4) {
-
-            for(int i = 1 ; i < 5 ; i++ ) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject = jsonArrayAllRecent.getJSONObject( jsonArrayAllRecent.length()-i );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                jsonArrayLatestRecent.put(jsonObject);
-            }
-        }
-        else {
-            jsonArrayLatestRecent = jsonArrayAllRecent;
-        }
-
-        if (jsonArrayLatestRecent.length() <= 2) {
-            ViewGroup.LayoutParams layoutParams = gridviewRecentFloc.getLayoutParams();
-            layoutParams.height = layoutParams.WRAP_CONTENT; //this is in pixels
-            gridviewRecentFloc.setLayoutParams(layoutParams);
-        }
-
-        RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this, jsonArrayLatestRecent);
-        gridviewRecentFloc.setAdapter(adapterRecent);
-
-        final JSONArray finalJsonArrayLatestRecent = jsonArrayLatestRecent;
-        gridviewRecentFloc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position);
-                try {
-                    Intent intentFlocDesc = new Intent(HomeActivity.this, FlocDescriptionActivity.class);
-                    intentFlocDesc.putExtra("floc_data", finalJsonArrayLatestRecent.getJSONObject(position).toString());
-                    intentFlocDesc.putExtra("from", "RecentFloc");
-                    startActivity(intentFlocDesc);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        tvBtnMoreRecentFloc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String selectedCategory = new GetSharedPreference(HomeActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
-                if(selectedCategory == null) {
-                    CommonUtilities.customToast(HomeActivity.this, "Please, Select Interest");
-                }
-                else {
-                    startActivity(new Intent(HomeActivity.this, AllRecentEventActivity.class));
-                }
-            }
-        });
-    }*/
 
     private void setPageViewIndicator() {
 

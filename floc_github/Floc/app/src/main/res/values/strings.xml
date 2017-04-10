@@ -150,6 +150,7 @@
     <string name="others">Others</string>
     <string name="skip">Skip</string>
     <string name="isShowFeatureActivity">boolShowFeature</string>
+    <string name="archive_floc">Archive Floc</string>
 
     <string-array name="interests">
         <item>Music Festival</item>

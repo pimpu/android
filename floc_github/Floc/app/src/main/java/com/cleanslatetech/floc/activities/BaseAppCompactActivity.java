@@ -287,6 +287,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             arrayMenuModels = new ArrayList<MenuModel>();
 
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.recent_flocs)));
+            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.archive_floc)));
 
            /* arraySubMenuModel = new ArrayList<SubMenuModels>();
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.upload_pictures)));
@@ -346,6 +347,16 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                     .putExtra("from", getResources().getString(R.string.privacy_policy))
                     .putExtra("url", "http://floc.world/privacy-policy.html"));
 
+        } else if( menuName.equals(getResources().getString(R.string.archive_floc))) {
+
+            String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+            if(selectedCategory == null) {
+                CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Select Interest");
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), ArchiveFlocActivity.class));
+            }
+
         } else if( menuName.equals(getResources().getString(R.string.recent_flocs))) {
 
             String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
@@ -353,7 +364,17 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                 CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Select Interest");
             }
             else {
-                startActivity(new Intent(getApplicationContext(), AllRecentEventActivity.class));
+                startActivity(new Intent(getApplicationContext(), RecentFlocActivity.class));
+            }
+
+        } else if( menuName.equals(getResources().getString(R.string.archive_floc))) {
+
+            String selectedCategory = new GetSharedPreference(BaseAppCompactActivity.this).getString(getResources().getString(R.string.shrdSelectedCategory));
+            if(selectedCategory == null) {
+                CommonUtilities.customToast(BaseAppCompactActivity.this, "Please, Select Interest");
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), ArchiveFlocActivity.class));
             }
 
         } else if(menuName.equals(getResources().getString(R.string.app_name))) {

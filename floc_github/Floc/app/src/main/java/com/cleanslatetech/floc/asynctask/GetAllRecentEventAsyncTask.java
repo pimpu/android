@@ -2,16 +2,17 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
+import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
 import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,28 +21,32 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by pimpu on 3/5/2017.
+ * Created by pimpu on 4/10/2017.
  */
-public class GetAllRecentEventAsyncTask {
-    Context context;
-    private JSONArray jsonArrayGetEvents;
+
+class GetAllRecentEventAsyncTask {
+    private Context context;
     private ProgressDialog prgDig;
 
-    public GetAllRecentEventAsyncTask(Context context, JSONArray jsonArrayGetEvents, ProgressDialog prgDig) {
+    public GetAllRecentEventAsyncTask(Context context, ProgressDialog prgDig) {
         this.context = context;
-        this.jsonArrayGetEvents = jsonArrayGetEvents;
         this.prgDig = prgDig;
     }
 
     public void getData() {
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
+
         // Make RESTful webservice call using AsyncHttpClient object
-        RestClient.get(CommonVariables.GET_ALL_RECENT_SERVER_URL, null, new JsonHttpResponseHandler() {
+        RestClient.get(CommonVariables.GET_ALL_RECENT_SERVER_URL, requestParams, new JsonHttpResponseHandler() {
             // When the response returned by REST has Http response code '200'
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 try{
                     System.out.println("GetAllRecent: "+json);
+
                     // when Get all events comes from home activity, then progress dialog is null
                     // and come from Create floc, progress dialog of creating floc will continue upto here.
                     if(prgDig != null) {

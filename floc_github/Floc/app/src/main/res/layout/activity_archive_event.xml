@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_all_archive_event"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+    android:orientation="vertical"
+    tools:context="com.cleanslatetech.floc.activities.ArchiveFlocActivity">
+
+    <include
+        layout="@layout/appbar_layout" />
+
+    <com.cleanslatetech.floc.utilities.OpenSansTextView
+        android:id="@+id/id_tv_no_archive_events_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="3dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:background="@color/colorPrimary"
+        android:text="No current archive events are found."
+        android:textColor="@color/white"
+        android:textSize="@dimen/sixteen_textsize"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        app:OpenSans="openSans_regular"/>
+
+    <ScrollView
+        android:id="@+id/id_scrollview_allArchive"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/id_ll_archive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

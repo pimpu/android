@@ -33,7 +33,7 @@ public class FacebookCallBackMethod implements FacebookCallback<LoginResult> {
     }
 
     public void getFacebookProfileData(AccessToken accessToken) {
-       ((AppCompatActivity)context).setContentView(R.layout.activity_splash_screen);
+//       ((AppCompatActivity)context).setContentView(R.layout.activity_splash_screen);
 
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
 

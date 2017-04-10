@@ -37,12 +37,24 @@
                         android:orientation="horizontal" />
 
                     <com.cleanslatetech.floc.utilities.OpenSansButton
+                        android:id="@+id/id_skip_feature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:text="@string/skip"
                         android:background="@android:color/transparent"
                         android:onClick="gotoNext"/>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansButton
+                        android:id="@+id/id_proceed_to_app"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Proceed to app"
+                        android:layout_marginRight="8dp"
+                        android:visibility="gone"
+                        android:background="@android:color/transparent"
+                        android:onClick="gotoNext" />
                 </LinearLayout>
 
         </RelativeLayout>

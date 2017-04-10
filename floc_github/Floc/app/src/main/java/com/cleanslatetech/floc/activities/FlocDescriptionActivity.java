@@ -23,6 +23,7 @@ import com.cleanslatetech.floc.asynctask.BookEventAsyncTask;
 import com.cleanslatetech.floc.asynctask.ChatAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetActivityAsyncTask;
 import com.cleanslatetech.floc.asynctask.LikeStoreAsyncTask;
+import com.cleanslatetech.floc.asynctask.PostRecentVisitedEventAsyncTask;
 import com.cleanslatetech.floc.asynctask.RateEventAsyncTask;
 import com.cleanslatetech.floc.asynctask.ReviewStoreAsyncTask;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
@@ -67,6 +68,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
     public static String strFrom;
 
     Timer timer;
+    GetSharedPreference getSharedPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,14 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
         super.setToolBar("Floc Description");
 
+        getSharedPreference = new GetSharedPreference(this);
+
         init();
+
+        // register this event into recently visited
+        if (isConnectingToInternet(this)) {
+            new PostRecentVisitedEventAsyncTask(this, iUSerId, iEventId, iCategoryId).postData();
+        }
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -84,7 +93,14 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
                 FlocDescriptionActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        getLatestEventUpdate();
+                        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+                            CommonUtilities.customToast(FlocDescriptionActivity.this, getResources().getString(R.string.strNoInternet));
+                            // stop executing code by return
+                            return;
+                        }
+                        else {
+                            new GetActivityAsyncTask(FlocDescriptionActivity.this, iEventId, iUSerId).getData();
+                        }
                     }
                 });
             }
@@ -116,6 +132,10 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         String eventPicture = null;
         String intent_floc_data = getIntent().getExtras().getString("floc_data");
         strFrom = getIntent().getExtras().getString("from");
+
+        iUSerId = getSharedPreference.getInt(getResources().getString(R.string.shrdLoginId));
+        strUserEmail = getSharedPreference.getString(getResources().getString(R.string.shrdUserEmail));
+        strUserName = getSharedPreference.getString(getResources().getString(R.string.shrdUserName));
 
         imgFlocPic = (AppCompatImageView) findViewById(R.id.img_floc_desc);
 
@@ -167,10 +187,6 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
         });
 
-        iUSerId = new GetSharedPreference(this).getInt(getResources().getString(R.string.shrdLoginId));
-        strUserEmail = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserEmail));
-        strUserName = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserName));
-
         try {
             JSONObject jsonFlocData = new JSONObject(intent_floc_data);
             System.out.println(jsonFlocData);
@@ -192,9 +208,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
 
             try {
-                JSONObject jsonObject = new JSONObject(
-                        new GetSharedPreference(this).getString(
-                                getResources().getString(R.string.shrdActivityId)) );
+                JSONObject jsonObject = new JSONObject(getSharedPreference.getString(getResources().getString(R.string.shrdActivityId)) );
 
                 iActivityIdRating = jsonObject.getInt("rate");
                 iActivityIdLike = jsonObject.getInt("like");
@@ -203,9 +217,6 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            // get latest event data
-//            getLatestEventUpdate();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -230,20 +241,8 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void getLatestEventUpdate() {
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
-            CommonUtilities.customToast(FlocDescriptionActivity.this, getResources().getString(R.string.strNoInternet));
-            // stop executing code by return
-            return;
-        }
-        else {
-            new GetActivityAsyncTask(this, iEventId, tvAsyncText, iUSerId).getData();
-        }
-
-    }
-
     public void onClickLikeEvent(View view) {
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+        if (!isConnectingToInternet(this)) {
 
             rlProgressLayout.setVisibility(View.VISIBLE);
             tvAsyncText.setText(getResources().getString(R.string.strNoInternet));
@@ -254,12 +253,12 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             return;
         }
         else {
-            new LikeStoreAsyncTask(FlocDescriptionActivity.this, tvAsyncText, iActivityIdLike, iEventId, iUSerId).postData();
+            new LikeStoreAsyncTask(this, tvAsyncText, iActivityIdLike, iEventId, iUSerId).postData();
         }
     }
 
     public void OnClickSubmitReview(View view) {
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+        if (!isConnectingToInternet(this)) {
 
             rlProgressLayout.setVisibility(View.VISIBLE);
             tvAsyncText.setText(getResources().getString(R.string.strNoInternet));
@@ -275,18 +274,18 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             boolean boolReview = isEmptyString(txtReview.getText().toString());
 
             if(boolReview) {
-                new ReviewStoreAsyncTask(FlocDescriptionActivity.this, tvAsyncText, iActivityIdReview,
+                new ReviewStoreAsyncTask(this, tvAsyncText, iActivityIdReview,
                         iEventId, iUSerId, txtReview.getText().toString()).postData();
             }
             else {
-                CommonUtilities.customToast(FlocDescriptionActivity.this, "Review field is empty.");
+                CommonUtilities.customToast(this, "Review field is empty.");
             }
 
         }
     }
 
     public void onClickBookEvent(View view) {
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+        if (!isConnectingToInternet(this)) {
 
             rlProgressLayout.setVisibility(View.VISIBLE);
             tvAsyncText.setText(getResources().getString(R.string.strNoInternet));
@@ -298,13 +297,13 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         }
         else {
 
-            new BookEventAsyncTask(FlocDescriptionActivity.this, tvAsyncText,
+            new BookEventAsyncTask(this, tvAsyncText,
                     iUSerId, iEventId, iCategoryId, strUserName, strUserEmail, 1).postData();
         }
     }
 
     public void onClickSubmitReview(View view) {
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+        if (!isConnectingToInternet(this)) {
 
             rlProgressLayout.setVisibility(View.VISIBLE);
             tvAsyncText.setText(getResources().getString(R.string.strNoInternet));
@@ -316,14 +315,14 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         }
         else {
 
-            new RateEventAsyncTask(FlocDescriptionActivity.this, tvAsyncText,
+            new RateEventAsyncTask(this, tvAsyncText,
                     iActivityIdRating, iUSerId, iEventId, iCreaterId, Math.round(ratingBar.getRating()) ).postData();
         }
     }
 
     @Override
     public void onClickLike(JSONArray jsonArrayAllLike) {
-        Intent intent = new Intent(FlocDescriptionActivity.this, FlocDescTopicsActivity.class);
+        Intent intent = new Intent(this, FlocDescTopicsActivity.class);
         intent.putExtra("flocTopics", jsonArrayAllLike.toString());
         intent.putExtra("what", "likes");
         startActivity(intent);
@@ -331,7 +330,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
     @Override
     public void onClickReview(JSONArray jsonArrayAllReviews) {
-        Intent intent = new Intent(FlocDescriptionActivity.this, FlocDescTopicsActivity.class);
+        Intent intent = new Intent(this, FlocDescTopicsActivity.class);
         intent.putExtra("flocTopics", jsonArrayAllReviews.toString());
         intent.putExtra("what", "reviews");
         startActivity(intent);
@@ -339,7 +338,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
     @Override
     public void onClickBooking(JSONArray jsonArrayAllBooking) {
-        Intent intent = new Intent(FlocDescriptionActivity.this, FlocDescTopicsActivity.class);
+        Intent intent = new Intent(this, FlocDescTopicsActivity.class);
         intent.putExtra("flocTopics", jsonArrayAllBooking.toString());
         intent.putExtra("what", "booking");
         startActivity(intent);
@@ -358,7 +357,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
     public void onClickSentComment(View view) {
         String strComment = txtComment.getText().toString();
 
-        if (!isConnectingToInternet(FlocDescriptionActivity.this)) {
+        if (!isConnectingToInternet(this)) {
 
             rlProgressLayout.setVisibility(View.VISIBLE);
             tvAsyncText.setText(getResources().getString(R.string.strNoInternet));
@@ -370,7 +369,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         }
         else {
             if(strComment.length() > 0) {
-                new ChatAsyncTask(FlocDescriptionActivity.this, tvAsyncText,
+                new ChatAsyncTask(this, tvAsyncText,
                         iUSerId, iEventId, strEventName, strComment ).postData();
             }
         }

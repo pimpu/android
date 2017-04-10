@@ -48,7 +48,9 @@ public class CommonVariables {
     public static final String GET_INTEREST_CATEGORY_SERVER_URL = mobileoperationapi_server_url + "GetCategory";
     public static final String SET_USER_INTEREST_SERVER_URL = mobileoperationapi_server_url + "UserInterest";
     public static final String GET_ALL_EVENTS_SERVER_URL = mobileoperationapi_server_url + "GetEvent";
-    public static final String GET_ALL_RECENT_SERVER_URL = mobileoperationapi_server_url + "GetRecent";
+    public static final String GET_ALL_ARCHIVE_SERVER_URL = mobileoperationapi_server_url + "GetRecent";
+    public static final String GET_ALL_RECENT_SERVER_URL = mobileoperationapi_server_url + "GetRecentlyVisited";
+    public static final String POST_RECENT_VISITED_SERVER_URL = mobileoperationapi_server_url + "RecentlyVisited";
     public static final String CREATE_FLOC_SERVER_URL = mobileoperationapi_server_url + "CreateFloc";
     public static final String POST_IMAGE_SERVER_URL = mobileoperationapi_server_url + "Post";
     public static final String POST_PROFILE_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostProfile";

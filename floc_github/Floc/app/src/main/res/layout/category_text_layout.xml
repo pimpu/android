@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:padding="2dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/id_because_you_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Because you like"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular"/>
+
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:id="@+id/id_dynamic_category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Category name"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            app:OpenSans="openSans_regular"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/id_smiley_face"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/smiley_face"/>
+
+    </LinearLayout>
+</RelativeLayout>

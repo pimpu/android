@@ -1,5 +1,6 @@
 package com.cleanslatetech.floc.activities;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +12,24 @@ import android.widget.LinearLayout;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
+import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
+import com.facebook.AccessToken;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 
+import static com.cleanslatetech.floc.utilities.CommonUtilities.handleGoogleSignInResult;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignIn;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
 
-public class FeaturingActivity extends AppCompatActivity {
+public class FeaturingActivity extends AppCompatActivity{
     private ViewPager mViewPager;
     private CustomSliderPagerAdapter mAdapter;
     private LinearLayout pager_indicator;
@@ -35,7 +49,8 @@ public class FeaturingActivity extends AppCompatActivity {
         mAdapter = new CustomSliderPagerAdapter(this, mResources);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(0);
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -43,6 +58,14 @@ public class FeaturingActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if (position == (dotsCount-1)) {
+                    findViewById(R.id.id_skip_feature).setVisibility(View.GONE);
+                    findViewById(R.id.id_proceed_to_app).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.id_proceed_to_app).setVisibility(View.GONE);
+                    findViewById(R.id.id_skip_feature).setVisibility(View.VISIBLE);
+                }
+
                 for (int i = 0; i < dotsCount; i++) {
                     dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
                 }
@@ -115,5 +138,4 @@ public class FeaturingActivity extends AppCompatActivity {
             handleIntentWhenSignOut(this);
         }
     }
-
 }

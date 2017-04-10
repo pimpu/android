@@ -1,5 +1,6 @@
 package com.cleanslatetech.floc.asynctask;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhen
  */
 
 public class SocialLoginAsyncTask {
+    private ProgressDialog progressDialog;
     private String email, provider, providerKey, profile_pic;
     private Context context;
 
@@ -42,7 +44,11 @@ public class SocialLoginAsyncTask {
         this.profile_pic = profile_pic;
         this.context = context;
 
-        ((AppCompatActivity)context).setContentView(R.layout.activity_splash_screen);
+//        ((AppCompatActivity)context).setContentView(R.layout.activity_splash_screen);
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Sign In");
+        progressDialog.show();
     }
 
     public void postData() {
@@ -63,6 +69,7 @@ public class SocialLoginAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                progressDialog.dismiss();
                 try{
                     System.out.println(json);
 
@@ -84,14 +91,14 @@ public class SocialLoginAsyncTask {
                                     });
                         }
 
-                        Handler handler = new Handler();
+                        /*Handler handler = new Handler();
                         Runnable r = new Runnable() {
                             public void run() {
                                 ((AppCompatActivity)context).recreate();
                                 ((AppCompatActivity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             }
                         };
-                        handler.postDelayed(r, 500);
+                        handler.postDelayed(r, 500);*/
 
                     } else {
                         String userName = json.getString("UserName");
@@ -134,6 +141,8 @@ public class SocialLoginAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                progressDialog.dismiss();
+
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
@@ -152,11 +161,13 @@ public class SocialLoginAsyncTask {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 // When Http response code is '404'
                 if (statusCode == 404) {
+                    progressDialog.dismiss();
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
+                    progressDialog.dismiss();
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
@@ -168,7 +179,7 @@ public class SocialLoginAsyncTask {
                             postData();
                             return;
                         }
-
+                        progressDialog.dismiss();
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));
                             CommonUtilities.customToast(context, errorResponse.getString("message"));

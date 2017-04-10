@@ -104,6 +104,10 @@ public class FlocsActivity extends BaseAppCompactActivity {
             AppCompatEditText txtFriendEmail = (AppCompatEditText) findViewById(R.id.id_txt_friend_to_invite);
             Boolean boolEmail = Validations.emailValidate(txtFriendEmail.getText().toString());
 
+            if (GetFlocAsyncTask.iEventId == 0) {
+                CommonUtilities.customToast(FlocsActivity.this, "Please, Select running floc.");
+                return;
+            }
             if(boolEmail) {
                 int iUSerId = new GetSharedPreference(this).getInt(getResources().getString(R.string.shrdLoginId));
 

@@ -1,10 +1,12 @@
 package com.cleanslatetech.floc.activities;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -27,6 +29,8 @@ public class AllEventActivity extends BaseAppCompactActivity {
         setContentView(R.layout.activity_all_event);
 
         super.setToolBar(getResources().getString(R.string.events));
+
+        LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         String strInterestCategory = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdSelectedCategory));
         String strAllCategory = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdAllCategoryList));
@@ -99,19 +103,12 @@ public class AllEventActivity extends BaseAppCompactActivity {
                     }
                 }
 
-                AppCompatTextView txAppCompatTextView = new AppCompatTextView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(10, 10, 10, 5);
-                txAppCompatTextView.setLayoutParams(layoutParams);
-                txAppCompatTextView.setText("Because you like "+categoryName);
-                txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
-                txAppCompatTextView.setPadding(10, 3, 0, 3);
-                txAppCompatTextView.setTextSize(18);
-                txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
-                Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
-                txAppCompatTextView.setTypeface(font);
+                inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
+                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
+                tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(
@@ -124,7 +121,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
                 recyclerView.setAdapter(mAdapter);
 
-                ll.addView(txAppCompatTextView);
+                ll.addView(inflate);
                 ll.addView(recyclerView);
             }
 
@@ -144,19 +141,13 @@ public class AllEventActivity extends BaseAppCompactActivity {
                     }
                 }
 
-                AppCompatTextView txAppCompatTextView = new AppCompatTextView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(10, 10, 10, 5);
-                txAppCompatTextView.setLayoutParams(layoutParams);
-                txAppCompatTextView.setText(categoryName);
-                txAppCompatTextView.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                txAppCompatTextView.setTextColor(getResources().getColor(R.color.white));
-                txAppCompatTextView.setPadding(10, 3, 0, 3);
-                txAppCompatTextView.setTextSize(18);
-                txAppCompatTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-                Typeface font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans-Regular.ttf");
-                txAppCompatTextView.setTypeface(font);
+                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
+
+                inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
+                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
+                tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(
@@ -169,7 +160,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapNotInterest.get(key));
                 recyclerView.setAdapter(mAdapter);
 
-                ll.addView(txAppCompatTextView);
+                ll.addView(inflate);
                 ll.addView(recyclerView);
             }
 

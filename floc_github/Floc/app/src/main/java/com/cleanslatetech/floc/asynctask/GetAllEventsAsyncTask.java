@@ -2,11 +2,7 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Toast;
 
-import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
@@ -46,7 +42,7 @@ public class GetAllEventsAsyncTask {
 
                     HomeActivity.interfaceAllRecentAndCurrentEvent.getAllEvents(jsonArrayGetEvents);
 
-                    new GetAllRecentEventAsyncTask(context, jsonArrayGetEvents, prgDig).getData();
+                    new GetAllArchiveEventAsyncTask(context, prgDig).getData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

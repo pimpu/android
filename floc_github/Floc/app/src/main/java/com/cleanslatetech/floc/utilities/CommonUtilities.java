@@ -126,8 +126,7 @@ public class CommonUtilities {
             return;
         }
         else {
-            boolean isAvailInterest = new GetSharedPreference(context).getBoolean(
-                    context.getResources().getString(R.string.shrdIsInterestSelected));
+            boolean isAvailInterest = new GetSharedPreference(context).getBoolean(context.getResources().getString(R.string.shrdIsInterestSelected));
 
             if ( isAvailInterest ) {
                 context.startActivity(new Intent(context, HomeActivity.class));
