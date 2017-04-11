@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class RecentFlocActivity extends BaseAppCompactActivity {
 
@@ -31,7 +32,9 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
 
         LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        String strInterestCategory = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdSelectedCategory));
+        int userId = new GetSharedPreference(this).getInt(getResources().getString(R.string.shrdLoginId));
+
+        Set<String> strInterestCategory = new GetSharedPreference(this).getStringSet(getResources().getString(R.string.shrdSelectedCategory));
         String strAllCategory = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdAllCategoryList));
         JSONArray joAllCategory = null;
 
@@ -60,7 +63,7 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
 
                     JSONArray jsonArray = new JSONArray();
 
-                    if (strInterestCategory.contains(""+eventCategoryId) ) {
+                    if (strInterestCategory.contains(eventCategoryId) ) {
 
                         boolean isEventCategory = hmapInterest.containsKey(eventCategoryId);
 

@@ -36,12 +36,15 @@ public class SetInterestAsyncTask {
     private Context context;
     private ArrayList<Integer> iArraySelectedPositions;
     private static ProgressDialog prgDialog;
+    private int userId;
 
     public SetInterestAsyncTask(
             Context context,
             List<Integer> iArraySelectedPositions) {
         this.context = context;
         this.iArraySelectedPositions = (ArrayList<Integer>) iArraySelectedPositions;
+
+        userId = new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId));
     }
 
     public void postData() {
@@ -54,7 +57,7 @@ public class SetInterestAsyncTask {
 
         RequestParams params;
         params = new RequestParams();
-        params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
+        params.put("UserId", userId);
         params.put("Interest", iArraySelectedPositions);
         invokeWS(context, params);
     }
@@ -86,8 +89,9 @@ public class SetInterestAsyncTask {
                         String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
 //                        CommonUtilities.customToast(context, msg);
                         if(msg.equals("Success")) {
-                            new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
-                            new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdSelectedCategory),iArraySelectedPositions.toString());
+                            SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+                            setSharedPreference.setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected), true);
+                            setSharedPreference.setStringSet(context.getResources().getString(R.string.shrdSelectedCategory), iArraySelectedPositions);
 
                             context.startActivity(new Intent(context, HomeActivity.class));
                             ((AppCompatActivity)context).finish();

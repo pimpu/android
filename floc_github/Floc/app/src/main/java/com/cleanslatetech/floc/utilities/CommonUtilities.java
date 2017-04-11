@@ -118,7 +118,6 @@ public class CommonUtilities {
         setSharedPreference.setInt(context.getResources().getString(R.string.shrdLoginId), id);
         setSharedPreference.setString(context.getResources().getString(R.string.shrdUserEmail), email);
 
-
         if (!isConnectingToInternet(context)) {
             CommonUtilities.customToast(context, context.getResources().getString(R.string.strNoInternet));
 
@@ -127,11 +126,9 @@ public class CommonUtilities {
         }
         else {
             boolean isAvailInterest = new GetSharedPreference(context).getBoolean(context.getResources().getString(R.string.shrdIsInterestSelected));
-
             if ( isAvailInterest ) {
                 context.startActivity(new Intent(context, HomeActivity.class));
-            }
-            else  {
+            } else  {
                 context.startActivity(new Intent(context, SelectInterestActivity.class));
             }
             ((AppCompatActivity)context).finish();
@@ -144,7 +141,17 @@ public class CommonUtilities {
                 new Intent(context, SignupOptionActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) );
 
-        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.isAppSignIn), false);
+        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+
+        setSharedPreference.setBoolean(context.getResources().getString(R.string.isAppSignIn), false);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdLoginType), null);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdUserName), null);
+        setSharedPreference.setInt(context.getResources().getString(R.string.shrdLoginId), 0);
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdUserEmail), null);
+
+        setSharedPreference.setString(context.getResources().getString(R.string.shrdAllCategoryList), null);
+        setSharedPreference.setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected), false);
+        setSharedPreference.setStringSet(context.getResources().getString(R.string.shrdSelectedCategory), null);
     }
 
     public static AccessToken isFacebookLoggedIn() {

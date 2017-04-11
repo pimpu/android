@@ -1,9 +1,11 @@
 package com.cleanslatetech.floc.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatRatingBar;
@@ -39,6 +41,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -372,6 +378,50 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
                 new ChatAsyncTask(this, tvAsyncText,
                         iUSerId, iEventId, strEventName, strComment ).postData();
             }
+        }
+    }
+
+    public void onClickWhatsappLogo(View view) {
+        imgFlocPic.setDrawingCacheEnabled(true);
+        Bitmap bmp = imgFlocPic.getDrawingCache();
+
+        File imagePath = new File(getCacheDir(), "images");
+        if(!imagePath.exists()) {
+            imagePath.mkdir();
+        }
+
+        File newFile = new File(imagePath, "image.png");
+
+        try {
+            if( newFile.exists() ) {
+                newFile.delete();
+            }
+
+            newFile.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(newFile);
+            // Write the bitmap to the output stream (and thus the file) in PNG format (lossless compression)
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            // Flush and close the output stream
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Uri contentUri = FileProvider.getUriForFile(this, "com.cleanslatetech.floc.fileprovider", newFile);
+
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("image/*");
+        whatsappIntent.setPackage("com.whatsapp");
+        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        whatsappIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        whatsappIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+        whatsappIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        try {
+            startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            CommonUtilities.customToast(this, "Whatsapp have not been installed.");
         }
     }
 }

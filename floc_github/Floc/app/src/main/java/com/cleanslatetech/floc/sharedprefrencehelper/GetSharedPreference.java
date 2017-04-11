@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 
 import com.cleanslatetech.floc.R;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by pimpu on 1/20/2017.
  */
@@ -29,5 +34,9 @@ public class GetSharedPreference {
 
     public boolean getBoolean(String text) {
         return sharedPreference.getBoolean(text,false);
+    }
+
+    public Set<String> getStringSet(String text) {
+        return sharedPreference.getStringSet(text, null);
     }
 }

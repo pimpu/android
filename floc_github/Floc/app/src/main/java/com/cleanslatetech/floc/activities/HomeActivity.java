@@ -25,7 +25,10 @@ import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Eve
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class HomeActivity extends BaseAppCompactActivity implements InterfaceAllRecent_Current_Archive_Event {
 
@@ -56,7 +59,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     private void setSlideOrInterestGrid() {
-        int[] mResources = new int[]{R.drawable.slider_1, R.drawable.slider_3, R.drawable.slider_4, R.drawable.slider_5};
+        int[] mResources = new int[]{R.drawable.home_slider_1, R.drawable.home_slider_2, R.drawable.home_slider_3, R.drawable.home_slider_4};
 
         mViewPager = (ViewPager) findViewById(R.id.slider_viewpager);
         pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
@@ -157,7 +160,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             }
         });
 
-        String strIntArrayInterestCategory = getSharedPreference.getString(getResources().getString(R.string.shrdSelectedCategory));
+        Set<String> strIntArrayInterestCategory = getSharedPreference.getStringSet(getResources().getString(R.string.shrdSelectedCategory));
         String strIntArrayAllCategory = getSharedPreference.getString(getResources().getString(R.string.shrdAllCategoryList));
         JSONArray joAllCategory = null;
 
@@ -180,7 +183,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
                 JSONArray jsonArray = new JSONArray();
 
-                if (strIntArrayInterestCategory.contains(""+eventCategoryId) ) {
+                if (strIntArrayInterestCategory.contains(eventCategoryId) ) {
 
                     boolean isEventCategory = hmapInterest.containsKey(eventCategoryId);
 

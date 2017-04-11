@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 
 import com.cleanslatetech.floc.R;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by pimpu on 1/20/2017.
  */
@@ -36,4 +41,10 @@ public class SetSharedPreference {
         editor.commit();
     }
 
+    public void setStringSet(String key, List val) {
+        Set<String> set = new HashSet<String>();
+        set.addAll(val);
+        editor.putStringSet(key, set);
+        editor.commit();
+    }
 }

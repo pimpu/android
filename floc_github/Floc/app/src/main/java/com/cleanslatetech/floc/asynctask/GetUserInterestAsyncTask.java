@@ -92,8 +92,9 @@ public class GetUserInterestAsyncTask {
                         iArraySelectedInterest.clear();
                         iArraySelectedInterest.addAll(hs);
 
-                        new SetSharedPreference(context).setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected),true);
-                        new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdSelectedCategory),iArraySelectedInterest.toString());
+                        SetSharedPreference setSharedPreference = new SetSharedPreference(context);
+                        setSharedPreference.setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected), true);
+                        setSharedPreference.setStringSet(context.getResources().getString(R.string.shrdSelectedCategory), iArraySelectedInterest);
 
                         new GetInterestCategoryAsyncTask(context, gridLinearLayout, progressBar, "interestAvailable");
 

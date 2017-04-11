@@ -32,11 +32,14 @@
     <string name="shrdUserName">userName</string>
     <string name="shrdUserEmail">userEmail</string>
     <string name="shrdLoginId">loginId</string>
-    <string name="shrdAllCategoryList">allCategoryList</string>
-    <string name="shrdIsInterestSelected">isInterestSelected</string>
     <string name="shrdSelectedSubmenu">selectedSubmenu</string>
     <string name="shrdSelectedMenu">selectedMenu</string>
     <string name="shrdActivityId">activityId</string>
+    <string name="shrdStringPic">shrdStringPic</string>
+    <string name="shrdAllCategoryList">allCategoryList</string>
+    <string name="shrdIsInterestSelected">isInterestSelected</string>
+    <string name="shrdSelectedCategory">selectedCategory</string>
+    <string name="shrdMyProfile">myProfileData</string>
     <string name="facebookLogin">facebookLogin</string>
     <string name="googleLogin">googleLogin</string>
     <string name="appLogin">appLogin</string>
@@ -133,7 +136,6 @@
     <string name="my_floc_bookings">My Floc Bookings</string>
     <string name="try_again">Try again</string>
     <string name="share">Share</string>
-    <string name="shrdStringPic">shrdStringPic</string>
     <string name="retry">Retry</string>
     <string name="join_this_floc">Join This Floc</string>
     <string name="booking">Booking:\t\t</string>
@@ -141,9 +143,7 @@
     <string name="organizer">Organizer:\t\t</string>
     <string name="submit_review">Submit Review</string>
     <string name="floc_talk">Floc talk:</string>
-    <string name="shrdSelectedCategory">selectedCategory</string>
     <string name="middle_name">Middle Name</string>
-    <string name="shrdMyProfile">myProfileData</string>
     <string name="click_on_at_least_5_interests_below">We want to understand you better (Click at least 5 interests)</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="click_here">Click here</string>
