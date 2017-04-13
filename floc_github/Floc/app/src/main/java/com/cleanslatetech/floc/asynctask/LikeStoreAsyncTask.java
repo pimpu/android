@@ -52,12 +52,13 @@ public class LikeStoreAsyncTask {
                 postData();
             }
         });
-    }
 
-    public void postData() {
         rlProgressLayout.setVisibility(View.VISIBLE);
         tvAsyncText.setText("Event loading ...");
         prgDlg.setVisibility(View.VISIBLE);
+    }
+
+    public void postData() {
 
         RequestParams params;
         params = new RequestParams();
@@ -96,13 +97,14 @@ public class LikeStoreAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDlg.setVisibility(View.GONE);
+
 
                 // When Http response code is '404'
                 if (statusCode == 404) {
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
 
+                    prgDlg.setVisibility(View.GONE);
                     rlProgressLayout.setVisibility(View.GONE);
                 }
                 // When Http response code is '500'
@@ -110,6 +112,7 @@ public class LikeStoreAsyncTask {
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
 
+                    prgDlg.setVisibility(View.GONE);
                     rlProgressLayout.setVisibility(View.GONE);
                 }
                 // When Http response code other than 404, 500
@@ -118,13 +121,13 @@ public class LikeStoreAsyncTask {
                         System.out.println(errorResponse);
 
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
-
-                            btntv_Retry.setVisibility(View.VISIBLE);
-
+                            /*CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+                            btntv_Retry.setVisibility(View.VISIBLE);*/
+                            postData();
                             return;
                         }
 
+                        prgDlg.setVisibility(View.GONE);
                         rlProgressLayout.setVisibility(View.GONE);
 
                         if( errorResponse.getBoolean("error") ) {

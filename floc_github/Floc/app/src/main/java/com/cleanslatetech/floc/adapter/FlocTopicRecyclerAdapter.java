@@ -1,7 +1,6 @@
 package com.cleanslatetech.floc.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.FlocDescTopicsActivity;
-import com.cleanslatetech.floc.activities.FlocDescriptionActivity;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
 import org.json.JSONArray;

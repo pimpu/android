@@ -32,6 +32,7 @@ import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.interfaces.InterfaceFlocDescTopics;
+import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.MakeTextResizable;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
@@ -54,7 +55,7 @@ import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 public class FlocDescriptionActivity extends BaseAppCompactActivity implements InterfaceFlocDescTopics {
     private AppCompatImageView imgFlocPic;
     private AppCompatRatingBar ratingBar;
-    private AppCompatTextView tvDetails, tvAsyncText;
+    private AppCompatTextView tvDetails, tvAsyncText, tvStartDate, tvStartTime, tvEndDate, tvEndTime, tvAddress;
     private AppCompatEditText txtComment;
     private FloatingActionButton fabSentComment;
 
@@ -148,6 +149,11 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         rlProgressLayout = (RelativeLayout) findViewById(R.id.id_getactivity_progress_layout);
 
         tvDetails = (AppCompatTextView) findViewById(R.id.floc_description_details);
+        tvStartDate = (AppCompatTextView) findViewById(R.id.id_flocdesc_startDate);
+        tvStartTime = (AppCompatTextView) findViewById(R.id.id_flocdesc_startTime);
+        tvEndDate = (AppCompatTextView) findViewById(R.id.id_flocdesc_endDate);
+        tvEndTime = (AppCompatTextView) findViewById(R.id.id_flocdesc_endTime);
+        tvAddress = (AppCompatTextView) findViewById(R.id.floc_description_address);
         tvAsyncText = (AppCompatTextView) findViewById(R.id.id_floc_desc_async_msg);
 
         ratingBar = (AppCompatRatingBar) findViewById(R.id.ratingBar);
@@ -202,6 +208,14 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             iCreaterId = jsonFlocData.getInt("EventCreatorId");
             strEventName = jsonFlocData.getString("EventName");
 
+            String strAddress = jsonFlocData.getString("EventArea")+", "+ jsonFlocData.getString("EventCity")+", "+
+                                                                            jsonFlocData.getString("EventState");
+
+            tvStartDate.setText( getResources().getString(R.string.start_date)+" "+formatDate(jsonFlocData.getString("EventStartDate")) );
+            tvStartTime.setText( getResources().getString(R.string.start_hour)+" "+jsonFlocData.getString("EventStartHour") + ":"+ jsonFlocData.getString("EventStartMin"));
+            tvEndDate.setText( getResources().getString(R.string.end_date)+" "+formatDate(jsonFlocData.getString("EventEndDate")) );
+            tvEndTime.setText( getResources().getString(R.string.end_hour)+" "+jsonFlocData.getString("EventEndHour") + ":"+ jsonFlocData.getString("EventEndMin"));
+            tvAddress.setText("Address: "+strAddress);
             tvDetails.setText("Description: "+jsonFlocData.getString("EventDescription"));
             MakeTextResizable.makeTextViewResizable(tvDetails, 3, "See More", true);
 
@@ -423,5 +437,14 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         } catch (android.content.ActivityNotFoundException ex) {
             CommonUtilities.customToast(this, "Whatsapp have not been installed.");
         }
+    }
+
+    private String formatDate(String dateText) {
+        long lDateDob = DateHelper.dobConvertToMillis(dateText);
+        String day = DateHelper.getDay(lDateDob);
+        String month = DateHelper.getMonth(lDateDob);
+        String year = DateHelper.getYear(lDateDob);
+
+        return day + "-" + month + "-" + year;
     }
 }

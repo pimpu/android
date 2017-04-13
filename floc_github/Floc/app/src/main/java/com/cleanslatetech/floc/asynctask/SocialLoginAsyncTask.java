@@ -179,6 +179,7 @@ public class SocialLoginAsyncTask {
                             postData();
                             return;
                         }
+
                         progressDialog.dismiss();
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));

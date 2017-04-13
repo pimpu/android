@@ -329,6 +329,12 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                     .putExtra("from", getResources().getString(R.string.contact_us))
                     .putExtra("url", "http://floc.world/Home/Contact"));
 
+        } else if( menuName.equals(getResources().getString(R.string.f_amp_q))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.f_amp_q))
+                    .putExtra("url", "http://floc.world/Home/FAQ"));
+
         } else if( menuName.equals(getResources().getString(R.string.terms_amp_conditions))) {
 
             startActivity(new Intent(getApplicationContext(), WebviewActivity.class)

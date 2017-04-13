@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -120,7 +121,7 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                 );
                 recyclerView.setLayoutManager(mLayoutManager);
                 // Initialize a new Adapter for RecyclerView
-                RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
+                RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key), EnumFlocDescFrom.Archive.toString());
                 recyclerView.setAdapter(mAdapter);
 
                 ll.addView(inflate);
@@ -157,7 +158,7 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                 );
                 recyclerView.setLayoutManager(mLayoutManager);
                 // Initialize a new Adapter for RecyclerView
-                RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapNotInterest.get(key));
+                RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapNotInterest.get(key), EnumFlocDescFrom.Archive.toString());
                 recyclerView.setAdapter(mAdapter);
 
                 ll.addView(inflate);

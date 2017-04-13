@@ -37,15 +37,15 @@ public class RegisterUserAsyncTask {
         this.pwd = pwd;
         this.cnfrmPwd = cnfrmPwd;
 
-    }
-
-    public void postData() {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
         prgDialog.setMessage("Signing up ...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
+    }
+
+    public void postData() {
 
         RequestParams params;
         params = new RequestParams();
@@ -105,14 +105,16 @@ public class RegisterUserAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialog.cancel();
+
                 // When Http response code is '404'
                 if (statusCode == 404) {
+                    prgDialog.cancel();
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
+                    prgDialog.cancel();
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
@@ -125,6 +127,8 @@ public class RegisterUserAsyncTask {
                             postData();
                             return;
                         }
+
+                        prgDialog.cancel();
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));

@@ -26,10 +26,12 @@ import org.json.JSONObject;
 public class RecentFlocRecyclerAdapter extends RecyclerView.Adapter<RecentFlocRecyclerAdapter.ViewHolder> {
     private Context context;
     private JSONArray jaData;
+    private String from;
 
-    public RecentFlocRecyclerAdapter(Context context, JSONArray jaData) {
+    public RecentFlocRecyclerAdapter(Context context, JSONArray jaData, String from) {
         this.context = context;
         this.jaData = jaData;
+        this.from = from;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class RecentFlocRecyclerAdapter extends RecyclerView.Adapter<RecentFlocRe
         // Get the current color from the data set
         try {
 
-            holder.bind(jaData.getJSONObject(position), context, holder);
+            holder.bind(jaData.getJSONObject(position), context, holder, from);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,7 +75,7 @@ public class RecentFlocRecyclerAdapter extends RecyclerView.Adapter<RecentFlocRe
             tvEventName = (AppCompatTextView) v.findViewById(R.id.id_all_event_row_name);
         }
 
-        public void bind(final JSONObject jsonObject, final Context context, ViewHolder holder) {
+        public void bind(final JSONObject jsonObject, final Context context, ViewHolder holder, final String from) {
             String eventPicture = null;
             try {
                 eventPicture = jsonObject.getString("EventPicture");
@@ -94,7 +96,7 @@ public class RecentFlocRecyclerAdapter extends RecyclerView.Adapter<RecentFlocRe
                     public void onClick(View v) {
                         Intent intentFlocDesc = new Intent(context, FlocDescriptionActivity.class);
                         intentFlocDesc.putExtra("floc_data", jsonObject.toString());
-                        intentFlocDesc.putExtra("from", "RecentFloc");
+                        intentFlocDesc.putExtra("from", from);
                         context.startActivity(intentFlocDesc);
                     }
                 });

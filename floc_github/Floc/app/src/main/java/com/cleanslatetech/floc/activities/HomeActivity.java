@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
@@ -21,6 +22,7 @@ import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Event;
+import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +39,20 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     private LinearLayout pager_indicator;
     private int dotsCount;
     private ImageView[] dots;
+    private int delay = 2500; //milliseconds
+    private int page = 0;
+    private Handler handler;
+    Runnable runnable = new Runnable() {
+        public void run() {
+            if (mAdapter.getCount() == page) {
+                page = 0;
+            } else {
+                page++;
+            }
+            mViewPager.setCurrentItem(page, true);
+            handler.postDelayed(this, delay);
+        }
+    };
 
     public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent;
     public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
@@ -61,6 +77,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     private void setSlideOrInterestGrid() {
         int[] mResources = new int[]{R.drawable.home_slider_1, R.drawable.home_slider_2, R.drawable.home_slider_3, R.drawable.home_slider_4};
 
+        handler = new Handler();
         mViewPager = (ViewPager) findViewById(R.id.slider_viewpager);
         pager_indicator = (LinearLayout) findViewById(R.id.viewPagerCountDots);
         mAdapter = new CustomSliderPagerAdapter(this, mResources);
@@ -86,6 +103,8 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
             }
         });
+
+        handler.postDelayed(runnable, delay);
 
         setPageViewIndicator();
 
@@ -125,6 +144,15 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     protected void onResume() {
         super.onResume();
         createRightPopupMenu();
+        if (handler != null) {
+            handler.postDelayed(runnable, delay);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 
     @Override
@@ -228,7 +256,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             );
             recyclerView.setLayoutManager(mLayoutManager);
             // Initialize a new Adapter for RecyclerView
-            RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key));
+            RecentFlocRecyclerAdapter mAdapter = new RecentFlocRecyclerAdapter(this, hmapInterest.get(key), EnumFlocDescFrom.Home.toString());
             recyclerView.setAdapter(mAdapter);
 
             ll.addView(inflate);

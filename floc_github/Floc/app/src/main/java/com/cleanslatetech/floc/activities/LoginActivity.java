@@ -34,6 +34,7 @@ import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 
 public class LoginActivity extends AppCompatActivity{
 
+    // TODO: Add Invite user to Event in description page
 
     EditText txtLoginEmail, txtLoginPwd;
     public static Activity loginActivity;

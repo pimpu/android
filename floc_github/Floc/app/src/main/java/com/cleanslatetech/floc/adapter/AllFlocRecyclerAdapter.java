@@ -25,11 +25,13 @@ public class AllFlocRecyclerAdapter extends RecyclerView.Adapter<AllFlocRecycler
     private  JSONArray getEventsArray;
     private LayoutInflater inflater;
     private Context context;
+    private String strFrom;
 
-    public AllFlocRecyclerAdapter(Context context, JSONArray getEvents) {
+    public AllFlocRecyclerAdapter(Context context, JSONArray getEvents, String from) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         getEventsArray = getEvents;
+        strFrom = from;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class AllFlocRecyclerAdapter extends RecyclerView.Adapter<AllFlocRecycler
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvEventName, tvEventArea;
+        TextView tvEventName, tvEventArea, tvEventDate;
         AppCompatImageView imgvwEventPic;
 
         public EventViewHolder(View itemView) {
@@ -86,6 +88,7 @@ public class AllFlocRecyclerAdapter extends RecyclerView.Adapter<AllFlocRecycler
             try {
                 Intent intentFlocDesc = new Intent(context, FlocDescriptionActivity.class);
                 intentFlocDesc.putExtra("floc_data", getEventsArray.getJSONObject(getAdapterPosition()).toString());
+                intentFlocDesc.putExtra("from", strFrom);
                 context.startActivity(intentFlocDesc);
             } catch (JSONException e) {
                 e.printStackTrace();

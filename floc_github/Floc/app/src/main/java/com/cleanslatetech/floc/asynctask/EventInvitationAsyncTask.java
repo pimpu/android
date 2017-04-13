@@ -37,15 +37,17 @@ public class EventInvitationAsyncTask {
         this.iUSerId = iUSerId;
         this.email = email;
         this.iEventId = iEventId;
-    }
 
-    public void postData() {
         // Instantiate Progress Dialog object
         prgDialog = new ProgressDialog(context);
         // Set Progress Dialog Text
         prgDialog.setMessage("Invitation sending ...");
         // Set Cancelable as False
         prgDialog.setCancelable(false);
+    }
+
+    public void postData() {
+
 
         RequestParams params;
         params = new RequestParams();
@@ -98,14 +100,17 @@ public class EventInvitationAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                prgDialog.cancel();
+
                 // When Http response code is '404'
                 if (statusCode == 404) {
+                    prgDialog.cancel();
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
+                    prgDialog.cancel();
+
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
@@ -114,9 +119,11 @@ public class EventInvitationAsyncTask {
                     try {
                         System.out.println(errorResponse);
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
+                            postData();
                             return;
                         }
+
+                        prgDialog.cancel();
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));

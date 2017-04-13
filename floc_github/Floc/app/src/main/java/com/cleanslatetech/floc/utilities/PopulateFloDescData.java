@@ -202,7 +202,10 @@ public class PopulateFloDescData {
                 tvBookingCount.setText(""+jsonArrayBooking.length());
             }
 
-            if( FlocDescriptionActivity.strFrom.equals("RecentFloc") ) {
+            if( FlocDescriptionActivity.strFrom.equals( EnumFlocDescFrom.Archive.toString() ) ||
+                    FlocDescriptionActivity.strFrom.equals( EnumFlocDescFrom.Completed.toString() ) ||
+                    FlocDescriptionActivity.strFrom.equals( EnumFlocDescFrom.Pause.toString() ) ||
+                    FlocDescriptionActivity.strFrom.equals( EnumFlocDescFrom.Cancel.toString() ) ) {
                 tvBookedTest.setVisibility(View.GONE);
                 btnBookedEvent.setVisibility(View.GONE);
             }

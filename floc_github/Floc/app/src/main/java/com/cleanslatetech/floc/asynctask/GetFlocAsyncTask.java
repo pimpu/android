@@ -1,7 +1,6 @@
 package com.cleanslatetech.floc.asynctask;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatSpinner;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.AllFlocRecyclerAdapter;
@@ -19,6 +17,7 @@ import com.cleanslatetech.floc.adapter.CustomSpinnerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
+import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -81,11 +80,11 @@ public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
             }
         });
 
+        progressBar.setVisibility(View.VISIBLE);
+
     }
 
     public void getData() {
-        progressBar.setVisibility(View.VISIBLE);
-
         RequestParams params;
         params = new RequestParams();
         params.put("UserId", new GetSharedPreference(context).getInt(context.getResources().getString(R.string.shrdLoginId)));
@@ -122,14 +121,16 @@ public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                progressBar.setVisibility(View.GONE);
+
                 // When Http response code is '404'
                 if (statusCode == 404) {
+                    progressBar.setVisibility(View.GONE);
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
+                    progressBar.setVisibility(View.GONE);
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
                 }
@@ -139,12 +140,10 @@ public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
                         System.out.println(errorResponse);
 
                         if (errorResponse == null) {
-                            CommonUtilities.customToast(context,"Sorry for inconvenience. Please, Try again.");
-
-                            btnRefresh.setVisibility(View.VISIBLE);
-
+                            getData();
                             return;
                         }
+                        progressBar.setVisibility(View.GONE);
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));
@@ -178,27 +177,27 @@ public class GetFlocAsyncTask implements AdapterView.OnItemSelectedListener {
                 stringArrayFlocName.add(runningObj.getJSONObject(j).getString("EventName"));
             }
 
-            AllFlocRecyclerAdapter allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, runningObj);
+            AllFlocRecyclerAdapter allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, runningObj, EnumFlocDescFrom.Running.toString());
             recyclerRunningFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerRunningFloc.setLayoutManager(new LinearLayoutManager(context));
 
-            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, completedObj);
+            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, completedObj, EnumFlocDescFrom.Completed.toString());
             recyclerCompletedFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerCompletedFloc.setLayoutManager(new LinearLayoutManager(context));
 
-            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, pauseObj);
+            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, pauseObj, EnumFlocDescFrom.Pause.toString());
             recyclerPauseFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerPauseFloc.setLayoutManager(new LinearLayoutManager(context));
 
-            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, cancelObj);
+            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, cancelObj, EnumFlocDescFrom.Cancel.toString());
             recyclerCancelFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerCancelFloc.setLayoutManager(new LinearLayoutManager(context));
 
-            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, requestObj);
+            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, requestObj, EnumFlocDescFrom.RequestToJoin.toString());
             recyclerRequestedFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerRequestedFloc.setLayoutManager(new LinearLayoutManager(context));
 
-            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, myFlocObj);
+            allFlocRecyclerAdapter = new AllFlocRecyclerAdapter(context, myFlocObj, EnumFlocDescFrom.MyFlocBooking.toString());
             recyclerMyFloc.setAdapter(allFlocRecyclerAdapter);
             recyclerMyFloc.setLayoutManager(new LinearLayoutManager(context));
 

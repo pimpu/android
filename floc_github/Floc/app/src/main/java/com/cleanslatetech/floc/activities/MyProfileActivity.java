@@ -172,6 +172,8 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                 pinCode = pinCode.equals("null") ? "" : pinCode;
                 txtPincode.setText(pinCode);
 
+                System.out.println(joMyProfile.getString("ProfilePic"));
+
                 Glide
                         .with(this)
                         .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))

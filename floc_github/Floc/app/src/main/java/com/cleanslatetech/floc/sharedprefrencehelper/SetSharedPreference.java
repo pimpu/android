@@ -43,8 +43,12 @@ public class SetSharedPreference {
 
     public void setStringSet(String key, List val) {
         Set<String> set = new HashSet<String>();
-        set.addAll(val);
-        editor.putStringSet(key, set);
+        if ( val == null) {
+            editor.putStringSet(key, set);
+        } else {
+            set.addAll(val);
+            editor.putStringSet(key, set);
+        }
         editor.commit();
     }
 }

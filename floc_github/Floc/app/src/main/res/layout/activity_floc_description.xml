@@ -171,12 +171,82 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_flocdesc_startDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/start_date"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        app:OpenSans="openSans_regular"/>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_flocdesc_startTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/id_flocdesc_startDate"
+                        android:text="@string/start_hour"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        app:OpenSans="openSans_regular"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_flocdesc_endDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/end_date"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        app:OpenSans="openSans_regular"/>
+
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_flocdesc_endTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_toRightOf="@+id/id_flocdesc_endDate"
+                        android:text="@string/end_hour"
+                        android:textSize="@dimen/sixteen_textsize"
+                        android:textColor="@color/white"
+                        android:layout_centerVertical="true"
+                        app:OpenSans="openSans_regular"/>
+
+                </RelativeLayout>
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/floc_description_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/description"
+                    android:textSize="@dimen/sixteen_textsize"
+                    android:textColor="@color/white"
+                    app:OpenSans="openSans_regular"/>
+
                 <com.cleanslatetech.floc.utilities.OpenSansTextView
                     android:id="@+id/floc_description_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/name"
+                    android:text="@string/description"
                     android:textSize="@dimen/sixteen_textsize"
                     android:textColor="@color/white"
                     app:OpenSans="openSans_regular"/>
@@ -199,13 +269,14 @@
                     <android.support.v7.widget.AppCompatRatingBar
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:progressBackgroundTint="@color/white"
-                        android:stepSize="1.0"
                         android:secondaryProgress="@color/colorPrimary"
-                        android:scaleX="0.7"
-                        android:scaleY="0.7"
+                        android:layout_marginTop="5dp"
+                        android:stepSize="1.0"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
                         android:transformPivotX="0dp"
                         android:transformPivotY="0dp" />
                 </LinearLayout>
@@ -272,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/organizer"
-                        android:textSize="@dimen/login__screen_texts"
+                        android:textSize="@dimen/fourteen_textsize"
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         app:OpenSans="openSans_regular" />
