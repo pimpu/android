@@ -114,7 +114,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this)
                 .setCancelable(false)
-                .setMessage("Do you want to Exit?")
+                .setMessage("Thanks for visiting! We're fine tuning your flocworld experience every time you drop by. See you soon!")
                 .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -152,7 +152,9 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     @Override
     protected void onPause() {
         super.onPause();
-        handler.removeCallbacks(runnable);
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
     }
 
     @Override

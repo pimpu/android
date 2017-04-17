@@ -136,9 +136,29 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         AppCompatTextView titleToolBar = (AppCompatTextView) findViewById(R.id.toolbarTitle);
         LinearLayout optionText = (LinearLayout) findViewById(R.id.optionsText);
 
+        if (title.equals("Home")) {
+            ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
+            ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        } else if (title.equals("Build a floc") || title.equals("Build a Platform")) {
+            ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setText(title);
+
+            ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
+            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        } else if (title.equals("Events")) {
+            ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
+
+        }
+
         findViewById(R.id.onClickHomeOption).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
 
                 if(! title.equals("Home")) {
@@ -151,13 +171,14 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             @Override
             public void onClick(View v) {
                 new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
-                startActivity(new Intent(BaseAppCompactActivity.this, CreateFlocActivity.class));
+                startActivity(new Intent(BaseAppCompactActivity.this, CreateFlocOptionActivity.class));
             }
         });
 
         findViewById(R.id.onClickEvent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
                 startActivity(new Intent(BaseAppCompactActivity.this, AllEventActivity.class));
             }
@@ -404,9 +425,9 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
-            i.putExtra(Intent.EXTRA_SUBJECT, "Floc");
-            String sAux = " Download this great Floc application.\n\n";
-            sAux = sAux + "here floc play store link will come\n\n";
+            i.putExtra(Intent.EXTRA_SUBJECT, "FLOCworld. Birds Of UR Feather");
+            String sAux = "Download this great FLOCworld application.\n\n";
+            sAux = sAux + "https://play.google.com/store/apps/details?id=com.cleanslatetech.floc&hl=en";
             i.putExtra(Intent.EXTRA_TEXT, sAux);
             this.startActivity(Intent.createChooser(i, "choose one"));
 

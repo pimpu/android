@@ -151,6 +151,14 @@
     <string name="skip">Skip</string>
     <string name="isShowFeatureActivity">boolShowFeature</string>
     <string name="archive_floc">Archive Floc</string>
+    <string name="build_a_floc">Build a floc</string>
+    <string name="build_a_platform">Build a Platform</string>
+    <string name="what_s_this">What\'s this?</string>
+    <string name="channel_name">Channel Name:</string>
+    <string name="owner_email">Owner Email:</string>
+    <string name="password">Password:</string>
+    <string name="about_channel">About Channel:</string>
+    <string name="channel_type">Channel Type:</string>
 
     <string-array name="interests">
         <item>Music Festival</item>

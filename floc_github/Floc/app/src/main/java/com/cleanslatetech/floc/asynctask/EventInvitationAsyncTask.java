@@ -5,9 +5,13 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.FlocDescriptionActivity;
 import com.cleanslatetech.floc.activities.FlocsActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
@@ -31,6 +35,9 @@ public class EventInvitationAsyncTask {
     private int iUSerId, iEventId;
     private String email;
     private ProgressDialog prgDialog;
+    private ProgressBar progressBar;
+    private Button nbutton;
+    private TextView textview;
 
     public EventInvitationAsyncTask(Context context, int iUSerId, String email, int iEventId) {
         this.context = context;
@@ -46,8 +53,20 @@ public class EventInvitationAsyncTask {
         prgDialog.setCancelable(false);
     }
 
-    public void postData() {
+    public EventInvitationAsyncTask(Context context, String email, ProgressBar progressBar,
+                                    Button nbutton, int iUSerId, int iEventId, TextView textview) {
+        this.context = context;
+        this.iUSerId = iUSerId;
+        this.email = email;
+        this.iEventId = iEventId;
+        this.progressBar = progressBar;
+        this.nbutton = nbutton;
+        this.textview = textview;
+        this.textview.setVisibility(View.GONE);
+    }
 
+
+    public void postData() {
 
         RequestParams params;
         params = new RequestParams();
@@ -61,7 +80,12 @@ public class EventInvitationAsyncTask {
 
     private void invokeWS(final Context context, RequestParams params) {
         // Show Progress Dialog
-        prgDialog.show();
+        if (prgDialog != null) {
+            prgDialog.show();
+
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
         // Make RESTful webservice call using AsyncHttpClient object
         RestClient.post(CommonVariables.EVENT_INVITATION_SERVER_URL, params, new JsonHttpResponseHandler() {
@@ -69,7 +93,13 @@ public class EventInvitationAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialog.cancel();
+                if (prgDialog != null) {
+                    prgDialog.cancel();
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
+
                 try{
                     System.out.println(json);
 
@@ -77,12 +107,23 @@ public class EventInvitationAsyncTask {
                     JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
                     if (error) {
-                        for( int i = 0 ; i < jsonArray.length(); i++) {
-                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
-                            System.out.println(msg);
-                            CommonUtilities.customToast(context, msg);
+                        if (prgDialog != null) {
+                            for( int i = 0 ; i < jsonArray.length(); i++) {
+                                String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                                System.out.println(msg);
+                                CommonUtilities.customToast(context, msg);
+                            }
+                        } else {
+                            textview.setVisibility(View.VISIBLE);
+                            String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                            textview.setText(msg);
                         }
+
                     } else {
+                        if( nbutton != null) {
+                            nbutton.performClick();
+                        }
+
                         ((AppCompatEditText) ((AppCompatActivity)context).findViewById(R.id.id_txt_friend_to_invite)).setText("");
                     }
                 } catch (JSONException e) {
@@ -92,7 +133,12 @@ public class EventInvitationAsyncTask {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                prgDialog.cancel();
+                if (prgDialog != null) {
+                    prgDialog.cancel();
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
                 System.out.println("status code: "+statusCode);
                 System.out.println("responseString: "+responseString);
                 CommonUtilities.customToast(context, "Error "+statusCode+" : "+responseString);
@@ -103,13 +149,23 @@ public class EventInvitationAsyncTask {
 
                 // When Http response code is '404'
                 if (statusCode == 404) {
-                    prgDialog.cancel();
+                    if (prgDialog != null) {
+                        prgDialog.cancel();
+
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
                     System.out.println("Requested resource not found");
                     CommonUtilities.customToast(context, "Requested resource not found");
                 }
                 // When Http response code is '500'
                 else if (statusCode == 500) {
-                    prgDialog.cancel();
+                    if (prgDialog != null) {
+                        prgDialog.cancel();
+
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
 
                     System.out.println("Something went wrong at server end");
                     CommonUtilities.customToast(context, "Something went wrong at server end");
@@ -122,8 +178,12 @@ public class EventInvitationAsyncTask {
                             postData();
                             return;
                         }
+                        if (prgDialog != null) {
+                            prgDialog.cancel();
 
-                        prgDialog.cancel();
+                        } else {
+                            progressBar.setVisibility(View.GONE);
+                        }
 
                         if( errorResponse.getBoolean("error") ) {
                             System.out.println(errorResponse.getString("message"));

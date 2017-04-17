@@ -77,6 +77,7 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
         tv_personal = (AppCompatTextView) findViewById(R.id.openPersonaPanel);
         tv_finance = (AppCompatTextView) findViewById(R.id.openFinancePanel);
         tv_dob = (AppCompatTextView) findViewById(R.id.id_btn_birthDate);
+
         txtEmail = (AppCompatEditText) findViewById(R.id.personal_email);
         txtCountry = (AppCompatAutoCompleteTextView) findViewById(R.id.personal_country);
         txtFirstName = (AppCompatEditText) findViewById(R.id.personal_first_name);
@@ -92,6 +93,7 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
         txtBranch = (AppCompatEditText) findViewById(R.id.personal_bank_branch);
         txtIfsc = (AppCompatEditText) findViewById(R.id.personal_bank_Ifsc_code);
         txtAc = (AppCompatEditText) findViewById(R.id.personal_bank_account_numner);
+
         myImage = (ImageView) findViewById(R.id.personal_pic);
 
         personalLayout = findViewById(R.id.personal_layout);

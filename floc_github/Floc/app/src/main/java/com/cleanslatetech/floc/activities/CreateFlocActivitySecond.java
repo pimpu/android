@@ -46,7 +46,7 @@ public class CreateFlocActivitySecond extends BaseAppCompactActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_floc_second);
 
-        super.setToolBar(getResources().getString(R.string.create_floc));
+        super.setToolBar(getResources().getString(R.string.build_a_floc));
 
         init();
     }

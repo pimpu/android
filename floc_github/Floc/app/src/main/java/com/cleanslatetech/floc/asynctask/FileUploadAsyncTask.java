@@ -16,7 +16,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
+import com.cleanslatetech.floc.activities.CreatePlatformActivity;
 import com.cleanslatetech.floc.activities.MyProfileActivity;
+import com.cleanslatetech.floc.models.ChannelModel;
 import com.cleanslatetech.floc.models.EventsModel;
 import com.cleanslatetech.floc.models.MyProfileModel;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -50,6 +52,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
     private Context context;
     private EventsModel eventsModel;
     private MyProfileModel myProfileModel;
+    private ChannelModel channelModel;
 
     public FileUploadAsyncTask(Context context, EventsModel eventsModel, String filepath, String postImageServerUrl) {
         this.filepath = filepath;
@@ -63,6 +66,13 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
         this.context = context;
         this.postImageServerUrl = postImageServerUrl;
         this.myProfileModel = myProfileModel;
+    }
+
+    public FileUploadAsyncTask(Context context, ChannelModel channelModel, String filepath, String postImageServerUrl) {
+        this.filepath = filepath;
+        this.context = context;
+        this.postImageServerUrl = postImageServerUrl;
+        this.channelModel = channelModel;
     }
 
     @Override
@@ -118,6 +128,9 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
                 } else if (myProfileModel != null) {
                     myProfileModel.setProfilePic(msg);
                     new InsertMyProfileAsyncTask(context, myProfileModel, prgDialog).postData();
+
+                } else if (channelModel != null) {
+                    channelModel.setChannelImage(msg);
                 }
             }
         } catch (JSONException e) {

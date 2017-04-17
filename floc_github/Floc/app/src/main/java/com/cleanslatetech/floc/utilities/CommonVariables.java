@@ -29,7 +29,7 @@ public class CommonVariables {
 
     // server api calling strings
 
-    private static String accountapi_server_url = "http://floc.world/api/AccountApi/";
+    private static String accountapi_server_url = "http://flocworld.co.in/api/AccountApi/";
     public static final String USER_REGISTER_SERVER_URL = accountapi_server_url + "Register";
     public static final String USER_LOGIN_SERVER_URL = accountapi_server_url + "Login";
     public static final String CHANGE_PASSWORD_SERVER_URL = accountapi_server_url + "ChangePassword";
@@ -40,9 +40,9 @@ public class CommonVariables {
 
 //    public static final String INTEREST_CATEGORY_SERVER_URL = "http://demo.floc.world/img/category/";
 
-    public static final String EVENT_IMAGE_SERVER_URL = "http://floc.world";
+    public static final String EVENT_IMAGE_SERVER_URL = "http://flocworld.co.in";
 
-    private static String mobileoperationapi_server_url = "http://floc.world/api/MobileOperationApi/";
+    private static String mobileoperationapi_server_url = "http://flocworld.co.in/api/MobileOperationApi/";
     public static final String OTP_CONFIRM_SERVER_URL = mobileoperationapi_server_url + "SendOtp";
     public static final String GET_USER_INTEREST_SERVER_URL = mobileoperationapi_server_url + "GetInterest";
     public static final String GET_INTEREST_CATEGORY_SERVER_URL = mobileoperationapi_server_url + "GetCategory";
@@ -54,8 +54,9 @@ public class CommonVariables {
     public static final String CREATE_FLOC_SERVER_URL = mobileoperationapi_server_url + "CreateFloc";
     public static final String POST_IMAGE_SERVER_URL = mobileoperationapi_server_url + "Post";
     public static final String POST_PROFILE_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostProfile";
+    public static final String POST_CHANNEL_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostChannel";
 
-    private static String activityapi_server_url = "http://floc.world/api/ActivityApi/";
+    private static String activityapi_server_url = "http://flocworld.co.in/api/ActivityApi/";
     public static final String GET_EVENT_DETAILS_SERVER_URL = activityapi_server_url + "GetActivites";
     public static final String EVENT_LIKE_SERVER_URL = activityapi_server_url + "LikeEvent";
     public static final String EVENT_REVIEWSERVER_URL = activityapi_server_url + "WriteReview";

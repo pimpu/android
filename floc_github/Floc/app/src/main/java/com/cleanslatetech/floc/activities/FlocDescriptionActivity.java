@@ -1,11 +1,17 @@
 package com.cleanslatetech.floc.activities;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatRatingBar;
@@ -13,16 +19,28 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.ChatRecyclerAdapter;
 import com.cleanslatetech.floc.asynctask.BookEventAsyncTask;
+import com.cleanslatetech.floc.asynctask.ChangePwdAsyncTask;
 import com.cleanslatetech.floc.asynctask.ChatAsyncTask;
+import com.cleanslatetech.floc.asynctask.EventInvitationAsyncTask;
 import com.cleanslatetech.floc.asynctask.GetActivityAsyncTask;
 import com.cleanslatetech.floc.asynctask.LikeStoreAsyncTask;
 import com.cleanslatetech.floc.asynctask.PostRecentVisitedEventAsyncTask;
@@ -33,10 +51,13 @@ import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.interfaces.InterfaceFlocDescTopics;
 import com.cleanslatetech.floc.utilities.DateHelper;
+import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 import com.cleanslatetech.floc.utilities.MakeTextResizable;
+import com.cleanslatetech.floc.utilities.Validations;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.plus.PlusOneButton;
+import com.google.android.gms.plus.PlusShare;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +79,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
     private AppCompatTextView tvDetails, tvAsyncText, tvStartDate, tvStartTime, tvEndDate, tvEndTime, tvAddress;
     private AppCompatEditText txtComment;
     private FloatingActionButton fabSentComment;
+    private PopupWindow popupWindow;
 
     public RecyclerView.Adapter commentRecyclerAdapter;
     private RecyclerView recyclerviewComments;
@@ -65,7 +87,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
     // The request code must be 0 or greater.
     private static final int PLUS_ONE_REQUEST_CODE = 0;
-    private PlusOneButton mPlusOneButton;
+    private ShareButton shareButton;
     private RelativeLayout rlProgressLayout;
     private int iActivityIdRating, iActivityIdLike, iActivityIdReview;
     private int iEventId, iCategoryId, iCreaterId, iUSerId;
@@ -123,7 +145,6 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
     @Override
     protected void onResume() {
         super.onResume();
-        mPlusOneButton.initialize(URL, PLUS_ONE_REQUEST_CODE);
     }
 
     @Override
@@ -244,15 +265,17 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
 
         // facebook share
-        ShareButton shareButton = (ShareButton) findViewById(R.id.shareButton);
+        shareButton = (ShareButton) findViewById(R.id.shareButton);
         ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentTitle("http://flocworld.co.in/Event/EventDescription/"+iEventId)
                 .setContentUrl(Uri.parse(CommonVariables.EVENT_IMAGE_SERVER_URL + eventPicture))
                 .build();
         shareButton.setShareContent(content);
 
         // Google+ share
-        mPlusOneButton = (PlusOneButton) findViewById(R.id.plus_one_button);
-        URL = CommonVariables.EVENT_IMAGE_SERVER_URL + eventPicture;
+        /*mPlusOneButton = (PlusOneButton) findViewById(R.id.plus_one_button);
+        mPlusOneButton.initialize(URL, PLUS_ONE_REQUEST_CODE);
+        URL = CommonVariables.EVENT_IMAGE_SERVER_URL + eventPicture;*/
 
     }
 
@@ -395,7 +418,80 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         }
     }
 
-    public void onClickWhatsappLogo(View view) {
+    private String formatDate(String dateText) {
+        long lDateDob = DateHelper.dobConvertToMillis(dateText);
+        String day = DateHelper.getDay(lDateDob);
+        String month = DateHelper.getMonth(lDateDob);
+        String year = DateHelper.getYear(lDateDob);
+
+        return day + "-" + month + "-" + year;
+    }
+
+    public void openSharePopup(View view) {
+        // initialize a pop up window type
+
+        // Initialize a new instance of LayoutInflater service
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.share_floc_window, null);
+
+        if( strFrom.equals( EnumFlocDescFrom.Archive.toString() ) ||
+                strFrom.equals( EnumFlocDescFrom.Completed.toString() ) ||
+                strFrom.equals( EnumFlocDescFrom.Pause.toString() ) ||
+                strFrom.equals( EnumFlocDescFrom.Cancel.toString() ) ) {
+            CommonUtilities.customToast(FlocDescriptionActivity.this, "Not allowed to share Floc for some reason.");
+        }
+
+        popupWindow = new PopupWindow(layout, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        // Set an elevation value for popup window
+        // Call requires API level 21
+        if(Build.VERSION.SDK_INT>=21) {
+            popupWindow.setElevation(5.0f);
+        }
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        View anchor = findViewById(R.id.id_openShareDailog);
+        popupWindow.showAsDropDown(anchor, 0, -580);
+    }
+
+    public void onClickFacebookShare(View view) {
+        popupWindow.dismiss();
+        shareButton.performClick();
+    }
+
+    public void onClickGoogleShare(View view) {
+        popupWindow.dismiss();
+
+        Uri contentUri = getUri();
+        ContentResolver cr = this.getContentResolver();
+        String mime = cr.getType(contentUri);
+
+        PlusShare.Builder share = new PlusShare.Builder(this);
+        share.setText("http://flocworld.co.in/Event/EventDescription/"+iEventId);
+        share.addStream(contentUri);
+        share.setType(mime);
+        startActivityForResult(share.getIntent(), PLUS_ONE_REQUEST_CODE);
+    }
+
+    public void onClickWhatsappShare(View view) {
+        popupWindow.dismiss();
+        Uri contentUri = getUri();
+
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+        whatsappIntent.setType("image/*");
+        whatsappIntent.setPackage("com.whatsapp");
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://flocworld.co.in/Event/EventDescription/"+iEventId);
+        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        whatsappIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        whatsappIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+        whatsappIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        try {
+            startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            CommonUtilities.customToast(this, "Whatsapp have not been installed.");
+        }
+    }
+
+    private Uri getUri() {
         imgFlocPic.setDrawingCacheEnabled(true);
         Bitmap bmp = imgFlocPic.getDrawingCache();
 
@@ -423,28 +519,87 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             e.printStackTrace();
         }
 
-        Uri contentUri = FileProvider.getUriForFile(this, "com.cleanslatetech.floc.fileprovider", newFile);
-
-        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-        whatsappIntent.setType("image/*");
-        whatsappIntent.setPackage("com.whatsapp");
-        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-        whatsappIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-        whatsappIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
-        whatsappIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        try {
-            startActivity(whatsappIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            CommonUtilities.customToast(this, "Whatsapp have not been installed.");
-        }
+        return FileProvider.getUriForFile(this, "com.cleanslatetech.floc.fileprovider", newFile);
     }
 
-    private String formatDate(String dateText) {
-        long lDateDob = DateHelper.dobConvertToMillis(dateText);
-        String day = DateHelper.getDay(lDateDob);
-        String month = DateHelper.getMonth(lDateDob);
-        String year = DateHelper.getYear(lDateDob);
+    public void onClickFlocAppShare(View view) {
+        popupWindow.dismiss();
 
-        return day + "-" + month + "-" + year;
+        final EditText emailID = new EditText(this);
+        emailID.setHint("Friend Email Id");
+
+        final ProgressBar progressBar = new ProgressBar(this);
+        progressBar.setScaleY(0.7f);
+        progressBar.setScaleX(0.7f);
+        progressBar.setVisibility(View.GONE);
+
+        final TextView textview = new TextView(this);
+        textview.setText("Hell");
+        textview.setPadding(18, 20, 0, 0);
+        textview.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        textview.setVisibility(View.GONE);
+
+        //  alert dialog main layout
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutParams(parms);
+
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(20, 2, 2, 2);
+
+        // adding edittext and textview to alert dialog main layout
+        layout.addView(emailID);
+        layout.addView(progressBar);
+        layout.addView(textview);
+
+        // adjust InputType of edittext.
+        emailID.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS );
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        String userName = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserName));
+        alertDialog.setTitle("Invite User To Event");
+
+        // set main layout to alert dialog
+        alertDialog.setView(layout);
+        alertDialog.setCancelable(false);
+
+        alertDialog.setPositiveButton("Send",null);
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        final AlertDialog dialog = alertDialog.create();
+        dialog.show();
+
+        final Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor(Color.BLACK);
+
+        final Button pButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        pButton.setTextColor(Color.BLACK);
+        pButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String emailId = emailID.getText().toString();
+                Boolean flag = true;
+
+                if( !Validations.emailValidate(emailId) ) {
+                    flag = false;
+                    emailID.setError("field not a valid.");
+                }
+
+                if(flag) {
+                    new EventInvitationAsyncTask(FlocDescriptionActivity.this,
+                            emailId, progressBar, nbutton, iUSerId, iEventId, textview).postData();
+                }
+            }
+        });
     }
 }

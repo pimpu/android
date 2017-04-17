@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="@string/create_floc"
+            android:text="@string/build_a_floc"
             android:textSize="@dimen/fourteen_textsize"
             android:textColor="@color/colorPrimary"
             android:textAlignment="center"

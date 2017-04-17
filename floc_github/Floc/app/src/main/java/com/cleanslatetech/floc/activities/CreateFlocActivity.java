@@ -61,7 +61,7 @@ public class CreateFlocActivity extends BaseAppCompactActivity implements Adapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_floc);
 
-        super.setToolBar(getResources().getString(R.string.create_floc));
+        super.setToolBar(getResources().getString(R.string.build_a_floc));
 
         createFlocActivityInstance = this;
 

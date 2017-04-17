@@ -32,9 +32,14 @@ import static com.cleanslatetech.floc.utilities.CommonUtilities.handleGoogleSign
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
-    // TODO: Add Invite user to Event in description page
+    // TODO: search bar
+    // TODO: change the repsonse format of My booking Floc array in right menu FLOCworld option
+    // TODO: image in chat box
+    // TODO: save profile image when login with social
+    // TODO: Deep linking in share
+    // TODO: You tube type share layout
 
     EditText txtLoginEmail, txtLoginPwd;
     public static Activity loginActivity;

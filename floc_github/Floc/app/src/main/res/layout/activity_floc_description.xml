@@ -59,7 +59,7 @@
                         android:background="@drawable/white_border"
                         android:layout_gravity="center_vertical"
                         android:padding="5dp"
-                        android:text="Booked"
+                         android:text="Booked"
                         android:textSize="@dimen/login__screen_texts"
                         android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
@@ -73,36 +73,36 @@
                         android:layout_alignParentEnd="true">
 
                         <com.cleanslatetech.floc.utilities.OpenSansTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/id_openShareDailog"
+                            android:layout_width="97dp"
+                            android:layout_height="31dp"
+                            android:background="@color/colorPrimary"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
                             android:text="@string/share_on"
                             android:textColor="@color/white"
-                            app:OpenSans="openSans_regular"/>
+                            android:textSize="@dimen/sixteen_textsize"
+                            android:textAlignment="center"
+                            app:OpenSans="openSans_regular"
+                            android:onClick="openSharePopup" />
 
                         <com.facebook.share.widget.ShareButton
                             android:id="@+id/shareButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:contentDescription="@string/share"/>
+                            android:contentDescription="@string/share"
+                            android:visibility="gone"/>
 
-                        <com.google.android.gms.plus.PlusOneButton
+                        <!--<com.google.android.gms.plus.PlusOneButton
                             xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"
                             android:id="@+id/plus_one_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             plus:size="standard"
-                            plus:annotation="none" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/whatsapp_button"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/whatsapp_logo"
-                            android:onClick="onClickWhatsappLogo"/>
+                            plus:annotation="none"
+                            android:visibility="gone" />-->
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -402,13 +402,13 @@
                     android:layout_marginBottom="10dp">
 
                     <com.cleanslatetech.floc.utilities.OpenSansButton
-                        android:layout_width="110dp"
-                        android:layout_height="35dp"
+                        android:layout_width="108dp"
+                        android:layout_height="30dp"
                         android:background="@color/colorPrimary"
                         android:layout_gravity="end"
                         android:text="@string/submit"
                         android:textColor="@color/white"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/fourteen_textsize"
                         app:OpenSans="openSans_regular"
                         android:onClick="OnClickSubmitReview"/>
 

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+    android:orientation="vertical"
+    tools:context="com.cleanslatetech.floc.activities.CreatePlatformActivity">
+
+    <include layout="@layout/appbar_layout" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/labelName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/channel_name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/id_channel_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/labelName"
+                    android:background="@drawable/white_border"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/ownerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/owner_email"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/id_owner_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ownerName"
+                    android:background="@drawable/white_border"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/platform_pwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/password"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/id_platform_pwd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/platform_pwd"
+                    android:background="@drawable/white_border"
+                    android:inputType="textPassword"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/channel_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/about_channel"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansEditText
+                    android:id="@+id/id_channel_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/channel_desc"
+                    android:background="@drawable/white_border"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/channelPicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/picture"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansButton
+                    android:id="@+id/id_channel_file_chooser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/channelPicture"
+                    android:background="@drawable/white_border"
+                    android:onClick="selectChannelPicture"
+                    android:text="Choose File"
+                    android:textColor="@color/white" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/tv_selected_channel_file"
+                    android:layout_width="@dimen/event_image_column_height"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@+id/id_channel_file_chooser"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="No file chosen"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/channel_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/channel_type"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <RadioGroup
+                    android:id="@+id/rg_channel_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/channel_type"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_channel_public"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:buttonTint="@color/white"
+                        android:paddingStart="5dp"
+                        android:text="Public"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen_textsize" />
+
+                    <RadioButton
+                        android:id="@+id/rb_channel_private"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:buttonTint="@color/white"
+                        android:paddingLeft="5dp"
+                        android:text="Private"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen_textsize" />
+                </RadioGroup>
+
+            </RelativeLayout>
+
+            <com.cleanslatetech.floc.utilities.OpenSansButton
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:onClick="onClickCreatePlatform"
+                android:text="@string/create"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:OpenSans="openSans_regular" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/appbar_layout" />
+
+</LinearLayout>
