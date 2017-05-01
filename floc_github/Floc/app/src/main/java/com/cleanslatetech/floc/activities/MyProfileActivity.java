@@ -31,6 +31,8 @@ import com.cleanslatetech.floc.utilities.HandleExpandLayoutMethods;
 import com.cleanslatetech.floc.interfaces.InterfaceOnDateSet;
 import com.cleanslatetech.floc.utilities.FormValidator;
 import com.cleanslatetech.floc.utilities.SelectDateFragment;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,12 +62,16 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
     long lDateDob = 0;
     Boolean isPicUpload;
 
+    private GetSharedPreference getSharedPreference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
 
         super.setToolBar(getResources().getString(R.string.my_profile));
+
+        getSharedPreference = new GetSharedPreference(this);
 
         init();
     }
@@ -119,12 +125,12 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
         rbMale = (RadioButton) findViewById(R.id.rbMale);
         rbFemale = (RadioButton) findViewById(R.id.rbFemale);
 
-        strMyProfile = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdMyProfile));
+        strMyProfile = getSharedPreference.getString(getResources().getString(R.string.shrdMyProfile));
 
         joMyProfile = new JSONObject();
         try {
 
-            txtEmail.setText(new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserEmail)));
+            txtEmail.setText(getSharedPreference.getString(getResources().getString(R.string.shrdUserEmail)));
 
             if(strMyProfile != null) {
 
@@ -174,14 +180,39 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                 pinCode = pinCode.equals("null") ? "" : pinCode;
                 txtPincode.setText(pinCode);
 
-                System.out.println(joMyProfile.getString("ProfilePic"));
 
-                Glide
-                        .with(this)
-                        .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
-                        .placeholder(R.drawable.textarea_gradient_bg)
-                        .dontAnimate()
-                        .into(myImage);
+                String loginType = getSharedPreference
+                        .getString(getResources().getString(R.string.shrdLoginType));
+
+                if(loginType.equals(getResources().getString(R.string.facebookLogin)) ||
+                        loginType.equals(getResources().getString(R.string.googleLogin)) ) {
+
+                    findViewById(R.id.id_profilePic_chooser).setVisibility(View.GONE);
+
+                    Glide
+                            .with(this)
+                            .load(getSharedPreference.getString("social_profilePic"))
+                            .placeholder(R.drawable.textarea_gradient_bg)
+                            .into(myImage);
+                }
+                else {
+
+                    if( joMyProfile.getString("ProfilePic").equals("null") ) {
+                        Glide
+                                .with(getApplication())
+                                .load( R.drawable.blank_profile )
+                                .placeholder(R.drawable.textarea_gradient_bg)
+                                .into(myImage);
+
+                    } else {
+
+                        Glide
+                                .with(this)
+                                .load( CommonVariables.EVENT_IMAGE_SERVER_URL + joMyProfile.getString("ProfilePic"))
+                                .placeholder(R.drawable.textarea_gradient_bg)
+                                .into(myImage);
+                    }
+                }
 
                 filePath = joMyProfile.getString("ProfilePic");
 
@@ -305,14 +336,26 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                     // Get the Uri of the selected file
                     Uri uri = data.getData();
 
+                    CropImage.activity(uri)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setMinCropResultSize(800, 400)
+                            .setMaxCropResultSize(2600, 2200)
+                            .start(this);
+
+                }
+                break;
+
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
                     // Get the path
                     try {
-                        filePath = getPath(MyProfileActivity.this, uri);
+                        filePath = getPath(MyProfileActivity.this, resultUri);
+                        System.out.println("filePath: "+filePath);
                         File imgFile = new  File(filePath);
 
-                        if(imgFile.exists()){
-
-                            Bitmap profileBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        if(imgFile.exists()) {
 
                             Glide
                                     .with(this)
@@ -320,16 +363,20 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                                     .placeholder(R.drawable.textarea_gradient_bg)
                                     .dontAnimate()
                                     .into(myImage);
-//                            myImage.setImageBitmap(profileBitmap);
 
                             isPicUpload = true;
 
                         }
+
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
+
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
                 break;
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -359,8 +406,8 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
                 strAc = joMyProfile.getString("Account").equals("null") ? "test" : joMyProfile.getString("Account");
 
                 MyProfileModel myProfileModel = new MyProfileModel(
-                        new GetSharedPreference(MyProfileActivity.this).getInt(getResources().getString(R.string.shrdLoginId)),
-                        new GetSharedPreference(MyProfileActivity.this).getString(getResources().getString(R.string.shrdUserName)),
+                        getSharedPreference.getInt(getResources().getString(R.string.shrdLoginId)),
+                        getSharedPreference.getString(getResources().getString(R.string.shrdUserName)),
                         txtFirstName.getText().toString(),
                         txtMiddleName.getText().toString(),
                         txtLastName.getText().toString(),
@@ -449,8 +496,8 @@ public class MyProfileActivity extends BaseAppCompactActivity implements Interfa
 
 
                 MyProfileModel myProfileModel = new MyProfileModel(
-                        new GetSharedPreference(MyProfileActivity.this).getInt(getResources().getString(R.string.shrdLoginId)),
-                        new GetSharedPreference(MyProfileActivity.this).getString(getResources().getString(R.string.shrdUserName)),
+                        getSharedPreference.getInt(getResources().getString(R.string.shrdLoginId)),
+                        getSharedPreference.getString(getResources().getString(R.string.shrdUserName)),
                         strFirstName,
                         strMiddleName,
                         strLastName,

@@ -11,12 +11,21 @@ android {
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
     defaultConfig {
         applicationId "com.cleanslatetech.floc"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,29 +47,35 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    // http calls
-    // loading animation on splash screen loading text
-    // fuzzy image load with glide gallery
-    // futuresimple/android-floating-action-button
-    // google sign in
-    // google plus one button
-    // facebook sign in
+    testCompile 'junit:junit:4.12'
+
     // slid show
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // http calls
     compile 'com.loopj.android:android-async-http:1.4.9'
+
+    // loading animation on splash screen loading text
     compile 'com.wang.avi:library:1.0.5'
     compile 'com.nineoldandroids:library:2.4.0'
+
+    // fuzzy image load with glide gallery
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+
+    // google sign in
     compile 'com.google.android.gms:play-services-auth:10.2.1'
+
+    // google plus one button
     compile 'com.google.android.gms:play-services-plus:10.2.1'
+
+    // facebook sign in
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.chabbal:slidingdotsplash:1.0.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.3.+'
 }
 apply plugin: 'com.google.gms.google-services'

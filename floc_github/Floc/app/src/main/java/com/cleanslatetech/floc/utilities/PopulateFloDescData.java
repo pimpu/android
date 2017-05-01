@@ -94,12 +94,15 @@ public class PopulateFloDescData {
 
             final JSONArray finalJsonArrayReview = jsonArrayReview;
 
-            tvReviewCount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickReview(finalJsonArrayReview);
-                }
-            });
+            if ( !tvReviewCount.getText().toString().equals("0")) {
+                tvReviewCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickReview(finalJsonArrayReview);
+                    }
+                });
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -118,6 +121,7 @@ public class PopulateFloDescData {
 
     private void showLikeData(AppCompatActivity appCompatContext) {
         AppCompatTextView tvLikes = (AppCompatTextView) appCompatContext.findViewById(R.id.id_likes_count);
+        AppCompatTextView tvLikesLabel = (AppCompatTextView) appCompatContext.findViewById(R.id.id_txt_like);
         AppCompatImageButton imgbtnUnlikeTint = (AppCompatImageButton) appCompatContext.findViewById(R.id.img_btn_unlike_event);
         AppCompatImageButton imgbtnLikeTint = (AppCompatImageButton) appCompatContext.findViewById(R.id.img_btn_like_event);
 
@@ -155,12 +159,23 @@ public class PopulateFloDescData {
             }
 
             final JSONArray finalJsonArrayLike = jsonArrayLike;
-            tvLikes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickLike(finalJsonArrayLike);
-                }
-            });
+
+            if( !tvLikes.getText().toString().equals("0")) {
+
+                tvLikes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickLike(finalJsonArrayLike);
+                    }
+                });
+
+                tvLikesLabel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickLike(finalJsonArrayLike);
+                    }
+                });
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -184,6 +199,7 @@ public class PopulateFloDescData {
 
     private void showBookingData(AppCompatActivity appCompatContext) {
         AppCompatTextView tvBookingCount = (AppCompatTextView) appCompatContext.findViewById(R.id.id_booking_count);
+        AppCompatTextView tvBookingCountLabel = (AppCompatTextView) appCompatContext.findViewById(R.id.id_booking_count_label);
         AppCompatTextView tvBookedTest = (AppCompatTextView) appCompatContext.findViewById(R.id.id_tv_booked);
         AppCompatButton btnBookedEvent = (AppCompatButton) appCompatContext.findViewById(R.id.id_btn_booked_event);
 
@@ -231,12 +247,23 @@ public class PopulateFloDescData {
             }
 
             final JSONArray finalJsonArrayBooking = jsonArrayBooking;
-            tvBookingCount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickBooking(finalJsonArrayBooking);
-                }
-            });
+
+            if ( !tvBookingCount.getText().toString().equals("0") ) {
+
+                tvBookingCount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickBooking(finalJsonArrayBooking);
+                    }
+                });
+
+                tvBookingCountLabel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((FlocDescriptionActivity)context).interfaceFlocDescTopics.onClickBooking(finalJsonArrayBooking);
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

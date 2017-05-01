@@ -19,9 +19,11 @@ import com.cleanslatetech.floc.models.ChannelModel;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
+import com.cleanslatetech.floc.utilities.DateHelper;
 import com.cleanslatetech.floc.utilities.FormValidator;
 
 import java.net.URISyntaxException;
+import java.util.Date;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.getFileName;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.getPath;
@@ -33,7 +35,7 @@ public class CreatePlatformActivity extends BaseAppCompactActivity {
     private static final int FILE_SELECT_CODE = 103;
     private String filePath;
     private AppCompatEditText txtChannelName, txtChannelPwd, txtChannelDesc;
-    RadioButton rbPublic, rbPrivate;
+    RadioButton rbPublic, rbPrivate, rbEcommerce, rbChannel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class CreatePlatformActivity extends BaseAppCompactActivity {
 
         rbPublic = (RadioButton) findViewById(R.id.rb_channel_public);
         rbPrivate = (RadioButton) findViewById(R.id.rb_channel_private);
+        rbEcommerce = (RadioButton) findViewById(R.id.rb_platform_ecommerce);
+        rbChannel = (RadioButton) findViewById(R.id.rb_platform_channel);
 
         String email = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdUserEmail));
         tvChannelOwner.setText(email);
@@ -111,17 +115,26 @@ public class CreatePlatformActivity extends BaseAppCompactActivity {
 
         } else {
             String selectedChannelType = null;
+            String selectedPlatformType = null;
+
             if(rbPublic.isChecked()) {
                 selectedChannelType = "Public";
             } else if(rbPrivate.isChecked()) {
                 selectedChannelType = "Private";
             }
 
+            if(rbEcommerce.isChecked()) {
+                selectedPlatformType = "Ecommerce";
+
+            } else if(rbChannel.isChecked()) {
+                selectedPlatformType = "Channel";
+            }
+
             ChannelModel channelModel = new ChannelModel(
                     txtChannelName.getText().toString().trim(),
                     tvChannelOwner.getText().toString().trim(),
                     txtChannelDesc.getText().toString().trim(),
-                    "PlatformType",
+                    selectedPlatformType,
                     selectedChannelType,
                     txtChannelPwd.getText().toString().trim(),
                     0,
@@ -137,8 +150,15 @@ public class CreatePlatformActivity extends BaseAppCompactActivity {
                         imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                     }
 
-//                    new FileUploadAsyncTask(CreatePlatformActivity.this, channelModel, filePath, CommonVariables.POST_CHANNEL_IMAGE_SERVER_URL).execute();
-                    System.out.println(channelModel.toString());
+                    long dateMillis = new Date().getTime();
+                    String day = DateHelper.getDay(dateMillis);
+                    String month = DateHelper.getMonth(dateMillis);
+                    String year = DateHelper.getYear(dateMillis);
+                    String startDate = year + "-" + month + "-" + day;
+
+                    channelModel.setCreateDate(startDate);
+
+                    new FileUploadAsyncTask(CreatePlatformActivity.this, channelModel, filePath, CommonVariables.POST_CHANNEL_IMAGE_SERVER_URL).execute();
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

@@ -15,13 +15,47 @@ import com.loopj.android.http.SyncHttpClient;
 public class RestClient {
     private static AsyncHttpClient client = new AsyncHttpClient();
     public static AsyncHttpClient syncHttpClient= new SyncHttpClient();
+    public static int DEFAULT_TIMEOUT = 20 * 1000;
 
     public static void get(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+        client.setTimeout(DEFAULT_TIMEOUT);
+        client.setConnectTimeout(DEFAULT_TIMEOUT);
+        client.setResponseTimeout(DEFAULT_TIMEOUT);
+
         client.get(url, params, responseHandler);
     }
 
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.setTimeout(DEFAULT_TIMEOUT);
+        client.setConnectTimeout(DEFAULT_TIMEOUT);
+        client.setResponseTimeout(DEFAULT_TIMEOUT);
+
         getClient().get(url, params, responseHandler);
+    }
+
+    public static void post(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+        client.setTimeout(DEFAULT_TIMEOUT);
+        client.setConnectTimeout(DEFAULT_TIMEOUT);
+        client.setResponseTimeout(DEFAULT_TIMEOUT);
+
+        client.post(url, params, responseHandler);
+    }
+
+    public static void postWithHeader(String url, String apiKeyHeader, RequestParams params, JsonHttpResponseHandler responseHandler) {
+        client.setTimeout(DEFAULT_TIMEOUT);
+        client.setConnectTimeout(DEFAULT_TIMEOUT);
+        client.setResponseTimeout(DEFAULT_TIMEOUT);
+
+        client.addHeader("X-Authorization", apiKeyHeader);
+        client.post(url, params, responseHandler);
+    }
+
+    public static void put(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
+        client.setTimeout(DEFAULT_TIMEOUT);
+        client.setConnectTimeout(DEFAULT_TIMEOUT);
+        client.setResponseTimeout(DEFAULT_TIMEOUT);
+
+        client.put(url, params, responseHandler);
     }
 
     private static AsyncHttpClient getClient() {
@@ -29,19 +63,6 @@ public class RestClient {
         if (Looper.myLooper() == null)
             return syncHttpClient;
         return client;
-    }
-
-    public static void post(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
-        client.post(url, params, responseHandler);
-    }
-
-    public static void postWithHeader(String url, String apiKeyHeader, RequestParams params, JsonHttpResponseHandler responseHandler) {
-        client.addHeader("X-Authorization", apiKeyHeader);
-        client.post(url, params, responseHandler);
-    }
-
-    public static void put(String url, RequestParams params, JsonHttpResponseHandler responseHandler) {
-        client.put(url, params, responseHandler);
     }
 
 }

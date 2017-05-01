@@ -30,7 +30,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_event);
 
-        super.setToolBar(getResources().getString(R.string.events));
+        super.setToolBar(getResources().getString(R.string.flocs));
 
         LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

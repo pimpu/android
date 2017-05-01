@@ -8,27 +8,28 @@ import com.cleanslatetech.floc.utilities.FormValidator;
  */
 
 public class ChannelModel {
-    @isEmpty( errorMsg="Channel name cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    @isEmpty( errorMsg="platform type cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    private String PlatformType;
+
+    @isEmpty( errorMsg="name cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
     private String ChannelName;
 
-    @isEmpty( errorMsg="Channel owner cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    @isEmpty( errorMsg="owner cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
     private String ChannelOwner;
+
+    @isEmpty( errorMsg="password cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    private String ChannelPassword;
 
     private String CreateDate;
 
-    @isEmpty( errorMsg="Channel about cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    @isEmpty( errorMsg="about cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
     private String ChannelAbout;
 
-    @isEmpty( errorMsg="Channel image cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    @isEmpty( errorMsg="image cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
     private String ChannelImage;
 
-    private String PlatformType;
-
-    @isEmpty( errorMsg="Channel type cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
+    @isEmpty( errorMsg="type cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
     private String ChannelType;
-
-    @isEmpty( errorMsg="Channel password cannot be null", errorDisplayType= FormValidator.DisplayType.Toast)
-    private String ChannelPassword;
 
     private int ChannelStatus;
 

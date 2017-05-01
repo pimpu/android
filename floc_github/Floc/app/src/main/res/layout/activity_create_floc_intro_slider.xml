@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/dark_blue"
+    tools:context="com.cleanslatetech.floc.activities.CreateFlocIntroSliderActivity">
+
+    <com.cleanslatetech.floc.utilities.OpenSansButton
+        android:id="@+id/startBuildCreateFloCIntro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingRight="@dimen/ten_dp"
+        android:text="@string/start_building"
+        android:textColor="@color/colorPrimary"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        android:onClick="gotoCreateForm" />
+
+    <com.cleanslatetech.floc.utilities.OpenSansButton
+        android:id="@+id/skipCreateFloCIntro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingRight="@dimen/ten_dp"
+        android:text="@string/skip"
+        android:textColor="@color/colorPrimary"
+        android:background="@android:color/transparent"
+        android:onClick="gotoCreateForm" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/create_intro_slider_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/create_intro_count_dots"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

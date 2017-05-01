@@ -55,12 +55,12 @@
             app:OpenSans="openSans_regular" />
 
         <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:id="@+id/onClickEvent"
+            android:id="@+id/onClickFloc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="end"
-            android:text="@string/events"
+            android:text="@string/flocs"
             android:textSize="@dimen/fourteen_textsize"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"

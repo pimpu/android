@@ -34,12 +34,20 @@ import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 
 public class LoginActivity extends AppCompatActivity {
 
-    // TODO: search bar
+    // TODO: search bar by category, city, date
     // TODO: change the repsonse format of My booking Floc array in right menu FLOCworld option
     // TODO: image in chat box
     // TODO: save profile image when login with social
     // TODO: Deep linking in share
     // TODO: You tube type share layout
+    // TODO: Notification
+    // TODO: Image customization
+    // TODO: sort image using GPS location
+    // TODO: Edit Interest Option in right menu
+    // TODO: change plus minus btn into checkbox while selecting interest
+    // TODO: change text "start flocking" button and "the above 5 are for registration process"
+    // TODO: remove single task from web view activity. not open webview again when other webview option open
+    // TODO: alternate solution for moving text
 
     EditText txtLoginEmail, txtLoginPwd;
     public static Activity loginActivity;

@@ -10,10 +10,8 @@ import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import cz.msebera.android.httpclient.Header;
 
 /**

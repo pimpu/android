@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -67,6 +70,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -158,6 +163,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         interfaceFlocDescTopics = this;
 
         String eventPicture = null;
+
         String intent_floc_data = getIntent().getExtras().getString("floc_data");
         strFrom = getIntent().getExtras().getString("from");
 
@@ -474,10 +480,10 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
     public void onClickWhatsappShare(View view) {
         popupWindow.dismiss();
-        Uri contentUri = getUri();
+        /*Uri contentUri = getUri();
 
         Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-        whatsappIntent.setType("image/*");
+        whatsappIntent.setType("image*//*");
         whatsappIntent.setPackage("com.whatsapp");
         whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://flocworld.co.in/Event/EventDescription/"+iEventId);
         whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
@@ -486,6 +492,72 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
         whatsappIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         try {
             startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            CommonUtilities.customToast(this, "Whatsapp have not been installed.");
+        }*/
+
+        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //Inflate the layout into a view and configure it the way you like
+        View inflate = mInflater.inflate(R.layout.share_layout_on_whatsapp, null, false);
+        ImageView imgView = (ImageView) inflate.findViewById(R.id.id_iv_share_floc_img);
+        AppCompatTextView tvTitle = (AppCompatTextView) inflate.findViewById(R.id.id_tv_share_floc_text);
+
+        imgView.setImageDrawable(imgFlocPic.getDrawable());
+        tvTitle.setText(strEventName);
+
+        //Pre-measure the view so that height and width don't remain null.
+        inflate.measure(View.MeasureSpec.makeMeasureSpec(inflate.getWidth(), View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(inflate.getHeight(), View.MeasureSpec.UNSPECIFIED));
+
+        //Assign a size and position to the view and all of its descendants
+        inflate.layout(inflate.getWidth(), inflate.getHeight(), inflate.getMeasuredWidth(), inflate.getMeasuredHeight());
+
+        //Create the bitmap
+        Bitmap bitmap = Bitmap.createBitmap(inflate.getMeasuredWidth(),
+                inflate.getMeasuredHeight(),
+                Bitmap.Config.RGB_565 );
+
+        //Create a canvas with the specified bitmap to draw into
+        Canvas c = new Canvas(bitmap);
+
+        //Render this view (and all of its children) to the given Canvas
+        inflate.draw(c);
+
+        File imagePath = new File(getCacheDir(), "images");
+        if(!imagePath.exists()) {
+            imagePath.mkdir();
+        }
+
+        File newFile = new File(imagePath, "image_"+new Date().getTime()+"_"+".png");
+
+        try {
+            if(!newFile.exists()) {
+                newFile.createNewFile();
+            }
+
+            FileOutputStream fos = new FileOutputStream(newFile);
+            // Write the bitmap to the output stream (and thus the file) in PNG format (lossless compression)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, fos);
+            // Flush and close the output stream
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Uri contentUri = FileProvider.getUriForFile(FlocDescriptionActivity.this, "com.cleanslatetech.floc.fileprovider", newFile);
+
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+        shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://flocworld.co.in/Event/EventDescription/"+iEventId);
+
+        try {
+            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
         } catch (android.content.ActivityNotFoundException ex) {
             CommonUtilities.customToast(this, "Whatsapp have not been installed.");
         }
@@ -515,6 +587,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             // Flush and close the output stream
             fos.flush();
             fos.close();
+            imgFlocPic.setDrawingCacheEnabled(false);
         } catch (IOException e) {
             e.printStackTrace();
         }

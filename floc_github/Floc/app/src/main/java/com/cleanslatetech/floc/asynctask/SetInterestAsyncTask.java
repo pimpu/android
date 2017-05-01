@@ -4,11 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.chabbal.slidingdotsplash.SlidingSplashView;
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
@@ -24,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;

@@ -55,6 +55,8 @@ public class CommonVariables {
     public static final String POST_IMAGE_SERVER_URL = mobileoperationapi_server_url + "Post";
     public static final String POST_PROFILE_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostProfile";
     public static final String POST_CHANNEL_IMAGE_SERVER_URL = mobileoperationapi_server_url + "PostChannel";
+    public static final String CREATE_PLATOFRM_SERVER_URL = mobileoperationapi_server_url + "CreatePlatform";
+    public static final String GET_CHANNEL_SERVER_URL = mobileoperationapi_server_url + "GetChannel";
 
     private static String activityapi_server_url = "http://flocworld.co.in/api/ActivityApi/";
     public static final String GET_EVENT_DETAILS_SERVER_URL = activityapi_server_url + "GetActivites";

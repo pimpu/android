@@ -139,19 +139,19 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         if (title.equals("Home")) {
             ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
             ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
-            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
 
         } else if (title.equals("Build a floc") || title.equals("Build a Platform")) {
             ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setText(title);
 
             ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.colorPrimary));
             ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
-            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.colorPrimary));
+            ((AppCompatTextView) findViewById(R.id.onClickFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
 
         } else if (title.equals("Events")) {
             ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.colorPrimary));
             ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
-            ((AppCompatTextView) findViewById(R.id.onClickEvent)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
+            ((AppCompatTextView) findViewById(R.id.onClickFloc)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
 
         }
 
@@ -175,7 +175,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             }
         });
 
-        findViewById(R.id.onClickEvent).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.onClickFloc).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -184,7 +184,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             }
         });
 
-        if( title.equals("Home") || title.equals(getResources().getString(R.string.app_name)) ) {
+        if( title.equals("Home") || title.equals(getResources().getString(R.string.my_flocworld)) ) {
             logo.setVisibility(View.VISIBLE);
 //            optionText.setVisibility(View.VISIBLE);
             titleToolBar.setVisibility(View.GONE);
@@ -196,7 +196,6 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             titleToolBar.setText(title);
 //            toolbar.setBackgroundResource(R.drawable.toolbar_gradient);
         }
-
 
         createRightPopupMenu();
         createLeftPopupMenu();
@@ -310,7 +309,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.comment)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.activity), arraySubMenuModel));*/
 
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.app_name)));
+            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.my_flocworld)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.invite_friend)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.my_profile)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.setting)));
@@ -376,7 +375,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
             startActivity(new Intent(getApplicationContext(), RecentFlocActivity.class));
 
-        } else if(menuName.equals(getResources().getString(R.string.app_name))) {
+        } else if(menuName.equals(getResources().getString(R.string.my_flocworld))) {
 
             startActivity(new Intent(getApplicationContext(), FlocsActivity.class));
 

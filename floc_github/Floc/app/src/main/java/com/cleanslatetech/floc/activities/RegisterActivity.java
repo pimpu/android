@@ -141,4 +141,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     }
+
+    public void OnClicktermsAndCondition(View view) {
+        startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                .putExtra("from", getResources().getString(R.string.terms_amp_conditions))
+                .putExtra("url", "http://floc.world/terms.html"));
+    }
 }

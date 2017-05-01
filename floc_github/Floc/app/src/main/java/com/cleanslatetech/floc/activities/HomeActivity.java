@@ -3,6 +3,7 @@ package com.cleanslatetech.floc.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -10,11 +11,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
@@ -54,7 +58,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
         }
     };
 
-    public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent;
+    public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent, jsonArrayAllChannel;
     public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
 
     private GetSharedPreference getSharedPreference;
@@ -68,6 +72,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
         jsonArrayAllArchive = new JSONArray();
         jsonArrayAllEvents = new JSONArray();
         jsonArrayAllRecent = new JSONArray();
+        jsonArrayAllChannel = new JSONArray();
 
         interfaceAllRecentAndCurrentEvent = this;
 
@@ -112,9 +117,29 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
 
     @Override
     public void onBackPressed() {
+
+        TextView textView = new TextView(HomeActivity.this);
+        textView.setTextColor(getResources().getColor(android.R.color.black));
+        textView.setTextSize(17);
+        textView.setLineSpacing(2, 1);
+        textView.setText("Thanks for visiting! We're fine tuning your flocworld experience every time you drop by. See you soon!");
+
+        //  alert dialog main layout
+        LinearLayout layout = new LinearLayout(this);
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(parms);
+
+        layout.setGravity(Gravity.CLIP_VERTICAL);
+        layout.setPadding(30, 30, 30, 2);
+
+        // adding edittext and textview to alert dialog main layout
+        layout.addView(textView);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this)
                 .setCancelable(false)
-                .setMessage("Thanks for visiting! We're fine tuning your flocworld experience every time you drop by. See you soon!")
+                .setView(layout)
                 .setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -168,9 +193,22 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     }
 
     @Override
+    public void getAllChannle(JSONArray jsonArray) {
+        jsonArrayAllChannel = jsonArray;
+    }
+
+    @Override
     public void getAllArchive(JSONArray paramJsonArray) {
+        Uri URIdata = getIntent().getData();
+        if( URIdata != null ) {
+            List params = URIdata.getPathSegments();
+            String param3 = params.get(2).toString();
+            System.out.println(param3);
+        }
+
         setContentView(R.layout.activity_home);
         super.setToolBar("Home");
+
 
         setSlideOrInterestGrid();
 

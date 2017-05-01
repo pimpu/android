@@ -71,17 +71,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:orientation="horizontal"
+                android:background="@color/google_color"
                 android:gravity="center"
-                android:padding="10dp"
-                android:background="@color/google_color">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/id_img_google"
                     android:layout_width="27dp"
                     android:layout_height="27dp"
-                    android:src="@drawable/googleplus"
-                    android:layout_marginRight="22dp"/>
+                    android:layout_marginRight="22dp"
+                    android:src="@drawable/googleplus" />
 
                 <com.cleanslatetech.floc.utilities.OpenSansTextView
                     android:id="@+id/id_tv_signin_google"

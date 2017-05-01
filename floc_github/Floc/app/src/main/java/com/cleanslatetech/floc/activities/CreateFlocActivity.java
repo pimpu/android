@@ -25,6 +25,8 @@ import com.cleanslatetech.floc.interfaces.InterfaceOnTimeSet;
 import com.cleanslatetech.floc.utilities.SelectDateFragment;
 import com.cleanslatetech.floc.utilities.SelectTimeFragment;
 import com.cleanslatetech.floc.utilities.Validations;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -170,14 +172,29 @@ public class CreateFlocActivity extends BaseAppCompactActivity implements Adapte
                     // Get the Uri of the selected file
                     Uri uri = data.getData();
 
+                    CropImage.activity(uri)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setMinCropResultSize(800, 400)
+                            .setMaxCropResultSize(3600, 3200)
+                            .start(this);
+                }
+                break;
+
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
                     // Get the path
                     try {
-                        filePath = getPath(CreateFlocActivity.this, uri);
+                        filePath = getPath(CreateFlocActivity.this, resultUri);
                         tvSelectedFile.setText(getFileName(filePath));
                         tvSelectedFile.setSelected(true);
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
+
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
                 }
                 break;
         }

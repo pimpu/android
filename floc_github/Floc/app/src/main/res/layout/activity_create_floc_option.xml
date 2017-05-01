@@ -12,126 +12,87 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="@dimen/ten_dp">
-
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/ten_dp"
-            android:text="@string/build_a_floc"
-            android:textSize="@dimen/register_screen_texts"
-            android:textColor="@color/white"
-            android:layout_centerVertical="true"
-            app:OpenSans="openSans_regular"
-            android:onClick="onClickGoToBuildFloc" />
-
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/ten_dp"
-            android:text="@string/what_s_this"
-            android:textSize="@dimen/fourteen_textsize"
-            android:textColor="@color/white"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            app:OpenSans="openSans_regular"
-            android:onClick="onClickShowDetails_BuildFloc" />
-
-    </RelativeLayout>
-
-    <View
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="@dimen/ten_dp">
-
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/ten_dp"
-            android:text="@string/build_a_platform"
-            android:textSize="@dimen/register_screen_texts"
-            android:textColor="@color/white"
-            android:layout_centerVertical="true"
-            app:OpenSans="openSans_regular"
-            android:onClick="onClickGoToBuildPlatform" />
-
-        <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/ten_dp"
-            android:text="@string/what_s_this"
-            android:textSize="@dimen/fourteen_textsize"
-            android:textColor="@color/white"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            app:OpenSans="openSans_regular"
-            android:onClick="onClickShowDetails_BuildPlatform" />
-
-    </RelativeLayout>
-
-    <View
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="1px"/>
-
-    <com.cleanslatetech.floc.utilities.OpenSansTextView
-        android:id="@+id/id_selected_build_floc_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ten_dp"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/build_a_floc"
-        android:textSize="@dimen/register_screen_texts"
-        android:textColor="@color/colorPrimary"
-        app:OpenSans="openSans_regular" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_marginTop="@dimen/ten_dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:orientation="vertical"
-            android:padding="@dimen/activity_horizontal_margin">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="50dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="640dp">
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/ten_dp">
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/create_intro_slider_viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/ten_dp"
+                    android:text="@string/build_a_floc"
+                    android:textSize="@dimen/register_screen_texts"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickGoToBuildFloc" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center">
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/ten_dp"
+                    android:text="@string/what_s_this"
+                    android:textSize="@dimen/fourteen_textsize"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickShowDetails_BuildFloc" />
 
-                    <LinearLayout
-                        android:id="@+id/create_intro_count_dots"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center"
-                        android:orientation="horizontal" />
+            </RelativeLayout>
 
-                </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/ten_dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/ten_dp"
+                    android:text="@string/build_a_platform"
+                    android:textSize="@dimen/register_screen_texts"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickGoToBuildPlatform" />
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/ten_dp"
+                    android:text="@string/what_s_this"
+                    android:textSize="@dimen/fourteen_textsize"
+                    android:textColor="@color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    app:OpenSans="openSans_regular"
+                    android:onClick="onClickShowDetails_BuildPlatform" />
 
             </RelativeLayout>
         </LinearLayout>
-    </ScrollView>
+
+    </RelativeLayout>
+
 </LinearLayout>

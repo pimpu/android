@@ -62,7 +62,8 @@ public class CreateFlocAsyncTask {
         params.put("ConciergeServices",eventsModel.getConciergeServices());
         params.put("EventStatus",eventsModel.getEventStatus());
         params.put("IsExclusive",eventsModel.getIsExclusive());
-                
+        params.put("channelId", 0);
+
         invokeWS(context, params);
     }
 

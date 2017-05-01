@@ -38,33 +38,61 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp">
 
-                    <com.cleanslatetech.floc.utilities.OpenSansButton
-                        android:id="@+id/id_btn_booked_event"
+                    <LinearLayout
+                        android:id="@+id/booked_action_btn"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
-                        android:background="@color/colorPrimary"
-                        android:text="@string/join_this_floc"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/fourteen_textsize"
-                        app:OpenSans="openSans_regular"
-                        android:onClick="onClickBookEvent"/>
+                        android:layout_height="wrap_content">
+
+                        <com.cleanslatetech.floc.utilities.OpenSansButton
+                            android:id="@+id/id_btn_booked_event"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:background="@color/colorPrimary"
+                            android:text="@string/join_this_floc"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/fourteen_textsize"
+                            app:OpenSans="openSans_regular"
+                            android:onClick="onClickBookEvent"/>
+
+                        <com.cleanslatetech.floc.utilities.OpenSansTextView
+                            android:id="@+id/id_tv_booked"
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/white_border"
+                            android:layout_gravity="center_vertical"
+                            android:padding="5dp"
+                            android:text="Booked"
+                            android:textSize="@dimen/login__screen_texts"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"
+                            app:OpenSans="openSans_regular" />
+                    </LinearLayout>
 
                     <com.cleanslatetech.floc.utilities.OpenSansTextView
-                        android:id="@+id/id_tv_booked"
-                        android:visibility="gone"
+                        android:id="@+id/id_booking_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/white_border"
-                        android:layout_gravity="center_vertical"
-                        android:padding="5dp"
-                         android:text="Booked"
-                        android:textSize="@dimen/login__screen_texts"
-                        android:textStyle="bold"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/booked_action_btn"
+                        android:layout_marginLeft="@dimen/ten_dp"
+                        android:textSize="@dimen/OTPtextsize"
                         android:textColor="@color/colorPrimary"
-                        app:OpenSans="openSans_regular" />
+                        app:OpenSans="openSans_regular"/>
 
+                    <com.cleanslatetech.floc.utilities.OpenSansTextView
+                        android:id="@+id/id_booking_count_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/id_booking_count"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="11dp"
+                        android:text="booking"
+                        android:textSize="@dimen/fourteen_textsize"
+                        android:textColor="@color/colorPrimary"
+                        app:OpenSans="openSans_regular"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -140,7 +168,7 @@
                         android:layout_marginTop="12dp"
                         android:text="@string/likes"
                         android:textSize="@dimen/sixteen_textsize"
-                        android:textColor="@color/white"
+                        android:textColor="@color/colorPrimary"
                         app:OpenSans="openSans_regular"/>
 
                     <android.support.v7.widget.AppCompatImageButton
@@ -295,7 +323,7 @@
                     app:OpenSans="openSans_regular"
                     android:onClick="onClickSubmitReview"/>
 
-                <RelativeLayout
+                <!--<RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
@@ -310,17 +338,8 @@
                         android:textColor="@color/white"
                         app:OpenSans="openSans_regular" />
 
-                    <com.cleanslatetech.floc.utilities.OpenSansTextView
-                        android:id="@+id/id_booking_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/id_tv_txtNoBooking"
-                        android:layout_marginTop="3dp"
-                        android:textSize="@dimen/OTPtextsize"
-                        android:textColor="@color/colorPrimary"
-                        app:OpenSans="openSans_regular"/>
-                </RelativeLayout>
+
+                </RelativeLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -51,7 +51,7 @@
                 android:textColorHint="@color/hint"
                 android:drawableTint="@color/white"
                 android:drawableLeft="@drawable/ic_name_icon"
-                app:OpenSans="openSans_regular" />-->
+                app:OpenSans="openSans_regular" />
 
             <com.cleanslatetech.floc.utilities.OpenSansTextView
                 android:id="@+id/errorNameText"
@@ -63,7 +63,7 @@
                 android:textSize="@dimen/fourteen_textsize"
                 android:textColor="@color/google_color"
                 android:visibility="gone"
-                app:OpenSans="openSans_regular" />
+                app:OpenSans="openSans_regular" />-->
 
             <com.cleanslatetech.floc.utilities.OpenSansEditText
                 android:id="@+id/idRegisterUserEmail"
@@ -168,7 +168,8 @@
                 android:text="@string/strTermCondition"
                 android:textSize="@dimen/login__screen_texts"
                 android:textColor="@color/white"
-                app:OpenSans="openSans_regular" />
+                app:OpenSans="openSans_regular"
+                android:onClick="OnClicktermsAndCondition" />
 
         </LinearLayout>
 

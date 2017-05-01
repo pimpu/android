@@ -24,6 +24,52 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <com.cleanslatetech.floc.utilities.OpenSansTextView
+                    android:id="@+id/platform_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:text="@string/platform_type"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/sixteen_textsize"
+                    app:OpenSans="openSans_regular" />
+
+                <RadioGroup
+                    android:id="@+id/rg_platform_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/platform_type"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rb_platform_ecommerce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:buttonTint="@color/white"
+                        android:text="Ecommerce"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen_textsize" />
+
+                    <RadioButton
+                        android:id="@+id/rb_platform_channel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/white"
+                        android:layout_marginStart="8dp"
+                        android:text="Channel"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sixteen_textsize" />
+                </RadioGroup>
+
+            </RelativeLayout>android:layout_marginStart="8dp"
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <com.cleanslatetech.floc.utilities.OpenSansTextView

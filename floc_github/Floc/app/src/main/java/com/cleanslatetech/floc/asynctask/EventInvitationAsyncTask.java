@@ -8,13 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.FlocDescriptionActivity;
-import com.cleanslatetech.floc.activities.FlocsActivity;
-import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -122,9 +117,10 @@ public class EventInvitationAsyncTask {
                     } else {
                         if( nbutton != null) {
                             nbutton.performClick();
+                        } else {
+                            ((AppCompatEditText) ((AppCompatActivity)context).findViewById(R.id.id_txt_friend_to_invite)).setText("");
                         }
 
-                        ((AppCompatEditText) ((AppCompatActivity)context).findViewById(R.id.id_txt_friend_to_invite)).setText("");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

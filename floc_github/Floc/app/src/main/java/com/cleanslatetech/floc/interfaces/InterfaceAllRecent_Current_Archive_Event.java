@@ -10,4 +10,5 @@ public interface InterfaceAllRecent_Current_Archive_Event {
     void getAllEvents(JSONArray jsonArray);
     void getAllRecent(JSONArray jsonArray);
     void getAllArchive(JSONArray jsonArray);
+    void getAllChannle(JSONArray jsonArray);
 }

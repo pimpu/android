@@ -41,7 +41,7 @@ public class GetAllArchiveEventAsyncTask {
 
                     HomeActivity.interfaceAllRecentAndCurrentEvent.getAllArchive(json.getJSONArray("Event"));
 
-                    new GetAllRecentEventAsyncTask(context, prgDig).getData();
+                    new GetChannelAsyncTask(context, prgDig).getData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

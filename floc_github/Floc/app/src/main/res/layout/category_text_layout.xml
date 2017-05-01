@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:paddingLeft="@dimen/ten_dp">
 
         <com.cleanslatetech.floc.utilities.OpenSansTextView
             android:id="@+id/id_because_you_like"

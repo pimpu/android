@@ -32,7 +32,7 @@ public class FlocsActivity extends BaseAppCompactActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flocs);
 
-        super.setToolBar(getResources().getString(R.string.app_name));
+        super.setToolBar(getResources().getString(R.string.my_flocworld));
 
         init();
     }

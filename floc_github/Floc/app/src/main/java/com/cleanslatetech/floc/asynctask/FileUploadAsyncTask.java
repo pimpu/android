@@ -131,6 +131,7 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
 
                 } else if (channelModel != null) {
                     channelModel.setChannelImage(msg);
+                    new CreatePlatformAsyncTask(context, channelModel, prgDialog).postData();
                 }
             }
         } catch (JSONException e) {
@@ -255,10 +256,10 @@ public class FileUploadAsyncTask extends AsyncTask<String, String, String>{
         double width = (double) convertesBitmap.getWidth();
         double height = (double) convertesBitmap.getHeight();
         if(width>height){
-            xFactor = 400/width;
+            xFactor = 470/width;
         }
         else{
-            xFactor = 300/width;
+            xFactor = 250/width;
         }
         int Nheight = (int) ((xFactor*height));
         int NWidth =(int) (xFactor * width) ;
