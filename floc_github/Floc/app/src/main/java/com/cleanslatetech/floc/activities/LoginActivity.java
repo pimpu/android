@@ -1,34 +1,18 @@
 package com.cleanslatetech.floc.activities;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.LoginUserAsyncTask;
-import com.cleanslatetech.floc.asynctask.OTPConformAsyncTask;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
-import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleGoogleSignInResult;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 
@@ -61,6 +45,12 @@ public class LoginActivity extends AppCompatActivity {
 
         txtLoginEmail = (EditText) findViewById(R.id.idLoginUserEmail);
         txtLoginPwd = (EditText) findViewById(R.id.idLoginUserPassword);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, SignupOptionActivity.class));
+        super.onBackPressed();
     }
 
     public void loginUser(View view) {

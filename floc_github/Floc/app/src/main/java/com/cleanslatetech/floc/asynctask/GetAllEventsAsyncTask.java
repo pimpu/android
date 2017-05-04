@@ -42,7 +42,7 @@ public class GetAllEventsAsyncTask {
 
                     HomeActivity.interfaceAllRecentAndCurrentEvent.getAllEvents(jsonArrayGetEvents);
 
-                    new GetAllArchiveEventAsyncTask(context, prgDig).getData();
+                    new GetAllRecentEventAsyncTask(context, prgDig).getData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

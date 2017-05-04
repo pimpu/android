@@ -2,7 +2,7 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.activities.LoginActivity;
@@ -16,8 +16,6 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -74,20 +72,25 @@ public class RegisterUserAsyncTask {
                     JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
                     if (error) {
-                        for( int i = 0 ; i < jsonArray.length(); i++) {
-                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
+//                        for( int i = 0 ; i < jsonArray.length(); i++) {
+                            String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
                             System.out.println(msg);
                             CommonUtilities.customToast(context, msg);
-                        }
+//                        }
                     } else {
-                        // intet for next activity
-                        int id = json.getInt(CommonVariables.TAG_ID);
 
-                        String userName = json.getString("UserName");
-                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), userName, email, id);
+                        if (json.getBoolean("IsConfirmed")) {
 
-                        RegisterActivity.registerActivity.finish();
-                        LoginActivity.loginActivity.finish();
+                            // intet for next activity
+                            int id = json.getInt(CommonVariables.TAG_ID);
+
+                            String userName = json.getString("UserName");
+                            handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), userName, email, id);
+
+                        } else {
+                            String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                            CommonUtilities.customToast(context, msg);
+                        }
 
                     }
                 } catch (JSONException e) {

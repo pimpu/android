@@ -1,21 +1,16 @@
 package com.cleanslatetech.floc.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.asynctask.OTPConformAsyncTask;
-import com.cleanslatetech.floc.asynctask.RegisterUserAsyncTask;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
@@ -148,7 +143,7 @@ public class OTPActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new RegisterUserAsyncTask(OTPActivity.this, email, pwd, cnfrmPwd).postData();
+//                new RegisterUserAsyncTask(OTPActivity.this, email, pwd, cnfrmPwd).postData();
             }
 
         }

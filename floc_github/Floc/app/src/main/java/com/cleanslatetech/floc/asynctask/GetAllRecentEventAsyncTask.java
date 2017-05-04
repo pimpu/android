@@ -47,17 +47,9 @@ class GetAllRecentEventAsyncTask {
                 try{
                     System.out.println("GetAllRecent: "+json);
 
-                    // when Get all events comes from home activity, then progress dialog is null
-                    // and come from Create floc, progress dialog of creating floc will continue upto here.
-                    if(prgDig != null) {
-                        prgDig.dismiss();
-                        // finish fisrt page of create floc activity.
-                        CreateFlocActivity.getInstance().finish();
-                        // finish second/latest page of create floc activity.
-                        ((AppCompatActivity)context).finish();
-                    }
-
                     HomeActivity.interfaceAllRecentAndCurrentEvent.getAllRecent(json.getJSONArray("Event"));
+
+                    new GetChannelAsyncTask(context, prgDig).getData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

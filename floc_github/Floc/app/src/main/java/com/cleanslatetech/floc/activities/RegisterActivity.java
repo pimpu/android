@@ -3,32 +3,18 @@ package com.cleanslatetech.floc.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.asynctask.OTPConformAsyncTask;
 import com.cleanslatetech.floc.asynctask.RegisterUserAsyncTask;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
-import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import static com.cleanslatetech.floc.utilities.CommonUtilities.handleGoogleSignInResult;
 import static com.cleanslatetech.floc.utilities.CommonUtilities.isConnectingToInternet;
 import static com.cleanslatetech.floc.utilities.Validations.emailValidate;
 import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
@@ -36,16 +22,22 @@ import static com.cleanslatetech.floc.utilities.Validations.isEmptyString;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText txtUserName, txtUserEmail, txtPassword, txtConformPwd;
-    public static Activity registerActivity;
+//    public static Activity registerActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        registerActivity = this;
+//        registerActivity = this;
 
         init();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, SignupOptionActivity.class));
+        super.onBackPressed();
     }
 
     private void init() {
@@ -136,7 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-                new OTPConformAsyncTask(RegisterActivity.this, email, pwd, cnfrmPwd).postData();
+//                new OTPConformAsyncTask(RegisterActivity.this, email, pwd, cnfrmPwd).postData();
+                new RegisterUserAsyncTask(RegisterActivity.this, email, pwd, cnfrmPwd).postData();
             }
 
         }

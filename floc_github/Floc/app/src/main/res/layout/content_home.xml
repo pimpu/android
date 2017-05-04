@@ -74,6 +74,32 @@
                     app:OpenSans="openSans_regular" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/id_home_channel_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/ten_dp">
+
+            <com.cleanslatetech.floc.utilities.OpenSansTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:text="FLOCselect"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:textSize="@dimen/login__screen_texts"
+                android:textColor="@color/white"
+                app:OpenSans="openSans_regular" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_home_channel_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
         <!--<com.cleanslatetech.floc.utilities.OpenSansTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

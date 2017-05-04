@@ -67,18 +67,26 @@ public class LoginUserAsyncTask {
                     JSONArray jsonArray = json.getJSONArray(CommonVariables.TAG_MESSAGE);
 
                     if (error) {
-                        for( int i = 0 ; i < jsonArray.length(); i++) {
-                            String msg = jsonArray.getJSONObject(i).getString(CommonVariables.TAG_MESSAGE_OBJ);
+//                        for( int i = 0 ; i < jsonArray.length(); i++) {
+                            String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
                             System.out.println(msg);
                             CommonUtilities.customToast(context, msg);
-                        }
+//                        }
                     } else {
-                        // intet for next activity
-                        int id = json.getInt(CommonVariables.TAG_ID);
-                        String email = json.getString("EmailId");
-                        String userName = json.getString("UserName");
+                        if (json.getBoolean("IsConfirmed")) {
 
-                        handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), userName, email, id);
+                            // intet for next activity
+                            int id = json.getInt(CommonVariables.TAG_ID);
+                            String email = json.getString("EmailId");
+                            String userName = json.getString("UserName");
+
+                            handleIntentWhenSignIn(context,  context.getResources().getString(R.string.appLogin), userName, email, id);
+
+                        } else {
+                            String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
+                            CommonUtilities.customToast(context, msg);
+                        }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

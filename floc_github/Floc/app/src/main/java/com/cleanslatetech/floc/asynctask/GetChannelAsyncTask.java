@@ -37,9 +37,9 @@ public class GetChannelAsyncTask {
                 try{
                     System.out.println("GetAllChannel: "+json);
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllChannle(json.getJSONArray("Event"));
+                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllChannle(json.getJSONArray("CA"));
 
-                    new GetAllRecentEventAsyncTask(context, prgDig).getData();
+                    new GetAllArchiveEventAsyncTask(context, prgDig).getData();
 
                 } catch (JSONException e) {
                     e.printStackTrace();

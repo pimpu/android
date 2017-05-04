@@ -61,8 +61,8 @@ public class RecentFlocAdapter extends BaseAdapter {
         }
 
         try {
-            String eventPicture = jsonArrayLatestRecent.getJSONObject(position).getString("EventPicture");
-            String eventName = jsonArrayLatestRecent.getJSONObject(position).getString("EventName");
+            String eventPicture = jsonArrayLatestRecent.getJSONObject(position).getString("ChannelImage");
+            String eventName = jsonArrayLatestRecent.getJSONObject(position).getString("ChannelName");
 
             holder.eventName.setText(eventName);
             holder.eventName.setSelected(true);

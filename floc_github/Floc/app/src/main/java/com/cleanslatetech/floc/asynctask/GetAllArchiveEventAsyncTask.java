@@ -39,9 +39,17 @@ public class GetAllArchiveEventAsyncTask {
                 try{
                     System.out.println("GetAllArchive: "+json);
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllArchive(json.getJSONArray("Event"));
+                    // when Get all events comes from home activity, then progress dialog is null
+                    // and come from Create floc, progress dialog of creating floc will continue upto here.
+                    if(prgDig != null) {
+                        prgDig.dismiss();
+                        // finish fisrt page of create floc activity.
+                        CreateFlocActivity.getInstance().finish();
+                        // finish second/latest page of create floc activity.
+                        ((AppCompatActivity)context).finish();
+                    }
 
-                    new GetChannelAsyncTask(context, prgDig).getData();
+                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllArchive(json.getJSONArray("Event"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

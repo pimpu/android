@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.adapter.ChannelRecyclerAdapter;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
 import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
@@ -31,7 +31,6 @@ import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -302,6 +301,18 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             ll.addView(inflate);
             ll.addView(recyclerView);
         }
+
+        RecyclerView llChannel = (RecyclerView) findViewById(R.id.id_home_channel_layout);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(
+                this,
+                LinearLayoutManager.HORIZONTAL,
+                false
+        );
+        llChannel.setLayoutManager(mLayoutManager);
+
+        // Initialize a new Adapter for RecyclerView
+        ChannelRecyclerAdapter adapterRecent = new ChannelRecyclerAdapter(this, jsonArrayAllChannel);
+        llChannel.setAdapter(adapterRecent);
     }
 
     private void setPageViewIndicator() {
