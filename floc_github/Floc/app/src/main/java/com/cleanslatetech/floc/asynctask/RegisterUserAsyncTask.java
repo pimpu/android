@@ -90,6 +90,7 @@ public class RegisterUserAsyncTask {
                         } else {
                             String msg = jsonArray.getJSONObject(0).getString(CommonVariables.TAG_MESSAGE_OBJ);
                             CommonUtilities.customToast(context, msg);
+                            ((RegisterActivity) context).onBackPressed();
                         }
 
                     }

@@ -480,10 +480,10 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
     public void onClickWhatsappShare(View view) {
         popupWindow.dismiss();
-        /*Uri contentUri = getUri();
+        Uri contentUri = getUri();
 
         Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
-        whatsappIntent.setType("image*//*");
+        whatsappIntent.setType("image");
         whatsappIntent.setPackage("com.whatsapp");
         whatsappIntent.putExtra(Intent.EXTRA_TEXT, "http://flocworld.co.in/Event/EventDescription/"+iEventId);
         whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
@@ -494,9 +494,9 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             startActivity(whatsappIntent);
         } catch (android.content.ActivityNotFoundException ex) {
             CommonUtilities.customToast(this, "Whatsapp have not been installed.");
-        }*/
+        }
 
-        LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        /*LayoutInflater mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //Inflate the layout into a view and configure it the way you like
         View inflate = mInflater.inflate(R.layout.share_layout_on_whatsapp, null, false);
@@ -549,6 +549,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
 
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setPackage("com.whatsapp");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
         shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -560,7 +561,7 @@ public class FlocDescriptionActivity extends BaseAppCompactActivity implements I
             startActivity(Intent.createChooser(shareIntent, "Choose an app"));
         } catch (android.content.ActivityNotFoundException ex) {
             CommonUtilities.customToast(this, "Whatsapp have not been installed.");
-        }
+        }*/
     }
 
     private Uri getUri() {

@@ -59,8 +59,8 @@ public class LoginUserAsyncTask {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
-                prgDialog.cancel();
                 try{
+                    prgDialog.cancel();
                     System.out.println(json);
 
                     Boolean error = json.getBoolean(CommonVariables.TAG_ERROR);

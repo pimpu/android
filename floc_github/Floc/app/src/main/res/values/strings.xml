@@ -2,6 +2,7 @@
     <string name="hintUsrEmail">Email</string>
     <string name="hintUsrName">Name</string>
     <string name="hintPassword">Password</string>
+    <string name="hintRegisterPassword">Password: 6 characters long and one uppercase</string>
     <string name="hintConfirmPassword">Confirm password</string>
 
     <string name="app_name">FLOCworld</string>
