@@ -48,7 +48,7 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
         ScrollView scrollViewArchiveFloc = (ScrollView) findViewById(R.id.id_scrollview_allArchive);
         LinearLayout ll = (LinearLayout) findViewById(R.id.id_ll_archive);
 
-        final JSONArray jsonArrayAllArchive = HomeActivity.jsonArrayAllArchive;
+        final JSONArray jsonArrayAllArchive = HomePageActivity.jsonArrayAllArchive;
 
         if(jsonArrayAllArchive.length() > 0) {
 
@@ -110,7 +110,6 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
@@ -147,7 +146,6 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);

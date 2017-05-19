@@ -51,7 +51,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
         ScrollView scrollViewRecentFloc = (ScrollView) findViewById(R.id.id_scrollview_allEvents);
         LinearLayout ll = (LinearLayout) findViewById(R.id.id_ll_events);
 
-        final JSONArray jsonArrayAllEvents = HomeActivity.jsonArrayAllEvents;
+        final JSONArray jsonArrayAllEvents = HomePageActivity.jsonArrayAllEvents;
 
         if(jsonArrayAllEvents.length() > 0) {
 
@@ -111,7 +111,6 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
@@ -150,7 +149,6 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
@@ -181,7 +179,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
 
                 reverseArray.put(obj);
             }
-            RecentFlocAdapter adapterRecent = new RecentFlocAdapter(this, reverseArray);
+            HomeFlocAdapter adapterRecent = new HomeFlocAdapter(this, reverseArray);
 
             gridviewRecentFloc.setAdapter(adapterRecent);
 

@@ -3,7 +3,7 @@ package com.cleanslatetech.floc.asynctask;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -40,7 +40,7 @@ public class GetAllEventsAsyncTask {
                     // manipulate gride view
                     JSONArray jsonArrayGetEvents = json.getJSONArray("Event");
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllEvents(jsonArrayGetEvents);
+                    HomePageActivity.interfaceAllRecentAndCurrentEvent.getAllEvents(jsonArrayGetEvents);
 
                     new GetAllRecentEventAsyncTask(context, prgDig).getData();
 

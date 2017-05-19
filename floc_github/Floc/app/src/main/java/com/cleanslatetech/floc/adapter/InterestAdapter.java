@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
 import com.cleanslatetech.floc.activities.SelectInterestActivity;
 
 import org.json.JSONArray;

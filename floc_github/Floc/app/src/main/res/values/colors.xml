@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f36d21</color>
+    <color name="colorPrimary">#fe3000</color>
     <color name="colorPrimaryDark">#020202</color>
     <color name="colorAccent">#cc4a01</color>
     <color name="white">#ffffff</color>
@@ -19,7 +19,11 @@
     <color name="dark_blue">#001b37</color>
     <color name="wifiSymbolColor">#cfcdcd</color>
     <color name="gray">#464b4b</color>
+
+    <!--Revised Colour-->
     <color name="highlight_top_menu">#ececec</color>
-    <color name="highlight_top_menu">#ececec</color>
+    <color name="background_gray">#bababa</color>
+    <color name="title">#565656</color>
+    <color name="subtitle">#a1a1a1</color>
 
 </resources>

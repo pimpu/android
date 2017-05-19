@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.activities.CreateFlocActivity;
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -49,7 +49,7 @@ public class GetAllArchiveEventAsyncTask {
                         ((AppCompatActivity)context).finish();
                     }
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllArchive(json.getJSONArray("Event"));
+                    HomePageActivity.interfaceAllRecentAndCurrentEvent.getAllArchive(json.getJSONArray("Event"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

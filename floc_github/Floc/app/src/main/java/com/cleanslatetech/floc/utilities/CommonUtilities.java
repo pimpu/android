@@ -1,12 +1,9 @@
 package com.cleanslatetech.floc.utilities;
 
-import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,9 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.BaseAppCompactActivity;
-import com.cleanslatetech.floc.activities.HomeActivity;
-import com.cleanslatetech.floc.activities.LoginActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.activities.SelectInterestActivity;
 import com.cleanslatetech.floc.activities.SignupOptionActivity;
 import com.cleanslatetech.floc.asynctask.SocialLoginAsyncTask;
@@ -35,15 +30,10 @@ import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.loopj.android.http.Base64;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -53,7 +43,6 @@ import java.net.URL;
  */
 
 public class CommonUtilities {
-    private static ProgressDialog mProgressDialog;
 
     public static Bundle getFacebookData(JSONObject object) {
         try {
@@ -127,7 +116,7 @@ public class CommonUtilities {
         else {
             boolean isAvailInterest = new GetSharedPreference(context).getBoolean(context.getResources().getString(R.string.shrdIsInterestSelected));
             if ( isAvailInterest ) {
-                context.startActivity(new Intent(context, HomeActivity.class));
+                context.startActivity(new Intent(context, HomePageActivity.class));
             } else  {
                 context.startActivity(new Intent(context, SelectInterestActivity.class));
             }

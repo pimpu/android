@@ -50,7 +50,7 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
         ScrollView scrollViewRecentFloc = (ScrollView) findViewById(R.id.id_scrollview_allRecent);
         LinearLayout ll = (LinearLayout) findViewById(R.id.id_ll_recent);
 
-        final JSONArray jsonArrayAllRecent = HomeActivity.jsonArrayAllRecent;
+        final JSONArray jsonArrayAllRecent = HomePageActivity.jsonArrayAllRecent;
 
         if(jsonArrayAllRecent.length() > 0) {
 
@@ -112,7 +112,6 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);
@@ -149,7 +148,6 @@ public class RecentFlocActivity extends BaseAppCompactActivity {
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
-                inflate.findViewById(R.id.id_smiley_face).setVisibility(View.GONE);
                 tvCategory.setText(categoryName);
 
                 RecyclerView recyclerView = new RecyclerView(this);

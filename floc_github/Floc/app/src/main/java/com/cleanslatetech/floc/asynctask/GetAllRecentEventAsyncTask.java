@@ -2,11 +2,9 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.CreateFlocActivity;
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
@@ -47,7 +45,7 @@ class GetAllRecentEventAsyncTask {
                 try{
                     System.out.println("GetAllRecent: "+json);
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllRecent(json.getJSONArray("Event"));
+                    HomePageActivity.interfaceAllRecentAndCurrentEvent.getAllRecent(json.getJSONArray("Event"));
 
                     new GetChannelAsyncTask(context, prgDig).getData();
 

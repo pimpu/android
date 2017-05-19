@@ -60,8 +60,6 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent, jsonArrayAllChannel;
     public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
 
-    private GetSharedPreference getSharedPreference;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -208,14 +206,11 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
         setContentView(R.layout.activity_home);
         super.setToolBar("Home");
 
-
         setSlideOrInterestGrid();
 
         jsonArrayAllArchive = paramJsonArray;
 
-//        initRecentFlocGridview();
-//        initEventGridview();
-        getSharedPreference = new GetSharedPreference(HomeActivity.this);
+        GetSharedPreference getSharedPreference = new GetSharedPreference(HomeActivity.this);
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.id_home_selected_events);
         AppCompatTextView tvBtnMoreEvent = (AppCompatTextView) findViewById(R.id.tvBtnMoreEvent);

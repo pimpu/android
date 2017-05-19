@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -89,7 +89,7 @@ public class SetInterestAsyncTask {
                             setSharedPreference.setBoolean(context.getResources().getString(R.string.shrdIsInterestSelected), true);
                             setSharedPreference.setStringSet(context.getResources().getString(R.string.shrdSelectedCategory), iArraySelectedPositions);
 
-                            context.startActivity(new Intent(context, HomeActivity.class));
+                            context.startActivity(new Intent(context, HomePageActivity.class));
                             ((AppCompatActivity)context).finish();
                         }
                     }

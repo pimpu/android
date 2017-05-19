@@ -3,7 +3,7 @@ package com.cleanslatetech.floc.asynctask;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 import com.cleanslatetech.floc.utilities.RestClient;
@@ -37,7 +37,7 @@ public class GetChannelAsyncTask {
                 try{
                     System.out.println("GetAllChannel: "+json);
 
-                    HomeActivity.interfaceAllRecentAndCurrentEvent.getAllChannle(json.getJSONArray("CA"));
+                    HomePageActivity.interfaceAllRecentAndCurrentEvent.getAllChannle(json.getJSONArray("CA"));
 
                     new GetAllArchiveEventAsyncTask(context, prgDig).getData();
 

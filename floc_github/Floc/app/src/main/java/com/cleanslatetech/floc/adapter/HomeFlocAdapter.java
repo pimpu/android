@@ -18,18 +18,22 @@ import org.json.JSONException;
 /**
  * Created by pimpu on 2/7/2017.
  */
-public class RecentFlocAdapter extends BaseAdapter {
+public class HomeFlocAdapter extends BaseAdapter {
     private Context context;
-    private JSONArray jsonArrayLatestRecent;
+    private JSONArray jaData;
+    private int limit;
 
-    public RecentFlocAdapter(Context context, JSONArray jsonArrayLatestRecent) {
+    public HomeFlocAdapter(Context context, JSONArray jaData, int limit) {
         this.context = context;
-        this.jsonArrayLatestRecent = jsonArrayLatestRecent;
+        this.jaData = jaData;
+        this.limit = limit;
+
+        System.out.println(jaData);
     }
 
     @Override
     public int getCount() {
-        return jsonArrayLatestRecent.length();
+        return limit;
     }
 
     @Override
@@ -61,8 +65,8 @@ public class RecentFlocAdapter extends BaseAdapter {
         }
 
         try {
-            String eventPicture = jsonArrayLatestRecent.getJSONObject(position).getString("ChannelImage");
-            String eventName = jsonArrayLatestRecent.getJSONObject(position).getString("ChannelName");
+            String eventPicture = jaData.getJSONObject(position).getString("EventPicture");
+            String eventName = jaData.getJSONObject(position).getString("EventName");
 
             holder.eventName.setText(eventName);
             holder.eventName.setSelected(true);

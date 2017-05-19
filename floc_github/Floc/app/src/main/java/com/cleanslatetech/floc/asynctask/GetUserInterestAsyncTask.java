@@ -2,20 +2,15 @@ package com.cleanslatetech.floc.asynctask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.GridView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
-import com.cleanslatetech.floc.activities.SelectInterestActivity;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.CommonVariables;
-import com.cleanslatetech.floc.utilities.PopulateFloDescData;
 import com.cleanslatetech.floc.utilities.RestClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -31,7 +26,6 @@ import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.cleanslatetech.floc.R.id.tvBtnSaveInterest;
 
 /**
  * Created by pimpu on 4/8/2017.

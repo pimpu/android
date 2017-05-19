@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomeActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.adapter.InterestAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
@@ -64,7 +64,7 @@ public class GetInterestCategoryAsyncTask {
 
                     if( isInterestAvailable.equals("interestAvailable") ) {
 
-                        context.startActivity(new Intent(context, HomeActivity.class));
+                        context.startActivity(new Intent(context, HomePageActivity.class));
                         ((AppCompatActivity)context).finish();
 
                     } else {
