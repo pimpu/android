@@ -278,7 +278,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
             }
 
             LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+            View inflate = mInflater.inflate(R.layout.single_floc_layout, null, false);
             AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
             tvCategory.setText(categoryName);
 

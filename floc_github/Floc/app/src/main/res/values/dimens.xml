@@ -1,8 +1,9 @@
 <resources>
     <!--remove space between item text and group divider line in navigation drawer-->
-    <dimen name="design_navigation_separator_vertical_padding">0dp</dimen>
+    <!--<dimen name="design_navigation_separator_vertical_padding">0dp</dimen>-->
 
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="ten_textsize">10sp</dimen>
     <dimen name="grid_column_textsize">12sp</dimen>
     <dimen name="fourteen_textsize">14sp</dimen>
     <dimen name="sixteen_textsize">16sp</dimen>
@@ -21,7 +22,7 @@
     <dimen name="fourty_space">40dp</dimen>
     <dimen name="grid_column_width">100dp</dimen>
     <dimen name="grid_column_height">140dp</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_height">180dp</dimen>
     <dimen name="event_image_column_height">180dp</dimen>
     <dimen name="twoFifty_height">230dp</dimen>
     <dimen name="three_hundred_height">260dp</dimen>

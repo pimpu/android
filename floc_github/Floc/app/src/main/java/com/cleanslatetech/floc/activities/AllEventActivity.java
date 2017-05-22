@@ -1,14 +1,12 @@
 package com.cleanslatetech.floc.activities;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -107,7 +105,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
                     }
                 }
 
-                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                View inflate = mInflater.inflate(R.layout.single_floc_layout, null, false);
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
@@ -145,7 +143,7 @@ public class AllEventActivity extends BaseAppCompactActivity {
                 }
 
 
-                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                View inflate = mInflater.inflate(R.layout.single_floc_layout, null, false);
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);

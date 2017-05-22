@@ -18,8 +18,26 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_home_page"
-        app:menu="@menu/activity_home_page_drawer" />
+        android:fitsSystemWindows="true" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/nav_header"
+                layout="@layout/nav_header_home_page" />
+
+            <ListView
+                android:id="@+id/list_drawer_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:choiceMode="singleChoice"
+                android:listSelector="@color/light_gray" />
+
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

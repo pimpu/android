@@ -17,9 +17,9 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/recentFlocBg"
+                android:id="@+id/channelBg"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="140dp"
                 android:scaleType="fitXY"
                 android:adjustViewBounds="true" />
 
@@ -27,7 +27,7 @@
     </android.support.v7.widget.CardView>
 
     <com.cleanslatetech.floc.utilities.OpenSansTextView
-        android:id="@+id/tvRecentFlocName"
+        android:id="@+id/channelName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -39,5 +39,3 @@
         app:OpenSans="openSans_regular" />
 
 </LinearLayout>
-
-

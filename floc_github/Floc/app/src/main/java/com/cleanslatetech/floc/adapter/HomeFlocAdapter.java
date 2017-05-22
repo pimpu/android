@@ -1,6 +1,7 @@
 package com.cleanslatetech.floc.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
@@ -10,10 +11,13 @@ import android.widget.BaseAdapter;
 
 import com.bumptech.glide.Glide;
 import com.cleanslatetech.floc.R;
+import com.cleanslatetech.floc.activities.FlocDescriptionActivity;
+import com.cleanslatetech.floc.activities.HomePageActivity;
 import com.cleanslatetech.floc.utilities.CommonVariables;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by pimpu on 2/7/2017.
@@ -65,8 +69,9 @@ public class HomeFlocAdapter extends BaseAdapter {
         }
 
         try {
-            String eventPicture = jaData.getJSONObject(position).getString("EventPicture");
-            String eventName = jaData.getJSONObject(position).getString("EventName");
+            final JSONObject jsonObject = jaData.getJSONObject(position);
+            String eventPicture = jsonObject.getString("EventPicture");
+            String eventName = jsonObject.getString("EventName");
 
             holder.eventName.setText(eventName);
             holder.eventName.setSelected(true);
@@ -76,6 +81,16 @@ public class HomeFlocAdapter extends BaseAdapter {
                     .placeholder(R.drawable.textarea_gradient_bg)
                     .dontAnimate()
                     .into(holder.imgview_bg);
+
+            holder.imgview_bg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentFlocDesc = new Intent(context, FlocDescriptionActivity.class);
+                    intentFlocDesc.putExtra("floc_data", jsonObject.toString());
+                    intentFlocDesc.putExtra("from", "Home");
+                    context.startActivity(intentFlocDesc);
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();

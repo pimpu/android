@@ -63,7 +63,7 @@
     <string name="done">Done</string>
 
     <string name="recent_flocs">Recent Flocs</string>
-    <string name="more">Much much more ..</string>
+    <string name="much_much_more">Much much more ..</string>
     <string name="about_us">About Us</string>
     <string name="contact_us">Contact Us</string>
     <string name="f_amp_q">FAQS</string>
@@ -596,5 +596,8 @@
     <string name="title_activity_home_page">HomePageActivity</string>
 
     <string name="action_settings">Settings</string>
+    <string name="don_t_show_me_again">Don\'t show me again</string>
+    <string name="proceed_to_app">Proceed to app</string>
+    <string name="shrdIsShowFeaturingScreen">isShowFeatureScreen</string>
 
 </resources>

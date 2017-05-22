@@ -34,7 +34,7 @@ public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecycler
 
     @Override
     public ChannelRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        View v = LayoutInflater.from(context).inflate(R.layout.recentfloc_grid_single,parent,false);
+        View v = LayoutInflater.from(context).inflate(R.layout.channel_grid_single,parent,false);
 
         // Return the ViewHolder
         return new ChannelRecyclerAdapter.ViewHolder(v);
@@ -69,8 +69,8 @@ public class ChannelRecyclerAdapter extends RecyclerView.Adapter<ChannelRecycler
             super(v);
 
             // Get the widget reference from the custom layout
-            imgview_bg = (AppCompatImageView) v.findViewById(R.id.recentFlocBg);
-            tvEventName = (AppCompatTextView) v.findViewById(R.id.tvRecentFlocName);
+            imgview_bg = (AppCompatImageView) v.findViewById(R.id.channelBg);
+            tvEventName = (AppCompatTextView) v.findViewById(R.id.channelName);
         }
 
         public void bind(final JSONObject jsonObject, final Context context) {

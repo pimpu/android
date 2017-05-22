@@ -11,12 +11,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,26 +22,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.ChannelRecyclerAdapter;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
+import com.cleanslatetech.floc.adapter.DrawerMenuAdapter;
 import com.cleanslatetech.floc.adapter.HomeFlocAdapter;
-import com.cleanslatetech.floc.adapter.RecentFlocRecyclerAdapter;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Event;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
-import com.cleanslatetech.floc.utilities.EnumFlocDescFrom;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -189,17 +189,13 @@ public class HomePageActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_more) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
 
         }
 
@@ -235,6 +231,7 @@ public class HomePageActivity extends AppCompatActivity
         setContentView(R.layout.activity_home_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.id_home_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -254,7 +251,37 @@ public class HomePageActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        final ArrayList<String> menuName = new ArrayList<>();
+        menuName.add("Home");
+        menuName.add("More");
+        menuName.add("Settings");
+        menuName.add("Logout");
 
+        ArrayList<Integer> menuImage = new ArrayList<>();
+        menuImage.add(R.drawable.ic_menu_camera);
+        menuImage.add(R.drawable.ic_menu_gallery);
+        menuImage.add(R.drawable.ic_menu_slideshow);
+        menuImage.add(R.drawable.ic_menu_manage);
+
+        ListView listDrawerMenu = (ListView) findViewById(R.id.list_drawer_menu);
+
+        // Getting adapter by passing xml data ArrayList
+        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this, menuName, menuImage);
+        listDrawerMenu.setAdapter(adapter);
+
+        // Click event for single list row
+        listDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+
+                Toast.makeText(HomePageActivity.this, menuName.get(position), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // populating home page data ....
         jsonArrayAllArchive = paramJsonArray;
 
         GetSharedPreference getSharedPreference = new GetSharedPreference(HomePageActivity.this);
@@ -325,29 +352,27 @@ public class HomePageActivity extends AppCompatActivity
             }
 
             LayoutInflater mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View inflateBecauseLikeText = mInflater.inflate(R.layout.category_text_layout, null, false);
+            View inflateBecauseLikeText = mInflater.inflate(R.layout.single_floc_layout, null, false);
             AppCompatTextView tvCategory = (AppCompatTextView) inflateBecauseLikeText.findViewById(R.id.id_dynamic_category_name);
+            AppCompatTextView tvMoreCategory = (AppCompatTextView) inflateBecauseLikeText.findViewById(R.id.tvBtnMoreInterestFlocEvent);
             GridView gridLikesCategoryViseFloc = (GridView) inflateBecauseLikeText.findViewById(R.id.gridviewFloc);
+
             tvCategory.setText(categoryName);
+            tvMoreCategory.setText("Much more "+categoryName);
 
             int length = hmapInterest.get(key).length();
             int len = ( length > 6 ) ? 6 : length;
             HomeFlocAdapter adapterRecent = new HomeFlocAdapter(this, hmapInterest.get(key), len);
             gridLikesCategoryViseFloc.setAdapter(adapterRecent);
 
-            /*gridviewRecentFloc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /*gridLikesCategoryViseFloc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     try {
-                        Intent intentFlocDesc = new Intent(AllEventActivity.this, FlocDescriptionActivity.class);
+                        Intent intentFlocDesc = new Intent(HomePageActivity.this, FlocDescriptionActivity.class);
                         intentFlocDesc.putExtra("floc_data", jsonArrayAllEvents.getJSONObject(position).toString());
-                        intentFlocDesc.putExtra("from", "Event");
+                        intentFlocDesc.putExtra("from", "Home");
                         startActivity(intentFlocDesc);
-
-                        Intent intentFlocDesc = new Intent(context, FlocDescriptionActivity.class);
-                        intentFlocDesc.putExtra("floc_data", jsonObject.toString());
-                        intentFlocDesc.putExtra("from", from);
-                        context.startActivity(intentFlocDesc);
 
 
                     } catch (JSONException e) {

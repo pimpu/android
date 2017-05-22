@@ -106,7 +106,7 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                 }
 
 
-                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                View inflate = mInflater.inflate(R.layout.single_floc_layout, null, false);
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);
@@ -142,7 +142,7 @@ public class ArchiveFlocActivity extends BaseAppCompactActivity {
                     }
                 }
 
-                View inflate = mInflater.inflate(R.layout.category_text_layout, null, false);
+                View inflate = mInflater.inflate(R.layout.single_floc_layout, null, false);
                 AppCompatTextView tvCategory = (AppCompatTextView) inflate.findViewById(R.id.id_dynamic_category_name);
 
                 inflate.findViewById(R.id.id_because_you_like).setVisibility(View.GONE);

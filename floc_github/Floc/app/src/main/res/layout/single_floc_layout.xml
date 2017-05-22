@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Because you like"
-            android:textSize="16sp"
+            android:textSize="@dimen/grid_column_textsize"
             android:textColor="@color/subtitle"
             android:layout_centerVertical="true"
             app:OpenSans="openSans_regular"/>
@@ -29,7 +29,7 @@
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/id_because_you_like"
             android:text="Category name"
-            android:textSize="18sp"
+            android:textSize="@dimen/fourteen_textsize"
             android:textColor="@color/title"
             app:OpenSans="openSans_regular"/>
 
@@ -55,17 +55,20 @@
             android:columnWidth="150dp"
             android:numColumns="auto_fit"
             android:verticalSpacing="10dp"
+            android:horizontalSpacing="5dp"
             android:stretchMode="columnWidth" />
 
         <com.cleanslatetech.floc.utilities.OpenSansTextView
-            android:id="@+id/tvBtnMoreFloc"
+            android:id="@+id/tvBtnMoreInterestFlocEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
-            android:text="@string/more"
-            android:textSize="@dimen/login__screen_texts"
-            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:text="@string/much_much_more"
+            android:textSize="@dimen/fourteen_textsize"
+            android:textColor="@color/black"
             android:textAlignment="textEnd"
+            android:textStyle="bold"
             app:OpenSans="openSans_regular" />
     </LinearLayout>
 

@@ -16,12 +16,20 @@
         android:orientation="vertical"
         android:padding="10dp" >
 
+        <com.cleanslatetech.floc.utilities.OpenSansTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:text="@string/recent_flocs"
+            android:textSize="@dimen/register_screen_texts"
+            android:textColor="@color/black"
+            app:OpenSans="openSans_regular" />
+
         <LinearLayout
             android:id="@+id/id_home_event_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/ten_dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/id_home_selected_events"
@@ -36,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:text="@string/more"
+                android:text="@string/much_much_more"
                 android:layout_marginTop="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:textSize="@dimen/login__screen_texts"
@@ -48,17 +56,14 @@
             android:id="@+id/id_home_channel_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/ten_dp">
+            android:orientation="vertical">
 
             <com.cleanslatetech.floc.utilities.OpenSansTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
                 android:text="FLOCselect"
-                android:layout_marginTop="@dimen/fab_margin"
-                android:layout_marginBottom="@dimen/fab_margin"
-                android:textSize="@dimen/login__screen_texts"
+                android:textSize="@dimen/register_screen_texts"
                 android:textColor="@color/black"
                 app:OpenSans="openSans_regular" />
 

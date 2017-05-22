@@ -6,12 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.cleanslatetech.floc.R;
 import com.cleanslatetech.floc.adapter.CustomSliderPagerAdapter;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
 import com.cleanslatetech.floc.utilities.CommonUtilities;
 import com.cleanslatetech.floc.utilities.FacebookCallBackMethod;
 import com.facebook.AccessToken;
@@ -81,6 +84,13 @@ public class FeaturingActivity extends AppCompatActivity{
 
         setPageViewIndicator();
 
+        CheckBox chkBx = (CheckBox) findViewById( R.id.chk_isshow_features );
+        chkBx.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                new SetSharedPreference(FeaturingActivity.this).setBoolean(getResources().getString(R.string.shrdIsShowFeaturingScreen), isChecked);
+            }
+        });
     }
 
     private void setPageViewIndicator() {
