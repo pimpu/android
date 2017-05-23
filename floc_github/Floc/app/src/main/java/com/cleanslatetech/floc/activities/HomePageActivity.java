@@ -3,11 +3,15 @@ package com.cleanslatetech.floc.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatTextView;
@@ -40,18 +44,33 @@ import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Event;
 import com.cleanslatetech.floc.interfaces.InterfaceOnClickText;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
+import com.cleanslatetech.floc.sharedprefrencehelper.SetSharedPreference;
+import com.cleanslatetech.floc.utilities.CommonUtilities;
+import com.cleanslatetech.floc.utilities.CommonVariables;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import static com.cleanslatetech.floc.utilities.CommonUtilities.handleIntentWhenSignOut;
+
 public class HomePageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, InterfaceAllRecent_Current_Archive_Event,
-        InterfaceOnClickText {
+        implements GoogleApiClient.OnConnectionFailedListener,
+        InterfaceAllRecent_Current_Archive_Event, InterfaceOnClickText {
 
     ViewPager mViewPager;
     private CustomSliderPagerAdapter mAdapter;
@@ -77,10 +96,28 @@ public class HomePageActivity extends AppCompatActivity
     public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent, jsonArrayAllChannel;
     public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
 
+    public GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // initialization of facebook sdk prior to create content view of activity.
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
         setContentView(R.layout.activity_splash_screen);
+
+
+        // google setup
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         jsonArrayAllArchive = new JSONArray();
         jsonArrayAllEvents = new JSONArray();
@@ -89,7 +126,53 @@ public class HomePageActivity extends AppCompatActivity
 
         interfaceAllRecentAndCurrentEvent = this;
 
-        new GetMyProfile(this).getData();
+        String strActivityId = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdActivityId));
+        if(strActivityId == null) {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("rate", 5);
+                jsonObject.put("like", 1);
+                jsonObject.put("review", 4);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new SetSharedPreference(this).setString(getResources().getString(R.string.shrdActivityId), String.valueOf(jsonObject));
+        }
+
+        if(!hasPermissions(this, CommonVariables.PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, CommonVariables.PERMISSIONS, CommonVariables.REQUEST_PERMISSION);
+
+        } else {
+            new GetMyProfile(this).getData();
+        }
+    }
+
+    private boolean hasPermissions(Context context, String[] permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case CommonVariables.REQUEST_PERMISSION:
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("Permission has been denied by user");
+//                    CommonUtilities.customToast(HomePageActivity.this, "Permission require for registering with Buxa.");
+
+                    Snackbar.make(findViewById(R.id.activity_splash_screen), "Permission require for FLOCworld.", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Action", null).show();
+                } else {
+                    new GetMyProfile(this).getData();
+                }
+                break;
+        }
     }
 
     @Override
@@ -186,7 +269,7 @@ public class HomePageActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }*/
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /*@SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -205,7 +288,7 @@ public class HomePageActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }*/
 
     @Override
     public void getAllEvents(JSONArray jsonArray) {
@@ -251,8 +334,8 @@ public class HomePageActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
         listDrawerMenu = (ListView) findViewById(R.id.list_drawer_menu);
 
@@ -437,21 +520,90 @@ public class HomePageActivity extends AppCompatActivity
     }
 
     private void handleNavigationItemSelected(String menuItem) {
-        if ( menuItem.equals("More") ) {
-            ImageView imgBack = (ImageView) findViewById(R.id.back_from_more);
-            imgBack.setImageResource(R.drawable.abc_ic_ab_back_material);
-
-            createMoreNav();
-
-        } else {
+        if ( !menuItem.equals("More") ) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
+
         }
+
         Toast.makeText(HomePageActivity.this, menuItem, Toast.LENGTH_SHORT).show();
+
+        if (menuItem.equals("More")) {
+                ImageView imgBack = (ImageView) findViewById(R.id.back_from_more);
+                imgBack.setImageResource(R.drawable.abc_ic_ab_back_material);
+
+                createMoreNav();
+
+        } else if(menuItem.equals(getResources().getString(R.string.setting))) {
+            startActivity(new Intent(this, SettingActivity.class));
+
+        } else if(menuItem.equals(getResources().getString(R.string.action_logout))) {
+
+            String loginType = new GetSharedPreference(HomePageActivity.this)
+                    .getString(getResources().getString(R.string.shrdLoginType));
+
+            if(loginType.equals(getResources().getString(R.string.appLogin))) {
+                // intet for next activity
+                handleIntentWhenSignOut(HomePageActivity.this);
+            }
+            else if(loginType.equals(getResources().getString(R.string.facebookLogin))) {
+                LoginManager.getInstance().logOut();
+
+                // intet for next activity
+                handleIntentWhenSignOut(HomePageActivity.this);
+            }
+            else if(loginType.equals(getResources().getString(R.string.googleLogin))) {
+
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                // intet for next activity
+                                handleIntentWhenSignOut(HomePageActivity.this);
+                            }
+                        });
+            }
+        } else if( menuItem.equals(getResources().getString(R.string.about_us))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.about_us))
+                    .putExtra("url", "http://floc.world/Home/About"));
+
+        } else if( menuItem.equals(getResources().getString(R.string.contact_us))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.contact_us))
+                    .putExtra("url", "http://floc.world/Home/Contact"));
+
+        } else if( menuItem.equals(getResources().getString(R.string.f_amp_q))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.f_amp_q))
+                    .putExtra("url", "http://floc.world/Home/FAQ"));
+
+        } else if( menuItem.equals(getResources().getString(R.string.terms_amp_conditions))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.terms_amp_conditions))
+                    .putExtra("url", "http://floc.world/terms.html"));
+
+        } else if( menuItem.equals(getResources().getString(R.string.privacy_policy))) {
+
+            startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
+                    .putExtra("from", getResources().getString(R.string.privacy_policy))
+                    .putExtra("url", "http://floc.world/privacy-policy.html"));
+
+        }
+
     }
 
     @Override
     public void onClickText(String menuItem) {
         handleNavigationItemSelected(menuItem);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

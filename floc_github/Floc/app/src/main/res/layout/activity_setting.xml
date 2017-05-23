@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_blue"
     tools:context="com.cleanslatetech.floc.activities.SettingActivity">
 
     <include layout="@layout/appbar_layout" />
@@ -36,15 +35,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:background="@drawable/white_border"
+                    android:background="@drawable/black_border"
                     android:text="@string/change_password"
-                    android:textColor="@color/white"
+                    android:textColor="@color/title"
                     android:textSize="@dimen/sixteen_textsize"
                     android:textAlignment="center"
                     app:OpenSans="openSans_regular"
                     android:onClick="onClickChangePwd"/>
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,9 +55,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:background="@drawable/white_border"
+                    android:background="@drawable/black_border"
                     android:text="@string/forgot_password"
-                    android:textColor="@color/white"
+                    android:textColor="@color/title"
                     android:textSize="@dimen/sixteen_textsize"
                     android:textAlignment="center"
                     app:OpenSans="openSans_regular"

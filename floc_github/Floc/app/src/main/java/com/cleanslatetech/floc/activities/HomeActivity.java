@@ -165,7 +165,7 @@ public class HomeActivity extends BaseAppCompactActivity implements InterfaceAll
     @Override
     protected void onResume() {
         super.onResume();
-        createRightPopupMenu();
+//        createRightPopupMenu();
         if (handler != null) {
             handler.postDelayed(runnable, delay);
         }

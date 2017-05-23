@@ -71,60 +71,18 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        if(!hasPermissions(this, CommonVariables.PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, CommonVariables.PERMISSIONS, CommonVariables.REQUEST_PERMISSION);
-        }
-
-        String strActivityId = new GetSharedPreference(this).getString(getResources().getString(R.string.shrdActivityId));
-        if(strActivityId == null) {
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("rate", 5);
-                jsonObject.put("like", 1);
-                jsonObject.put("review", 4);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            new SetSharedPreference(this).setString(getResources().getString(R.string.shrdActivityId), String.valueOf(jsonObject));
-        }
-
-
     }
 
     @Override
     public void onBackPressed() {
-        new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
+        /*new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
         Intent intent = new Intent(this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         overridePendingTransition(0,0);
-        startActivity(intent);
-    }
+        startActivity(intent);*/
 
-    private boolean hasPermissions(Context context, String[] permissions) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case CommonVariables.REQUEST_PERMISSION:
-                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("Permission has been denied by user");
-                    CommonUtilities.customToast(BaseAppCompactActivity.this, "Permission require for registering with Buxa.");
-                } else {
-                    System.out.println("Permission has been granted by user");
-                }
-                break;
-        }
+        super.onBackPressed();
     }
 
     public void setToolBar(final String title) {
@@ -132,11 +90,19 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         AppCompatImageView logo = (AppCompatImageView) findViewById(R.id.toolbarAppLogo);
         AppCompatTextView titleToolBar = (AppCompatTextView) findViewById(R.id.toolbarTitle);
-        LinearLayout optionText = (LinearLayout) findViewById(R.id.optionsText);
+        titleToolBar.setText(title);
 
-        if (title.equals("Home")) {
+        /*if (title.equals("Home")) {
             ((AppCompatTextView) findViewById(R.id.onClickHomeOption)).setTextColor(getResources().getColor(R.color.highlight_top_menu));
             ((AppCompatTextView) findViewById(R.id.onClickCreateFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
             ((AppCompatTextView) findViewById(R.id.onClickFloc)).setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -182,23 +148,20 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                 new SetSharedPreference(BaseAppCompactActivity.this).setString(getResources().getString(R.string.shrdSelectedMenu), null);
                 startActivity(new Intent(BaseAppCompactActivity.this, AllEventActivity.class));
             }
-        });
+        });*/
 
-        if( title.equals("Home") || title.equals(getResources().getString(R.string.my_flocworld)) ) {
+        /*if( title.equals("Home") || title.equals(getResources().getString(R.string.my_flocworld)) ) {
             logo.setVisibility(View.VISIBLE);
-//            optionText.setVisibility(View.VISIBLE);
             titleToolBar.setVisibility(View.GONE);
         }
         else {
             logo.setVisibility(View.GONE);
-//            optionText.setVisibility(View.GONE);
             titleToolBar.setVisibility(View.VISIBLE);
             titleToolBar.setText(title);
-//            toolbar.setBackgroundResource(R.drawable.toolbar_gradient);
-        }
+        }*/
 
-        createRightPopupMenu();
-        createLeftPopupMenu();
+//        createRightPopupMenu();
+//        createLeftPopupMenu();
     }
 
     @Override
@@ -206,7 +169,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
     }
 
-    public void createRightPopupMenu() {
+    /*public void createRightPopupMenu() {
         CardView imgviewRightOption = (CardView) findViewById(R.id.rightMenuBar);
         ImageView profileImage = (ImageView) findViewById(R.id.profileImage_toolbar);
 
@@ -278,13 +241,12 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                 popupWindow.showAsDropDown(findViewById(R.id.appBarLeft));
             }
         });
-    }
+    }*/
 
     /**
      * show popup window method reuturn PopupWindow
-     * @param popupWindow
      */
-    private void popupWindowView(final PopupWindow popupWindow, String menuSide) {
+    /*private void popupWindowView(final PopupWindow popupWindow, String menuSide) {
         ArrayList<MenuModel> arrayMenuModels;
         ArrayList<SubMenuModels> arraySubMenuModel;
 
@@ -303,11 +265,11 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.recent_flocs)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.archive_floc)));
 
-           /* arraySubMenuModel = new ArrayList<SubMenuModels>();
+           *//* arraySubMenuModel = new ArrayList<SubMenuModels>();
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.upload_pictures)));
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.upload_video)));
             arraySubMenuModel.add(new SubMenuModels(getResources().getString(R.string.comment)));
-            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.activity), arraySubMenuModel));*/
+            arrayMenuModels.add(new MenuModel(getResources().getString(R.string.activity), arraySubMenuModel));*//*
 
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.my_flocworld)));
             arrayMenuModels.add(new MenuModel(getResources().getString(R.string.invite_friend)));
@@ -333,11 +295,11 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
         // set the listview as popup content
         popupWindow.setContentView(listViewSort);
-    }
+    }*/
 
     @Override
     public void getSubmenuClick(String menuName) {
-        if( menuName.equals(getResources().getString(R.string.about_us))) {
+        /*if( menuName.equals(getResources().getString(R.string.about_us))) {
 
             startActivity(new Intent(getApplicationContext(), WebviewActivity.class)
                     .putExtra("from", getResources().getString(R.string.about_us))
@@ -367,7 +329,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                     .putExtra("from", getResources().getString(R.string.privacy_policy))
                     .putExtra("url", "http://floc.world/privacy-policy.html"));
 
-        } else if( menuName.equals(getResources().getString(R.string.archive_floc))) {
+        } else*/ if( menuName.equals(getResources().getString(R.string.archive_floc))) {
 
             startActivity(new Intent(getApplicationContext(), ArchiveFlocActivity.class));
 
@@ -387,11 +349,11 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
 
             startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
 
-        }else if(menuName.equals(getResources().getString(R.string.setting))) {
+        } /*else if(menuName.equals(getResources().getString(R.string.setting))) {
 
             startActivity(new Intent(getApplicationContext(), SettingActivity.class));
 
-        } else if(menuName.equals(getResources().getString(R.string.action_logout))) {
+        }*/ /*else if(menuName.equals(getResources().getString(R.string.action_logout))) {
 
             String loginType = new GetSharedPreference(BaseAppCompactActivity.this)
                     .getString(getResources().getString(R.string.shrdLoginType));
@@ -417,7 +379,7 @@ public class BaseAppCompactActivity extends AppCompatActivity implements GoogleA
                             }
                         });
             }
-        }
+        }*/
     }
 
     private void sharedAppLink() {

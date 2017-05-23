@@ -5,7 +5,7 @@
     android:id="@+id/activity_splash_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_blue"
+    android:background="@color/dull_white"
     tools:context="com.cleanslatetech.floc.activities.SplashScreenActivity">
 
     <ImageView
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/strLoading"
-            android:textColor="@color/white"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/register_screen_texts"
             app:OpenSans="openSans_regular" />
 
@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:visibility="visible"
             app:indicator="BallPulse"
-            app:indicator_color="@color/white" />
+            app:indicator_color="@color/colorPrimary" />
     </LinearLayout>
 
 </RelativeLayout>

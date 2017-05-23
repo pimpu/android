@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/toolbar_gradient"
+    android:background="@color/colorPrimary"
     app:theme="@style/AppBaseTheme.AppBarOverlay"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/appBarLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,11 +18,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:orientation="vertical"/>
+        android:orientation="vertical"/>-->
 
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/optionsText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,6 +67,6 @@
             android:textAlignment="textEnd"
             app:OpenSans="openSans_regular" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </android.support.design.widget.AppBarLayout>

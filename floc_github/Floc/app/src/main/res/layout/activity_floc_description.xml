@@ -61,7 +61,7 @@
                             android:visibility="gone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/white_border"
+                            android:background="@drawable/black_border"
                             android:layout_gravity="center_vertical"
                             android:padding="5dp"
                             android:text="Booked"
@@ -180,7 +180,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/ic_thumb_up_black"
-                        android:background="@drawable/white_border"
+                        android:background="@drawable/black_border"
                         android:tint="@color/white"
                         android:onClick="onClickLikeEvent"/>
 
@@ -194,7 +194,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:src="@drawable/ic_thumb_up_orange"
-                        android:background="@drawable/white_border"
+                        android:background="@drawable/black_border"
                         android:onClick="onClickLikeEvent"/>
 
                 </RelativeLayout>
@@ -405,7 +405,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:padding="10dp"
-                        android:background="@drawable/white_border"
+                        android:background="@drawable/black_border"
                         android:inputType="textMultiLine"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sixteen_textsize"

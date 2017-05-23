@@ -30,7 +30,7 @@
 
             <include
                 android:id="@+id/nav_more_header"
-                layout="@layout/nav_more_header_page"/>
+                layout="@layout/nav_more_header_page" />
 
             <ListView
                 android:id="@+id/list_drawer_menu"

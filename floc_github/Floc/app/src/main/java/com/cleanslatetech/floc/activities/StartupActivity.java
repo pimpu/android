@@ -19,7 +19,6 @@ public class StartupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         /*GetSharedPreference getSharedPreference = new GetSharedPreference(StartupActivity.this);
 
@@ -69,5 +68,6 @@ public class StartupActivity extends AppCompatActivity {
             startActivity(new Intent(StartupActivity.this, SplashScreenActivity.class));
             finish();
         }
+        super.onCreate(savedInstanceState);
     }
 }

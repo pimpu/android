@@ -73,7 +73,7 @@ public class InsertMyProfileAsyncTask {
                 System.out.println(json);
 
                 new SetSharedPreference(context).setString(context.getResources().getString(R.string.shrdMyProfile), json.toString());
-                ((BaseAppCompactActivity)context).createRightPopupMenu();
+//                ((BaseAppCompactActivity)context).createRightPopupMenu();
             }
 
             @Override
