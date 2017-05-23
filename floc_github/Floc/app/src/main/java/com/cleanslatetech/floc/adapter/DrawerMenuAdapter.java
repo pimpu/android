@@ -10,27 +10,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.cleanslatetech.floc.R;
-import com.cleanslatetech.floc.activities.HomePageActivity;
+import com.cleanslatetech.floc.interfaces.InterfaceOnClickText;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by pimpu on 5/22/2017.
  */
 
 public class DrawerMenuAdapter extends BaseAdapter {
-
     private Activity activity;
     private ArrayList<String> dataName;
     private ArrayList<Integer> dataImage;
     private static LayoutInflater inflater=null;
+    private InterfaceOnClickText interfaceOnClickText;
 
-    public DrawerMenuAdapter(Activity a, ArrayList<String> menuName, ArrayList<Integer> menuImage) {
-        activity = a;
-        inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public DrawerMenuAdapter(Activity activity, ArrayList<String> menuName, ArrayList<Integer> menuImage) {
+        this.activity = activity;
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         dataImage = menuImage;
         dataName = menuName;
+
+        interfaceOnClickText = (InterfaceOnClickText) activity;
     }
 
     public int getCount() {
@@ -54,8 +55,21 @@ public class DrawerMenuAdapter extends BaseAdapter {
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.drawer_menu_image); // thumb image
 
         // Setting all values in listview
-        title.setText(dataName.get(position));
-        thumb_image.setImageResource(dataImage.get(position));
+        final String menuName = dataName.get(position);
+        title.setText(menuName);
+
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfaceOnClickText.onClickText(menuName);
+            }
+        });
+
+        if ( dataImage.size() > 0 )
+            thumb_image.setImageResource(dataImage.get(position));
+        else
+            thumb_image.setVisibility(View.GONE);
+
         return vi;
     }
 }

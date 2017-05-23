@@ -38,6 +38,7 @@ import com.cleanslatetech.floc.adapter.DrawerMenuAdapter;
 import com.cleanslatetech.floc.adapter.HomeFlocAdapter;
 import com.cleanslatetech.floc.asynctask.GetMyProfile;
 import com.cleanslatetech.floc.interfaces.InterfaceAllRecent_Current_Archive_Event;
+import com.cleanslatetech.floc.interfaces.InterfaceOnClickText;
 import com.cleanslatetech.floc.sharedprefrencehelper.GetSharedPreference;
 
 import org.json.JSONArray;
@@ -49,7 +50,8 @@ import java.util.List;
 import java.util.Set;
 
 public class HomePageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, InterfaceAllRecent_Current_Archive_Event {
+        implements NavigationView.OnNavigationItemSelectedListener, InterfaceAllRecent_Current_Archive_Event,
+        InterfaceOnClickText {
 
     ViewPager mViewPager;
     private CustomSliderPagerAdapter mAdapter;
@@ -71,6 +73,7 @@ public class HomePageActivity extends AppCompatActivity
         }
     };
 
+    private ListView listDrawerMenu;
     public static JSONArray jsonArrayAllArchive, jsonArrayAllEvents, jsonArrayAllRecent, jsonArrayAllChannel;
     public static InterfaceAllRecent_Current_Archive_Event interfaceAllRecentAndCurrentEvent;
 
@@ -251,35 +254,9 @@ public class HomePageActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        final ArrayList<String> menuName = new ArrayList<>();
-        menuName.add("Home");
-        menuName.add("More");
-        menuName.add("Settings");
-        menuName.add("Logout");
+        listDrawerMenu = (ListView) findViewById(R.id.list_drawer_menu);
 
-        ArrayList<Integer> menuImage = new ArrayList<>();
-        menuImage.add(R.drawable.ic_menu_camera);
-        menuImage.add(R.drawable.ic_menu_gallery);
-        menuImage.add(R.drawable.ic_menu_slideshow);
-        menuImage.add(R.drawable.ic_menu_manage);
-
-        ListView listDrawerMenu = (ListView) findViewById(R.id.list_drawer_menu);
-
-        // Getting adapter by passing xml data ArrayList
-        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this, menuName, menuImage);
-        listDrawerMenu.setAdapter(adapter);
-
-        // Click event for single list row
-        listDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                drawer.closeDrawer(GravityCompat.START);
-
-                Toast.makeText(HomePageActivity.this, menuName.get(position), Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        createPrimaryNav();
 
         // populating home page data ....
         jsonArrayAllArchive = paramJsonArray;
@@ -395,5 +372,86 @@ public class HomePageActivity extends AppCompatActivity
         // Initialize a new Adapter for RecyclerView
         ChannelRecyclerAdapter adapterRecent = new ChannelRecyclerAdapter(this, jsonArrayAllChannel);
         llChannel.setAdapter(adapterRecent);
+    }
+
+    private void createPrimaryNav() {
+        findViewById(R.id.nav_more_header).setVisibility(View.GONE);
+        findViewById(R.id.nav_header).setVisibility(View.VISIBLE);
+
+        final ArrayList<String> menuName = new ArrayList<>();
+        menuName.add("Home");
+        menuName.add("More");
+        menuName.add(getResources().getString(R.string.setting));
+        menuName.add(getResources().getString(R.string.action_logout));
+
+        ArrayList<Integer> menuImage = new ArrayList<>();
+        menuImage.add(R.drawable.ic_menu_camera);
+        menuImage.add(R.drawable.ic_menu_gallery);
+        menuImage.add(R.drawable.ic_menu_slideshow);
+        menuImage.add(R.drawable.ic_menu_manage);
+
+        // Getting adapter by passing xml data ArrayList
+        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this, menuName, menuImage);
+        listDrawerMenu.setAdapter(adapter);
+
+        // Click event for single list row
+        listDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                handleNavigationItemSelected(menuName.get(position));
+            }
+        });
+    }
+
+    private void createMoreNav() {
+        findViewById(R.id.nav_more_header).setVisibility(View.VISIBLE);
+        findViewById(R.id.nav_header).setVisibility(View.GONE);
+
+        final ArrayList<String> menuName = new ArrayList<>();
+        menuName.add(getResources().getString(R.string.about_us));
+        menuName.add(getResources().getString(R.string.contact_us));
+        menuName.add(getResources().getString(R.string.f_amp_q));
+        menuName.add(getResources().getString(R.string.terms_amp_conditions));
+        menuName.add(getResources().getString(R.string.privacy_policy));
+
+        ArrayList<Integer> menuImage = new ArrayList<>();
+
+        // Getting adapter by passing xml data ArrayList
+        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this, menuName, menuImage);
+        listDrawerMenu.setAdapter(adapter);
+
+        // Click event for single list row
+        listDrawerMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                handleNavigationItemSelected(menuName.get(position));
+            }
+        });
+
+        findViewById(R.id.back_from_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createPrimaryNav();
+            }
+        });
+    }
+
+    private void handleNavigationItemSelected(String menuItem) {
+        if ( menuItem.equals("More") ) {
+            ImageView imgBack = (ImageView) findViewById(R.id.back_from_more);
+            imgBack.setImageResource(R.drawable.abc_ic_ab_back_material);
+
+            createMoreNav();
+
+        } else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        Toast.makeText(HomePageActivity.this, menuItem, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClickText(String menuItem) {
+        handleNavigationItemSelected(menuItem);
     }
 }

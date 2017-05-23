@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white" >
+
+    <ImageView
+        android:id="@+id/back_from_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/twenty_dp"
+        android:layout_marginStart="@dimen/ten_dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="@color/black" />
+
+    <com.cleanslatetech.floc.utilities.OpenSansTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="@dimen/twenty_dp"
+        android:text="More"
+        android:textColor="@color/black"
+        android:textSize="@dimen/register_screen_texts"
+        app:OpenSans="openSans_regular" />
+
+</RelativeLayout>
